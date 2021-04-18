@@ -11,11 +11,15 @@
     "@types/cheerio": "^0.22.28",
     "axios": "^0.21.1",
     "cheerio": "^1.0.0-rc.6",
+    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
+    "express": "^4.17.1",
     "node-fetch": "^2.6.1",
     "rss-parser": "^3.12.0"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.10",
+    "@types/express": "^4.17.11",
     "@types/node": "^14.14.41",
     "@types/node-fetch": "^2.5.10",
     "@types/xml2js": "^0.4.8",

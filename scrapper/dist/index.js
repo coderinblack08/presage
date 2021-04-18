@@ -12,22 +12,29 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-require("dotenv/config");
-const rss_parser_1 = __importDefault(require("rss-parser"));
 const axios_1 = __importDefault(require("axios"));
 const cheerio_1 = __importDefault(require("cheerio"));
+require("dotenv/config");
+const express_1 = __importDefault(require("express"));
+const defaultPublishers_1 = require("./lib/defaultPublishers");
+const parser_1 = require("./lib/parser");
 const rss_1 = require("./lib/rss");
 const supabase_1 = require("./lib/supabase");
-const defaultPublishers_1 = require("./lib/defaultPublishers");
-const parser = new rss_parser_1.default();
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
+    console.time("main");
+    console.log("⛽️ Request received, scrapping articles");
     yield supabase_1.supabase.from("publishers").upsert(defaultPublishers_1.defaultPublishers);
     for (const x of Object.keys(rss_1.rss)) {
-        const feeds = yield parser.parseURL(rss_1.rss[x].top);
+        const feeds = yield parser_1.parser.parseURL(rss_1.rss[x].top);
         for (const feed of feeds.items) {
             if (feed.guid.startsWith("https://www.cnn.com/collections")) {
                 continue;
             }
+            const { data: alreadyExists } = yield supabase_1.supabase
+                .from("articles")
+                .select("*", { count: "exact" })
+                .filter("title", "eq", feed.title);
+            console.log("Already Exists " + JSON.stringify(alreadyExists));
             const res = yield axios_1.default.get(feed.guid, {
                 withCredentials: true,
                 headers: { "X-Requested-With": "XMLHttpRequest" },
@@ -47,6 +54,18 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
             yield supabase_1.supabase.from("articles").upsert([data]);
         }
     }
+    console.log("✨ Success, articles saved");
+    console.timeEnd("main");
 });
-main().catch((err) => console.error(err));
+const app = express_1.default();
+app.post("/webhook", (_, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield main();
+        res.status(200).send();
+    }
+    catch (error) {
+        next(new Error(error));
+    }
+}));
+app.listen(4000, () => console.log("🚀🌙 Listening on port http://localhost:4000"));
 //# sourceMappingURL=index.js.map
