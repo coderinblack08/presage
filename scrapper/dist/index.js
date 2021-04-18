@@ -44,7 +44,6 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
                 url: feed.guid || undefined,
                 image,
             };
-            console.log(data);
             yield supabase_1.supabase.from("articles").upsert([data]);
         }
     }

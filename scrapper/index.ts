@@ -41,8 +41,6 @@ const main = async () => {
         image,
       };
 
-      console.log(data);
-
       await supabase.from("articles").upsert([data]);
     }
   }
