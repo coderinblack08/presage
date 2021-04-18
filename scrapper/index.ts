@@ -1,6 +1,7 @@
 import axios from "axios";
 import cheerio from "cheerio";
 import cors from "cors";
+import cron from "node-cron";
 import "dotenv/config";
 import express from "express";
 import { defaultPublishers } from "./lib/defaultPublishers";
@@ -25,28 +26,28 @@ const main = async () => {
         .select("*", { count: "exact" })
         .filter("title", "eq", feed.title);
 
-      console.log("Already Exists " + JSON.stringify(alreadyExists));
+      if (alreadyExists && alreadyExists.length === 0) {
+        const res = await axios.get(feed.guid!, {
+          withCredentials: true,
+          headers: { "X-Requested-With": "XMLHttpRequest" },
+          responseType: "text",
+        });
 
-      const res = await axios.get(feed.guid!, {
-        withCredentials: true,
-        headers: { "X-Requested-With": "XMLHttpRequest" },
-        responseType: "text",
-      });
+        const $ = cheerio.load(res.data);
+        const image = $('meta[property="og:image"]').attr("content");
 
-      const $ = cheerio.load(res.data);
-      const image = $('meta[property="og:image"]').attr("content");
+        const data = {
+          category: ["top"],
+          publisher: x,
+          title: feed.title,
+          description: feed.contentSnippet,
+          date: feed.pubDate || feed.isoDate,
+          url: feed.guid || undefined,
+          image,
+        };
 
-      const data = {
-        category: ["top"],
-        publisher: x,
-        title: feed.title,
-        description: feed.contentSnippet,
-        date: feed.pubDate || feed.isoDate,
-        url: feed.guid || undefined,
-        image,
-      };
-
-      await supabase.from("articles").upsert([data]);
+        await supabase.from("articles").upsert([data]);
+      }
     }
   }
 
@@ -69,3 +70,7 @@ app.post("/webhook", async (_, res, next) => {
 app.listen(4000, () =>
   console.log("🚀🌙 Listening on port http://localhost:4000")
 );
+
+if (process.env.NODE_ENV !== "production") {
+  cron.schedule("*/10 * * * *", () => main());
+}

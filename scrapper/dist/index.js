@@ -14,6 +14,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const axios_1 = __importDefault(require("axios"));
 const cheerio_1 = __importDefault(require("cheerio"));
+const cors_1 = __importDefault(require("cors"));
+const node_cron_1 = __importDefault(require("node-cron"));
 require("dotenv/config");
 const express_1 = __importDefault(require("express"));
 const defaultPublishers_1 = require("./lib/defaultPublishers");
@@ -34,30 +36,32 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
                 .from("articles")
                 .select("*", { count: "exact" })
                 .filter("title", "eq", feed.title);
-            console.log("Already Exists " + JSON.stringify(alreadyExists));
-            const res = yield axios_1.default.get(feed.guid, {
-                withCredentials: true,
-                headers: { "X-Requested-With": "XMLHttpRequest" },
-                responseType: "text",
-            });
-            const $ = cheerio_1.default.load(res.data);
-            const image = $('meta[property="og:image"]').attr("content");
-            const data = {
-                category: ["top"],
-                publisher: x,
-                title: feed.title,
-                description: feed.contentSnippet,
-                date: feed.pubDate || feed.isoDate,
-                url: feed.guid || undefined,
-                image,
-            };
-            yield supabase_1.supabase.from("articles").upsert([data]);
+            if (alreadyExists && alreadyExists.length === 0) {
+                const res = yield axios_1.default.get(feed.guid, {
+                    withCredentials: true,
+                    headers: { "X-Requested-With": "XMLHttpRequest" },
+                    responseType: "text",
+                });
+                const $ = cheerio_1.default.load(res.data);
+                const image = $('meta[property="og:image"]').attr("content");
+                const data = {
+                    category: ["top"],
+                    publisher: x,
+                    title: feed.title,
+                    description: feed.contentSnippet,
+                    date: feed.pubDate || feed.isoDate,
+                    url: feed.guid || undefined,
+                    image,
+                };
+                yield supabase_1.supabase.from("articles").upsert([data]);
+            }
         }
     }
     console.log("✨ Success, articles saved");
     console.timeEnd("main");
 });
 const app = express_1.default();
+app.use(cors_1.default({ origin: "*" }));
 app.post("/webhook", (_, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield main();
@@ -68,4 +72,5 @@ app.post("/webhook", (_, res, next) => __awaiter(void 0, void 0, void 0, functio
     }
 }));
 app.listen(4000, () => console.log("🚀🌙 Listening on port http://localhost:4000"));
+node_cron_1.default.schedule("*/10 * * * *", () => main());
 //# sourceMappingURL=index.js.map
