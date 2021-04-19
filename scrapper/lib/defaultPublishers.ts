@@ -17,4 +17,12 @@ export const defaultPublishers = [
     profile_picture:
       "https://static.wikia.nocookie.net/logopedia/images/3/39/Fox_News_Channel_%282017%29.svg/revision/latest/scale-to-width-down/200?cb=20171128043059",
   },
+  {
+    name: "abc",
+    description: "See the whole picture with ABC News.",
+    website: "https://abcnews.com",
+    verified: true,
+    profile_picture:
+      "https://d1hbpr09pwz0sk.cloudfront.net/logo_url/go-com-3e90d80b",
+  },
 ];

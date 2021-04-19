@@ -1,13 +1,34 @@
 import axios from "axios";
 import cheerio from "cheerio";
 import cors from "cors";
-import cron from "node-cron";
 import "dotenv/config";
 import express from "express";
+import cron from "node-cron";
 import { defaultPublishers } from "./lib/defaultPublishers";
 import { parser } from "./lib/parser";
 import { rss } from "./lib/rss";
 import { supabase } from "./lib/supabase";
+
+const getCategories = (
+  source: string,
+  feed: any,
+  $: cheerio.Root | null
+): string[] => {
+  switch (source) {
+    case "foxnews":
+      if ($) {
+        const tags = $('meta[name="classification-tags"]').attr("content");
+        return tags ? tags.split(",") : [];
+      }
+      return [];
+
+    case "abc":
+      return feed.categories;
+
+    default:
+      return [];
+  }
+};
 
 const main = async () => {
   console.time("main");
@@ -16,6 +37,7 @@ const main = async () => {
 
   for (const x of Object.keys(rss)) {
     const feeds = await parser.parseURL(rss[x].top);
+    let i = 0;
     for (const feed of feeds.items) {
       if (feed.guid!.startsWith("https://www.cnn.com/collections")) {
         continue;
@@ -27,17 +49,29 @@ const main = async () => {
         .filter("title", "eq", feed.title);
 
       if (alreadyExists && alreadyExists.length === 0) {
-        const res = await axios.get(feed.guid!, {
-          withCredentials: true,
-          headers: { "X-Requested-With": "XMLHttpRequest" },
-          responseType: "text",
-        });
+        let image: string = "";
 
-        const $ = cheerio.load(res.data);
-        const image = $('meta[property="og:image"]').attr("content");
+        if (x !== "abc") {
+          const res = await axios.get(feed.guid!, {
+            withCredentials: true,
+            headers: { "X-Requested-With": "XMLHttpRequest" },
+            responseType: "text",
+          });
+
+          const $ = cheerio.load(res.data);
+          image = $('meta[property="og:image"]').attr("content") || "";
+        }
+
+        if (x === "abc") {
+          const rawRss = await axios.get(rss[x].top);
+          const $ = cheerio.load(rawRss.data);
+          const items = $("item");
+          image = (items.children()[i] as any).attribs.url;
+        }
 
         const data = {
-          category: ["top"],
+          category: getCategories(x, feed, null),
+          section: "top",
           publisher: x,
           title: feed.title,
           description: feed.contentSnippet,
@@ -47,6 +81,7 @@ const main = async () => {
         };
 
         await supabase.from("articles").upsert([data]);
+        i++;
       }
     }
   }
@@ -71,6 +106,7 @@ app.listen(4000, () =>
   console.log("🚀🌙 Listening on port http://localhost:4000")
 );
 
+main();
 if (process.env.NODE_ENV !== "production") {
   cron.schedule("*/10 * * * *", () => main());
 }

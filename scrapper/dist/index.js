@@ -15,19 +15,34 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const axios_1 = __importDefault(require("axios"));
 const cheerio_1 = __importDefault(require("cheerio"));
 const cors_1 = __importDefault(require("cors"));
-const node_cron_1 = __importDefault(require("node-cron"));
 require("dotenv/config");
 const express_1 = __importDefault(require("express"));
+const node_cron_1 = __importDefault(require("node-cron"));
 const defaultPublishers_1 = require("./lib/defaultPublishers");
 const parser_1 = require("./lib/parser");
 const rss_1 = require("./lib/rss");
 const supabase_1 = require("./lib/supabase");
+const getCategories = (source, feed, $) => {
+    switch (source) {
+        case "foxnews":
+            if ($) {
+                const tags = $('meta[name="classification-tags"]').attr("content");
+                return tags ? tags.split(",") : [];
+            }
+            return [];
+        case "abc":
+            return feed.categories;
+        default:
+            return [];
+    }
+};
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
     console.time("main");
     console.log("⛽️ Request received, scrapping articles");
     yield supabase_1.supabase.from("publishers").upsert(defaultPublishers_1.defaultPublishers);
     for (const x of Object.keys(rss_1.rss)) {
         const feeds = yield parser_1.parser.parseURL(rss_1.rss[x].top);
+        let i = 0;
         for (const feed of feeds.items) {
             if (feed.guid.startsWith("https://www.cnn.com/collections")) {
                 continue;
@@ -37,15 +52,25 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
                 .select("*", { count: "exact" })
                 .filter("title", "eq", feed.title);
             if (alreadyExists && alreadyExists.length === 0) {
-                const res = yield axios_1.default.get(feed.guid, {
-                    withCredentials: true,
-                    headers: { "X-Requested-With": "XMLHttpRequest" },
-                    responseType: "text",
-                });
-                const $ = cheerio_1.default.load(res.data);
-                const image = $('meta[property="og:image"]').attr("content");
+                let image = "";
+                if (x !== "abc") {
+                    const res = yield axios_1.default.get(feed.guid, {
+                        withCredentials: true,
+                        headers: { "X-Requested-With": "XMLHttpRequest" },
+                        responseType: "text",
+                    });
+                    const $ = cheerio_1.default.load(res.data);
+                    image = $('meta[property="og:image"]').attr("content") || "";
+                }
+                if (x === "abc") {
+                    const rawRss = yield axios_1.default.get(rss_1.rss[x].top);
+                    const $ = cheerio_1.default.load(rawRss.data);
+                    const items = $("item");
+                    image = items.children()[i].attribs.url;
+                }
                 const data = {
-                    category: ["top"],
+                    category: getCategories(x, feed, null),
+                    section: "top",
                     publisher: x,
                     title: feed.title,
                     description: feed.contentSnippet,
@@ -53,7 +78,9 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
                     url: feed.guid || undefined,
                     image,
                 };
-                yield supabase_1.supabase.from("articles").upsert([data]);
+                const { error } = yield supabase_1.supabase.from("articles").upsert([data]);
+                console.error(feed, error);
+                i++;
             }
         }
     }
@@ -72,5 +99,8 @@ app.post("/webhook", (_, res, next) => __awaiter(void 0, void 0, void 0, functio
     }
 }));
 app.listen(4000, () => console.log("🚀🌙 Listening on port http://localhost:4000"));
-node_cron_1.default.schedule("*/10 * * * *", () => main());
+main();
+if (process.env.NODE_ENV !== "production") {
+    node_cron_1.default.schedule("*/10 * * * *", () => main());
+}
 //# sourceMappingURL=index.js.map
