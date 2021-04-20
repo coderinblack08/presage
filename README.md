@@ -7,3 +7,15 @@ Here is the breakdown of the pages included in the [Figma file](https://www.figm
 - Design System: Base styles (colors, typography, elements)
 - Components: Well, components
 - Mockup: Page designs
+
+## Development
+
+```bash
+cd scrapper
+yarn start
+
+cd ../web
+yarn dev
+```
+
+Setup .env accordingly (create Supabase project, their local cli is still in the workings)
