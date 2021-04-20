@@ -1,6 +1,7 @@
 import React from "react";
 import { Button } from "../components/Button";
 import { Navbar } from "../components/Navbar";
+import { Select } from "../components/Select";
 
 let active = 0;
 const categories = [
@@ -52,6 +53,33 @@ const Index: React.FC = () => {
             <Button size="small">Articles</Button>
           </div>
         </nav>
+        <div className="flex items-center mt-5 space-x-3">
+          <Select
+            items={["All Publishers", "CNN", "Fox News", "ABC"]}
+            defaultValue="All Publishers"
+          />
+          <Select
+            items={[
+              "All Categories",
+              "California",
+              "Crypto",
+              "Donald J. Trump",
+            ]}
+            defaultValue="All Categories"
+          />
+          <div className="flex items-center relative py-2 pl-9 pr-4 rounded-8 text-lighter-gray focus:outline-none bg-darker-gray rounded-lg">
+            <span className="text-primary text-lg pl-4 z-10 absolute left-0">
+              ≥
+            </span>
+            <div
+              className="bg-transparent min-w-[1rem] pr-2 focus:outline-none"
+              contentEditable
+            >
+              0
+            </div>
+            <p className="text-gray">Likes</p>
+          </div>
+        </div>
       </main>
     </div>
   );
