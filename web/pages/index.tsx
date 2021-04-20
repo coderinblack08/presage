@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useRef } from "react";
+import useSWR from "swr";
 import { Button } from "../components/Button";
 import { Navbar } from "../components/Navbar";
 import { Select } from "../components/Select";
+import { supabase } from "../lib/supabase";
 
 let active = 0;
 const categories = [
@@ -16,6 +18,21 @@ const categories = [
 ];
 
 const Index: React.FC = () => {
+  const likeInput = useRef<HTMLDivElement>();
+  const { data } = useSWR(
+    "articles",
+    async () =>
+      (
+        await supabase
+          .from("articles")
+          .select("*")
+          .order("date", { ascending: false })
+          .limit(10)
+      ).data
+  );
+
+  console.log(data);
+
   return (
     <div>
       <Navbar />
@@ -67,19 +84,24 @@ const Index: React.FC = () => {
             ]}
             defaultValue="All Categories"
           />
-          <div className="flex items-center relative py-2 pl-9 pr-4 rounded-8 text-lighter-gray focus:outline-none bg-darker-gray rounded-lg">
+          <button
+            onFocus={() => likeInput.current.focus()}
+            className="flex items-center relative cursor-default py-2 pl-9 pr-4 rounded-8 text-lighter-gray focus:outline-none bg-darker-gray rounded-lg"
+          >
             <span className="text-primary text-lg pl-4 z-10 absolute left-0">
               ≥
             </span>
             <div
-              className="bg-transparent min-w-[1rem] pr-2 focus:outline-none"
+              className="bg-transparent min-w-[1rem] pr-1.5 focus:outline-none"
+              ref={likeInput}
               contentEditable
             >
               0
             </div>
             <p className="text-gray">Likes</p>
-          </div>
+          </button>
         </div>
+        <pre>{JSON.stringify(data, null, 2)}</pre>
       </main>
     </div>
   );

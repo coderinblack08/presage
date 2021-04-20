@@ -10,9 +10,11 @@
   "dependencies": {
     "@headlessui/react": "^1.0.0",
     "@heroicons/react": "^1.0.1",
+    "@supabase/supabase-js": "^1.11.6",
     "next": "latest",
     "react": "^17.0.1",
-    "react-dom": "^17.0.1"
+    "react-dom": "^17.0.1",
+    "swr": "^0.5.5"
   },
   "devDependencies": {
     "@types/node": "^14.14.41",
