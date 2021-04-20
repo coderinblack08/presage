@@ -7,11 +7,37 @@
 @layer base {
   :root {
     font-size: 14px;
-    @apply text-lighter-gray;
+    @apply text-lighter-gray antialiased;
   }
-  #svelte,
+
+  #next,
   body,
   html {
     @apply bg-black;
+  }
+
+  h3 {
+    font-weight: bold;
+    font-size: 1.86rem;
+    line-height: 2.28rem;
+    letter-spacing: -0.005em;
+  }
+
+  p,
+  span,
+  a,
+  div,
+  .body {
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 22px;
+    letter-spacing: 0.005em;
+  }
+
+  .small {
+    font-weight: 500;
+    font-size: 12px !important;
+    line-height: 22px;
+    letter-spacing: 0.005em;
   }
 }
