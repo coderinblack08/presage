@@ -28,6 +28,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         select id, publisher, category, a.description, title, date, url, image
         from articles a
         where publisher = p.name
+        order by date asc
         limit $1
       ) a on a.publisher = p.name
       group by p.name;

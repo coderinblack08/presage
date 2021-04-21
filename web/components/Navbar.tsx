@@ -6,7 +6,10 @@ interface NavbarProps {}
 
 export const Navbar: React.FC<NavbarProps> = ({}) => {
   return (
-    <nav className="flex items-center justify-between max-w-[88rem] mx-auto p-6">
+    <nav
+      className="sticky z-50 top-0 bg-black bg-opacity-75 flex items-center justify-between max-w-[88rem] mx-auto p-6"
+      style={{ opacity: 5, backdropFilter: "blur(5px)" }}
+    >
       <img src="/static/logo.svg" className="w-auto h-11" />
       <ul className="flex items-center space-x-9">
         <li>
