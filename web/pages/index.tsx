@@ -21,7 +21,7 @@ const categories = [
 const Index: React.FC = () => {
   const likeInput = useRef<HTMLDivElement>();
   const [filterOpen, setFilterOpen] = useState(true);
-  const { data, isValidating } = useSWR("/api/articles?limit=2", fetcher, {
+  const { data, isValidating } = useSWR("/api/articles?limit=3", fetcher, {
     revalidateOnFocus: false,
   });
 

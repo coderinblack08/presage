@@ -22,13 +22,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         'date', a.date,
         'url', a.url,
         'image', a.image
-      ))
+      ) order by -(now()::DATE - a.date::DATE) * 0.75 + a.priority desc)
       from publishers p
       join lateral (
-        select id, publisher, category, a.description, title, date, url, image
+        select id, priority, publisher, category, a.description, title, date, url, image
         from articles a
         where publisher = p.name
-        order by -(now()::DATE - date::DATE) + priority desc
+        order by -(now()::DATE - date::DATE) * 0.75 + priority desc
         limit $1
       ) a on a.publisher = p.name
       group by p.name;

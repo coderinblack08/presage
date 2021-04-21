@@ -42,14 +42,14 @@ export const Select: React.FC<SelectProps> = ({
             >
               <Listbox.Options
                 static
-                className="absolute py-1 mt-2 overflow-auto text-base bg-darker-gray rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+                className="absolute p-2 mt-2 overflow-auto text-base bg-darker-gray rounded-lg shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
               >
                 {items.map((item, i) => (
                   <Listbox.Option
                     key={i}
                     className={({ active }) =>
                       `${active ? "text-white bg-primary" : "text-lighter-gray"}
-                          cursor-default select-none relative py-2 pl-10 pr-16`
+                          cursor-default select-none relative py-2 pl-10 pr-16 rounded-lg`
                     }
                     value={item}
                   >
