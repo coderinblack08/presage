@@ -11,7 +11,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const result = await client.query(
       `
-      select p.name, 
+      select p.name,
       array_agg(json_build_object(
         'id', a.id,
         'category', a.category,
@@ -28,7 +28,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         select id, publisher, category, a.description, title, date, url, image
         from articles a
         where publisher = p.name
-        order by date asc
+        order by -(now()::DATE - date::DATE) + priority desc
         limit $1
       ) a on a.publisher = p.name
       group by p.name;
@@ -41,4 +41,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   } catch (error) {
     res.status(500).send(error);
   }
+
+  await client.end();
 };

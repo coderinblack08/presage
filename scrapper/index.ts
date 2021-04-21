@@ -76,8 +76,9 @@ const main = async () => {
           publisher: x,
           title: feed.title,
           description: feed.contentSnippet,
-          date: feed.pubDate || feed.isoDate,
+          date: new Date(feed.pubDate || feed.isoDate || "").toISOString(),
           url: feed.guid || undefined,
+          priority: (feeds.items.length - i) / feeds.items.length,
           image,
         };
 
