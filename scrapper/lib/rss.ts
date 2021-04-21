@@ -1,11 +1,11 @@
 export const rss: Record<string, { top: string }> = {
-  cnn: {
+  CNN: {
     top: "http://rss.cnn.com/rss/edition.rss",
   },
-  foxnews: {
+  "Fox News": {
     top: "http://feeds.foxnews.com/foxnews/latest",
   },
-  abc: {
+  ABC: {
     top: "https://abcnews.go.com/abcnews/topstories",
   },
 };

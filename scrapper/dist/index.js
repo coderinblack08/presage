@@ -24,13 +24,13 @@ const rss_1 = require("./lib/rss");
 const supabase_1 = require("./lib/supabase");
 const getCategories = (source, feed, $) => {
     switch (source) {
-        case "foxnews":
+        case "Fox News":
             if ($) {
                 const tags = $('meta[name="classification-tags"]').attr("content");
                 return tags ? tags.split(",") : [];
             }
             return [];
-        case "abc":
+        case "ABC":
             return feed.categories;
         default:
             return [];
@@ -53,23 +53,24 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
                 .filter("title", "eq", feed.title);
             if (alreadyExists && alreadyExists.length === 0) {
                 let image = "";
-                if (x !== "abc") {
+                let $;
+                if (x !== "ABC") {
                     const res = yield axios_1.default.get(feed.guid, {
                         withCredentials: true,
                         headers: { "X-Requested-With": "XMLHttpRequest" },
                         responseType: "text",
                     });
-                    const $ = cheerio_1.default.load(res.data);
+                    $ = cheerio_1.default.load(res.data);
                     image = $('meta[property="og:image"]').attr("content") || "";
                 }
-                if (x === "abc") {
+                if (x === "ABC") {
                     const rawRss = yield axios_1.default.get(rss_1.rss[x].top);
-                    const $ = cheerio_1.default.load(rawRss.data);
+                    $ = cheerio_1.default.load(rawRss.data);
                     const items = $("item");
                     image = items.children()[i].attribs.url;
                 }
                 const data = {
-                    category: getCategories(x, feed, null),
+                    category: getCategories(x, feed, $),
                     section: "top",
                     publisher: x,
                     title: feed.title,

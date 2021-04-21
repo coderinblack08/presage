@@ -12,17 +12,17 @@ import { supabase } from "./lib/supabase";
 const getCategories = (
   source: string,
   feed: any,
-  $: cheerio.Root | null
+  $: cheerio.Root | undefined
 ): string[] => {
   switch (source) {
-    case "foxnews":
+    case "Fox News":
       if ($) {
         const tags = $('meta[name="classification-tags"]').attr("content");
         return tags ? tags.split(",") : [];
       }
       return [];
 
-    case "abc":
+    case "ABC":
       return feed.categories;
 
     default:
@@ -50,27 +50,28 @@ const main = async () => {
 
       if (alreadyExists && alreadyExists.length === 0) {
         let image: string = "";
+        let $;
 
-        if (x !== "abc") {
+        if (x !== "ABC") {
           const res = await axios.get(feed.guid!, {
             withCredentials: true,
             headers: { "X-Requested-With": "XMLHttpRequest" },
             responseType: "text",
           });
 
-          const $ = cheerio.load(res.data);
+          $ = cheerio.load(res.data);
           image = $('meta[property="og:image"]').attr("content") || "";
         }
 
-        if (x === "abc") {
+        if (x === "ABC") {
           const rawRss = await axios.get(rss[x].top);
-          const $ = cheerio.load(rawRss.data);
+          $ = cheerio.load(rawRss.data);
           const items = $("item");
           image = (items.children()[i] as any).attribs.url;
         }
 
         const data = {
-          category: getCategories(x, feed, null),
+          category: getCategories(x, feed, $),
           section: "top",
           publisher: x,
           title: feed.title,

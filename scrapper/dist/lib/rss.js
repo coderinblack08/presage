@@ -2,13 +2,13 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.rss = void 0;
 exports.rss = {
-    cnn: {
+    CNN: {
         top: "http://rss.cnn.com/rss/edition.rss",
     },
-    foxnews: {
+    "Fox News": {
         top: "http://feeds.foxnews.com/foxnews/latest",
     },
-    abc: {
+    ABC: {
         top: "https://abcnews.go.com/abcnews/topstories",
     },
 };

@@ -23,6 +23,13 @@
     letter-spacing: -0.005em;
   }
 
+  h4 {
+    font-weight: bold;
+    font-size: 1.43rem;
+    line-height: 2rem;
+    letter-spacing: -0.005em;
+  }
+
   p,
   span,
   a,
