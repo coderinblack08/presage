@@ -21,14 +21,21 @@ const categories = [
 const Index: React.FC = () => {
   const likeInput = useRef<HTMLDivElement>();
   const [filterOpen, setFilterOpen] = useState(true);
-  const { data, isValidating } = useSWR("/api/articles?limit=3", fetcher, {
-    revalidateOnFocus: false,
-  });
+  const [query, setQuery] = useState<any>({ limit: 3 });
+  const { data, isValidating } = useSWR(
+    `/api/articles?${Object.keys(query)
+      .map((x) => x + "=" + query[x])
+      .join("&")}`,
+    fetcher,
+    {
+      revalidateOnFocus: false,
+    }
+  );
 
   return (
     <div>
       <Navbar />
-      <main className="max-w-6xl mx-auto py-16 lg:py-20 px-6">
+      <main className="max-w-6xl mx-auto py-20 lg:py-24 px-6">
         <header>
           <h3>Your Personal, Curated Feed</h3>
           <p className="text-gray mt-2">
@@ -71,6 +78,14 @@ const Index: React.FC = () => {
             <Select
               items={["All Publishers", "CNN", "Fox News", "ABC"]}
               defaultValue="All Publishers"
+              onChange={(value) => {
+                if (value === "All Publishers") {
+                  setQuery({ limit: 3 });
+                  console.log(query);
+                } else {
+                  setQuery({ ...query, publisher: value, limit: 10 });
+                }
+              }}
             />
             <Select
               items={[
@@ -99,18 +114,20 @@ const Index: React.FC = () => {
             </button>
           </div>
         )}
-        <div className="grid grid-cols-2 gap-16 mt-20">
-          {!isValidating ? (
-            data
+        {!isValidating ? (
+          <div className="grid grid-cols-2 gap-16 mt-24">
+            {data
               ?.reduce((acc, cur) => [...acc, cur.articles], [])
               .flat()
               .map((article) => (
                 <ArticleCard key={article.title} {...article} />
-              ))
-          ) : (
+              ))}
+          </div>
+        ) : (
+          <div className="grid justify-items-center mt-20">
             <p className="text-light-gray">Loading...</p>
-          )}
-        </div>
+          </div>
+        )}
       </main>
     </div>
   );

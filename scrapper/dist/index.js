@@ -75,7 +75,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
                     publisher: x,
                     title: feed.title,
                     description: feed.contentSnippet,
-                    date: new Date(feed.pubDate || feed.isoDate || "").toISOString(),
+                    date: feed.pubDate || feed.isoDate,
                     url: feed.guid || undefined,
                     priority: (feeds.items.length - i) / feeds.items.length,
                     image,

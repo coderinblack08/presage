@@ -2,11 +2,16 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { Client } from "pg";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const { limit = 5 } = req.query;
+  const { limit = 5, publisher } = req.query;
   const client = new Client({
     connectionString: process.env.CONNECTION_STRING,
   });
   await client.connect();
+  const variables = [limit];
+
+  if (publisher) {
+    variables.push(publisher);
+  }
 
   try {
     const result = await client.query(
@@ -31,9 +36,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         order by -(now()::DATE - date::DATE) * 0.75 + priority desc
         limit $1
       ) a on a.publisher = p.name
+      ${publisher ? "where p.name = $2" : ""}
       group by p.name;
       `,
-      [limit]
+      variables
     );
     res
       .status(200)

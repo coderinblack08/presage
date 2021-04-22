@@ -6,17 +6,25 @@ interface SelectProps {
   defaultValue: string;
   items: string[];
   className?: string;
+  onChange?: (value: string) => void;
 }
 
 export const Select: React.FC<SelectProps> = ({
   defaultValue,
   items,
   className,
+  onChange,
 }) => {
   const [selected, setSelected] = useState(defaultValue);
 
   return (
-    <Listbox value={selected} onChange={setSelected}>
+    <Listbox
+      value={selected}
+      onChange={(value) => {
+        setSelected(value);
+        onChange && onChange(value);
+      }}
+    >
       {({ open }) => (
         <>
           <div className="relative mt-1">
@@ -42,7 +50,7 @@ export const Select: React.FC<SelectProps> = ({
             >
               <Listbox.Options
                 static
-                className="absolute p-2 mt-2 overflow-auto text-base bg-darker-gray rounded-lg shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+                className="absolute p-2 mt-2 overflow-auto text-base bg-darker-gray shadow-2xl rounded-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
               >
                 {items.map((item, i) => (
                   <Listbox.Option
