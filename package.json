@@ -1,0 +1,13 @@
+{
+  "name": "presage",
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "scrapper",
+      "web"
+    ],
+    "nohoist": [
+      "**"
+    ]
+  }
+}

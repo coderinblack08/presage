@@ -23,13 +23,14 @@ const Index: React.FC = () => {
   const likeInput = useRef<HTMLDivElement>();
   const [filterOpen, setFilterOpen] = useState(true);
   const [query, setQuery] = useState<any>({ limit: 3 });
-  const {
-    data: categories,
-    isValidating: categoriesLoading,
-    mutate: mutateCategories,
-  } = useSWR(
-    "categories",
-    async () => (await supabase.from("categories").select("*").limit(6)).data
+  const { data: categories, size, setSize } = useSWRInfinite(
+    (pageIndex, previousPageData) => {
+      if (previousPageData && !previousPageData.data) {
+        return null;
+      }
+      return `/api/categories?limit=5&offset=${pageIndex * 5}}`;
+    },
+    fetcher
   );
   const { data, isValidating } = useSWR(
     `/api/articles?${Object.keys(query)
@@ -97,14 +98,10 @@ const Index: React.FC = () => {
               }}
             />
             <Select
-              items={
-                !categoriesLoading && categories
-                  ? categories.map((x) => x.name)
-                  : []
-              }
+              items={categories ? categories[0].map((x) => x.name) : []}
               defaultValue="All Categories"
               waypoint={() => {
-                mutateCategories();
+                setSize(1);
               }}
             />
             <button

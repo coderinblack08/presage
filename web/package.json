@@ -1,5 +1,5 @@
 {
-  "name": "with-tailwindcss",
+  "name": "@presage/web",
   "version": "0.1.0",
   "private": true,
   "scripts": {
