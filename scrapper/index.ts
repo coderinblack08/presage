@@ -4,6 +4,7 @@ import cors from "cors";
 import "dotenv/config";
 import express from "express";
 import cron from "node-cron";
+import { Client } from "pg";
 import { defaultPublishers } from "./lib/defaultPublishers";
 import { parser } from "./lib/parser";
 import { rss } from "./lib/rss";
@@ -34,6 +35,10 @@ const main = async () => {
   console.time("main");
   console.log("⛽️ Request received, scrapping articles");
   await supabase.from("publishers").upsert(defaultPublishers);
+  const client = new Client({
+    connectionString: process.env.CONNECTION_STRING,
+  });
+  await client.connect();
 
   for (const x of Object.keys(rss)) {
     const feeds = await parser.parseURL(rss[x].top);
@@ -83,6 +88,17 @@ const main = async () => {
         };
 
         await supabase.from("articles").upsert([data]);
+        for (const category of data.category) {
+          await client.query(
+            `
+              insert into categories (name, articles)
+              values ($1, 1)
+              on conflict (name)
+              do update set articles = categories.articles + 1;
+            `,
+            [category]
+          );
+        }
         i++;
       }
     }
@@ -90,6 +106,7 @@ const main = async () => {
 
   console.log("✨ Success, articles saved");
   console.timeEnd("main");
+  await client.end();
 };
 
 const app = express();

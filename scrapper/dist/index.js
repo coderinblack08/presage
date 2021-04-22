@@ -18,6 +18,7 @@ const cors_1 = __importDefault(require("cors"));
 require("dotenv/config");
 const express_1 = __importDefault(require("express"));
 const node_cron_1 = __importDefault(require("node-cron"));
+const pg_1 = require("pg");
 const defaultPublishers_1 = require("./lib/defaultPublishers");
 const parser_1 = require("./lib/parser");
 const rss_1 = require("./lib/rss");
@@ -40,6 +41,10 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
     console.time("main");
     console.log("⛽️ Request received, scrapping articles");
     yield supabase_1.supabase.from("publishers").upsert(defaultPublishers_1.defaultPublishers);
+    const client = new pg_1.Client({
+        connectionString: process.env.CONNECTION_STRING,
+    });
+    yield client.connect();
     for (const x of Object.keys(rss_1.rss)) {
         const feeds = yield parser_1.parser.parseURL(rss_1.rss[x].top);
         let i = 0;
@@ -81,12 +86,21 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
                     image,
                 };
                 yield supabase_1.supabase.from("articles").upsert([data]);
+                for (const category of data.category) {
+                    yield client.query(`
+              insert into categories (name, articles)
+              values ($1, 1)
+              on conflict (name)
+              do update set articles = categories.articles + 1;
+            `, [category]);
+                }
                 i++;
             }
         }
     }
     console.log("✨ Success, articles saved");
     console.timeEnd("main");
+    yield client.end();
 });
 const app = express_1.default();
 app.use(cors_1.default({ origin: "*" }));
