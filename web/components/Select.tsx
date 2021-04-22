@@ -1,12 +1,14 @@
 import React, { Fragment, useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
+import { Waypoint } from "react-waypoint";
 
 interface SelectProps {
   defaultValue: string;
   items: string[];
   className?: string;
   onChange?: (value: string) => void;
+  waypoint?: () => void;
 }
 
 export const Select: React.FC<SelectProps> = ({
@@ -14,6 +16,7 @@ export const Select: React.FC<SelectProps> = ({
   items,
   className,
   onChange,
+  waypoint,
 }) => {
   const [selected, setSelected] = useState(defaultValue);
 
@@ -84,6 +87,7 @@ export const Select: React.FC<SelectProps> = ({
                     )}
                   </Listbox.Option>
                 ))}
+                <Waypoint onEnter={() => waypoint && waypoint()} />
               </Listbox.Options>
             </Transition>
           </div>

@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import useSWR from "swr";
+import useSWR, { useSWRInfinite } from "swr";
 import { supabase } from "../lib/supabase";
 import { ArticleCard } from "../components/ArticleCard";
 import { Button } from "../components/Button";
@@ -23,7 +23,11 @@ const Index: React.FC = () => {
   const likeInput = useRef<HTMLDivElement>();
   const [filterOpen, setFilterOpen] = useState(true);
   const [query, setQuery] = useState<any>({ limit: 3 });
-  const { data: categories, isValidating: categoriesLoading } = useSWR(
+  const {
+    data: categories,
+    isValidating: categoriesLoading,
+    mutate: mutateCategories,
+  } = useSWR(
     "categories",
     async () => (await supabase.from("categories").select("*").limit(6)).data
   );
@@ -99,6 +103,9 @@ const Index: React.FC = () => {
                   : []
               }
               defaultValue="All Categories"
+              waypoint={() => {
+                mutateCategories();
+              }}
             />
             <button
               onFocus={() => likeInput.current.focus()}
