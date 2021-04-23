@@ -6,7 +6,9 @@ import { Select } from "./Select";
 interface CategorySelectProps {}
 
 export const CategorySelect: React.FC<CategorySelectProps> = ({}) => {
-  const { data, size, setSize } = useSWRInfinite((index) => {
+  const { data, size, setSize } = useSWRInfinite((index, previousPageData) => {
+    if (previousPageData && !previousPageData.length) return null;
+
     return `/api/categories?limit=5&page=${index}`;
   }, fetcher);
 
