@@ -10,7 +10,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       const result = await supabase
         .from("categories")
         .select("*")
-        // .range(offset, offset + skip - 1)
+        .range(offset, offset + skip - 1)
         .order("articles", { ascending: false });
 
       res.status(200).json(result.data);
