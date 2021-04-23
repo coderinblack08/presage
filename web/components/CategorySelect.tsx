@@ -3,9 +3,13 @@ import { useSWRInfinite } from "swr";
 import { fetcher } from "../pages/fetcher";
 import { Select } from "./Select";
 
-interface CategorySelectProps {}
+interface CategorySelectProps {
+  setCategory: (selected: string) => void;
+}
 
-export const CategorySelect: React.FC<CategorySelectProps> = ({}) => {
+export const CategorySelect: React.FC<CategorySelectProps> = ({
+  setCategory,
+}) => {
   const { data, size, setSize } = useSWRInfinite((index, previousPageData) => {
     if (previousPageData && !previousPageData.length) return null;
 
@@ -14,8 +18,9 @@ export const CategorySelect: React.FC<CategorySelectProps> = ({}) => {
 
   return (
     <Select
-      items={data ? data.flat().map((x) => x.name) : []}
+      items={data ? ["All Categories", ...data.flat().map((x) => x.name)] : []}
       defaultValue="All Categories"
+      onChange={(value) => setCategory(value)}
       waypoint={async () => {
         setSize(size + 1);
       }}

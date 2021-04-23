@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { Client } from "pg";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const { limit = 5, publisher } = req.query;
+  const { limit = 5, publisher, category } = req.query;
   const client = new Client({
     connectionString: process.env.CONNECTION_STRING,
   });
@@ -11,6 +11,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   if (publisher) {
     variables.push(publisher);
+  }
+
+  if (category) {
+    variables.push(category);
   }
 
   try {
@@ -32,7 +36,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       join lateral (
         select id, priority, publisher, category, a.description, title, date, url, image
         from articles a
-        where publisher = p.name
+        where publisher = p.name ${
+          category ? `and ${publisher ? "$3" : "$2"} = any(category)` : ""
+        }
         order by -(now()::DATE - date::DATE) * 0.75 + priority desc
         limit $1
       ) a on a.publisher = p.name

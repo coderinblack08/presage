@@ -26,6 +26,7 @@ const Index: React.FC = () => {
   const [query, setQuery] = useState<any>({ limit: 3 });
   const { data, isValidating } = useSWR(
     `/api/articles?${Object.keys(query)
+      .filter((x) => query[x] !== undefined)
       .map((x) => x + "=" + query[x])
       .join("&")}`,
     fetcher,
@@ -82,14 +83,23 @@ const Index: React.FC = () => {
               defaultValue="All Publishers"
               onChange={(value) => {
                 if (value === "All Publishers") {
-                  setQuery({ limit: 3 });
+                  setQuery({ category: query.category, limit: 3 });
                   console.log(query);
                 } else {
                   setQuery({ ...query, publisher: value, limit: 10 });
                 }
               }}
             />
-            <CategorySelect />
+            <CategorySelect
+              setCategory={(category) => {
+                if (category === "All Categories") {
+                  setQuery({ publisher: query.publisher, limit: 3 });
+                  console.log(query);
+                } else {
+                  setQuery({ ...query, category });
+                }
+              }}
+            />
             <button
               onFocus={() => likeInput.current.focus()}
               className="flex items-center relative cursor-default py-2 pl-9 pr-4 rounded-8 text-lighter-gray focus:outline-none bg-darker-gray rounded-lg"
