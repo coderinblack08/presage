@@ -1,11 +1,13 @@
 import React, { useRef, useState } from "react";
 import useSWR, { useSWRInfinite } from "swr";
 import { supabase } from "../lib/supabase";
+import AutosizeInput from "react-input-autosize";
 import { ArticleCard } from "../components/ArticleCard";
 import { Button } from "../components/Button";
 import { Navbar } from "../components/Navbar";
 import { Select } from "../components/Select";
 import { fetcher } from "./fetcher";
+import { CategorySelect } from "../components/CategorySelect";
 
 let active = 0;
 const tabs = [
@@ -23,15 +25,6 @@ const Index: React.FC = () => {
   const likeInput = useRef<HTMLDivElement>();
   const [filterOpen, setFilterOpen] = useState(true);
   const [query, setQuery] = useState<any>({ limit: 3 });
-  const { data: categories, size, setSize } = useSWRInfinite(
-    (pageIndex, previousPageData) => {
-      if (previousPageData && !previousPageData.data) {
-        return null;
-      }
-      return `/api/categories?limit=5&offset=${pageIndex * 5}}`;
-    },
-    fetcher
-  );
   const { data, isValidating } = useSWR(
     `/api/articles?${Object.keys(query)
       .map((x) => x + "=" + query[x])
@@ -56,7 +49,7 @@ const Index: React.FC = () => {
         <nav className="flex items-center justify-between mt-8 overflow-x-auto relative">
           <ul className="flex items-center space-x-4 flex-shrink relative categories mr-8">
             {tabs.map((category, i) => (
-              <li>
+              <li key={i}>
                 <button
                   className={`py-1 px-3 ${
                     active === i
@@ -97,13 +90,7 @@ const Index: React.FC = () => {
                 }
               }}
             />
-            <Select
-              items={categories ? categories[0].map((x) => x.name) : []}
-              defaultValue="All Categories"
-              waypoint={() => {
-                setSize(1);
-              }}
-            />
+            <CategorySelect />
             <button
               onFocus={() => likeInput.current.focus()}
               className="flex items-center relative cursor-default py-2 pl-9 pr-4 rounded-8 text-lighter-gray focus:outline-none bg-darker-gray rounded-lg"
@@ -111,13 +98,7 @@ const Index: React.FC = () => {
               <span className="text-primary text-lg pl-4 z-10 absolute left-0">
                 ≥
               </span>
-              <div
-                className="bg-transparent min-w-[1rem] pr-1.5 focus:outline-none"
-                ref={likeInput}
-                contentEditable
-              >
-                0
-              </div>
+              <AutosizeInput value={0} ref={likeInput} className="autoresize" />
               <p className="text-gray">Likes</p>
             </button>
           </div>

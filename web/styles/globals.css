@@ -47,4 +47,8 @@
     line-height: 22px;
     letter-spacing: 0.005em;
   }
+
+  .autoresize > input {
+    @apply bg-transparent pr-1.5 focus:outline-none;
+  }
 }
