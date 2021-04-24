@@ -14,7 +14,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
         WebkitBackdropFilter: "blur(5px)",
       }}
     >
-      <img src="/static/logo.svg" className="w-auto h-11" />
+      <img src="/static/logo.png" className="w-auto h-11" />
       <ul className="flex items-center space-x-9">
         <li>
           <Link href="/">
@@ -39,7 +39,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
           </Link>
         </li>
       </ul>
-      <div className="flex items-center">
+      <div className="flex items-center flex-shrink-0">
         <div className="flex items-center space-x-4 mr-6">
           <a href="#">
             <img src="/static/github.svg" className="w-6 h-6" />

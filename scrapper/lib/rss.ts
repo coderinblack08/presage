@@ -5,8 +5,10 @@ export const rss: Record<string, { top?: string; us?: string }> = {
   },
   "Fox News": {
     top: "http://feeds.foxnews.com/foxnews/latest",
+    us: "http://feeds.foxnews.com/foxnews/national",
   },
   ABC: {
     top: "https://abcnews.go.com/abcnews/topstories",
+    us: "https://abcnews.go.com/abcnews/usheadlines",
   },
 };
