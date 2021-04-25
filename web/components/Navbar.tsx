@@ -15,7 +15,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
       }}
     >
       <img src="/static/logo.png" className="w-auto h-10" />
-      <ul className="flex items-center space-x-9">
+      <ul className="hidden lg:flex items-center space-x-9">
         <li>
           <Link href="/">
             <a className="text-white bg-darker-gray px-4 py-2 rounded-lg">

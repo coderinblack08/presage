@@ -32,7 +32,9 @@ export const Card: React.FC<CardProps> = ({
   author,
 }) => {
   return (
-    <article className={`${expanded ? "block max-w-lg" : "flex space-x-4"}`}>
+    <article
+      className={`${expanded ? "block w-full lg:max-w-lg" : "flex space-x-4"}`}
+    >
       <img
         src={image.url}
         alt={image.alt}

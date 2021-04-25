@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
+@import url("https://rsms.me/inter/inter.css");
 
 @tailwind base;
 @tailwind components;
@@ -51,5 +51,10 @@
 
   .autoresize > input {
     @apply bg-transparent pr-1.5 focus:outline-none;
+  }
+
+  .stroke-text {
+    -webkit-text-stroke: 1.5px theme("colors.darker-gray");
+    -webkit-text-fill-color: transparent;
   }
 }

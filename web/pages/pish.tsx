@@ -20,9 +20,6 @@ const Pish: NextPage<{ articles?: ApiSearchResponse }> = ({ articles }) => {
           name="description"
           content="An innovative student run non-mainstream news organization delivery credible news biweekly."
         />
-        <meta httpEquiv="Content-Type" content="text/html;charset=UTF-8" />
-        <meta httpEquiv="X-UA-Compatible" content="edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
       <Navbar />
       <main className="max-w-6xl mx-auto py-20 lg:py-24 px-6">
@@ -39,12 +36,7 @@ const Pish: NextPage<{ articles?: ApiSearchResponse }> = ({ articles }) => {
               )}
             </button>
           </div>
-          <h1
-            className="text-7xl font-black text-black select-none"
-            style={{
-              textShadow: `#2f364b 0px 0px 3px, #2f364b 0px 0px 3px, #2f364b 0px 0px 3px, #2f364b 0px 0px 3px, #2f364b 0px 0px 3px, #2f364b 0px 0px 3px`,
-            }}
-          >
+          <h1 className="text-6xl xl:text-7xl font-black text-black select-none stroke-text">
             Pish & Presage
           </h1>
         </div>
@@ -56,10 +48,10 @@ const Pish: NextPage<{ articles?: ApiSearchResponse }> = ({ articles }) => {
           Merging Pish, an innovative student run non-mainstream news
           organization, with Presage.
         </p>
-        <div className="grid mt-16 grid-cols-12 gap-4">
+        <div className="container lg:w-full grid mt-16 grid-cols-12 gap-12 lg:gap-4">
           {articles.results[0].data.items.map(({ article }, index: number) => (
             <div
-              className={`col-span-6 ${
+              className={`col-span-12 lg:col-span-6 ${
                 index === 0 ? "row-span-4" : "row-span-1"
               }`}
             >
@@ -75,7 +67,10 @@ const Pish: NextPage<{ articles?: ApiSearchResponse }> = ({ articles }) => {
               />
             </div>
           ))}
-          <a className="col-span-6 row-span-1 text-primary" href="">
+          <a
+            className="col-span-12 lg:col-span-6 row-span-1 text-primary"
+            href=""
+          >
             View All →
           </a>
         </div>
