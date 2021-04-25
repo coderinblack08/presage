@@ -1,10 +1,15 @@
 import React from "react";
 import Link from "next/link";
 import { Button } from "./Button";
+import { useRouter } from "next/router";
 
 interface NavbarProps {}
 
 export const Navbar: React.FC<NavbarProps> = ({}) => {
+  const router = useRouter();
+  const onPath = (tab: string) => tab === router.pathname;
+  const activeClass = "text-white bg-darker-gray rounded-lg";
+
   return (
     <nav
       className="sticky z-50 top-0 bg-black bg-opacity-75 flex items-center justify-between max-w-[88rem] mx-auto p-6"
@@ -15,27 +20,49 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
       }}
     >
       <img src="/static/logo.png" className="w-auto h-10" />
-      <ul className="hidden lg:flex items-center space-x-9">
+      <ul className="hidden lg:flex items-center space-x-4">
         <li>
           <Link href="/">
-            <a className="text-white bg-darker-gray px-4 py-2 rounded-lg">
+            <a
+              className={`${
+                onPath("/") ? activeClass : "text-light-gray"
+              } px-4 py-2`}
+            >
               Feed
             </a>
           </Link>
         </li>
         <li>
-          <Link href="/">
-            <a className="text-light-gray">Publishers</a>
+          <Link href="/publishers">
+            <a
+              className={`${
+                onPath("/publishers") ? activeClass : "text-light-gray"
+              } px-4 py-2`}
+            >
+              Publishers
+            </a>
           </Link>
         </li>
         <li>
-          <Link href="/">
-            <a className="text-light-gray">Apply to Publish</a>
+          <Link href="/apply">
+            <a
+              className={`${
+                onPath("/apply") ? activeClass : "text-light-gray"
+              } px-4 py-2`}
+            >
+              Apply to Publish
+            </a>
           </Link>
         </li>
         <li>
           <Link href="/pish">
-            <a className="text-light-gray">Pish</a>
+            <a
+              className={`${
+                onPath("/pish") ? activeClass : "text-light-gray"
+              } px-4 py-2`}
+            >
+              Pish
+            </a>
           </Link>
         </li>
       </ul>

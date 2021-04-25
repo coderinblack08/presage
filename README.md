@@ -1,4 +1,4 @@
-# Pish
+# Presage
 
 A modern news aggregator for all
 
