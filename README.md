@@ -1,6 +1,6 @@
 # Presage
 
-A modern news aggregator for all
+![Presage Thumbnail](web/public/static/github-thumbnail.png)
 
 ## Design Guidelines
 
