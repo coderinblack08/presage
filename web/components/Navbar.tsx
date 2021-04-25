@@ -41,7 +41,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
       </ul>
       <div className="flex items-center flex-shrink-0">
         <div className="flex items-center space-x-4 mr-6">
-          <a href="#">
+          <a href="https://github.com/coderinblack08/presage">
             <img src="/static/github.svg" className="w-6 h-6" />
           </a>
           <a href="#">

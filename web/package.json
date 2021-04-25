@@ -10,6 +10,7 @@
   "dependencies": {
     "@headlessui/react": "^1.0.0",
     "@heroicons/react": "^1.0.1",
+    "@prismicio/client": "^4.0.0",
     "@supabase/supabase-js": "^1.11.6",
     "date-fns": "^2.21.1",
     "next": "latest",

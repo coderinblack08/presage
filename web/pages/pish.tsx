@@ -1,14 +1,29 @@
-import { HeartIcon, ReplyIcon, UploadIcon } from "@heroicons/react/outline";
 import { VolumeOffIcon, VolumeUpIcon } from "@heroicons/react/solid";
+import Prismic from "@prismicio/client";
+import ApiSearchResponse from "@prismicio/client/types/ApiSearchResponse";
+import { GetStaticProps, NextPage } from "next";
+import Head from "next/head";
 import React from "react";
 import useSound from "use-sound";
 import { Navbar } from "../components/Navbar";
+import { Card } from "../components/pish/Card";
+import { client } from "../lib/prismic";
 
-const Pish: React.FC = () => {
+const Pish: NextPage<{ articles?: ApiSearchResponse }> = ({ articles }) => {
   const [play, { stop, isPlaying }] = useSound("/assets/pronounce_pish.mp3");
 
   return (
     <div>
+      <Head>
+        <title>Pish News</title>
+        <meta
+          name="description"
+          content="An innovative student run non-mainstream news organization delivery credible news biweekly."
+        />
+        <meta httpEquiv="Content-Type" content="text/html;charset=UTF-8" />
+        <meta httpEquiv="X-UA-Compatible" content="edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      </Head>
       <Navbar />
       <main className="max-w-6xl mx-auto py-20 lg:py-24 px-6">
         <div className="relative">
@@ -27,8 +42,7 @@ const Pish: React.FC = () => {
           <h1
             className="text-7xl font-black text-black select-none"
             style={{
-              textShadow: `#2f364b 0px 0px 3px,   #2f364b 0px 0px 3px,   #2f364b 0px 0px 3px,
-            #2f364b 0px 0px 3px,   #2f364b 0px 0px 3px,   #2f364b 0px 0px 3px`,
+              textShadow: `#2f364b 0px 0px 3px, #2f364b 0px 0px 3px, #2f364b 0px 0px 3px, #2f364b 0px 0px 3px, #2f364b 0px 0px 3px, #2f364b 0px 0px 3px`,
             }}
           >
             Pish & Presage
@@ -42,39 +56,54 @@ const Pish: React.FC = () => {
           Merging Pish, an innovative student run non-mainstream news
           organization, with Presage.
         </p>
-        <div className="mt-16">
-          <article className="max-w-lg">
-            <img
-              src="https://images.prismic.io/pish/91fa7611-d2e5-4a25-af40-62d50d0f62c0_warnock_loeffler_perdue_ossoff.jpg?auto=compress,format"
-              className="rounded-lg mb-6"
-            />
-            <h4>Day of Georgia Senate Races Analysis</h4>
-            <p className="text-light-gray mt-2">
-              Georgia officials say that predictions and results will start
-              coming out starting tonight and tomorrow morning.
-            </p>
-            <div className="flex items-center justify-between mt-6">
-              <p className="text-light-gray">
-                January 4, 2021 <span className="text-gray">By</span>{" "}
-                <span className="text-primary">Hansel Grimes</span>
-              </p>
-              <div className="flex items-center space-x-4">
-                <button>
-                  <HeartIcon className="w-6 h-6 text-light-gray" />
-                </button>
-                <button>
-                  <UploadIcon className="w-6 h-6 text-light-gray" />
-                </button>
-                <button>
-                  <ReplyIcon className="w-6 h-6 text-light-gray" />
-                </button>
-              </div>
+        <div className="grid mt-16 grid-cols-12 gap-4">
+          {articles.results[0].data.items.map(({ article }, index: number) => (
+            <div
+              className={`col-span-6 ${
+                index === 0 ? "row-span-4" : "row-span-1"
+              }`}
+            >
+              <Card
+                slug={article.slug}
+                tags={article.tags}
+                date={new Date(article.data.date)}
+                title={article.data.title[0].text}
+                description={article.data.description}
+                author={article.data.author.data.fullname[0].text}
+                image={article.data.image}
+                expanded={index === 0}
+              />
             </div>
-          </article>
+          ))}
+          <a className="col-span-6 row-span-1 text-primary" href="">
+            View All →
+          </a>
         </div>
       </main>
     </div>
   );
+};
+
+export const getStaticProps: GetStaticProps = async () => {
+  const articles = await client.query(
+    Prismic.Predicates.at("document.type", "trending"),
+    {
+      fetchLinks: [
+        "articles.title",
+        "articles.description",
+        "articles.image",
+        "articles.author",
+        "articles.date",
+        "authors.fullname",
+      ],
+    }
+  );
+
+  return {
+    props: {
+      articles,
+    },
+  };
 };
 
 export default Pish;
