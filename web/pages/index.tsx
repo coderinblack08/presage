@@ -6,6 +6,7 @@ import { Button } from "../components/Button";
 import { CategorySelect } from "../components/CategorySelect";
 import { Navbar } from "../components/Navbar";
 import { Select } from "../components/Select";
+import { useArticles } from "../lib/swr";
 import { fetcher } from "./fetcher";
 
 let active = 0;
@@ -24,16 +25,7 @@ const Index: React.FC = () => {
   const likeInput = useRef<HTMLDivElement>();
   const [filterOpen, setFilterOpen] = useState(true);
   const [query, setQuery] = useState<any>({ limit: 3 });
-  const { data, isValidating } = useSWR(
-    `/api/articles?${Object.keys(query)
-      .filter((x) => query[x] !== undefined)
-      .map((x) => x + "=" + query[x])
-      .join("&")}`,
-    fetcher,
-    {
-      revalidateOnFocus: false,
-    }
-  );
+  const { data, isValidating } = useArticles(query);
 
   return (
     <div>

@@ -10,11 +10,11 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
       className="sticky z-50 top-0 bg-black bg-opacity-75 flex items-center justify-between max-w-[88rem] mx-auto p-6"
       style={{
         opacity: 5,
-        backdropFilter: "blur(5px)",
-        WebkitBackdropFilter: "blur(5px)",
+        backdropFilter: "blur(8px)",
+        WebkitBackdropFilter: "blur(8px)",
       }}
     >
-      <img src="/static/logo.png" className="w-auto h-11" />
+      <img src="/static/logo.png" className="w-auto h-10" />
       <ul className="flex items-center space-x-9">
         <li>
           <Link href="/">
@@ -34,8 +34,8 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
           </Link>
         </li>
         <li>
-          <Link href="/">
-            <a className="text-light-gray">Pricing</a>
+          <Link href="/pish">
+            <a className="text-light-gray">Pish</a>
           </Link>
         </li>
       </ul>

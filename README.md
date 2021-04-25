@@ -1,3 +1,7 @@
+# Pish
+
+A modern news aggregator for all
+
 ## Design Guidelines
 
 Follow the colors and text styles from the Figma library/Tailwind config.
