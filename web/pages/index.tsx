@@ -104,14 +104,11 @@ const Index: React.FC = () => {
             </button>
           </div>
         )}
-        {!isValidating ? (
+        {!isValidating && data ? (
           <div className="grid grid-cols-2 gap-16 mt-24">
-            {data
-              ?.reduce((acc, cur) => [...acc, cur.articles], [])
-              .flat()
-              .map((article) => (
-                <ArticleCard key={article.title} {...article} />
-              ))}
+            {data.map((article) => (
+              <ArticleCard key={article.title} {...article} />
+            ))}
           </div>
         ) : (
           <div className="grid justify-items-center mt-20">

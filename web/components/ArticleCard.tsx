@@ -29,7 +29,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
           <img
             className="w-12 h-12 rounded-full"
             src={publisher_profile_picture}
-            alt={title}
+            alt={publisher_name}
           />
           <div className="mb-4">
             <p className="font-bold text-lg text-lighter-gray">

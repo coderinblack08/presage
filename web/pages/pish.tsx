@@ -68,7 +68,7 @@ const Pish: NextPage<{ articles?: ApiSearchResponse }> = ({ articles }) => {
             </div>
           ))}
           <a
-            className="col-span-12 lg:col-span-6 row-span-1 text-primary"
+            className="col-span-12 lg:col-span-6 row-span-1 text-primary hover:text-faint-primary"
             href=""
           >
             View All →
