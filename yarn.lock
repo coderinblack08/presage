@@ -3241,6 +3241,11 @@ swr@^0.5.5:
   dependencies:
     dequal "2.0.2"
 
+tailwind-scrollbar@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/tailwind-scrollbar/-/tailwind-scrollbar-1.3.0.tgz#db5bfc63591dc8bf0cc8c2a8cb598cbfb98c937d"
+  integrity sha512-/HNuK6zsmINSWWwi9aGkNd15k/XIRWbu5PE6nvJonOlowbeHliUAOq81ic8ZAA9wglz0KvBYSpX8ach3G5hNpA==
+
 tailwindcss-text-fill-stroke@^1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/tailwindcss-text-fill-stroke/-/tailwindcss-text-fill-stroke-1.1.2.tgz#d46934745112ffa547a096fca29130cd409bba9c"

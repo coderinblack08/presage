@@ -15,6 +15,24 @@
   html {
     @apply bg-black;
   }
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: theme("colors.darker-gray") theme("colors.black");
+  }
+
+  ::-webkit-scrollbar {
+    overflow: overlay;
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    display: initial;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: theme("colors.darker-gray");
+    border-radius: 5px;
+  }
 
   h3,
   .h3 {

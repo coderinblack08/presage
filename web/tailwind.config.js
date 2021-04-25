@@ -30,7 +30,7 @@ module.exports = {
     },
   },
   variants: {
-    extend: {},
+    scrollbar: ["rounded", "dark"],
   },
-  plugins: [require("tailwindcss-text-fill-stroke")()],
+  plugins: [require("tailwind-scrollbar")],
 };
