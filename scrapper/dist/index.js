@@ -37,6 +37,7 @@ const getCategories = (source, feed, $) => {
             return [];
     }
 };
+const blacklist = ["https://www.cnn.com/collections"];
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
     console.time("main");
     console.log("⛽️ Request received, scrapping articles");
@@ -46,55 +47,63 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
     });
     yield client.connect();
     for (const x of Object.keys(rss_1.rss)) {
-        const feeds = yield parser_1.parser.parseURL(rss_1.rss[x].top);
-        let i = 0;
-        for (const feed of feeds.items) {
-            if (feed.guid.startsWith("https://www.cnn.com/collections")) {
-                continue;
-            }
-            const { data: alreadyExists } = yield supabase_1.supabase
-                .from("articles")
-                .select("*", { count: "exact" })
-                .filter("title", "eq", feed.title);
-            if (alreadyExists && alreadyExists.length === 0) {
-                let image = "";
-                let $;
-                if (x !== "ABC") {
-                    const res = yield axios_1.default.get(feed.guid, {
-                        withCredentials: true,
-                        headers: { "X-Requested-With": "XMLHttpRequest" },
-                        responseType: "text",
-                    });
-                    $ = cheerio_1.default.load(res.data);
-                    image = $('meta[property="og:image"]').attr("content") || "";
+        for (const section of ["top", "us"]) {
+            const feeds = yield parser_1.parser.parseURL(rss_1.rss[x][section]);
+            let i = 0;
+            for (const feed of feeds.items) {
+                let blacklisted = false;
+                blacklist.forEach((link) => {
+                    if (feed.guid.startsWith(link)) {
+                        blacklisted = true;
+                    }
+                });
+                if (blacklisted) {
+                    continue;
                 }
-                if (x === "ABC") {
-                    const rawRss = yield axios_1.default.get(rss_1.rss[x].top);
-                    $ = cheerio_1.default.load(rawRss.data);
-                    const items = $("item");
-                    image = items.children()[i].attribs.url;
-                }
-                const data = {
-                    category: getCategories(x, feed, $),
-                    section: "top",
-                    publisher: x,
-                    title: feed.title,
-                    description: feed.contentSnippet,
-                    date: feed.pubDate || feed.isoDate,
-                    url: feed.guid || undefined,
-                    priority: (feeds.items.length - i) / feeds.items.length,
-                    image,
-                };
-                yield supabase_1.supabase.from("articles").upsert([data]);
-                for (const category of data.category) {
-                    yield client.query(`
+                const { data: alreadyExists } = yield supabase_1.supabase
+                    .from("articles")
+                    .select("*", { count: "exact" })
+                    .filter("title", "eq", feed.title);
+                if (alreadyExists && alreadyExists.length === 0) {
+                    let image = "";
+                    let $;
+                    if (x !== "ABC") {
+                        const res = yield axios_1.default.get(feed.guid, {
+                            withCredentials: true,
+                            headers: { "X-Requested-With": "XMLHttpRequest" },
+                            responseType: "text",
+                        });
+                        $ = cheerio_1.default.load(res.data);
+                        image = $('meta[property="og:image"]').attr("content") || "";
+                    }
+                    if (x === "ABC") {
+                        const rawRss = yield axios_1.default.get(rss_1.rss[x].top);
+                        $ = cheerio_1.default.load(rawRss.data);
+                        const items = $("item");
+                        image = items.children()[i].attribs.url;
+                    }
+                    const data = {
+                        category: getCategories(x, feed, $),
+                        section,
+                        publisher: x,
+                        title: feed.title,
+                        description: feed.contentSnippet,
+                        date: feed.pubDate || feed.isoDate,
+                        url: feed.guid || undefined,
+                        priority: (feeds.items.length - i) / feeds.items.length,
+                        image,
+                    };
+                    yield supabase_1.supabase.from("articles").upsert([data]);
+                    for (const category of data.category) {
+                        yield client.query(`
               insert into categories (name, articles)
               values ($1, 1)
               on conflict (name)
               do update set articles = categories.articles + 1;
             `, [category]);
+                    }
+                    i++;
                 }
-                i++;
             }
         }
     }

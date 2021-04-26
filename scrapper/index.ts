@@ -31,6 +31,8 @@ const getCategories = (
   }
 };
 
+const blacklist = ["https://www.cnn.com/collections"];
+
 const main = async () => {
   console.time("main");
   console.log("⛽️ Request received, scrapping articles");
@@ -41,65 +43,74 @@ const main = async () => {
   await client.connect();
 
   for (const x of Object.keys(rss)) {
-    const feeds = await parser.parseURL(rss[x].top);
-    let i = 0;
-    for (const feed of feeds.items) {
-      if (feed.guid!.startsWith("https://www.cnn.com/collections")) {
-        continue;
-      }
+    for (const section of ["top", "us"] as const) {
+      const feeds = await parser.parseURL(rss[x][section]);
+      let i = 0;
+      for (const feed of feeds.items) {
+        let blacklisted = false;
+        blacklist.forEach((link) => {
+          if (feed.guid!.startsWith(link)) {
+            blacklisted = true;
+          }
+        });
 
-      const { data: alreadyExists } = await supabase
-        .from("articles")
-        .select("*", { count: "exact" })
-        .filter("title", "eq", feed.title);
-
-      if (alreadyExists && alreadyExists.length === 0) {
-        let image: string = "";
-        let $;
-
-        if (x !== "ABC") {
-          const res = await axios.get(feed.guid!, {
-            withCredentials: true,
-            headers: { "X-Requested-With": "XMLHttpRequest" },
-            responseType: "text",
-          });
-
-          $ = cheerio.load(res.data);
-          image = $('meta[property="og:image"]').attr("content") || "";
+        if (blacklisted) {
+          continue;
         }
 
-        if (x === "ABC") {
-          const rawRss = await axios.get(rss[x].top);
-          $ = cheerio.load(rawRss.data);
-          const items = $("item");
-          image = (items.children()[i] as any).attribs.url;
-        }
+        const { data: alreadyExists } = await supabase
+          .from("articles")
+          .select("*", { count: "exact" })
+          .filter("title", "eq", feed.title);
 
-        const data = {
-          category: getCategories(x, feed, $),
-          section: "top",
-          publisher: x,
-          title: feed.title,
-          description: feed.contentSnippet,
-          date: feed.pubDate || feed.isoDate,
-          url: feed.guid || undefined,
-          priority: (feeds.items.length - i) / feeds.items.length,
-          image,
-        };
+        if (alreadyExists && alreadyExists.length === 0) {
+          let image: string = "";
+          let $;
 
-        await supabase.from("articles").upsert([data]);
-        for (const category of data.category) {
-          await client.query(
-            `
+          if (x !== "ABC") {
+            const res = await axios.get(feed.guid!, {
+              withCredentials: true,
+              headers: { "X-Requested-With": "XMLHttpRequest" },
+              responseType: "text",
+            });
+
+            $ = cheerio.load(res.data);
+            image = $('meta[property="og:image"]').attr("content") || "";
+          }
+
+          if (x === "ABC") {
+            const rawRss = await axios.get(rss[x].top);
+            $ = cheerio.load(rawRss.data);
+            const items = $("item");
+            image = (items.children()[i] as any).attribs.url;
+          }
+
+          const data = {
+            category: getCategories(x, feed, $),
+            section,
+            publisher: x,
+            title: feed.title,
+            description: feed.contentSnippet,
+            date: feed.pubDate || feed.isoDate,
+            url: feed.guid || undefined,
+            priority: (feeds.items.length - i) / feeds.items.length,
+            image,
+          };
+
+          await supabase.from("articles").upsert([data]);
+          for (const category of data.category) {
+            await client.query(
+              `
               insert into categories (name, articles)
               values ($1, 1)
               on conflict (name)
               do update set articles = categories.articles + 1;
             `,
-            [category]
-          );
+              [category]
+            );
+          }
+          i++;
         }
-        i++;
       }
     }
   }
