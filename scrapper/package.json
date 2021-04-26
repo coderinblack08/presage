@@ -1,6 +1,6 @@
 {
   "name": "@presage/scrapper",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "main": "dist/index.js",
   "scripts": {
     "start": "yarn build && node dist/index.js",

@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import pg from "pg-promise";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const { limit = 5, publisher, category } = req.query;
+  const { limit = 5, publisher, category, section } = req.query;
 
   const db = pg()(process.env.CONNECTION_STRING);
   db.connect();
@@ -22,14 +22,14 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         inner join publishers c on name = publisher
         where publisher = p.name ${
           category ? "and ${category} = any(category)" : ""
-        }
+        } ${section ? "and ${section} = section" : ""}
         order by -(now()::DATE - date::DATE) * 0.75 + priority + likes * 0.1 desc
         limit ${limit}
       ) as a on a.publisher = p.name
       ${publisher ? "where p.name = ${publisher}" : ""}
       order by a.rank desc;
       `,
-      { limit, publisher, category }
+      { limit, publisher, category, section }
     );
     res.status(200).json(result);
   } catch (error) {

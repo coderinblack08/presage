@@ -23,3 +23,5 @@ yarn dev
 ```
 
 Setup .env accordingly (create Supabase project, their local cli is still in the workings)
+
+[![Stargazers repo roster for @coderinblack08/presage](https://reporoster.com/stars/coderinblack08/presage)](https://github.com/coderinblack08/presage/stargazers)
