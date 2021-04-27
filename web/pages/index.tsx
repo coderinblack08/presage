@@ -9,7 +9,6 @@ import { Select } from "../components/Select";
 import { useArticles } from "../lib/swr";
 import { fetcher } from "./fetcher";
 
-let active = 0;
 const tabs = [
   "Top",
   "U.S.",
@@ -20,11 +19,13 @@ const tabs = [
   "Technology",
   "Entertainment",
 ];
+const sections = ["top", "us"];
 
 const Index: React.FC = () => {
   const likeInput = useRef<HTMLDivElement>();
   const [filterOpen, setFilterOpen] = useState(true);
   const [query, setQuery] = useState<any>({ limit: 3 });
+  const [section, setSection] = useState(0);
   const { data, isValidating } = useArticles(query);
 
   return (
@@ -44,10 +45,14 @@ const Index: React.FC = () => {
               <li key={i}>
                 <button
                   className={`py-1 px-3 ${
-                    active === i
+                    section === i
                       ? "text-faint-primary bg-primary bg-opacity-25"
                       : "text-light-gray"
-                  } rounded-lg`}
+                  } rounded-lg focus:outline-none`}
+                  onClick={() => {
+                    setSection(i);
+                    setQuery({ ...query, section: sections[i] });
+                  }}
                 >
                   {category}
                 </button>
@@ -105,11 +110,22 @@ const Index: React.FC = () => {
           </div>
         )}
         {!isValidating && data ? (
-          <div className="grid grid-cols-2 gap-16 mt-24">
-            {data.map((article) => (
-              <ArticleCard key={article.title} {...article} />
-            ))}
-          </div>
+          data.length === 0 ? (
+            <div className="grid justify-items-center mt-20">
+              <p className="text-light-gray">
+                No articles match your filters.{" "}
+                <a href="#" className="text-primary">
+                  Reload ⟳
+                </a>
+              </p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-16 mt-24">
+              {data.map((article: any) => (
+                <ArticleCard key={article.title} {...article} />
+              ))}
+            </div>
+          )
         ) : (
           <div className="grid justify-items-center mt-20">
             <p className="text-light-gray">Loading...</p>
