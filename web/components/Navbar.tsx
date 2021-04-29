@@ -80,7 +80,9 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
         </div>
         <div className="space-x-2">
           <Button color="secondary">Login</Button>
-          <Button>Register</Button>
+          <Link href="/register">
+            <Button>Register</Button>
+          </Link>
         </div>
       </div>
     </nav>

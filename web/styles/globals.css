@@ -42,7 +42,7 @@
     letter-spacing: 0.005em;
   }
 
-  a {
+  a.link {
     @apply text-primary hover:underline hover:text-faint-primary;
   }
 
