@@ -11,12 +11,14 @@ export const UserProvider: React.FC = (props) => {
   useEffect(() => {
     const session = supabase.auth.session();
     const fetchUserData = () =>
-      supabase
-        .from("users")
-        .select("*")
-        .filter("id", "eq", session.user.id)
-        .single()
-        .then((res) => res.data);
+      session
+        ? supabase
+            .from("users")
+            .select("*")
+            .filter("id", "eq", session.user.id)
+            .single()
+            .then((res) => res.data)
+        : null;
 
     let unsubscribe: () => void = () => {};
     (async () => {

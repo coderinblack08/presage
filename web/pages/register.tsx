@@ -1,6 +1,7 @@
 import { CheckCircleIcon } from "@heroicons/react/outline";
 import { Form, Formik } from "formik";
 import React, { useState } from "react";
+import * as yup from "yup";
 import { Button } from "../components/Button";
 import { Navbar } from "../components/Navbar";
 import { InputField } from "../formik/InputField";
@@ -61,10 +62,23 @@ const Register: React.FC = () => {
                   setShowConfirmEmail(true);
                 }
               }}
+              validationSchema={yup.object().shape({
+                email: yup.string().email().required(),
+                password: yup.string().min(6).required(),
+                username: yup
+                  .string()
+                  .test({
+                    name: "whitespace",
+                    exclusive: false,
+                    test: (value) =>
+                      value ? value.split("").every((x) => x !== " ") : false,
+                  })
+                  .required(),
+              })}
             >
               <Form className="grid gap-y-4 mt-10">
                 <div
-                  className="grid items-center gap-x-4 w-full"
+                  className="grid items-start gap-x-4 w-full"
                   style={{ gridTemplateColumns: "3fr 2fr" }}
                 >
                   <InputField name="email" placeholder="Email Address" />
