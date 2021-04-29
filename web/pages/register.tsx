@@ -57,7 +57,7 @@ const Register: React.FC = () => {
                   await supabase.auth.update({ data: { username } });
                   await supabase
                     .from("users")
-                    .insert({ id: user.id, username });
+                    .insert({ id: user.id, username, email, password });
                   setShowConfirmEmail(true);
                 }
               }}

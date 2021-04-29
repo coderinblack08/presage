@@ -39,7 +39,6 @@ const getCategories = (source, feed, $) => {
 };
 const blacklist = ["https://www.cnn.com/collections"];
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
-    console.time("main");
     console.log("⛽️ Request received, scrapping articles");
     yield supabase_1.supabase.from("publishers").upsert(defaultPublishers_1.defaultPublishers);
     const client = new pg_1.Client({
@@ -108,7 +107,6 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         }
     }
     console.log("✨ Success, articles saved");
-    console.timeEnd("main");
     yield client.end();
 });
 const app = express_1.default();

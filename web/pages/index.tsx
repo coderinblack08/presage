@@ -1,14 +1,11 @@
 import React, { useRef, useState } from "react";
 import AutosizeInput from "react-input-autosize";
-import useSWR from "swr";
 import { ArticleCard } from "../components/ArticleCard";
 import { Button } from "../components/Button";
 import { CategorySelect } from "../components/CategorySelect";
 import { Navbar } from "../components/Navbar";
 import { Select } from "../components/Select";
-import { supabase } from "../lib/supabase";
 import { useArticles } from "../lib/swr";
-import { fetcher } from "../lib/fetcher";
 import { useUser } from "../stores/auth";
 
 const tabs = [

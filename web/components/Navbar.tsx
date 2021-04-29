@@ -19,7 +19,11 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
         WebkitBackdropFilter: "blur(8px)",
       }}
     >
-      <img src="/static/logo.png" className="w-auto h-10" />
+      <Link href="/">
+        <a className="cursor-pointer">
+          <img src="/static/logo.png" className="w-auto h-10" />
+        </a>
+      </Link>
       <ul className="hidden lg:flex items-center space-x-4">
         <li>
           <Link href="/">
@@ -79,7 +83,9 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
           </button>
         </div>
         <div className="space-x-2">
-          <Button color="secondary">Login</Button>
+          <Link href="/login">
+            <Button color="secondary">Login</Button>
+          </Link>
           <Link href="/register">
             <Button>Register</Button>
           </Link>
