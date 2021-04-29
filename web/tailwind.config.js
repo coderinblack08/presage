@@ -1,3 +1,5 @@
+const colors = require("tailwindcss/colors");
+
 module.exports = {
   mode: "jit",
   purge: ["./pages/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}"],
@@ -27,6 +29,7 @@ module.exports = {
       primary: "#547CF5",
       "faint-primary": "#7A9AFC",
       "white-primary": "#D4DFFF",
+      ...colors.red,
     },
   },
   variants: {

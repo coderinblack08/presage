@@ -6,8 +6,10 @@ import { Button } from "../components/Button";
 import { CategorySelect } from "../components/CategorySelect";
 import { Navbar } from "../components/Navbar";
 import { Select } from "../components/Select";
+import { supabase } from "../lib/supabase";
 import { useArticles } from "../lib/swr";
-import { fetcher } from "./fetcher";
+import { fetcher } from "../lib/fetcher";
+import { useUser } from "../stores/auth";
 
 const tabs = [
   "Top",
@@ -26,6 +28,7 @@ const Index: React.FC = () => {
   const [filterOpen, setFilterOpen] = useState(true);
   const [query, setQuery] = useState<any>({ limit: 3 });
   const [section, setSection] = useState(0);
+  const { user } = useUser();
   const { data, isValidating } = useArticles(query);
 
   return (
@@ -109,6 +112,7 @@ const Index: React.FC = () => {
             </button>
           </div>
         )}
+        <pre>{JSON.stringify(user, null, 2)}</pre>
         {!isValidating && data ? (
           data.length === 0 ? (
             <div className="grid justify-items-center mt-20">

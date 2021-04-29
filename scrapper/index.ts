@@ -34,7 +34,6 @@ const getCategories = (
 const blacklist = ["https://www.cnn.com/collections"];
 
 const main = async () => {
-  console.time("main");
   console.log("⛽️ Request received, scrapping articles");
   await supabase.from("publishers").upsert(defaultPublishers);
   const client = new Client({
@@ -116,7 +115,6 @@ const main = async () => {
   }
 
   console.log("✨ Success, articles saved");
-  console.timeEnd("main");
   await client.end();
 };
 

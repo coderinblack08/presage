@@ -1,9 +1,7 @@
 import useSWR from "swr";
-import { fetcher } from "../pages/fetcher";
+import { fetcher } from "./fetcher";
 
 export const useArticles = (query: string) => {
-  console.log(query);
-
   const result = useSWR(
     `/api/articles?${Object.keys(query)
       .filter((x) => query[x] !== undefined)

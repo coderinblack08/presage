@@ -42,6 +42,10 @@
     letter-spacing: 0.005em;
   }
 
+  a {
+    @apply text-primary hover:underline hover:text-faint-primary;
+  }
+
   .small {
     font-weight: 500;
     font-size: 12px !important;

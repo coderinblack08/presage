@@ -1,6 +1,6 @@
 import React from "react";
 import { useSWRInfinite } from "swr";
-import { fetcher } from "../pages/fetcher";
+import { fetcher } from "../lib/fetcher";
 import { Select } from "./Select";
 
 interface CategorySelectProps {
