@@ -15,24 +15,25 @@ export const UserProvider: React.FC = (props) => {
 
   useEffect(() => {
     const session = supabase.auth.session();
-    const fetchUserData = () =>
+    const fetchUserData = async () =>
       session
-        ? supabase
-            .from("users")
-            .select("*")
-            .filter("id", "eq", session.user.id)
-            .single()
-            .then((res) => res.data)
+        ? (
+            await supabase
+              .from("users")
+              .select("*")
+              .filter("id", "eq", session.user.id)
+              .single()
+          ).data
         : null;
 
     let unsubscribe: () => void = () => {};
     (async () => {
       let details = await fetchUserData();
-      setUser({ ...session?.user, details } || null);
+      setUser(session ? { ...session?.user, details } : null);
       const { data } = supabase.auth.onAuthStateChange(async (_, session) => {
         setSession(session);
         details = await fetchUserData();
-        setUser({ ...session?.user, details } || null);
+        setUser(session ? { ...session?.user, details } : null);
       });
       unsubscribe = data.unsubscribe;
     })();

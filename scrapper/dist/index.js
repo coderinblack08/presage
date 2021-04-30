@@ -92,7 +92,8 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
                         priority: (feeds.items.length - i) / feeds.items.length,
                         image,
                     };
-                    yield supabase_1.supabase.from("articles").upsert([data]);
+                    const { error } = yield supabase_1.supabase.from("articles").upsert([data]);
+                    console.log(error);
                     for (const category of data.category) {
                         yield client.query(`
               insert into categories (name, articles)

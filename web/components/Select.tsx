@@ -53,7 +53,7 @@ export const Select: React.FC<SelectProps> = ({
             >
               <Listbox.Options
                 static
-                className="absolute p-2 mt-2 overflow-auto text-base bg-darker-gray shadow-2xl rounded-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+                className="absolute p-2 mt-2 overflow-auto text-base bg-darker-gray rounded-lg max-h-60 focus:outline-none sm:text-sm"
               >
                 {items.map((item, i) => (
                   <Listbox.Option

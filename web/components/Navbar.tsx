@@ -1,9 +1,9 @@
-import React from "react";
 import Link from "next/link";
-import { Button } from "./Button";
 import { useRouter } from "next/router";
+import React from "react";
 import { useUser } from "../stores/auth";
-import Avatar from "react-avatar";
+import { Button } from "./Button";
+import { UserDropdown } from "./UserDropdown";
 
 interface NavbarProps {}
 
@@ -85,7 +85,9 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
             <img src="/static/notification.svg" className="w-6 h-6" />
           </button>
         </div>
-        {!user ? (
+        {user ? (
+          <UserDropdown />
+        ) : (
           <div className="space-x-2">
             <Link href="/login">
               <Button color="secondary">Login</Button>
@@ -94,15 +96,6 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
               <Button>Register</Button>
             </Link>
           </div>
-        ) : (
-          <a href="#">
-            <Avatar
-              name="Coderinblack"
-              className="flex-shrink-0 rounded-full"
-              size="36px"
-              alt={user.details.username}
-            />
-          </a>
         )}
       </div>
     </nav>
