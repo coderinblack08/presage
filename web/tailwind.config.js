@@ -1,8 +1,6 @@
-const colors = require("tailwindcss/colors");
-
 module.exports = {
   mode: "jit",
-  purge: ["./pages/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}"],
+  purge: ["./{pages,components,formik}/**/*.tsx"],
   darkMode: false,
   theme: {
     fontFamily: {
@@ -29,7 +27,7 @@ module.exports = {
       primary: "#547CF5",
       "faint-primary": "#7A9AFC",
       "white-primary": "#D4DFFF",
-      ...colors.red,
+      red: "#F94B40",
     },
   },
   variants: {

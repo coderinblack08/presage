@@ -19,6 +19,7 @@
     "pg": "^8.6.0",
     "pg-promise": "^10.10.1",
     "react": "^17.0.1",
+    "react-avatar": "^3.10.0",
     "react-dom": "^17.0.1",
     "react-input-autosize": "^3.0.0",
     "react-waypoint": "^9.0.3",

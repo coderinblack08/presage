@@ -2,11 +2,14 @@ import React from "react";
 import Link from "next/link";
 import { Button } from "./Button";
 import { useRouter } from "next/router";
+import { useUser } from "../stores/auth";
+import Avatar from "react-avatar";
 
 interface NavbarProps {}
 
 export const Navbar: React.FC<NavbarProps> = ({}) => {
   const router = useRouter();
+  const { user } = useUser();
   const onPath = (tab: string) => tab === router.pathname;
   const activeClass = "text-white bg-darker-gray rounded-lg";
 
@@ -20,7 +23,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
       }}
     >
       <Link href="/">
-        <a className="cursor-pointer">
+        <a className="cursor-pointer flex-shrink-0">
           <img src="/static/logo.png" className="w-auto h-10" />
         </a>
       </Link>
@@ -82,14 +85,25 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
             <img src="/static/notification.svg" className="w-6 h-6" />
           </button>
         </div>
-        <div className="space-x-2">
-          <Link href="/login">
-            <Button color="secondary">Login</Button>
-          </Link>
-          <Link href="/register">
-            <Button>Register</Button>
-          </Link>
-        </div>
+        {!user ? (
+          <div className="space-x-2">
+            <Link href="/login">
+              <Button color="secondary">Login</Button>
+            </Link>
+            <Link href="/register">
+              <Button>Register</Button>
+            </Link>
+          </div>
+        ) : (
+          <a href="#">
+            <Avatar
+              name="Coderinblack"
+              className="flex-shrink-0 rounded-full"
+              size="36px"
+              alt={user.details.username}
+            />
+          </a>
+        )}
       </div>
     </nav>
   );

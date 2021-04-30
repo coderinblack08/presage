@@ -58,7 +58,7 @@ const Register: React.FC = () => {
                   await supabase.auth.update({ data: { username } });
                   await supabase
                     .from("users")
-                    .insert({ id: user.id, username, email, password });
+                    .insert({ id: user.id, username, email });
                   setShowConfirmEmail(true);
                 }
               }}
@@ -76,23 +76,29 @@ const Register: React.FC = () => {
                   .required(),
               })}
             >
-              <Form className="grid gap-y-4 mt-10">
-                <div
-                  className="grid items-start gap-x-4 w-full"
-                  style={{ gridTemplateColumns: "3fr 2fr" }}
-                >
-                  <InputField name="email" placeholder="Email Address" />
-                  <InputField name="username" placeholder="Username" />
-                </div>
-                <InputField
-                  name="password"
-                  placeholder="Password"
-                  type="password"
-                />
-                <Button type="submit" className="w-full mt-2">
-                  Create your account
-                </Button>
-              </Form>
+              {({ isSubmitting }) => (
+                <Form className="grid gap-y-4 mt-10">
+                  <div
+                    className="grid items-start gap-x-4 w-full"
+                    style={{ gridTemplateColumns: "3fr 2fr" }}
+                  >
+                    <InputField name="email" placeholder="Email Address" />
+                    <InputField name="username" placeholder="Username" />
+                  </div>
+                  <InputField
+                    name="password"
+                    placeholder="Password"
+                    type="password"
+                  />
+                  <Button
+                    type="submit"
+                    className="w-full mt-2"
+                    disabled={isSubmitting}
+                  >
+                    Create your account
+                  </Button>
+                </Form>
+              )}
             </Formik>
           </>
         )}

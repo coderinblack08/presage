@@ -109,7 +109,6 @@ const Index: React.FC = () => {
             </button>
           </div>
         )}
-        <pre>{JSON.stringify(user, null, 2)}</pre>
         {!isValidating && data ? (
           data.length === 0 ? (
             <div className="grid justify-items-center mt-20">

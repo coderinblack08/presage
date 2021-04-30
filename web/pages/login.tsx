@@ -1,7 +1,7 @@
-import { CheckCircleIcon } from "@heroicons/react/outline";
 import { Form, Formik } from "formik";
-import router, { useRouter } from "next/router";
-import React, { useState } from "react";
+import { useRouter } from "next/router";
+import React from "react";
+import * as yup from "yup";
 import { Button } from "../components/Button";
 import { Navbar } from "../components/Navbar";
 import { InputField } from "../formik/InputField";
@@ -14,7 +14,7 @@ const Register: React.FC = () => {
     <div>
       <Navbar />
       <div className="max-w-3xl mx-auto py-20 lg:py-28 px-6">
-        <h3>Sign Up for Presage</h3>
+        <h3>Sign In to Presage</h3>
         <p className="text-gray mt-2">
           Discover what’s going on around the globe with Presage
         </p>
@@ -32,6 +32,10 @@ const Register: React.FC = () => {
         </p>
         <Formik
           initialValues={{ email: "", password: "" }}
+          validationSchema={yup.object().shape({
+            email: yup.string().email().required(),
+            password: yup.string().required(),
+          })}
           onSubmit={async (values) => {
             const { error } = await supabase.auth.signIn(values);
             if (error) {
