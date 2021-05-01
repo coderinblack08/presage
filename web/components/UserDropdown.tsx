@@ -1,4 +1,5 @@
 import { Menu, Transition } from "@headlessui/react";
+import { ChevronRightIcon } from "@heroicons/react/outline";
 import { useRouter } from "next/router";
 import React, { Fragment } from "react";
 import Avatar from "react-avatar";
@@ -16,7 +17,7 @@ export const UserDropdown: React.FC<UserDropdownProps> = ({}) => {
       {({ open }) => (
         <>
           <div>
-            <Menu.Button>
+            <Menu.Button className="focus:outline-none">
               <Avatar
                 name={user?.details?.username}
                 alt={user?.details?.username}
@@ -37,13 +38,13 @@ export const UserDropdown: React.FC<UserDropdownProps> = ({}) => {
           >
             <Menu.Items
               static
-              className="absolute right-0 w-52 mt-4 origin-top-right bg-darker-gray rounded-lg focus:outline-none overflow-hidden"
+              className="absolute right-0 w-52 mt-4 origin-top-right bg-darkest-gray rounded-lg focus:outline-none overflow-hidden"
             >
               <Menu.Item>
                 {({ active }) => (
                   <button
-                    className={`inline-flex items-center text-left py-3 px-5 font-medium w-full text-base ${
-                      active ? "bg-[#32394d]" : ""
+                    className={`focus:outline-none inline-flex items-center text-left py-3 px-5 font-medium w-full text-base ${
+                      active ? "bg-darker-gray" : ""
                     }`}
                   >
                     Profile
@@ -53,19 +54,20 @@ export const UserDropdown: React.FC<UserDropdownProps> = ({}) => {
               <Menu.Item>
                 {({ active }) => (
                   <button
-                    className={`inline-flex items-center text-left py-3 px-5 font-medium w-full text-base ${
-                      active ? "bg-[#32394d]" : ""
+                    className={`focus:outline-none inline-flex justify-between items-center text-left py-3 px-5 font-medium w-full text-base ${
+                      active ? "bg-darker-gray" : ""
                     }`}
                   >
                     Language
+                    <ChevronRightIcon className="w-5 h-5" />
                   </button>
                 )}
               </Menu.Item>
               <Menu.Item>
                 {({ active }) => (
                   <button
-                    className={`inline-flex items-center text-left py-3 px-5 font-medium w-full text-base ${
-                      active ? "bg-[#32394d]" : ""
+                    className={`focus:outline-none inline-flex items-center text-left py-3 px-5 font-medium w-full text-base ${
+                      active ? "bg-darker-gray" : ""
                     }`}
                   >
                     Settings
@@ -75,8 +77,19 @@ export const UserDropdown: React.FC<UserDropdownProps> = ({}) => {
               <Menu.Item>
                 {({ active }) => (
                   <button
-                    className={`inline-flex items-center text-left py-3 px-5 font-medium w-full text-base ${
-                      active ? "bg-[#32394d]" : ""
+                    className={`focus:outline-none inline-flex items-center text-left py-3 px-5 font-medium w-full text-base ${
+                      active ? "bg-darker-gray" : ""
+                    }`}
+                  >
+                    Apply to Publish
+                  </button>
+                )}
+              </Menu.Item>
+              <Menu.Item>
+                {({ active }) => (
+                  <button
+                    className={`focus:outline-none inline-flex items-center text-left py-3 px-5 font-medium w-full text-base ${
+                      active ? "bg-darker-gray" : ""
                     }`}
                     onClick={async () => {
                       await supabase.auth.signOut();

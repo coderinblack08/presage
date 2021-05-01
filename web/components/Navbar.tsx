@@ -40,6 +40,17 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
           </Link>
         </li>
         <li>
+          <Link href="/social">
+            <a
+              className={`${
+                onPath("/social") ? activeClass : "text-light-gray"
+              } px-4 py-2`}
+            >
+              Social
+            </a>
+          </Link>
+        </li>
+        <li>
           <Link href="/publishers">
             <a
               className={`${
@@ -47,17 +58,6 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
               } px-4 py-2`}
             >
               Publishers
-            </a>
-          </Link>
-        </li>
-        <li>
-          <Link href="/apply">
-            <a
-              className={`${
-                onPath("/apply") ? activeClass : "text-light-gray"
-              } px-4 py-2`}
-            >
-              Apply to Publish
             </a>
           </Link>
         </li>
@@ -78,7 +78,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
           <a href="https://github.com/coderinblack08/presage">
             <img src="/static/github.svg" className="w-6 h-6" />
           </a>
-          <a href="#">
+          <a href="https://twitter.com/coderinblack/status/1386457368574140416">
             <img src="/static/twitter.svg" className="w-6 h-6" />
           </a>
           <button>

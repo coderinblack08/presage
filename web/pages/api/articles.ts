@@ -22,7 +22,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         inner join publishers c on name = publisher
         where publisher = p.name ${
           category ? "and ${category} = any(category)" : ""
-        } ${section ? "and ${section} = section" : ""}
+        } ${section ? "and section = ${section}" : ""}
         order by -(now()::DATE - date::DATE) * 0.75 + priority + likes * 0.1 desc
         limit ${limit}
       ) as a on a.publisher = p.name
