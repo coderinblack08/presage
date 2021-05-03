@@ -46,7 +46,7 @@ const Index: React.FC = () => {
                 <button
                   className={`py-1 px-3 ${
                     section === i
-                      ? "text-faint-primary bg-primary bg-opacity-25"
+                      ? "text-faint-primary bg-primary bg-opacity-10"
                       : "text-light-gray"
                   } rounded-lg focus:outline-none`}
                   onClick={() => {

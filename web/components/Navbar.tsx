@@ -11,15 +11,15 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
   const router = useRouter();
   const { user } = useUser();
   const onPath = (tab: string) => tab === router.pathname;
-  const activeClass = "text-white bg-darker-gray rounded-lg";
+  const activeClass = "text-faint-primary bg-primary bg-opacity-10 rounded-xl";
 
   return (
     <nav
-      className="sticky z-50 top-0 bg-black bg-opacity-75 flex items-center justify-between max-w-[88rem] mx-auto p-6"
+      className="sticky z-50 top-0 bg-black bg-opacity-75 flex items-center justify-between max-w-[98em] mx-auto p-6"
       style={{
         opacity: 5,
-        backdropFilter: "blur(8px)",
-        WebkitBackdropFilter: "blur(8px)",
+        backdropFilter: "blur(16px)",
+        WebkitBackdropFilter: "blur(16px)",
       }}
     >
       <Link href="/">
