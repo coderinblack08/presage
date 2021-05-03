@@ -7,7 +7,7 @@ import {
   PlusIcon,
   BookmarkIcon,
 } from "@heroicons/react/solid";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Avatar } from "../components/Avatar";
 import { AvatarGroup } from "../components/AvatarGroup";
 import { Navbar } from "../components/Navbar";
@@ -16,15 +16,17 @@ import { useScreen } from "../lib/useScreen";
 const Layout: React.FC = ({ children }) => {
   const screenType = useScreen();
 
-  let gridTemplateColumns = "2.5fr 5fr 3fr";
+  const [gridTemplateColumns, setColumns] = useState("2.5fr 5fr 3fr");
 
-  if (screenType === "tablet") {
-    gridTemplateColumns = ".75fr 8fr 3fr";
-  } else if (screenType === "mobile") {
-    gridTemplateColumns = "1fr 8fr";
-  } else if (screenType === "fullscreen") {
-    gridTemplateColumns = "1fr";
-  }
+  useEffect(() => {
+    if (screenType === "tablet") {
+      setColumns(".75fr 8fr 3fr");
+    } else if (screenType === "mobile") {
+      setColumns("1fr 12fr");
+    } else if (screenType === "fullscreen") {
+      setColumns("1fr");
+    }
+  }, [screenType]);
 
   return (
     <div>
