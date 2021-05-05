@@ -8,7 +8,7 @@ export const SoundbiteCard: React.FC<SoundbiteCardProps> = ({}) => {
     <article className="flex items-start space-x-10">
       <img
         src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrgcLLlnhTEguYtkqRD_iy-a39nYPEnZ6GpfCO_TxO-5hyS1IuwhMdhNtBdFv6Cwq-oLA&usqp=CAU"
-        className="object-cover w-44 h-30 rounded-lg"
+        className="object-cover w-44 h-30 rounded-xl"
         alt="Hello World!"
       />
       <div>

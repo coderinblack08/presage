@@ -1,25 +1,21 @@
 import React from "react";
-import { Navbar } from "../components/Navbar";
-import { LeftSideBar } from "./LeftSideBar";
-import { RightAside } from "./RightAside";
-import { useGridLayout } from "./useGridLayout";
+import {
+  SoundbiteHeader,
+  SoundbiteHeaderProps,
+} from "../components/SoundBiteHeader";
 
-const Layout: React.FC = ({ children }) => {
-  const gridTemplateColumns = useGridLayout();
+interface LayoutProps {}
 
+export const Layout: React.FC<LayoutProps & SoundbiteHeaderProps> = ({
+  children,
+  ...props
+}) => {
   return (
     <div>
-      <Navbar />
-      <div
-        className="grid gap-16 md:gap-24 max-w-[98em] mx-auto py-12 lg:py-14 px-6"
-        style={{ gridTemplateColumns }}
-      >
-        <LeftSideBar />
-        <main>{children}</main>
-        <RightAside />
+      <SoundbiteHeader {...props} />
+      <div className="max-w-4xl w-full mx-auto px-6">
+        <main className="py-12">{children}</main>
       </div>
     </div>
   );
 };
-
-export default Layout;

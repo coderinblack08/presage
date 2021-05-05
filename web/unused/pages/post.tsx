@@ -2,7 +2,7 @@ import { EmojiHappyIcon, PhotographIcon } from "@heroicons/react/outline";
 import React from "react";
 import { Button } from "../../components/Button";
 import { Input } from "../../components/Input";
-import Layout from "../../layout/Layout";
+import Layout from "../components/Layout";
 
 const Post: React.FC = () => {
   return (

@@ -8,9 +8,9 @@ import {
 } from "@heroicons/react/solid";
 import Link from "next/link";
 import React from "react";
-import { AvatarGroup } from "../components/AvatarGroup";
-import { useOnPath } from "../lib/onPath";
-import { useScreen } from "../lib/useScreen";
+import { AvatarGroup } from "../../components/AvatarGroup";
+import { useOnPath } from "../../lib/onPath";
+import { useScreen } from "../../lib/useScreen";
 
 interface LeftSideBarProps {}
 

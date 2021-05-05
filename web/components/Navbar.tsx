@@ -47,6 +47,19 @@ export const Navbar: React.FC<NavbarProps> = ({ noBlur = false }) => {
           </Link>
         </li>
         <li>
+          <Link href="/soundbites">
+            <a
+              className={`${
+                onPath(["/soundbites", "/upload"])
+                  ? activeClass
+                  : "text-light-gray"
+              } px-4 py-2`}
+            >
+              Soundbites
+            </a>
+          </Link>
+        </li>
+        <li>
           <Link href="/publishers">
             <a
               className={`${
@@ -54,17 +67,6 @@ export const Navbar: React.FC<NavbarProps> = ({ noBlur = false }) => {
               } px-4 py-2`}
             >
               Publishers
-            </a>
-          </Link>
-        </li>
-        <li>
-          <Link href="/soundbites">
-            <a
-              className={`${
-                onPath("/soundbites") ? activeClass : "text-light-gray"
-              } px-4 py-2`}
-            >
-              Soundbites
             </a>
           </Link>
         </li>

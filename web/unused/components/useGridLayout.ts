@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useScreen } from "../lib/useScreen";
+import { useScreen } from "../../lib/useScreen";
 
 export const useGridLayout = () => {
   const [gridTemplateColumns, setColumns] = useState("2.5fr 5fr 3fr");

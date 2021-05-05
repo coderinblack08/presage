@@ -12,9 +12,9 @@ export const Input: React.FC<InputProps> = ({
   ...props
 }) => {
   return React.createElement(textarea ? "textarea" : "input", {
-    className: `py-2 px-4 rounded-lg text-lighter-gray placeholder-gray bg-darker-gray focus:outline-none w-full ${
+    className: `rounded-lg text-lighter-gray placeholder-gray bg-darker-gray focus:outline-none w-full ${
       error ? "ring-[1.5px] ring-opacity-75 ring-primary" : ""
-    } ${className} ${textarea ? "resize-none" : ""}`,
+    } ${className} ${textarea ? "resize-none py-3 px-5" : "py-2 px-4"}`,
     ...props,
   });
 };

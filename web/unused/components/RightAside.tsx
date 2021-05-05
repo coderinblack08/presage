@@ -1,7 +1,7 @@
 import { PlusIcon } from "@heroicons/react/solid";
 import React from "react";
-import { Avatar } from "../components/Avatar";
-import { useScreen } from "../lib/useScreen";
+import { Avatar } from "../../components/Avatar";
+import { useScreen } from "../../lib/useScreen";
 
 interface RightAsideProps {}
 
