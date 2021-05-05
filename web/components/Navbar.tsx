@@ -1,26 +1,33 @@
 import Link from "next/link";
-import { useRouter } from "next/router";
 import React from "react";
+import { useOnPath } from "../lib/onPath";
 import { useUser } from "../stores/auth";
 import { Button } from "./Button";
 import { UserDropdown } from "./UserDropdown";
 
-interface NavbarProps {}
+interface NavbarProps {
+  noBlur?: boolean;
+}
 
-export const Navbar: React.FC<NavbarProps> = ({}) => {
-  const router = useRouter();
+export const Navbar: React.FC<NavbarProps> = ({ noBlur = false }) => {
+  const onPath = useOnPath();
   const { user } = useUser();
-  const onPath = (tab: string) => tab === router.pathname;
   const activeClass = "text-faint-primary bg-primary bg-opacity-10 rounded-xl";
 
   return (
     <nav
-      className="sticky z-50 top-0 bg-black bg-opacity-75 flex items-center justify-between max-w-[98em] mx-auto p-6"
-      style={{
-        opacity: 5,
-        backdropFilter: "blur(16px)",
-        WebkitBackdropFilter: "blur(16px)",
-      }}
+      className={`sticky z-50 top-0 bg-black ${
+        noBlur ? "" : "bg-opacity-75"
+      } flex items-center justify-between max-w-7xl mx-auto p-6`}
+      style={
+        noBlur
+          ? {}
+          : {
+              opacity: 5,
+              backdropFilter: "blur(16px)",
+              WebkitBackdropFilter: "blur(16px)",
+            }
+      }
     >
       <Link href="/">
         <a className="cursor-pointer flex-shrink-0">
@@ -40,17 +47,6 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
           </Link>
         </li>
         <li>
-          <Link href="/social">
-            <a
-              className={`${
-                onPath("/social") ? activeClass : "text-light-gray"
-              } px-4 py-2`}
-            >
-              Social
-            </a>
-          </Link>
-        </li>
-        <li>
           <Link href="/publishers">
             <a
               className={`${
@@ -62,13 +58,13 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
           </Link>
         </li>
         <li>
-          <Link href="/pish">
+          <Link href="/soundbites">
             <a
               className={`${
-                onPath("/pish") ? activeClass : "text-light-gray"
+                onPath("/soundbites") ? activeClass : "text-light-gray"
               } px-4 py-2`}
             >
-              Pish
+              Soundbites
             </a>
           </Link>
         </li>

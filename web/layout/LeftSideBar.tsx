@@ -6,14 +6,19 @@ import {
   BookmarkIcon,
   CogIcon,
 } from "@heroicons/react/solid";
+import Link from "next/link";
 import React from "react";
 import { AvatarGroup } from "../components/AvatarGroup";
+import { useOnPath } from "../lib/onPath";
 import { useScreen } from "../lib/useScreen";
 
 interface LeftSideBarProps {}
 
 export const LeftSideBar: React.FC<LeftSideBarProps> = ({}) => {
   const screenType = useScreen();
+  const onPath = useOnPath();
+  const active = "block py-1.5 px-4 rounded-lg bg-darker-gray w-full";
+  const normal = "block py-1.5 px-4 rounded-lg w-full text-light-gray";
 
   if (screenType === "desktop") {
     return (
@@ -21,12 +26,11 @@ export const LeftSideBar: React.FC<LeftSideBarProps> = ({}) => {
         <p className="font-bold small text-gray mb-3">NAVIGATION</p>
         <ul className="space-y-3">
           <li>
-            <a
-              href="#"
-              className="block py-1.5 px-4 rounded-lg bg-darker-gray w-full"
-            >
-              Home
-            </a>
+            <Link href="/social">
+              <a href="#" className={onPath("/social") ? active : normal}>
+                Home
+              </a>
+            </Link>
           </li>
           <li>
             <a
@@ -45,13 +49,16 @@ export const LeftSideBar: React.FC<LeftSideBarProps> = ({}) => {
             </a>
           </li>
           <li>
-            <a
-              href="#"
-              className="flex items-center justify-between py-1.5 px-4 rounded-lg w-full text-light-gray"
-            >
-              Post Message
-              <PencilAltIcon className="w-4 h-4 text-gray" />
-            </a>
+            <Link href="/post">
+              <a
+                className={`${
+                  onPath("/post") ? active : normal
+                } py-2 flex items-center justify-between`}
+              >
+                Post Message
+                <PencilAltIcon className="w-4 h-4 text-gray" />
+              </a>
+            </Link>
           </li>
         </ul>
         <p className="font-bold small text-gray mb-3 mt-16">FOLLOWING</p>

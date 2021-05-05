@@ -5,9 +5,9 @@ import { GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 import React from "react";
 import useSound from "use-sound";
-import { Navbar } from "../components/Navbar";
-import { Card } from "../components/pish/Card";
-import { client } from "../lib/prismic";
+import { Navbar } from "../../components/Navbar";
+import { Card } from "../../components/pish/Card";
+import { client } from "../../lib/prismic";
 
 const Pish: NextPage<{ articles?: ApiSearchResponse }> = ({ articles }) => {
   const [play, { stop, isPlaying }] = useSound("/assets/pronounce_pish.mp3");

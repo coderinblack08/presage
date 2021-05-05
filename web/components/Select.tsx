@@ -32,7 +32,7 @@ export const Select: React.FC<SelectProps> = ({
         <>
           <div className="relative mt-1">
             <Listbox.Button
-              className={`relative ${className} py-2 pl-4 pr-12 text-left bg-darker-gray rounded-lg shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-gray sm:text-sm`}
+              className={`relative py-2 pl-4 pr-12 text-left bg-darker-gray rounded-lg shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-gray sm:text-sm  ${className}`}
             >
               <span className="block truncate text-lighter-gray">
                 {selected}
@@ -53,7 +53,7 @@ export const Select: React.FC<SelectProps> = ({
             >
               <Listbox.Options
                 static
-                className="absolute p-2 mt-2 overflow-auto text-base bg-darker-gray rounded-lg max-h-60 focus:outline-none sm:text-sm"
+                className="absolute p-2 mt-2 overflow-auto text-base bg-darker-gray shadow-2xl rounded-lg max-h-60 focus:outline-none sm:text-sm"
               >
                 {items.map((item, i) => (
                   <Listbox.Option

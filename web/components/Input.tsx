@@ -5,11 +5,16 @@ export interface InputProps extends React.ComponentPropsWithRef<"input"> {
   textarea?: boolean;
 }
 
-export const Input: React.FC<InputProps> = ({ textarea, error, ...props }) => {
+export const Input: React.FC<InputProps> = ({
+  textarea,
+  className,
+  error,
+  ...props
+}) => {
   return React.createElement(textarea ? "textarea" : "input", {
     className: `py-2 px-4 rounded-lg text-lighter-gray placeholder-gray bg-darker-gray focus:outline-none w-full ${
       error ? "ring-[1.5px] ring-opacity-75 ring-primary" : ""
-    }`,
+    } ${className} ${textarea ? "resize-none" : ""}`,
     ...props,
   });
 };

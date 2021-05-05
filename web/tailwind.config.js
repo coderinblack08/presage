@@ -1,6 +1,6 @@
 module.exports = {
   mode: "jit",
-  purge: ["./{pages,components,formik}/**/*.tsx"],
+  purge: ["./{pages,components,formik,layout}/**/*.tsx"],
   darkMode: false,
   theme: {
     fontFamily: {

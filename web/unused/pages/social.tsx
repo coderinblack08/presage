@@ -1,7 +1,7 @@
 import { UploadIcon } from "@heroicons/react/outline";
 import { HeartIcon, ReplyIcon } from "@heroicons/react/solid";
 import React from "react";
-import Layout from "../layout/Layout";
+import Layout from "../../layout/Layout";
 
 const Social: React.FC = () => {
   return (

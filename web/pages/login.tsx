@@ -41,7 +41,11 @@ const Register: React.FC = () => {
             if (error) {
               alert(error.message);
             } else {
-              router.push("/");
+              const { protocol, host } = window.location;
+              window.location.href =
+                process.env.NODE_ENV === "production"
+                  ? `${protocol}://${host}/`
+                  : `http://${host}`;
             }
           }}
         >
