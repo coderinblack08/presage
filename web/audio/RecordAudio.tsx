@@ -1,43 +1,29 @@
 import { MicrophoneIcon, TrashIcon } from "@heroicons/react/solid";
-import useMediaRecorder from "@wmik/use-media-recorder";
 import Slider from "rc-slider/lib/Slider";
 import React, { useRef, useState } from "react";
-import { useDevices } from "./useDevices";
-import { useRecorder } from "./useRecorder";
+import useRecorder from "./useRecorder";
 
 export const RecordAudio: React.FC = () => {
-  const {
-    startRecording,
-    audioURL,
-    stopRecording,
-    isRecording,
-  } = useRecorder();
   const [playing, setPlaying] = useState(false);
   const player = useRef<HTMLAudioElement>();
   const audioSource = useRef<HTMLSourceElement>();
+  const { audioURL, recording, toggleRecording } = useRecorder();
 
   return (
     <div>
       <div className="flex items-center justify-between">
         <h4>Record</h4>
-        <audio ref={player} preload="auto" controls>
-          <source ref={audioSource} src={audioURL} />
-        </audio>
+        <audio ref={player} src={audioURL} controls />
       </div>
       <div className="flex items-center space-x-6 w-full mt-4">
         <button
           type="button"
           className="w-14 h-14 flex items-center justify-center rounded-full bg-primary hover:bg-faint-primary"
           onClick={() => {
-            if (isRecording) {
-              stopRecording();
-              console.log(audioURL);
-            } else {
-              startRecording();
-            }
+            toggleRecording();
           }}
         >
-          {isRecording ? (
+          {recording ? (
             <img src="/icons/stop.svg" className="text-white w-6 h-6" />
           ) : (
             <MicrophoneIcon className="text-white w-6 h-6" />
@@ -72,7 +58,6 @@ export const RecordAudio: React.FC = () => {
                   type="button"
                   onClick={() => {
                     const audio = player.current;
-                    audio.volume = 1;
                     audio.addEventListener("playing", () => setPlaying(true));
                     audio.addEventListener("pause", () => setPlaying(false));
                     audio.addEventListener("ended", () => setPlaying(false));

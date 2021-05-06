@@ -1,43 +1,40 @@
 import { useEffect, useState } from "react";
 
-export const useRecorder = () => {
+const useRecorder = () => {
+  const [recorder, setRecorder] = useState<MediaRecorder>();
+  const [recording, setRecording] = useState(false);
   const [audioURL, setAudioURL] = useState("");
-  const [isRecording, setIsRecording] = useState(false);
-  const [recorder, setRecorder] = useState<MediaRecorder | null>(null);
 
   useEffect(() => {
-    if (recorder === null) {
-      if (isRecording) {
-        requestRecorder().then(setRecorder, console.error);
+    if (recorder) {
+      if (recording) {
+        recorder.start();
+      } else {
+        recorder.stop();
+      }
+    } else {
+      if (recording) {
+        requestRecorder().then(setRecorder).catch(console.error);
       }
       return;
     }
 
-    if (isRecording) {
-      recorder.start();
-    } else {
-      recorder.stop();
-    }
-
-    const handleData = (e: BlobEvent) => {
+    const handleData = (e) => {
       setAudioURL(URL.createObjectURL(e.data));
     };
+
     recorder.addEventListener("dataavailable", handleData);
     return () => recorder.removeEventListener("dataavailable", handleData);
-  }, [recorder, isRecording]);
+  }, [recorder, recording]);
 
-  const startRecording = () => {
-    setIsRecording(true);
-  };
+  const toggleRecording = () => setRecording(!recording);
 
-  const stopRecording = () => {
-    setIsRecording(false);
-  };
-
-  return { audioURL, isRecording, startRecording, stopRecording };
+  return { toggleRecording, recording, audioURL };
 };
 
 async function requestRecorder() {
   const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
   return new MediaRecorder(stream);
 }
+
+export default useRecorder;
