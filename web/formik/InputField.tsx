@@ -2,15 +2,11 @@ import { useField } from "formik";
 import React from "react";
 import { Input, InputProps } from "../components/Input";
 
-export const InputField: React.FC<InputProps> = ({
-  className,
-  textarea,
-  ...props
-}) => {
+export const InputField: React.FC<InputProps> = ({ textarea, ...props }) => {
   const [field, meta] = useField(props as any);
 
   return (
-    <div className={`h-full w-full ${className}`}>
+    <div className="h-full w-full">
       <Input
         error={meta.touched && !!meta.error}
         textarea={textarea}

@@ -19,7 +19,7 @@ export const SoundbiteHeader: React.FC<SoundbiteHeaderProps> = ({
   return (
     <header className="sticky z-50 top-0">
       <Navbar noBlur />
-      <div className="px-6 max-w-4xl mx-auto bg-black pt-10 pb-20 border-b-2 border-darkest-gray">
+      <div className="px-6 max-w-4xl mx-auto bg-black py-20 border-b-2 border-darkest-gray">
         <h3>{title}</h3>
         {!hideSubtitle && (
           <p className="text-gray mt-2">
