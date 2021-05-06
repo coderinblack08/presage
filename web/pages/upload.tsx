@@ -1,25 +1,17 @@
-import {
-  FolderAddIcon,
-  MicrophoneIcon,
-  TrashIcon,
-  XIcon,
-} from "@heroicons/react/solid";
+import { FolderAddIcon, XIcon } from "@heroicons/react/solid";
 import { Form, Formik } from "formik";
-import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import React, { useState } from "react";
 import Dropzone from "react-dropzone";
+import * as yup from "yup";
+import { RecordAudio } from "../audio/RecordAudio";
 import { Button } from "../components/Button";
-import { Select } from "../components/Select";
 import { InputField } from "../formik/InputField";
 import { Layout } from "../layout/Layout";
 import { supabase } from "../lib/supabase";
-import { useDevices } from "../lib/useDevices";
-import * as yup from "yup";
 import { useUser } from "../stores/auth";
 
 const Upload: React.FC = () => {
-  const { devices } = useDevices();
   const { user } = useUser();
   const [thumbnail, setThumbnail] = useState<File | null>(null);
 
@@ -48,71 +40,7 @@ const Upload: React.FC = () => {
       >
         {() => (
           <Form>
-            <div className="flex items-center justify-between">
-              <h4>Record</h4>
-              {devices.length ? (
-                <Select
-                  defaultValue={devices[0].label}
-                  items={devices.map((x) => x.label)}
-                />
-              ) : null}
-            </div>
-            <div className="flex items-center space-x-6 w-full mt-4">
-              <button className="p-4 rounded-full bg-primary hover:bg-faint-primary">
-                <MicrophoneIcon className="text-white w-6 h-6" />
-              </button>
-              <div className="flex-grow">
-                <div className="w-full">
-                  <Slider
-                    min={0}
-                    max={300}
-                    value={21.51}
-                    railStyle={{ backgroundColor: "#282F42" }}
-                    trackStyle={{ backgroundColor: "#E4E7F1" }}
-                    handleStyle={{
-                      backgroundColor: "#FFFFFF",
-                      border: "none",
-                    }}
-                  />
-                </div>
-                <div className="relative flex items-center w-full">
-                  <p className="absolute left-0 font-bold">00:21.51</p>
-                  <div className="flex items-center justify-center space-x-2 w-full">
-                    <button>
-                      <img
-                        src="/icons/replay10.svg"
-                        alt="Replay 10 Seconds"
-                        className="text-white w-8 h-8"
-                      />
-                    </button>
-                    <button>
-                      <img
-                        src="/icons/play.svg"
-                        alt="Play"
-                        className="text-white w-12 h-12"
-                      />
-                    </button>
-                    <button>
-                      <img
-                        src="/icons/forward10.svg"
-                        alt="Forward 10 Seconds"
-                        className="text-white w-8 h-8"
-                      />
-                    </button>
-                    <button>
-                      <TrashIcon className="w-8 h-8 text-white" />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <p className="small text-gray mt-2">
-              Or upload an{" "}
-              <a href="#" className="text-primary small">
-                audio file
-              </a>{" "}
-              · 5 minute limit
-            </p>
+            <RecordAudio />
             <InputField
               name="description"
               placeholder="SoundBite Description"
@@ -141,6 +69,7 @@ const Upload: React.FC = () => {
                   </div>
                   {thumbnail && (
                     <Button
+                      type="button"
                       color="secondary"
                       size="small"
                       className="mt-5"
