@@ -3,17 +3,21 @@ import Slider from "rc-slider/lib/Slider";
 import React, { useRef, useState } from "react";
 import useRecorder from "./useRecorder";
 
-export const RecordAudio: React.FC = () => {
+export const RecordAudio: React.FC<{
+  setAudio: React.Dispatch<React.SetStateAction<string>>;
+}> = ({ setAudio }) => {
   const [playing, setPlaying] = useState(false);
   const player = useRef<HTMLAudioElement>();
   const audioSource = useRef<HTMLSourceElement>();
-  const { audioURL, recording, toggleRecording } = useRecorder();
+  const { clearAudio, audioURL, recording, toggleRecording } = useRecorder(
+    setAudio
+  );
 
   return (
     <div>
       <div className="flex items-center justify-between">
         <h4>Record</h4>
-        <audio ref={player} src={audioURL} controls />
+        <audio ref={player} src={audioURL} className="hidden" controls />
       </div>
       <div className="flex items-center space-x-6 w-full mt-4">
         <button
@@ -93,7 +97,13 @@ export const RecordAudio: React.FC = () => {
                   className="text-white w-8 h-8"
                 />
               </button>
-              <button type="button">
+              <button
+                type="button"
+                onClick={() => {
+                  clearAudio();
+                  setPlaying(false);
+                }}
+              >
                 <TrashIcon className="w-8 h-8 text-white" />
               </button>
             </div>

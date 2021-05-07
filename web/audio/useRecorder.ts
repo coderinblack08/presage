@@ -1,6 +1,8 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
-const useRecorder = () => {
+const useRecorder = (
+  setAudio: React.Dispatch<React.SetStateAction<string>>
+) => {
   const [recorder, setRecorder] = useState<MediaRecorder>();
   const [recording, setRecording] = useState(false);
   const [audioURL, setAudioURL] = useState("");
@@ -10,7 +12,7 @@ const useRecorder = () => {
       if (recording) {
         recorder.start();
       } else {
-        recorder.stop();
+        if (recorder.state !== "inactive") recorder.stop();
       }
     } else {
       if (recording) {
@@ -20,7 +22,9 @@ const useRecorder = () => {
     }
 
     const handleData = (e) => {
-      setAudioURL(URL.createObjectURL(e.data));
+      const url = URL.createObjectURL(e.data);
+      setAudioURL(url);
+      setAudio(url);
     };
 
     recorder.addEventListener("dataavailable", handleData);
@@ -28,8 +32,12 @@ const useRecorder = () => {
   }, [recorder, recording]);
 
   const toggleRecording = () => setRecording(!recording);
+  const clearAudio = () => {
+    URL.revokeObjectURL(audioURL);
+    setAudioURL("");
+  };
 
-  return { toggleRecording, recording, audioURL };
+  return { clearAudio, toggleRecording, recording, audioURL };
 };
 
 async function requestRecorder() {

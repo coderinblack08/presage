@@ -1,7 +1,12 @@
 import React from "react";
 import { Button } from "./Button";
 
-interface SoundbiteCardProps {}
+interface SoundbiteCardProps {
+  title: string;
+  description: string;
+  thumbnail: string;
+  user: any;
+}
 
 export const SoundbiteCard: React.FC<SoundbiteCardProps> = ({}) => {
   return (

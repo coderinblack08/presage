@@ -1,5 +1,6 @@
 import { FolderAddIcon, XIcon } from "@heroicons/react/solid";
 import { Form, Formik } from "formik";
+import { v4 } from "uuid";
 import "rc-slider/assets/index.css";
 import React, { useState } from "react";
 import Dropzone from "react-dropzone";
@@ -10,41 +11,72 @@ import { InputField } from "../formik/InputField";
 import { Layout } from "../layout/Layout";
 import { supabase } from "../lib/supabase";
 import { useUser } from "../stores/auth";
+import { useRouter } from "next/router";
 
 const Upload: React.FC = () => {
   const { user } = useUser();
+  const [audio, setAudio] = useState("");
   const [thumbnail, setThumbnail] = useState<File | null>(null);
+  const router = useRouter();
 
   return (
     <Layout title="Upload SoundBite">
       <Formik
-        initialValues={{ description: "" }}
+        initialValues={{ description: "", title: "" }}
         onSubmit={async (values: any) => {
-          const body = { ...values };
+          if (audio === "") {
+            alert("Please record a SoundBite");
+            return;
+          }
+
+          const id = v4();
+          const audioFile = await fetch(audio)
+            .then((r) => r.blob())
+            .then(
+              (blobFile) => new File([blobFile], id, { type: "audio/mp3" })
+            );
+
+          const audioPath = `${user.id}-${id}`;
+          const body = { ...values, audio: audioPath, id, user_id: user.id };
+          const { error } = await supabase.storage
+            .from("soundbites")
+            .upload(audioPath, audioFile);
+          if (error) {
+            throw error;
+          }
           if (thumbnail) {
-            const filePath = `${user.id}-${Math.random()}-${thumbnail.name}`;
-            const { data, error } = await supabase.storage
+            const filePath = `${user.id}-${id}-${thumbnail.name}`;
+            const { error } = await supabase.storage
               .from("thumbnails")
               .upload(filePath, thumbnail);
             if (error) {
               throw error;
             }
-            console.log(data);
             body.thumbnail = filePath;
           }
-          console.log(body);
+          const { error: err } = await supabase.from("soundbites").insert(body);
+          if (err) {
+            throw err;
+          }
+          router.push("/soundbites");
         }}
         validationSchema={yup.object().shape({
           description: yup.string().min(20).max(500),
+          title: yup.string().max(256).required(),
         })}
       >
-        {() => (
+        {({ isSubmitting }) => (
           <Form>
-            <RecordAudio />
+            <RecordAudio setAudio={setAudio} />
+            <InputField
+              name="title"
+              placeholder="SoundBite Title"
+              className="mt-10"
+            />
             <InputField
               name="description"
               placeholder="SoundBite Description"
-              className="mt-10 h-32"
+              className="mt-4 h-32"
               textarea
             />
             <Dropzone
@@ -82,7 +114,12 @@ const Upload: React.FC = () => {
                 </section>
               )}
             </Dropzone>
-            <Button type="submit" className="w-full mt-5">
+            <Button
+              type="submit"
+              className="w-full mt-5"
+              disabled={isSubmitting}
+              loading={isSubmitting}
+            >
               Publish SoundBite
             </Button>
           </Form>
