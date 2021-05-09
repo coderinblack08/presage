@@ -2,6 +2,7 @@ import React from "react";
 import { Button } from "./Button";
 import Image from "next/image";
 import { usePlayerStore } from "../stores/playing";
+import { SoundBitePlayButton } from "./SoundBitePlayButton";
 
 export interface SoundBite {
   id: string;
@@ -39,21 +40,9 @@ export const SoundbiteCard: React.FC<SoundBite> = ({
         <div className="flex justify-between">
           <h4>{title}</h4>
           <div className="flex items-center space-x-4">
-            <button
-              onClick={() =>
-                usePlayerStore.getState().play({
-                  id,
-                  title,
-                  description,
-                  audio,
-                  thumbnail,
-                  users,
-                })
-              }
-              className="transition focus:outline-none hover:bg-dark-gray bg-darker-gray rounded-full p-2 flex-shrink-0"
-            >
-              <img src="/icons/play.svg" className="w-5 h-5" />
-            </button>
+            <SoundBitePlayButton
+              {...{ id, title, description, audio, thumbnail, users }}
+            />
             <Button size="small" color="secondary">
               Follow
             </Button>

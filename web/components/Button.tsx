@@ -12,6 +12,8 @@ const ButtonTheme = {
   },
   color: {
     transparent: "bg-transparent text-white",
+    white: "text-primary bg-white-primary hover:bg-white",
+    lightPrimary: "text-white bg-faint-primary",
     primary:
       "text-white bg-primary hover:bg-faint-primary disabled:text-white-primary disabled:bg-faint-primary",
     secondary:
@@ -41,7 +43,7 @@ export const Button: React.FC<ButtonProps> = ({
 }) => {
   return (
     <button
-      className={`${ButtonTheme.size[size]} ${ButtonTheme.color[color]} focus:outline-none focus-visible:ring inline-flex items-center justify-center transition shadow-lg ${className}`}
+      className={`${ButtonTheme.size[size]} ${ButtonTheme.color[color]} focus:outline-none focus-visible:ring inline-flex items-center justify-center transition shadow-sm ${className}`}
       {...props}
     >
       <span className={loading ? "opacity-0" : `flex items-center`}>
