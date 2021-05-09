@@ -5,10 +5,14 @@ import { SoundbiteCard } from "../components/SoundBiteCard";
 import { Layout } from "../layout/Layout";
 import { supabase } from "../lib/supabase";
 
+async function fetchSoundBites() {
+  return await supabase.from("soundbites").select("*, users(*)").limit(10);
+}
+
 const Publishers: NextPage<{ soundbites?: any }> = ({ soundbites }) => {
   const { data, isValidating } = useSWR(
     "soundbites",
-    async () => (await supabase.from("soundbites").select("*, users(*)")).data,
+    async () => (await fetchSoundBites()).data,
     { revalidateOnFocus: false, initialData: soundbites }
   );
 
@@ -26,7 +30,7 @@ const Publishers: NextPage<{ soundbites?: any }> = ({ soundbites }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const soundbites = await supabase.from("soundbites").select("*, users(*)");
+  const soundbites = await fetchSoundBites();
   return {
     props: {
       soundbites: soundbites.data,

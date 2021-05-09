@@ -1,17 +1,28 @@
+import { Popover } from "@headlessui/react";
+import { VolumeUpIcon, XIcon } from "@heroicons/react/solid";
 import format from "format-duration";
-import { XIcon } from "@heroicons/react/solid";
+import "rc-slider/assets/index.css";
 import Slider from "rc-slider/lib/Slider";
 import React, { useEffect } from "react";
 import { useAudioPlayer, useAudioPosition } from "react-use-audio-player";
 import shallow from "zustand/shallow";
 import { supabase } from "../lib/supabase";
 import { usePlayerStore } from "../stores/playing";
-import { Button } from "./Button";
-import "rc-slider/assets/index.css";
 
 const PlayAudioControls: React.FC<{ url: string }> = ({ url }) => {
-  const [setPlaying] = usePlayerStore((x) => [x.setPlaying], shallow);
-  const { togglePlayPause, ready, loading, playing, player } = useAudioPlayer({
+  const [setPlaying, volume, setVolume] = usePlayerStore(
+    (x) => [x.setPlaying, x.volume, x.setVolume],
+    shallow
+  );
+  const {
+    togglePlayPause,
+    ready,
+    loading,
+    playing,
+    player,
+    volume: howlerVolume,
+  } = useAudioPlayer({
+    volume,
     src: url,
     format: ["wav", "m4a", "mp3", "ogg"],
     autoplay: true,
@@ -26,39 +37,64 @@ const PlayAudioControls: React.FC<{ url: string }> = ({ url }) => {
   if (!ready && !loading) return <div>No audio to play</div>;
   if (loading) return <div>Loading audio</div>;
   return (
-    <div className="flex flex-col items-end space-y-2">
-      <div className="flex items-center space-x-4">
-        <button>
+    <div className="flex flex-col items-center space-y-2">
+      <div className="flex items-center">
+        <button className="mr-3">
           <img
-            src="/icons/replay10.svg"
+            src="/icons/skip-previous.svg"
             alt="Replay 10 seconds"
             className="w-10 h-10"
           />
         </button>
-        <button onClick={togglePlayPause}>
+        <button onClick={togglePlayPause} className="mr-3">
           {!playing ? (
-            <img src="/icons/play.svg" className="w-14 h-14" alt="Play song" />
+            <img src="/icons/play.svg" className="w-12 h-12" alt="Play song" />
           ) : (
             <img
               src="/icons/pause.svg"
-              className="w-14 h-14"
+              className="w-12 h-12"
               alt="Pause song"
             />
           )}
         </button>
-        <button>
+        <button className="mr-7">
           <img
-            src="/icons/forward10.svg"
+            src="/icons/skip-next.svg"
             alt="Forward 10 seconds"
             className="w-10 h-10"
           />
         </button>
+        <Popover className="relative mr-5">
+          <Popover.Button>
+            <VolumeUpIcon className="w-8 h-8 text-white" />
+          </Popover.Button>
+
+          <Popover.Panel className="inset-x-0 mx-auto py-4 px-2 -mt-4 rounded-full bg-darkest-gray absolute top-0 transform -translate-y-full z-10">
+            <div className="h-32">
+              <Slider
+                value={volume * 100}
+                onChange={(v) => {
+                  const value = parseFloat((Number(v) / 100).toFixed(2));
+                  setVolume(value);
+                  return howlerVolume(value);
+                }}
+                railStyle={{ backgroundColor: "#282F42" }}
+                trackStyle={{ backgroundColor: "#E4E7F1" }}
+                handleStyle={{
+                  backgroundColor: "#FFFFFF",
+                  border: "none",
+                }}
+                min={0}
+                max={100}
+                vertical
+              />
+            </div>
+          </Popover.Panel>
+        </Popover>
         <select
-          className="appearance-none px-4 py-0.5 small rounded-lg bg-primary border-2 border-white-primary text-white-primary font-bold"
+          className="focus:outline-none appearance-none flex justify-items-center px-3 py-0.5 small rounded-lg bg-white text-primary font-bold"
           defaultValue="1"
-          onChange={(e) => {
-            player.rate(Number(e.target.value));
-          }}
+          onChange={(e) => player.rate(Number(e.target.value))}
         >
           <option value="0.5">0.5x</option>
           <option value="1">1.0x</option>
@@ -69,11 +105,8 @@ const PlayAudioControls: React.FC<{ url: string }> = ({ url }) => {
       <div className="flex items-center space-x-5">
         <span className="font-bold">
           {format(percentComplete * duration * 10)}{" "}
-          <span className="text-white-primary font-bold">
-            / {format(duration * 1000)}
-          </span>
         </span>
-        <div className="w-72">
+        <div className="w-96">
           <Slider
             value={percentComplete}
             onChange={(v) => seek((duration * v) / 100)}
@@ -87,6 +120,7 @@ const PlayAudioControls: React.FC<{ url: string }> = ({ url }) => {
             max={100}
           />
         </div>
+        <span className="font-bold">{format(duration * 1000)}</span>
       </div>
     </div>
   );
@@ -127,8 +161,8 @@ export const SoundBitePlayer: React.FC = ({}) => {
           <button
             className="absolute top-4 right-4"
             onClick={() => {
-              usePlayerStore.getState().clear();
               stop();
+              usePlayerStore.getState().clear();
             }}
           >
             <XIcon className="w-4 h-4" />
@@ -138,22 +172,14 @@ export const SoundBitePlayer: React.FC = ({}) => {
               src="https://kidscreen.com/wp/wp-content/uploads/2017/10/Ben10-KeyArt.jpg"
               className="w-24 h-24 rounded-xl object-cover"
             />
-            <div className="min-w-0">
-              <div className="small text-white-primary font-semibold">
+            <div className="max-w-sm">
+              <div className="small text-white-primary font-semibold truncate">
                 Programming — EP 2.
               </div>
-              <div className="flex items-center">
-                <h4 className="text-white mr-4">The Ben Ten Show — Pt. 1</h4>
-                <div className="flex items-center space-x-2">
-                  <Button size="small" color="white">
-                    Follow
-                  </Button>
-                  <Button size="small" color="lightPrimary">
-                    Report
-                  </Button>
-                </div>
-              </div>
-              <p className="white-primary truncate min-w-">
+              <h4 className="text-white mr-4 truncate">
+                The Ben Ten Show — Pt. 1
+              </h4>
+              <p className="white-primary truncate">
                 In this episode Adam talks to Ben Orenstein about what he likes.
               </p>
             </div>
