@@ -40,9 +40,6 @@ export const SoundbiteHeader: React.FC<SoundbiteHeaderProps> = ({
             <Button size="small" color="secondary">
               Explore
             </Button>
-            <Button size="small" color="secondary">
-              All
-            </Button>
           </nav>
           <Link href="/upload">
             <Button
