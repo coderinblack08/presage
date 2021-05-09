@@ -1,3 +1,4 @@
+import format from "format-duration";
 import { XIcon } from "@heroicons/react/solid";
 import Slider from "rc-slider/lib/Slider";
 import React, { useEffect } from "react";
@@ -6,10 +7,11 @@ import shallow from "zustand/shallow";
 import { supabase } from "../lib/supabase";
 import { usePlayerStore } from "../stores/playing";
 import { Button } from "./Button";
+import "rc-slider/assets/index.css";
 
 const PlayAudioControls: React.FC<{ url: string }> = ({ url }) => {
   const [setPlaying] = usePlayerStore((x) => [x.setPlaying], shallow);
-  const { togglePlayPause, ready, loading, playing } = useAudioPlayer({
+  const { togglePlayPause, ready, loading, playing, player } = useAudioPlayer({
     src: url,
     format: ["wav", "m4a", "mp3", "ogg"],
     autoplay: true,
@@ -20,12 +22,11 @@ const PlayAudioControls: React.FC<{ url: string }> = ({ url }) => {
   const { percentComplete, duration, seek } = useAudioPosition({
     highRefreshRate: true,
   });
-
   if (!ready && !loading) return <div>No audio to play</div>;
   if (loading) return <div>Loading audio</div>;
 
   return (
-    <div className="flex flex-col items-end space-y-4">
+    <div className="flex flex-col items-end space-y-2">
       <div className="flex items-center space-x-4">
         <button>
           <img
@@ -52,20 +53,37 @@ const PlayAudioControls: React.FC<{ url: string }> = ({ url }) => {
             className="w-10 h-10"
           />
         </button>
-      </div>
-      <div className="w-64">
-        <Slider
-          railStyle={{ backgroundColor: "#7A9AFC" }}
-          trackStyle={{ backgroundColor: "#E4E7F1" }}
-          handleStyle={{
-            backgroundColor: "#FFFFFF",
-            border: "none",
+        <select
+          className="appearance-none px-4 py-0.5 small rounded-lg bg-primary border-2 border-white-primary text-white-primary font-bold"
+          defaultValue="1"
+          onChange={(e) => {
+            player.rate(Number(e.target.value));
           }}
-          min={0}
-          max={100}
-          onChange={(v) => seek((duration * v) / 100)}
-          value={percentComplete}
-        />
+        >
+          <option value="0.5">0.5x</option>
+          <option value="1">1.0x</option>
+          <option value="1.5">1.5x</option>
+          <option value="2">2.0x</option>
+        </select>
+      </div>
+      <div className="flex items-center space-x-5">
+        <span className="font-bold">
+          {format(percentComplete * duration * 10)}
+        </span>
+        <div className="w-72">
+          <Slider
+            value={percentComplete}
+            onChange={(v) => seek((duration * v) / 100)}
+            railStyle={{ backgroundColor: "#7A9AFC" }}
+            trackStyle={{ backgroundColor: "#E4E7F1" }}
+            handleStyle={{
+              backgroundColor: "#FFFFFF",
+              border: "none",
+            }}
+            min={0}
+            max={100}
+          />
+        </div>
       </div>
     </div>
   );
