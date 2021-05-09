@@ -31,6 +31,7 @@
     "react-howler": "^5.0.0",
     "react-input-autosize": "^3.0.0",
     "react-responsive": "^8.2.0",
+    "react-use-audio-player": "^1.2.4",
     "react-waypoint": "^9.0.3",
     "sharp": "^0.28.1",
     "swr": "^0.5.5",
