@@ -22,9 +22,9 @@ const PlayAudioControls: React.FC<{ url: string }> = ({ url }) => {
   const { percentComplete, duration, seek } = useAudioPosition({
     highRefreshRate: true,
   });
+
   if (!ready && !loading) return <div>No audio to play</div>;
   if (loading) return <div>Loading audio</div>;
-
   return (
     <div className="flex flex-col items-end space-y-2">
       <div className="flex items-center space-x-4">
@@ -68,7 +68,10 @@ const PlayAudioControls: React.FC<{ url: string }> = ({ url }) => {
       </div>
       <div className="flex items-center space-x-5">
         <span className="font-bold">
-          {format(percentComplete * duration * 10)}
+          {format(percentComplete * duration * 10)}{" "}
+          <span className="text-white-primary font-bold">
+            / {format(duration * 1000)}
+          </span>
         </span>
         <div className="w-72">
           <Slider
@@ -90,6 +93,7 @@ const PlayAudioControls: React.FC<{ url: string }> = ({ url }) => {
 };
 
 export const SoundBitePlayer: React.FC = ({}) => {
+  const { stop } = useAudioPlayer();
   const [soundbite, setPlaying, playing, setUrl, url] = usePlayerStore(
     (x) => [x.soundbite, x.setPlaying, x.playing, x.setUrl, x.url],
     shallow
@@ -120,7 +124,13 @@ export const SoundBitePlayer: React.FC = ({}) => {
     return (
       <div>
         <div className="flex justify-between items-center fixed bottom-6 inset-x-6 mx-auto max-w-[96em] bg-primary py-8 px-10 rounded-xl">
-          <button className="absolute top-4 right-4">
+          <button
+            className="absolute top-4 right-4"
+            onClick={() => {
+              usePlayerStore.getState().clear();
+              stop();
+            }}
+          >
             <XIcon className="w-4 h-4" />
           </button>
           <div className="flex items-center space-x-8">
