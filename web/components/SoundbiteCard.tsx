@@ -1,9 +1,12 @@
 import React from "react";
 import { Button } from "./Button";
-import { SupabaseImage } from "./SupabaseImage";
+import Image from "next/image";
+import { usePlayerStore } from "../stores/playing";
 
-interface SoundbiteCardProps {
+export interface SoundBite {
+  id: string;
   title: string;
+  audio: string;
   description: string;
   thumbnail: string;
   users: {
@@ -14,7 +17,9 @@ interface SoundbiteCardProps {
   };
 }
 
-export const SoundbiteCard: React.FC<SoundbiteCardProps> = ({
+export const SoundbiteCard: React.FC<SoundBite> = ({
+  id,
+  audio,
   title,
   description,
   thumbnail,
@@ -22,19 +27,31 @@ export const SoundbiteCard: React.FC<SoundbiteCardProps> = ({
 }) => {
   return (
     <article className="flex items-start space-x-10">
-      <SupabaseImage
+      <Image
         className="flex-shrink-0 object-cover rounded-lg"
-        bucket="thumbnails"
-        path={thumbnail}
+        src={thumbnail}
         width={175}
         height={125}
+        priority
       />
       <div className="w-full">
         <span className="text-primary">Programming — EP 2.</span>
         <div className="flex justify-between">
           <h4>{title}</h4>
           <div className="flex items-center space-x-4">
-            <button className="bg-darker-gray rounded-full p-2">
+            <button
+              onClick={() =>
+                usePlayerStore.getState().play({
+                  id,
+                  title,
+                  description,
+                  audio,
+                  thumbnail,
+                  users,
+                })
+              }
+              className="transition focus:outline-none hover:bg-dark-gray bg-darker-gray rounded-full p-2 flex-shrink-0"
+            >
               <img src="/icons/play.svg" className="w-5 h-5" />
             </button>
             <Button size="small" color="secondary">

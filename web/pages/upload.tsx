@@ -61,7 +61,14 @@ const Upload: React.FC = () => {
                 },
               }
             );
-            body.thumbnail = filePath;
+
+            const {
+              data: { signedURL },
+            } = await supabase.storage
+              .from("thumbnails")
+              .createSignedUrl(filePath, 60 * 60 * 24 * 365 * 1000);
+
+            body.thumbnail = signedURL;
           }
           const { error: err } = await supabase.from("soundbites").insert(body);
           if (err) {
@@ -101,7 +108,10 @@ const Upload: React.FC = () => {
                       <FolderAddIcon className="mb-2 w-12 h-12 text-primary" />
                       {thumbnail && (
                         <p className="text-light-gray">
-                          {thumbnail.name} {byteSize(thumbnail.size).toString()}
+                          {thumbnail.name}{" "}
+                          <span className="text-lighter-gray">
+                            ({byteSize(thumbnail.size).toString()})
+                          </span>
                         </p>
                       )}
                       <p className={`text-gray ${thumbnail ? "small" : ""}`}>

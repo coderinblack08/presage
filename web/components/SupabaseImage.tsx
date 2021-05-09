@@ -36,9 +36,11 @@ export const SupabaseImage: React.FC<SupabaseImageProps> = ({
     }
   }, [path]);
 
-  if (url)
-    return (
-      <Image src={url} width={width} height={height} {...props} priority />
-    );
-  return null;
+  return (
+    <div>
+      {url ? (
+        <Image src={url} width={width} height={height} priority {...props} />
+      ) : null}
+    </div>
+  );
 };

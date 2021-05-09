@@ -1,3 +1,6 @@
+// using javascript instead of typescript here cause of
+// protected properties not working with supabase
+
 import multer from "multer";
 import FormData from "form-data";
 import sharp from "sharp";
