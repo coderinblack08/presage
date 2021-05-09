@@ -1,24 +1,72 @@
 import { XIcon } from "@heroicons/react/solid";
+import Slider from "rc-slider/lib/Slider";
 import React, { useEffect } from "react";
-import { useAudioPlayer } from "react-use-audio-player";
+import { useAudioPlayer, useAudioPosition } from "react-use-audio-player";
 import shallow from "zustand/shallow";
 import { supabase } from "../lib/supabase";
 import { usePlayerStore } from "../stores/playing";
 import { Button } from "./Button";
 
 const PlayAudioControls: React.FC<{ url: string }> = ({ url }) => {
+  const [setPlaying] = usePlayerStore((x) => [x.setPlaying], shallow);
   const { togglePlayPause, ready, loading, playing } = useAudioPlayer({
     src: url,
-    format: ["mp3"],
+    format: ["wav", "m4a", "mp3", "ogg"],
     autoplay: true,
+    onplay: () => setPlaying(true),
+    onend: () => setPlaying(false),
+    onpause: () => setPlaying(false),
+  });
+  const { percentComplete, duration, seek } = useAudioPosition({
+    highRefreshRate: true,
   });
 
   if (!ready && !loading) return <div>No audio to play</div>;
   if (loading) return <div>Loading audio</div>;
 
   return (
-    <div>
-      <button onClick={togglePlayPause}>{playing ? "Pause" : "Play"}</button>
+    <div className="flex flex-col items-end space-y-4">
+      <div className="flex items-center space-x-4">
+        <button>
+          <img
+            src="/icons/replay10.svg"
+            alt="Replay 10 seconds"
+            className="w-10 h-10"
+          />
+        </button>
+        <button onClick={togglePlayPause}>
+          {!playing ? (
+            <img src="/icons/play.svg" className="w-14 h-14" alt="Play song" />
+          ) : (
+            <img
+              src="/icons/pause.svg"
+              className="w-14 h-14"
+              alt="Pause song"
+            />
+          )}
+        </button>
+        <button>
+          <img
+            src="/icons/forward10.svg"
+            alt="Forward 10 seconds"
+            className="w-10 h-10"
+          />
+        </button>
+      </div>
+      <div className="w-64">
+        <Slider
+          railStyle={{ backgroundColor: "#7A9AFC" }}
+          trackStyle={{ backgroundColor: "#E4E7F1" }}
+          handleStyle={{
+            backgroundColor: "#FFFFFF",
+            border: "none",
+          }}
+          min={0}
+          max={100}
+          onChange={(v) => seek((duration * v) / 100)}
+          value={percentComplete}
+        />
+      </div>
     </div>
   );
 };
@@ -53,7 +101,7 @@ export const SoundBitePlayer: React.FC = ({}) => {
   if (soundbite !== null)
     return (
       <div>
-        <div className="flex justify-between items-center fixed bottom-6 inset-x-6 mx-auto max-w-[96em] bg-primary py-8 px-12 rounded-xl">
+        <div className="flex justify-between items-center fixed bottom-6 inset-x-6 mx-auto max-w-[96em] bg-primary py-8 px-10 rounded-xl">
           <button className="absolute top-4 right-4">
             <XIcon className="w-4 h-4" />
           </button>
@@ -63,7 +111,9 @@ export const SoundBitePlayer: React.FC = ({}) => {
               className="w-24 h-24 rounded-xl object-cover"
             />
             <div className="min-w-0">
-              <div className="small">Programming — EP 2.</div>
+              <div className="small text-white-primary font-semibold">
+                Programming — EP 2.
+              </div>
               <div className="flex items-center">
                 <h4 className="text-white mr-4">The Ben Ten Show — Pt. 1</h4>
                 <div className="flex items-center space-x-2">
