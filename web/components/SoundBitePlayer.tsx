@@ -1,6 +1,7 @@
 import { Popover } from "@headlessui/react";
 import { VolumeUpIcon, XIcon } from "@heroicons/react/solid";
 import format from "format-duration";
+import { AnimatePresence, motion } from "framer-motion";
 import "rc-slider/assets/index.css";
 import Slider from "rc-slider/lib/Slider";
 import React, { useEffect } from "react";
@@ -154,40 +155,47 @@ export const SoundBitePlayer: React.FC = ({}) => {
     }
   }, [soundbite]);
 
-  if (soundbite !== null)
-    return (
-      <div>
-        <div className="flex justify-between items-center fixed bottom-6 inset-x-6 mx-auto max-w-[96em] bg-primary py-8 px-10 rounded-xl">
-          <button
-            className="absolute top-4 right-4"
-            onClick={() => {
-              stop();
-              usePlayerStore.getState().clear();
-            }}
-          >
-            <XIcon className="w-4 h-4" />
-          </button>
-          <div className="flex items-center space-x-8">
-            <img
-              src="https://kidscreen.com/wp/wp-content/uploads/2017/10/Ben10-KeyArt.jpg"
-              className="w-24 h-24 rounded-xl object-cover"
-            />
-            <div className="max-w-sm">
-              <div className="small text-white-primary font-semibold truncate">
-                Programming — EP 2.
+  return (
+    <AnimatePresence>
+      {soundbite ? (
+        <motion.div
+          initial={{ y: 175, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: 175, opacity: 0 }}
+          className="fixed bottom-6 inset-x-6 mx-auto"
+        >
+          <div className="flex justify-between items-center max-w-[96em] bg-primary py-8 px-10 rounded-xl">
+            <button
+              className="absolute top-4 right-4"
+              onClick={() => {
+                stop();
+                usePlayerStore.getState().clear();
+              }}
+            >
+              <XIcon className="w-4 h-4" />
+            </button>
+            <div className="flex items-center space-x-8">
+              <img
+                src="https://kidscreen.com/wp/wp-content/uploads/2017/10/Ben10-KeyArt.jpg"
+                className="w-24 h-24 rounded-xl object-cover"
+              />
+              <div className="max-w-sm">
+                <div className="small text-white-primary font-semibold truncate">
+                  Programming — EP 2.
+                </div>
+                <h4 className="text-white mr-4 truncate">
+                  The Ben Ten Show — Pt. 1
+                </h4>
+                <p className="white-primary truncate">
+                  In this episode Adam talks to Ben Orenstein about what he
+                  likes.
+                </p>
               </div>
-              <h4 className="text-white mr-4 truncate">
-                The Ben Ten Show — Pt. 1
-              </h4>
-              <p className="white-primary truncate">
-                In this episode Adam talks to Ben Orenstein about what he likes.
-              </p>
             </div>
+            <PlayAudioControls url={url} />
           </div>
-          <PlayAudioControls url={url} />
-        </div>
-      </div>
-    );
-
-  return null;
+        </motion.div>
+      ) : null}
+    </AnimatePresence>
+  );
 };
