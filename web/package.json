@@ -12,6 +12,7 @@
     "@heroicons/react": "^1.0.1",
     "@prismicio/client": "^4.0.0",
     "@supabase/supabase-js": "^1.11.6",
+    "@tailwindcss/aspect-ratio": "^0.2.0",
     "audio-recorder-polyfill": "^0.4.1",
     "axios": "^0.21.1",
     "byte-size": "^7.0.1",

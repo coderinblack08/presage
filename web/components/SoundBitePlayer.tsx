@@ -19,6 +19,7 @@ import { useAudioPlayer, useAudioPosition } from "react-use-audio-player";
 import shallow from "zustand/shallow";
 import { supabase } from "../lib/supabase";
 import { usePlayerStore } from "../stores/playing";
+import Image from "next/image";
 
 const PlayAudioControls: React.FC<{ url: string }> = ({ url }) => {
   const [setPlaying, volume, setVolume] = usePlayerStore(
@@ -47,23 +48,83 @@ const PlayAudioControls: React.FC<{ url: string }> = ({ url }) => {
 
   if (!ready && !loading) return <div>No audio to play</div>;
   if (loading) return <div>Loading audio</div>;
+
+  const sideControls = (
+    <div className="flex items-center">
+      <button className="mr-4">
+        <MdRepeat className="w-8 h-8 text-white" />
+      </button>
+      <div className="flex items-center space-x-4 mr-4 lg:mr-8">
+        <button
+          onClick={() => {
+            if (volume !== 0) {
+              setVolume(0);
+              howlerVolume(0);
+            } else {
+              setVolume(1);
+              howlerVolume(1);
+            }
+          }}
+        >
+          {volume > 0.5 ? (
+            <MdVolumeUp className="w-8 h-8 text-white" />
+          ) : volume === 0 ? (
+            <MdVolumeOff className="w-8 h-8 text-white" />
+          ) : (
+            <MdVolumeDown className="w-8 h-8 text-white" />
+          )}
+        </button>
+        <Slider
+          className="hidden lg:block w-20"
+          value={volume * 100}
+          onChange={(v) => {
+            const value = parseFloat((Number(v) / 100).toFixed(2));
+            setVolume(value);
+            return howlerVolume(value);
+          }}
+          railStyle={{ backgroundColor: "#7A9AFC" }}
+          trackStyle={{ backgroundColor: "#E4E7F1" }}
+          handleStyle={{
+            backgroundColor: "#FFFFFF",
+            border: "none",
+          }}
+          min={0}
+          max={100}
+        />
+      </div>
+      <select
+        className="focus:outline-none appearance-none flex justify-items-center px-3 py-0.5 small rounded-lg bg-white text-primary font-bold"
+        defaultValue="1"
+        onChange={(e) => player.rate(Number(e.target.value))}
+      >
+        <option value="0.5">0.5x</option>
+        <option value="1">1.0x</option>
+        <option value="1.5">1.5x</option>
+        <option value="2">2.0x</option>
+      </select>
+    </div>
+  );
+
   return (
     <>
-      <div className="col-span-2 flex flex-col items-center space-y-2">
-        <div className="flex items-center">
-          <button className="mr-3">
-            <MdSkipPrevious className="w-10 h-10 text-white" />
-          </button>
-          <button onClick={togglePlayPause} className="mr-3">
-            {!playing ? (
-              <MdPlayArrow className="w-12 h-12 text-white" />
-            ) : (
-              <MdPause className="w-12 h-12 text-white" />
-            )}
-          </button>
-          <button className="mr-7">
-            <MdSkipNext className="w-10 h-10 text-white" />
-          </button>
+      <div className="col-span-7 md:col-span-5 lg:col-span-3 flex flex-col items-center space-y-2">
+        <div className="flex justify-between items-center md:w-auto w-full">
+          <div className="flex items-center">
+            <button className="mr-3">
+              <MdSkipPrevious className="w-10 h-10 text-white" />
+            </button>
+            <button onClick={togglePlayPause} className="mr-3">
+              {!playing ? (
+                <MdPlayArrow className="w-12 h-12 text-white" />
+              ) : (
+                <MdPause className="w-12 h-12 text-white" />
+              )}
+            </button>
+            <button className="mr-7">
+              <MdSkipNext className="w-10 h-10 text-white" />
+            </button>
+          </div>
+          <div className="block md:hidden">{sideControls}</div>
         </div>
         <div className="flex items-center space-x-5 w-full">
           <span className="font-bold small">
@@ -84,59 +145,8 @@ const PlayAudioControls: React.FC<{ url: string }> = ({ url }) => {
           <span className="font-bold small">{format(duration * 1000)}</span>
         </div>
       </div>
-      <div className="flex items-center justify-end col-span-2">
-        <button className="mr-4">
-          <MdRepeat className="w-8 h-8 text-white" />
-        </button>
-        <div className="flex items-center space-x-4 mr-8">
-          <button
-            onClick={() => {
-              if (volume !== 0) {
-                setVolume(0);
-                howlerVolume(0);
-              } else {
-                setVolume(1);
-                howlerVolume(1);
-              }
-            }}
-          >
-            {volume > 0.5 ? (
-              <MdVolumeUp className="w-8 h-8 text-white" />
-            ) : volume === 0 ? (
-              <MdVolumeOff className="w-8 h-8 text-white" />
-            ) : (
-              <MdVolumeDown className="w-8 h-8 text-white" />
-            )}
-          </button>
-          <div className="w-20">
-            <Slider
-              value={volume * 100}
-              onChange={(v) => {
-                const value = parseFloat((Number(v) / 100).toFixed(2));
-                setVolume(value);
-                return howlerVolume(value);
-              }}
-              railStyle={{ backgroundColor: "#7A9AFC" }}
-              trackStyle={{ backgroundColor: "#E4E7F1" }}
-              handleStyle={{
-                backgroundColor: "#FFFFFF",
-                border: "none",
-              }}
-              min={0}
-              max={100}
-            />
-          </div>
-        </div>
-        <select
-          className="focus:outline-none appearance-none flex justify-items-center px-3 py-0.5 small rounded-lg bg-white text-primary font-bold"
-          defaultValue="1"
-          onChange={(e) => player.rate(Number(e.target.value))}
-        >
-          <option value="0.5">0.5x</option>
-          <option value="1">1.0x</option>
-          <option value="1.5">1.5x</option>
-          <option value="2">2.0x</option>
-        </select>
+      <div className="hidden md:flex col-span-2 items-center justify-end">
+        {sideControls}
       </div>
     </>
   );
@@ -179,7 +189,7 @@ export const SoundBitePlayer: React.FC = ({}) => {
           exit={{ y: 175, opacity: 0 }}
           className="fixed bottom-6 inset-x-6 mx-auto"
         >
-          <div className="relative inset-x-0 mx-auto grid grid-cols-6 gap-14 max-w-[96em] bg-primary py-8 px-10 rounded-xl">
+          <div className="relative inset-x-0 mx-auto grid grid-cols-7 gap-x-12 max-w-[96em] bg-primary py-8 px-10 rounded-xl">
             <button
               className="absolute top-4 right-4"
               onClick={() => {
@@ -189,17 +199,21 @@ export const SoundBitePlayer: React.FC = ({}) => {
             >
               <XIcon className="w-4 h-4" />
             </button>
-            <div className="flex items-center col-span-2">
-              <img
-                src="https://kidscreen.com/wp/wp-content/uploads/2017/10/Ben10-KeyArt.jpg"
-                className="w-20 h-20 mr-6 rounded-lg object-cover"
-              />
-              <div className="min-w-0">
+            <div className="hidden lg:flex items-center col-span-1 lg:col-span-2">
+              <div className="mr-6">
+                <Image
+                  width={80}
+                  height={80}
+                  src="https://gnixlumnyguqyjfowhaz.supabase.co/storage/v1/object/sign/thumbnails/5ee01ccc-c1b7-457b-90c6-1bf4360b4189-2c994fba-5042-4bcc-8e0e-ca43c3d9fb22-cover4.jpeg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJ0aHVtYm5haWxzLzVlZTAxY2NjLWMxYjctNDU3Yi05MGM2LTFiZjQzNjBiNDE4OS0yYzk5NGZiYS01MDQyLTRiY2MtOGUwZS1jYTQzYzNkOWZiMjItY292ZXI0LmpwZWciLCJpYXQiOjE2MjA1MzI0NDIsImV4cCI6MzMxNTY1MzI0NDJ9.nUmCnv0Gl55bDrjrovx5blwKuvhnAmSWZ0OECrqfhwE"
+                  className="rounded-lg object-cover"
+                />
+              </div>
+              <div className="hidden lg:block min-w-0">
                 <p className="text-white-primary truncate small">
                   By coderinblack · 2 days ago
                 </p>
                 <p className="text-white mr-4 truncate text-lg font-bold">
-                  The Ben Ten Show — Pt. 1 adfsdddddddasdfsd
+                  The Ben Ten Show — Pt. 1
                 </p>
                 {/* <div className="small text-white-primary font-semibold truncate">
                   Programming — EP 2.
@@ -207,6 +221,13 @@ export const SoundBitePlayer: React.FC = ({}) => {
               </div>
             </div>
             <PlayAudioControls url={url} />
+            <p className="block lg:hidden col-span-7 mt-2 text-white-primary">
+              Playing{" "}
+              <span className="text-white font-semibold">
+                Ten Ben Ten Show - Pt. 1
+              </span>{" "}
+              · By coderinblack · 2 days ago
+            </p>
           </div>
         </motion.div>
       ) : null}
