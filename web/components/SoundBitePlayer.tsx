@@ -1,3 +1,10 @@
+import { XIcon } from "@heroicons/react/solid";
+import format from "format-duration";
+import { AnimatePresence, motion } from "framer-motion";
+import Image from "next/image";
+import "rc-slider/assets/index.css";
+import Slider from "rc-slider/lib/Slider";
+import React, { useEffect } from "react";
 import {
   MdPause,
   MdPlayArrow,
@@ -5,21 +12,14 @@ import {
   MdSkipNext,
   MdSkipPrevious,
   MdVolumeDown,
-  MdVolumeMute,
   MdVolumeOff,
   MdVolumeUp,
 } from "react-icons/md";
-import { VolumeUpIcon, XIcon } from "@heroicons/react/solid";
-import format from "format-duration";
-import { AnimatePresence, motion } from "framer-motion";
-import "rc-slider/assets/index.css";
-import Slider from "rc-slider/lib/Slider";
-import React, { useEffect } from "react";
 import { useAudioPlayer, useAudioPosition } from "react-use-audio-player";
 import shallow from "zustand/shallow";
 import { supabase } from "../lib/supabase";
+import { useHover } from "../lib/useHover";
 import { usePlayerStore } from "../stores/playing";
-import Image from "next/image";
 
 const PlayAudioControls: React.FC<{ url: string }> = ({ url }) => {
   const [setPlaying, volume, setVolume] = usePlayerStore(
@@ -45,9 +45,6 @@ const PlayAudioControls: React.FC<{ url: string }> = ({ url }) => {
   const { percentComplete, duration, seek } = useAudioPosition({
     highRefreshRate: true,
   });
-
-  if (!ready && !loading) return <div>No audio to play</div>;
-  if (loading) return <div>Loading audio</div>;
 
   const sideControls = (
     <div className="flex items-center">
@@ -113,11 +110,15 @@ const PlayAudioControls: React.FC<{ url: string }> = ({ url }) => {
             <button className="mr-3">
               <MdSkipPrevious className="w-10 h-10 text-white" />
             </button>
-            <button onClick={togglePlayPause} className="mr-3">
+            <button
+              onClick={togglePlayPause}
+              className="mr-3 text-white disabled:text-white-primary"
+              disabled={loading}
+            >
               {!playing ? (
-                <MdPlayArrow className="w-12 h-12 text-white" />
+                <MdPlayArrow className="w-12 h-12" />
               ) : (
-                <MdPause className="w-12 h-12 text-white" />
+                <MdPause className="w-12 h-12" />
               )}
             </button>
             <button className="mr-7">
@@ -145,7 +146,7 @@ const PlayAudioControls: React.FC<{ url: string }> = ({ url }) => {
           <span className="font-bold small">{format(duration * 1000)}</span>
         </div>
       </div>
-      <div className="hidden md:flex col-span-2 items-center justify-end">
+      <div className="hidden md:flex col-span-2 row-span-2 items-center justify-end">
         {sideControls}
       </div>
     </>
@@ -158,6 +159,7 @@ export const SoundBitePlayer: React.FC = ({}) => {
     (x) => [x.soundbite, x.setPlaying, x.playing, x.setUrl, x.url],
     shallow
   );
+  const [hoverRef, isHovered] = useHover<HTMLDivElement>();
 
   const downloadAudio = async () => {
     try {
@@ -189,31 +191,38 @@ export const SoundBitePlayer: React.FC = ({}) => {
           exit={{ y: 175, opacity: 0 }}
           className="fixed bottom-6 inset-x-6 mx-auto"
         >
-          <div className="relative inset-x-0 mx-auto grid grid-cols-7 gap-x-12 max-w-[96em] bg-primary py-8 px-10 rounded-xl">
-            <button
+          {JSON.stringify(isHovered)}
+          <motion.div
+            className="relative inset-x-0 mx-auto grid grid-cols-7 gap-x-12 max-w-[90em] bg-primary py-8 px-10 rounded-xl"
+            ref={hoverRef}
+          >
+            <motion.button
               className="absolute top-4 right-4"
               onClick={() => {
                 stop();
+                URL.revokeObjectURL(url);
                 usePlayerStore.getState().clear();
               }}
             >
               <XIcon className="w-4 h-4" />
-            </button>
+            </motion.button>
             <div className="hidden lg:flex items-center col-span-1 lg:col-span-2">
-              <div className="mr-6">
-                <Image
-                  width={80}
-                  height={80}
-                  src="https://gnixlumnyguqyjfowhaz.supabase.co/storage/v1/object/sign/thumbnails/5ee01ccc-c1b7-457b-90c6-1bf4360b4189-2c994fba-5042-4bcc-8e0e-ca43c3d9fb22-cover4.jpeg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJ0aHVtYm5haWxzLzVlZTAxY2NjLWMxYjctNDU3Yi05MGM2LTFiZjQzNjBiNDE4OS0yYzk5NGZiYS01MDQyLTRiY2MtOGUwZS1jYTQzYzNkOWZiMjItY292ZXI0LmpwZWciLCJpYXQiOjE2MjA1MzI0NDIsImV4cCI6MzMxNTY1MzI0NDJ9.nUmCnv0Gl55bDrjrovx5blwKuvhnAmSWZ0OECrqfhwE"
-                  className="rounded-lg object-cover"
-                />
-              </div>
+              {soundbite.thumbnail ? (
+                <div className="mr-6">
+                  <Image
+                    width={80}
+                    height={80}
+                    src={soundbite.thumbnail}
+                    className="rounded-lg object-cover"
+                  />
+                </div>
+              ) : null}
               <div className="hidden lg:block min-w-0">
                 <p className="text-white-primary truncate small">
-                  By coderinblack · 2 days ago
+                  By {soundbite.users.username} · 2 days ago
                 </p>
                 <p className="text-white mr-4 truncate text-lg font-bold">
-                  The Ben Ten Show — Pt. 1
+                  {soundbite.title}
                 </p>
                 {/* <div className="small text-white-primary font-semibold truncate">
                   Programming — EP 2.
@@ -221,14 +230,14 @@ export const SoundBitePlayer: React.FC = ({}) => {
               </div>
             </div>
             <PlayAudioControls url={url} />
-            <p className="block lg:hidden col-span-7 mt-2 text-white-primary">
+            <p className="block lg:hidden col-span-7 md:col-span-5 mt-2 text-white-primary">
               Playing{" "}
               <span className="text-white font-semibold">
-                Ten Ben Ten Show - Pt. 1
+                {soundbite.title}
               </span>{" "}
-              · By coderinblack · 2 days ago
+              · By {soundbite.users.username} · 2 days ago
             </p>
-          </div>
+          </motion.div>
         </motion.div>
       ) : null}
     </AnimatePresence>

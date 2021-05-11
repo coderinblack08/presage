@@ -1,4 +1,5 @@
 import { GetServerSideProps, NextPage } from "next";
+import Link from "next/link";
 import React from "react";
 import useSWR from "swr";
 import { SoundbiteCard } from "../components/SoundBiteCard";
@@ -18,7 +19,7 @@ const Publishers: NextPage<{ soundbites?: any }> = ({ soundbites }) => {
 
   return (
     <Layout>
-      <div className="space-y-16">
+      <div className="grid gap-12">
         {!isValidating ? (
           data?.map((bite) => <SoundbiteCard {...bite} />)
         ) : (

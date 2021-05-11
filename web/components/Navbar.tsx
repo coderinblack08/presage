@@ -18,7 +18,7 @@ export const Navbar: React.FC<NavbarProps> = ({ noBlur = false }) => {
     <nav
       className={`sticky z-50 top-0 bg-black ${
         noBlur ? "" : "bg-opacity-75"
-      } flex items-center justify-between max-w-7xl mx-auto p-6`}
+      } flex items-center justify-between max-w-[90em] mx-auto p-6`}
       style={
         noBlur
           ? {}
