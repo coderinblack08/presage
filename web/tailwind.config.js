@@ -30,6 +30,11 @@ module.exports = {
       "white-primary": "#D4DFFF",
       red: "#F94B40",
     },
+    extend: {
+      maxWidth: {
+        "8xl": "88em",
+      },
+    },
   },
   variants: {
     scrollbar: ["rounded", "dark"],

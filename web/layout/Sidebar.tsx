@@ -48,7 +48,7 @@ export const Sidebar: React.FC<SidebarProps> = ({}) => {
               >
                 Upload
                 <CloudUploadIcon
-                  className={`w-5 h-5 ${
+                  className={`w-4 h-4 ${
                     onPath("/upload") ? "text-lighter-gray" : "text-light-gray"
                   }`}
                 />

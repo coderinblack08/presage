@@ -1,5 +1,4 @@
 import React from "react";
-import { Navbar } from "../components/Navbar";
 import {
   SoundbiteHeader,
   SoundbiteHeaderProps,
@@ -14,7 +13,7 @@ export const Layout: React.FC<LayoutProps & SoundbiteHeaderProps> = ({
 }) => {
   return (
     <div>
-      <div className="max-w-[90em] mx-auto w-full mt-16 px-6">
+      <div className=" lg:max-w-7xl xl:max-w-8xl mx-auto w-full mt-16 px-6">
         <div className="flex items-start justify-center space-x-20">
           <Sidebar />
           <main className="w-full">

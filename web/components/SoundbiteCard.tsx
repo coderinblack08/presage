@@ -29,10 +29,10 @@ export const SoundbiteCard: React.FC<SoundBite> = ({
   users,
 }) => {
   return (
-    <article className="flex items-start space-x-10">
+    <article className="flex flex-col sm:flex-row items-start space-y-6 sm:space-y-0 sm:space-x-10">
       {thumbnail ? (
         <Image
-          className="flex-shrink-0 object-cover rounded-lg"
+          className="object-cover rounded-lg"
           src={thumbnail}
           width={175}
           height={125}
@@ -41,13 +41,13 @@ export const SoundbiteCard: React.FC<SoundBite> = ({
       ) : null}
       <div className="w-full">
         {/* <span className="text-primary">Programming — EP 2.</span> */}
-        <div className="flex justify-between">
+        <div className="flex flex-col sm:flex-row justify-between">
           <Link href="/bite/[id]" as={`/bite/${id}`}>
             <a className="hover:text-white">
               <h4>{title}</h4>
             </a>
           </Link>
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center my-2 sm:my-0 space-x-4">
             <SoundBitePlayButton
               {...{ id, title, description, audio, thumbnail, users }}
             />

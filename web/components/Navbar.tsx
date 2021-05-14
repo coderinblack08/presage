@@ -12,13 +12,13 @@ interface NavbarProps {
 export const Navbar: React.FC<NavbarProps> = ({ noBlur = false }) => {
   const onPath = useOnPath();
   const { user } = useUser();
-  const activeClass = "text-faint-primary bg-primary bg-opacity-10 rounded-xl";
+  const activeClass = "text-faint-primary bg-primary bg-opacity-20 rounded-xl";
 
   return (
     <nav
       className={`sticky z-50 top-0 bg-black ${
         noBlur ? "" : "bg-opacity-75"
-      } flex items-center justify-between max-w-[90em] mx-auto p-6`}
+      } flex items-center justify-between lg:max-w-7xl xl:max-w-8xl mx-auto p-6`}
       style={
         noBlur
           ? {}
