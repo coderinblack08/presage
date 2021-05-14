@@ -2,16 +2,15 @@ import { MicrophoneIcon, TrashIcon } from "@heroicons/react/solid";
 import Slider from "rc-slider/lib/Slider";
 import React, { useRef, useState } from "react";
 import useRecorder from "./useRecorder";
+import "rc-slider/assets/index.css";
 
 export const RecordAudio: React.FC<{
   setAudio: React.Dispatch<React.SetStateAction<string>>;
 }> = ({ setAudio }) => {
   const [playing, setPlaying] = useState(false);
   const player = useRef<HTMLAudioElement>();
-  const audioSource = useRef<HTMLSourceElement>();
-  const { clearAudio, audioURL, recording, toggleRecording } = useRecorder(
-    setAudio
-  );
+  const { clearAudio, audioURL, recording, toggleRecording } =
+    useRecorder(setAudio);
 
   return (
     <div>

@@ -4,6 +4,7 @@ import shallow from "zustand/shallow";
 import { supabase } from "../lib/supabase";
 import { usePlayerStore } from "../stores/playing";
 import { ExtraPlayerControls } from "./ExtraPlayerControls";
+import { PlayerSlider } from "./PlayerSlider";
 import { PlayPauseSkipControls } from "./PlayPauseSkipControls";
 
 export const SoundBitePlayer: React.FC = ({}) => {
@@ -36,7 +37,7 @@ export const SoundBitePlayer: React.FC = ({}) => {
     <div>
       {soundbite ? (
         <div className="fixed bottom-0 w-full bg-primary lg:px-8 py-5">
-          <div className="max-w-8xl mx-auto flex items-center justify-between">
+          <div className="relative max-w-8xl mx-auto flex items-center justify-between">
             <div className="flex items-center space-x-8">
               <PlayPauseSkipControls url={url} />
               <div>
@@ -46,6 +47,7 @@ export const SoundBitePlayer: React.FC = ({}) => {
                 </p>
               </div>
             </div>
+            <PlayerSlider />
             <ExtraPlayerControls />
           </div>
         </div>

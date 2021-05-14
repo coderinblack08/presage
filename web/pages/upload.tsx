@@ -4,7 +4,6 @@ import FormData from "form-data";
 import byteSize from "byte-size";
 import { Form, Formik } from "formik";
 import { useRouter } from "next/router";
-import "rc-slider/assets/index.css";
 import React, { useState } from "react";
 import Dropzone from "react-dropzone";
 import { v4 } from "uuid";
