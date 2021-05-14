@@ -1,5 +1,10 @@
 import React from "react";
-import { MdPlayArrow, MdSkipNext, MdSkipPrevious } from "react-icons/md";
+import {
+  MdPause,
+  MdPlayArrow,
+  MdSkipNext,
+  MdSkipPrevious,
+} from "react-icons/md";
 import { useAudioPlayer } from "react-use-audio-player";
 import shallow from "zustand/shallow";
 import { usePlayerStore } from "../stores/playing";
@@ -32,8 +37,12 @@ export const PlayPauseSkipControls: React.FC<{ url: string; show?: boolean }> =
         <button className="text-white">
           <MdSkipPrevious className="w-7 h-7" />
         </button>
-        <button className="text-white">
-          <MdPlayArrow className="w-10 h-10" />
+        <button className="text-white" onClick={() => togglePlayPause()}>
+          {playing ? (
+            <MdPause className="w-10 h-10" />
+          ) : (
+            <MdPlayArrow className="w-10 h-10" />
+          )}
         </button>
         <button className="text-white">
           <MdSkipNext className="w-7 h-7" />
