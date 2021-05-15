@@ -12,7 +12,7 @@ interface NavbarProps {
 export const Navbar: React.FC<NavbarProps> = ({ noBlur = false }) => {
   const onPath = useOnPath();
   const { user } = useUser();
-  const activeClass = "text-faint-primary bg-primary bg-opacity-20 rounded-xl";
+  const activeClass = "text-faint-primary bg-primary bg-opacity-10 rounded-xl";
 
   return (
     <nav

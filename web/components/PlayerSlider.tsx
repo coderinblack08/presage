@@ -20,7 +20,7 @@ export const PlayerSlider: React.FC<PlayerSliderProps> = ({}) => {
       <Slider
         value={percentComplete}
         onChange={(v) => seek((duration * v) / 100)}
-        railStyle={{ backgroundColor: isMobile ? "#282F42" : "#E4E7F1" }}
+        railStyle={{ backgroundColor: isMobile ? "#282F42" : "#7A9AFC" }}
         trackStyle={{ backgroundColor: "#E4E7F1" }}
         handleStyle={{
           backgroundColor: "#FFFFFF",

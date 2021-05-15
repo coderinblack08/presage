@@ -12,7 +12,7 @@ export const Sidebar: React.FC<SidebarProps> = ({}) => {
   const normal = "block py-1.5 px-4 rounded-lg w-full text-light-gray";
 
   return (
-    <aside className="w-96">
+    <aside className="hidden lg:block w-96">
       <nav>
         <p className="font-bold small text-gray mb-3">NAVIGATION</p>
         <ul className="space-y-3">
