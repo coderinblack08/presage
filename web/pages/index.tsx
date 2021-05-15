@@ -19,7 +19,7 @@ const Publishers: NextPage<{ soundbites?: any }> = ({ soundbites }) => {
 
   return (
     <Layout>
-      <div className="bg-gradient-to-b from-transparent to-[#1B202E80] pb-8 border-b border-darker-gray border-opacity-75">
+      <div className="bg-gradient-to-b from-transparent to-[#1B202E66] pb-8 border-b border-darker-gray border-opacity-75">
         <main className="lg:max-w-7xl xl:max-w-8xl mx-auto w-full mt-16 px-6">
           <header className="mb-16">
             <h3>Your Personal, Curated Feed</h3>

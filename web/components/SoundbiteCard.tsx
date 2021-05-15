@@ -72,23 +72,21 @@ export const SoundbiteCard: React.FC<SoundBite> = ({
           <MdPlayArrow className="w-5 h-5 text-white" />
         </button>
       )}
-      <div className="w-full">
-        {/* <span className="text-primary">Programming — EP 2.</span> */}
-        <Link href="/bite/[id]" as={`/bite/${id}`}>
-          <a className="hover:text-white">
-            <h4>{title}</h4>
-          </a>
-        </Link>
-        <p className="text-gray mt-1">
-          Published by{" "}
-          <span className="text-lighter-gray">{users.username}</span>
-        </p>
-        <p className="mt-2 text-light-gray">{description}</p>
-        <p className="text-gray mt-2">
-          <span className="font-bold">4:12</span> · <time>2 days ago</time> ·
-          24k views
-        </p>
-      </div>
+      <Link href="/bite/[id]" as={`/bite/${id}`}>
+        <a className="w-full block">
+          {/* <span className="text-primary">Programming — EP 2.</span> */}
+          <h4>{title}</h4>
+          <p className="text-gray mt-1">
+            Published by{" "}
+            <span className="text-lighter-gray">{users.username}</span>
+          </p>
+          <p className="mt-2 text-light-gray">{description}</p>
+          <p className="text-gray mt-2">
+            <span className="font-bold">4:12</span> · <time>2 days ago</time> ·
+            24k views
+          </p>
+        </a>
+      </Link>
     </article>
   );
 };
