@@ -5,12 +5,12 @@ interface ExtraPlayerControlsProps {}
 
 export const ExtraPlayerControls: React.FC<ExtraPlayerControlsProps> = ({}) => {
   return (
-    <div className="flex items-center space-x-4">
-      <button className="text-white">
-        <MdVolumeUp className="w-6 h-6" />
+    <div className="flex items-center justify-end space-x-4">
+      <button className="icon-button">
+        <MdVolumeUp className="w-7 h-7" />
       </button>
-      <button className="text-white">
-        <MdRepeat className="w-6 h-6" />
+      <button className="icon-button">
+        <MdRepeat className="w-7 h-7" />
       </button>
     </div>
   );

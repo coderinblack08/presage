@@ -31,6 +31,7 @@
     "react-avatar": "^3.10.0",
     "react-dom": "^17.0.1",
     "react-dropzone": "^11.3.2",
+    "react-hotkeys": "^2.0.0",
     "react-icons": "^4.2.0",
     "react-input-autosize": "^3.0.0",
     "react-responsive": "^8.2.0",

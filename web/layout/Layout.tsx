@@ -3,6 +3,7 @@ import {
   SoundbiteHeader,
   SoundbiteHeaderProps,
 } from "../components/SoundBiteHeader";
+import { usePlayerStore } from "../stores/playing";
 import { Sidebar } from "./Sidebar";
 
 interface LayoutProps {}
@@ -11,8 +12,10 @@ export const Layout: React.FC<LayoutProps & SoundbiteHeaderProps> = ({
   children,
   ...props
 }) => {
+  const soundbite = usePlayerStore((x) => x.soundbite);
+
   return (
-    <div>
+    <div className={soundbite ? "pb-16" : ""}>
       <div className=" lg:max-w-7xl xl:max-w-8xl mx-auto w-full mt-16 px-6">
         <div className="flex items-start justify-center space-x-20">
           <Sidebar />

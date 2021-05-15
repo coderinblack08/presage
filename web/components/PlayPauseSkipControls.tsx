@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  MdMoreVert,
   MdPause,
   MdPlayArrow,
   MdSkipNext,
@@ -15,14 +16,7 @@ export const PlayPauseSkipControls: React.FC<{ url: string; show?: boolean }> =
       (x) => [x.setPlaying, x.volume],
       shallow
     );
-    const {
-      togglePlayPause,
-      ready,
-      loading,
-      playing,
-      player,
-      volume: howlerVolume,
-    } = useAudioPlayer({
+    const { togglePlayPause, playing } = useAudioPlayer({
       volume,
       src: url,
       format: ["wav", "m4a", "mp3", "ogg"],
@@ -33,19 +27,22 @@ export const PlayPauseSkipControls: React.FC<{ url: string; show?: boolean }> =
     });
 
     return (
-      <div className="flex items-center space-x-4">
-        <button className="text-white">
+      <div className="flex justify-end lg:justify-start items-center space-x-4">
+        <button className="icon-button">
           <MdSkipPrevious className="w-7 h-7" />
         </button>
-        <button className="text-white" onClick={() => togglePlayPause()}>
+        <button className="icon-button" onClick={() => togglePlayPause()}>
           {playing ? (
             <MdPause className="w-10 h-10" />
           ) : (
             <MdPlayArrow className="w-10 h-10" />
           )}
         </button>
-        <button className="text-white">
+        <button className="icon-button">
           <MdSkipNext className="w-7 h-7" />
+        </button>
+        <button className="icon-button">
+          <MdMoreVert className="w-7 h-7" />
         </button>
       </div>
     );

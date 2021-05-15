@@ -7,17 +7,15 @@ import { useAudioPosition } from "react-use-audio-player";
 interface PlayerSliderProps {}
 
 export const PlayerSlider: React.FC<PlayerSliderProps> = ({}) => {
+  const getCurrentTime = () => format(percentComplete * duration * 10);
   const { percentComplete, duration, seek } = useAudioPosition({
     highRefreshRate: true,
   });
-
-  const getCurrentTime = () => format(percentComplete * duration * 10);
 
   return (
     <div className="flex items-center space-x-4">
       <p className="small font-bold">{getCurrentTime()}</p>
       <Slider
-        className="lg:w-[32em]"
         value={percentComplete}
         onChange={(v) => seek((duration * v) / 100)}
         railStyle={{ backgroundColor: "#7A9AFC" }}

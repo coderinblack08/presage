@@ -61,4 +61,8 @@
     -webkit-text-stroke: 1.5px theme("colors.darker-gray");
     -webkit-text-fill-color: transparent;
   }
+
+  .icon-button {
+    @apply text-white transition transform hover:scale-110 focus:outline-none;
+  }
 }
