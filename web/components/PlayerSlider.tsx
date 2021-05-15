@@ -3,10 +3,12 @@ import Slider from "rc-slider/lib/Slider";
 import React from "react";
 import format from "format-duration";
 import { useAudioPosition } from "react-use-audio-player";
+import { useMediaQuery } from "react-responsive";
 
 interface PlayerSliderProps {}
 
 export const PlayerSlider: React.FC<PlayerSliderProps> = ({}) => {
+  const isMobile = useMediaQuery({ maxWidth: "640px" });
   const getCurrentTime = () => format(percentComplete * duration * 10);
   const { percentComplete, duration, seek } = useAudioPosition({
     highRefreshRate: true,
@@ -18,7 +20,7 @@ export const PlayerSlider: React.FC<PlayerSliderProps> = ({}) => {
       <Slider
         value={percentComplete}
         onChange={(v) => seek((duration * v) / 100)}
-        railStyle={{ backgroundColor: "#7A9AFC" }}
+        railStyle={{ backgroundColor: isMobile ? "#282F42" : "#E4E7F1" }}
         trackStyle={{ backgroundColor: "#E4E7F1" }}
         handleStyle={{
           backgroundColor: "#FFFFFF",

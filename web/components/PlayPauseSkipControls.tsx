@@ -41,7 +41,7 @@ export const PlayPauseSkipControls: React.FC<{ url: string; show?: boolean }> =
         <button className="icon-button">
           <MdSkipNext className="w-7 h-7" />
         </button>
-        <button className="icon-button">
+        <button className="icon-button block lg:hidden">
           <MdMoreVert className="w-7 h-7" />
         </button>
       </div>
