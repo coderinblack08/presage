@@ -1,10 +1,8 @@
-import React, { useRef } from "react";
-import { Button } from "./Button";
 import Image from "next/image";
-import { usePlayerStore } from "../stores/playing";
-import { SoundBitePlayButton } from "./player/SoundBitePlayButton";
-import Avatar from "react-avatar";
 import Link from "next/link";
+import React from "react";
+import { MdPlayArrow } from "react-icons/md";
+import { usePlayerStore } from "../stores/playing";
 
 export interface SoundBite {
   id: string;
@@ -29,39 +27,64 @@ export const SoundbiteCard: React.FC<SoundBite> = ({
   users,
 }) => {
   return (
-    <article className="flex flex-col sm:flex-row items-start space-y-6 sm:space-y-0 sm:space-x-10">
+    <article className="col-span-1 flex items-start space-x-10">
       {thumbnail ? (
-        <Image
-          className="object-cover rounded-lg"
-          src={thumbnail}
-          width={175}
-          height={125}
-          priority
-        />
-      ) : null}
-      <div className="w-full">
-        {/* <span className="text-primary">Programming — EP 2.</span> */}
-        <div className="flex flex-col sm:flex-row justify-between">
-          <Link href="/bite/[id]" as={`/bite/${id}`}>
-            <a className="hover:text-white">
-              <h4>{title}</h4>
-            </a>
-          </Link>
-          <div className="flex items-center my-2 sm:my-0 space-x-4">
-            <SoundBitePlayButton
-              {...{ id, title, description, audio, thumbnail, users }}
-            />
-            <Button size="small" color="secondary">
-              Follow
-            </Button>
+        <div className="relative flex-shrink-0 overflow-hidden">
+          <Image
+            className="absolute inset-0 object-cover rounded-lg"
+            src={thumbnail}
+            width={84}
+            height={84}
+            priority
+          />
+          <div className="absolute bottom-2.5 right-1">
+            <button
+              className="icon-button bg-black p-2 rounded-full"
+              onClick={() => {
+                usePlayerStore.getState().play({
+                  id,
+                  audio,
+                  title,
+                  description,
+                  thumbnail,
+                  users,
+                });
+              }}
+            >
+              <MdPlayArrow className="w-4 h-4 text-white" />
+            </button>
           </div>
         </div>
-        <p className="text-light-gray">
+      ) : (
+        <button
+          className="icon-button bg-darker-gray p-2 rounded-full"
+          onClick={() => {
+            usePlayerStore.getState().play({
+              id,
+              audio,
+              title,
+              description,
+              thumbnail,
+              users,
+            });
+          }}
+        >
+          <MdPlayArrow className="w-4 h-4 text-white" />
+        </button>
+      )}
+      <div className="w-full">
+        {/* <span className="text-primary">Programming — EP 2.</span> */}
+        <Link href="/bite/[id]" as={`/bite/${id}`}>
+          <a className="hover:text-white">
+            <h4>{title}</h4>
+          </a>
+        </Link>
+        <p className="text-gray mt-1">
           Published by{" "}
-          <span className="text-lighter-gray underline">{users.username}</span>
+          <span className="text-lighter-gray">{users.username}</span>
         </p>
-        <p className="mt-2 text-gray">{description}</p>
-        <p className="text-light-gray mt-1">
+        <p className="mt-2 text-light-gray">{description}</p>
+        <p className="text-gray mt-2">
           <span className="font-bold">4:12</span> · <time>2 days ago</time> ·
           24k views
         </p>

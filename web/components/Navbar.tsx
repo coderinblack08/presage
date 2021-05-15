@@ -6,36 +6,28 @@ import { useUser } from "../stores/auth";
 import { Button } from "./Button";
 import { UserDropdown } from "./UserDropdown";
 
-interface NavbarProps {
-  noBlur?: boolean;
-}
+interface NavbarProps {}
 
-export const Navbar: React.FC<NavbarProps> = ({ noBlur = false }) => {
+export const Navbar: React.FC<NavbarProps> = () => {
   const onPath = useOnPath();
   const { user } = useUser();
   const activeClass = "text-faint-primary bg-primary bg-opacity-10 rounded-xl";
 
   return (
     <nav
-      className={`sticky z-50 top-0 bg-black ${
-        noBlur ? "" : "bg-opacity-75"
-      } flex items-center justify-between lg:max-w-7xl xl:max-w-8xl mx-auto p-6`}
-      style={
-        noBlur
-          ? {}
-          : {
-              opacity: 5,
-              backdropFilter: "blur(16px)",
-              WebkitBackdropFilter: "blur(16px)",
-            }
-      }
+      className={`sticky z-50 top-0 bg-black bg-opacity-75 flex items-center justify-between lg:max-w-7xl xl:max-w-8xl mx-auto p-6`}
+      style={{
+        opacity: 5,
+        backdropFilter: "blur(16px)",
+        WebkitBackdropFilter: "blur(16px)",
+      }}
     >
       <Link href="/">
         <a className="cursor-pointer flex-shrink-0">
           <img src="/static/logo.png" className="w-auto h-10" />
         </a>
       </Link>
-      <ul className="hidden lg:flex items-center space-x-6">
+      <ul className="hidden lg:flex items-center space-x-5">
         <li>
           <Link href="/">
             <a
@@ -71,7 +63,7 @@ export const Navbar: React.FC<NavbarProps> = ({ noBlur = false }) => {
         </li>
         <li>
           <Link href="/search">
-            <button className="text-light-gray flex items-center px-4 py-2">
+            <button className="text-light-gray flex items-center px-4 py-2 focus:outline-none">
               <MdSearch className="w-5 h-5 mr-2" />
               Search
             </button>
@@ -86,7 +78,7 @@ export const Navbar: React.FC<NavbarProps> = ({ noBlur = false }) => {
           <a href="https://twitter.com/coderinblack/status/1386457368574140416">
             <img src="/static/twitter.svg" className="w-6 h-6" />
           </a>
-          <button>
+          <button className="focus:outline-none">
             <img src="/static/notification.svg" className="w-6 h-6" />
           </button>
         </div>

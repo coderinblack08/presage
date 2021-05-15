@@ -19,12 +19,28 @@ const Publishers: NextPage<{ soundbites?: any }> = ({ soundbites }) => {
 
   return (
     <Layout>
-      <div className="grid gap-12">
-        {!isValidating ? (
-          data?.map((bite) => <SoundbiteCard {...bite} />)
-        ) : (
-          <p>Loading...</p>
-        )}
+      <div className="bg-gradient-to-b from-transparent to-[#1B202E80] pb-8 border-b border-darker-gray border-opacity-75">
+        <main className="lg:max-w-7xl xl:max-w-8xl mx-auto w-full mt-16 px-6">
+          <header className="mb-16">
+            <h3>Your Personal, Curated Feed</h3>
+            <p className="text-gray mt-2">
+              Listen to your favorite{" "}
+              <span className="text-faint-primary">short-form podcasts</span>{" "}
+              and{" "}
+              <span className="text-faint-primary">audio-centric content</span>
+            </p>
+          </header>
+          <div className="grid lg:grid-cols-2 gap-20">
+            {!isValidating ? (
+              data?.map((bite) => <SoundbiteCard {...bite} />)
+            ) : (
+              <p>Loading...</p>
+            )}
+            <a href="#" className="text-primary text-center lg:col-span-2">
+              Show me more →
+            </a>
+          </div>
+        </main>
       </div>
     </Layout>
   );

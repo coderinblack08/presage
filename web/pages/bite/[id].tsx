@@ -19,7 +19,7 @@ const Id: React.FC = () => {
           .single()
       ).data
   );
-  return <Layout title="The Ben Ten Show — Pt. 1"></Layout>;
+  return <Layout></Layout>;
 };
 
 export default Id;
