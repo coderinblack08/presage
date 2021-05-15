@@ -1,6 +1,6 @@
 import React from "react";
-import { usePlayerStore } from "../stores/playing";
-import { SoundBite } from "./SoundBiteCard";
+import { usePlayerStore } from "../../stores/playing";
+import { SoundBite } from "../SoundBiteCard";
 
 export const SoundBitePlayButton: React.FC<SoundBite> = (props) => {
   const playing = usePlayerStore((x) => x.playing);

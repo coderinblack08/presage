@@ -1,5 +1,6 @@
 import Link from "next/link";
 import React from "react";
+import { MdSearch } from "react-icons/md";
 import { useOnPath } from "../lib/onPath";
 import { useUser } from "../stores/auth";
 import { Button } from "./Button";
@@ -34,7 +35,7 @@ export const Navbar: React.FC<NavbarProps> = ({ noBlur = false }) => {
           <img src="/static/logo.png" className="w-auto h-10" />
         </a>
       </Link>
-      <ul className="hidden lg:flex items-center space-x-4">
+      <ul className="hidden lg:flex items-center space-x-6">
         <li>
           <Link href="/">
             <a
@@ -47,27 +48,33 @@ export const Navbar: React.FC<NavbarProps> = ({ noBlur = false }) => {
           </Link>
         </li>
         <li>
-          <Link href="/soundbites">
+          <Link href="/explore">
             <a
               className={`${
-                onPath(["/soundbites", "/upload"])
-                  ? activeClass
-                  : "text-light-gray"
+                onPath("/explore") ? activeClass : "text-light-gray"
               } px-4 py-2`}
             >
-              Soundbites
+              Explore
             </a>
           </Link>
         </li>
         <li>
-          <Link href="/publishers">
+          <Link href="/upload">
             <a
               className={`${
-                onPath("/publishers") ? activeClass : "text-light-gray"
+                onPath("/upload") ? activeClass : "text-light-gray"
               } px-4 py-2`}
             >
-              Publishers
+              Upload
             </a>
+          </Link>
+        </li>
+        <li>
+          <Link href="/search">
+            <button className="text-light-gray flex items-center px-4 py-2">
+              <MdSearch className="w-5 h-5 mr-2" />
+              Search
+            </button>
           </Link>
         </li>
       </ul>

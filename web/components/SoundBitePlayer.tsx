@@ -3,9 +3,9 @@ import React, { useEffect } from "react";
 import shallow from "zustand/shallow";
 import { supabase } from "../lib/supabase";
 import { usePlayerStore } from "../stores/playing";
-import { ExtraPlayerControls } from "./ExtraPlayerControls";
-import { PlayerSlider } from "./PlayerSlider";
-import { PlayPauseSkipControls } from "./PlayPauseSkipControls";
+import { ExtraPlayerControls } from "./player/ExtraPlayerControls";
+import { PlayerSlider } from "./player/PlayerSlider";
+import { PlayPauseSkipControls } from "./player/PlayPauseSkipControls";
 
 export const SoundBitePlayer: React.FC = ({}) => {
   const [soundbite, setUrl, url] = usePlayerStore(

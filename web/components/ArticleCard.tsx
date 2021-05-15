@@ -1,5 +1,4 @@
 import { format } from "date-fns";
-import Link from "next/link";
 import React from "react";
 
 interface ArticleCardProps {

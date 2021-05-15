@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import { Button } from "./Button";
 import Image from "next/image";
 import { usePlayerStore } from "../stores/playing";
-import { SoundBitePlayButton } from "./SoundBitePlayButton";
+import { SoundBitePlayButton } from "./player/SoundBitePlayButton";
 import Avatar from "react-avatar";
 import Link from "next/link";
 

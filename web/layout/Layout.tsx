@@ -1,10 +1,10 @@
 import React from "react";
+import { Navbar } from "../components/Navbar";
 import {
   SoundbiteHeader,
   SoundbiteHeaderProps,
 } from "../components/SoundBiteHeader";
 import { usePlayerStore } from "../stores/playing";
-import { Sidebar } from "./Sidebar";
 
 interface LayoutProps {}
 
@@ -15,14 +15,14 @@ export const Layout: React.FC<LayoutProps & SoundbiteHeaderProps> = ({
   const soundbite = usePlayerStore((x) => x.soundbite);
 
   return (
-    <div className={soundbite ? "pb-24 lg:pb-16" : ""}>
-      <div className="lg:max-w-7xl xl:max-w-8xl mx-auto w-full mt-16 px-6">
-        <div className="flex items-start justify-center lg:space-x-20">
-          <Sidebar />
-          <main className="w-full">
+    <div>
+      <Navbar />
+      <div className={soundbite ? "pb-24 lg:pb-16" : ""}>
+        <div className="lg:max-w-7xl xl:max-w-8xl mx-auto w-full mt-16 px-6">
+          <div className="px-6 pb-20 max-w-4xl mx-auto">
             <SoundbiteHeader {...props} />
-            <div className="px-6 pb-20 max-w-4xl">{children}</div>
-          </main>
+            <main>{children}</main>
+          </div>
         </div>
       </div>
     </div>

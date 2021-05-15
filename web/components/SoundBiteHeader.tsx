@@ -13,7 +13,7 @@ export const SoundbiteHeader: React.FC<SoundbiteHeaderProps> = ({
   const onPath = useOnPath();
 
   return (
-    <header className="px-6 max-w-4xl bg-black pb-16">
+    <header className="max-w-4xl bg-black pb-16">
       <h3>{title}</h3>
       {!hideSubtitle && (
         <p className="text-gray mt-2">

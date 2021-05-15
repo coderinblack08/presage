@@ -1,7 +1,7 @@
 import { CloudUploadIcon } from "@heroicons/react/outline";
 import Link from "next/link";
 import React from "react";
-import { AvatarGroup } from "../components/AvatarGroup";
+import { AvatarGroup } from "../components/avatar/AvatarGroup";
 import { useOnPath } from "../lib/onPath";
 
 interface SidebarProps {}
