@@ -69,7 +69,7 @@ export const SoundbiteCard: React.FC<SoundBite> = ({
             });
           }}
         >
-          <MdPlayArrow className="w-4 h-4 text-white" />
+          <MdPlayArrow className="w-5 h-5 text-white" />
         </button>
       )}
       <div className="w-full">

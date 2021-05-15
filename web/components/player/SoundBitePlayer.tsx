@@ -1,11 +1,11 @@
 import "rc-slider/assets/index.css";
 import React, { useEffect } from "react";
 import shallow from "zustand/shallow";
-import { supabase } from "../lib/supabase";
-import { usePlayerStore } from "../stores/playing";
-import { ExtraPlayerControls } from "./player/ExtraPlayerControls";
-import { PlayerSlider } from "./player/PlayerSlider";
-import { PlayPauseSkipControls } from "./player/PlayPauseSkipControls";
+import { supabase } from "../../lib/supabase";
+import { usePlayerStore } from "../../stores/playing";
+import { ExtraPlayerControls } from "./ExtraPlayerControls";
+import { PlayerSlider } from "./PlayerSlider";
+import { PlayPauseSkipControls } from "./PlayPauseSkipControls";
 
 export const SoundBitePlayer: React.FC = ({}) => {
   const [soundbite, setUrl, url] = usePlayerStore(
@@ -48,10 +48,10 @@ export const SoundBitePlayer: React.FC = ({}) => {
                 </div>
                 <header className="min-w-0">
                   <p className="text-white font-bold truncate">
-                    The Ben Ten Show — Pt. 1
+                    {soundbite.title}
                   </p>
                   <p className="small text-white-primary truncate">
-                    By coderinblack · 2 days ago
+                    By {soundbite.users.username}
                   </p>
                 </header>
               </div>

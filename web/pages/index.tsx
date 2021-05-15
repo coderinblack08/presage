@@ -30,13 +30,13 @@ const Publishers: NextPage<{ soundbites?: any }> = ({ soundbites }) => {
               <span className="text-faint-primary">audio-centric content</span>
             </p>
           </header>
-          <div className="grid lg:grid-cols-2 gap-20">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
             {!isValidating ? (
               data?.map((bite) => <SoundbiteCard {...bite} />)
             ) : (
               <p>Loading...</p>
             )}
-            <a href="#" className="text-primary text-center lg:col-span-2">
+            <a href="#" className="text-primary lg:text-center lg:col-span-2">
               Show me more →
             </a>
           </div>

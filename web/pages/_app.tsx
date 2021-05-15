@@ -2,7 +2,7 @@ import { AppProps } from "next/app";
 import Head from "next/head";
 import React from "react";
 import { AudioPlayerProvider } from "react-use-audio-player";
-import { SoundBitePlayer } from "../components/SoundBitePlayer";
+import { SoundBitePlayer } from "../components/player/SoundBitePlayer";
 import { UserProvider } from "../stores/auth";
 import "../styles/globals.css";
 

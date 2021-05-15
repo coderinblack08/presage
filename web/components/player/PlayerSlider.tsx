@@ -8,7 +8,7 @@ import { useMediaQuery } from "react-responsive";
 interface PlayerSliderProps {}
 
 export const PlayerSlider: React.FC<PlayerSliderProps> = ({}) => {
-  const isMobile = useMediaQuery({ maxWidth: "640px" });
+  const isMobile = useMediaQuery({ maxWidth: "768px" });
   const getCurrentTime = () => format(percentComplete * duration * 10);
   const { percentComplete, duration, seek } = useAudioPosition({
     highRefreshRate: true,
