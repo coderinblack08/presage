@@ -1,5 +1,4 @@
 import { GetServerSideProps, NextPage } from "next";
-import Link from "next/link";
 import React from "react";
 import useSWR from "swr";
 import { SoundbiteCard } from "../components/SoundBiteCard";
@@ -7,7 +6,7 @@ import { Layout } from "../layout/Layout";
 import { supabase } from "../lib/supabase";
 
 async function fetchSoundBites() {
-  return await supabase.from("soundbites").select("*, users(*)").limit(10);
+  return await supabase.from("soundbites").select("*").limit(4);
 }
 
 const Publishers: NextPage<{ soundbites?: any }> = ({ soundbites }) => {

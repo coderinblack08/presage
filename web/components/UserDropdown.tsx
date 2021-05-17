@@ -10,7 +10,7 @@ interface UserDropdownProps {}
 
 export const UserDropdown: React.FC<UserDropdownProps> = ({}) => {
   const router = useRouter();
-  const { user } = useUser();
+  const { profile } = useUser();
 
   return (
     <Menu as="div" className="relative inline-block text-left">
@@ -19,8 +19,8 @@ export const UserDropdown: React.FC<UserDropdownProps> = ({}) => {
           <div>
             <Menu.Button className="focus:outline-none">
               <Avatar
-                name={user?.details?.username}
-                alt={user?.details?.username}
+                name={profile?.username}
+                alt={profile?.username}
                 className="flex-shrink-0 rounded-full"
                 size="36px"
               />

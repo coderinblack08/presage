@@ -6,7 +6,7 @@ export const InputField: React.FC<InputProps> = ({ textarea, ...props }) => {
   const [field, meta] = useField(props as any);
 
   return (
-    <div className="h-full w-full">
+    <div className="w-full">
       <Input
         error={meta.touched && !!meta.error}
         textarea={textarea}

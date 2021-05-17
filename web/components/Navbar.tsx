@@ -2,8 +2,8 @@ import Link from "next/link";
 import React from "react";
 import { MdSearch } from "react-icons/md";
 import { useOnPath } from "../lib/onPath";
+import { LoginModal } from "../modules/login/LoginModal";
 import { useUser } from "../stores/auth";
-import { Button } from "./Button";
 import { UserDropdown } from "./UserDropdown";
 
 interface NavbarProps {}
@@ -15,7 +15,7 @@ export const Navbar: React.FC<NavbarProps> = () => {
 
   return (
     <nav
-      className={`sticky z-50 top-0 bg-black bg-opacity-75 flex items-center justify-between lg:max-w-7xl xl:max-w-8xl mx-auto p-6`}
+      className={`sticky z-40 top-0 bg-black bg-opacity-75 flex items-center justify-between lg:max-w-7xl xl:max-w-8xl mx-auto p-6`}
       style={{
         opacity: 5,
         backdropFilter: "blur(16px)",
@@ -82,18 +82,7 @@ export const Navbar: React.FC<NavbarProps> = () => {
             <img src="/static/notification.svg" className="w-6 h-6" />
           </button>
         </div>
-        {user ? (
-          <UserDropdown />
-        ) : (
-          <div className="space-x-2">
-            <Link href="/login">
-              <Button color="secondary">Login</Button>
-            </Link>
-            <Link href="/register">
-              <Button>Register</Button>
-            </Link>
-          </div>
-        )}
+        {user ? <UserDropdown /> : <LoginModal />}
       </div>
     </nav>
   );
