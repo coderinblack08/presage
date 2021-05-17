@@ -14,11 +14,13 @@ export const config = {
   },
 };
 
+const apikey = process.env.NEXT_PUBLIC_ANON_PUBLIC_KEY;
+
 export default async (req, res) => {
   await multerAny(req, res);
 
   let {
-    query: { path, bucket, w, h, quality = "75" },
+    query: { path, bucket, w, h, access_token, quality = "75" },
   } = req;
 
   let blob = req.file;
@@ -35,13 +37,20 @@ export default async (req, res) => {
     formData.append("", transform, path);
     formData.append("cacheControl", 3600);
 
-    res.json(
-      await fetch(`${supabase.storage.url}/object/${bucket}/${path}`, {
+    const image = await fetch(
+      `${supabase.storage.url}/object/${bucket}/${path}`,
+      {
         method: "POST",
-        headers: supabase.storage.headers,
+        headers: {
+          apikey,
+          Authorization: `Bearer ${access_token || apikey}`,
+        },
         body: formData,
-      }).then((response) => response.json())
-    );
+      }
+    )
+      .then((response) => response.json())
+      .catch((e) => console.error(e));
+    res.json(image);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: err.message });

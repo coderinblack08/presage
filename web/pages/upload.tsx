@@ -13,7 +13,7 @@ const Upload: React.FC = () => {
 
   return (
     <Layout>
-      <div className="max-w-3xl mx-auto py-32">
+      <div className="max-w-3xl mx-auto py-32 px-6">
         <Formik
           initialValues={{ description: "", title: "" }}
           onSubmit={async (values) => {
@@ -25,29 +25,27 @@ const Upload: React.FC = () => {
             <Form>
               <h4 className="mb-5 text-white">Upload Soundbite</h4>
               <RecordAudio setAudio={setAudio} />
-              <InputField
-                name="title"
-                placeholder="SoundBite Title"
-                className="mt-6"
-              />
-              <InputField
-                name="description"
-                placeholder="SoundBite Description"
-                className="mt-4 h-32"
-                textarea
-              />
-              <ThumbnailUpload
-                thumbnail={thumbnail}
-                setThumbnail={setThumbnail}
-              />
-              <Button
-                type="submit"
-                className="w-full mt-5"
-                disabled={isSubmitting}
-                loading={isSubmitting}
-              >
-                Publish SoundBite
-              </Button>
+              <div className="space-y-5 mt-5">
+                <InputField name="title" placeholder="Title" />
+                <InputField
+                  name="description"
+                  placeholder="Description"
+                  className="h-32"
+                  textarea
+                />
+                <ThumbnailUpload
+                  thumbnail={thumbnail}
+                  setThumbnail={setThumbnail}
+                />
+                <Button
+                  type="submit"
+                  className="w-full"
+                  disabled={isSubmitting}
+                  loading={isSubmitting}
+                >
+                  Publish SoundBite
+                </Button>
+              </div>
             </Form>
           )}
         </Formik>

@@ -4,9 +4,10 @@ import useSWR from "swr";
 import { SoundbiteCard } from "../components/SoundBiteCard";
 import { Layout } from "../layout/Layout";
 import { supabase } from "../lib/supabase";
+import { definitions } from "../types/supabase";
 
 async function fetchSoundBites() {
-  return await supabase.from("soundbites").select("*").limit(4);
+  return await supabase.from("soundbites").select("*, profiles(*)").limit(4);
 }
 
 const Publishers: NextPage<{ soundbites?: any }> = ({ soundbites }) => {
@@ -31,7 +32,9 @@ const Publishers: NextPage<{ soundbites?: any }> = ({ soundbites }) => {
           </header>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
             {!isValidating ? (
-              data?.map((bite) => <SoundbiteCard {...bite} />)
+              data?.map((bite: any) => (
+                <SoundbiteCard key={bite.id} {...bite} />
+              ))
             ) : (
               <p>Loading...</p>
             )}

@@ -4,6 +4,9 @@ module.exports = withImages({
     webpack5: true,
   },
   images: {
-    domains: ["gnixlumnyguqyjfowhaz.supabase.co", "images.prismic.io"],
+    domains: [
+      process.env.NEXT_PUBLIC_SUPABASE_URL.replace("https://", ""),
+      "images.prismic.io",
+    ],
   },
 });

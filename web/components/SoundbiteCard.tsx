@@ -15,7 +15,7 @@ export interface SoundBite {
   views?: number;
   userId: string;
   createdAt?: string;
-  users: definitions["profiles"];
+  profiles: definitions["profiles"];
 }
 
 export const SoundbiteCard: React.FC<SoundBite> = ({
@@ -24,7 +24,7 @@ export const SoundbiteCard: React.FC<SoundBite> = ({
   title,
   description,
   thumbnailUrl,
-  users,
+  profiles,
 }) => {
   return (
     <article className="col-span-1 flex items-start space-x-10">
@@ -47,7 +47,7 @@ export const SoundbiteCard: React.FC<SoundBite> = ({
                   title,
                   description,
                   thumbnailUrl,
-                  users,
+                  profiles,
                 });
               }}
             >
@@ -64,8 +64,8 @@ export const SoundbiteCard: React.FC<SoundBite> = ({
               audio,
               title,
               description,
-              thumbnail,
-              users,
+              thumbnailUrl,
+              profiles,
             });
           }}
         >
@@ -78,7 +78,7 @@ export const SoundbiteCard: React.FC<SoundBite> = ({
           <h4>{title}</h4>
           <p className="text-gray mt-1">
             Published by{" "}
-            <span className="text-lighter-gray">{users.username}</span>
+            <span className="text-lighter-gray">{profiles.username}</span>
           </p>
           <p className="mt-2 text-light-gray">{description}</p>
           <p className="text-gray mt-2">

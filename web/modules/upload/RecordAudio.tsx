@@ -1,5 +1,5 @@
 import format from "format-duration";
-import React from "react";
+import React, { useRef } from "react";
 import {
   MdClose,
   MdMic,
@@ -17,6 +17,7 @@ export const RecordAudio: React.FC<{
   setAudio: React.Dispatch<React.SetStateAction<string>>;
 }> = ({ setAudio }) => {
   const { profile } = useUser();
+  const uploadRef = useRef<HTMLInputElement>();
   const [soundbite, isPreview] = usePlayerStore(
     (x) => [x.soundbite, x.preview],
     shallow
@@ -51,7 +52,9 @@ export const RecordAudio: React.FC<{
             )}
           </button>
           <div>
-            <p className="font-bold text-white">Record Audio</p>
+            <p className="font-bold text-white">
+              {recording ? "Recording Audio" : "Record Audio"}
+            </p>
             <p className="small text-light-gray">
               {format(duration * 1000)} / 5:00
             </p>
@@ -86,6 +89,28 @@ export const RecordAudio: React.FC<{
             />
           </div>
         )}
+      </div>
+      <input
+        type="file"
+        accept="image/*"
+        name="audio"
+        id="audio"
+        className="hidden"
+        multiple={false}
+        ref={uploadRef}
+      />
+      <div className="flex items-center space-x-4 my-6">
+        <Button
+          color="secondary"
+          size="small"
+          type="button"
+          onClick={() => uploadRef.current.click()}
+        >
+          Upload Audio
+        </Button>
+        <label htmlFor="audio" className="text-gray small">
+          Or choose an external audio clip
+        </label>
       </div>
     </div>
   );
