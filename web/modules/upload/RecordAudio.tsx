@@ -1,8 +1,8 @@
 import { MicrophoneIcon, TrashIcon } from "@heroicons/react/solid";
 import Slider from "rc-slider/lib/Slider";
 import React, { useRef, useState } from "react";
-import useRecorder from "./useRecorder";
 import "rc-slider/assets/index.css";
+import useRecorder from "./useRecorder";
 
 export const RecordAudio: React.FC<{
   setAudio: React.Dispatch<React.SetStateAction<string>>;
@@ -14,10 +14,7 @@ export const RecordAudio: React.FC<{
 
   return (
     <div>
-      <div className="flex items-center justify-between">
-        <h4>Record</h4>
-        <audio ref={player} src={audioURL} className="hidden" controls />
-      </div>
+      <audio ref={player} src={audioURL} className="hidden" controls />
       <div className="flex items-center space-x-6 w-full mt-4">
         <button
           type="button"

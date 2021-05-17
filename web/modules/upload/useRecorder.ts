@@ -21,7 +21,7 @@ const useRecorder = (
       return;
     }
 
-    const handleData = (e) => {
+    const handleData = (e: BlobEvent) => {
       const url = URL.createObjectURL(e.data);
       setAudioURL(url);
       setAudio(url);

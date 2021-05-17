@@ -1,6 +1,3 @@
-// using javascript instead of typescript here cause of
-// protected properties not working with supabase
-
 import multer from "multer";
 import FormData from "form-data";
 import sharp from "sharp";
@@ -23,12 +20,6 @@ export default async (req, res) => {
   let {
     query: { path, bucket, w, h, quality = "75" },
   } = req;
-
-  if (Array.isArray(w)) w = w[0];
-  if (Array.isArray(path)) path = path[0];
-  if (Array.isArray(bucket)) bucket = bucket[0];
-  if (Array.isArray(h)) h = h[0];
-  if (Array.isArray(quality)) quality = quality[0];
 
   let blob = req.file;
 
