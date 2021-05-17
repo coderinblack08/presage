@@ -72,4 +72,8 @@
   .icon-button {
     @apply text-white transition transform hover:scale-110 focus:outline-none;
   }
+
+  .button {
+    @apply focus:outline-none focus-visible:ring;
+  }
 }

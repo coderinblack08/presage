@@ -28,7 +28,8 @@ module.exports = {
       primary: "#547CF5",
       "faint-primary": "#7A9AFC",
       "white-primary": "#D4DFFF",
-      red: "#F94B40",
+      secondary: "#F94B40",
+      "faint-secondary": "#FF7269",
     },
     extend: {
       maxWidth: {

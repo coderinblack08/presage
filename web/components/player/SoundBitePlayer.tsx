@@ -8,8 +8,8 @@ import { PlayerSlider } from "./PlayerSlider";
 import { PlayPauseSkipControls } from "./PlayPauseSkipControls";
 
 export const SoundBitePlayer: React.FC = ({}) => {
-  const [soundbite, setUrl, url] = usePlayerStore(
-    (x) => [x.soundbite, x.setUrl, x.url],
+  const [soundbite, setUrl, url, isPreview] = usePlayerStore(
+    (x) => [x.soundbite, x.setUrl, x.url, x.preview],
     shallow
   );
 
@@ -29,7 +29,11 @@ export const SoundBitePlayer: React.FC = ({}) => {
 
   useEffect(() => {
     if (soundbite !== null) {
-      downloadAudio();
+      if (isPreview) {
+        setUrl(soundbite.audio);
+      } else {
+        downloadAudio();
+      }
     }
   }, [soundbite]);
 

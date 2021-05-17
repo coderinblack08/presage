@@ -4351,6 +4351,11 @@ use-subscription@1.5.1:
   dependencies:
     object-assign "^4.1.1"
 
+use-timer@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/use-timer/-/use-timer-2.0.1.tgz#eef400a83e3fa4af9896fdd6d07d34f676e9373c"
+  integrity sha512-ESFkDYZluJZ+G/CaoOBFxg0TjuG7kgNFNhIFZhqv14ho2WIZwuxkRnEURhyLm9I4vNz+ea9ZowNaOkExDAM+6Q==
+
 utf-8-validate@^5.0.2:
   version "5.0.4"
   resolved "https://registry.yarnpkg.com/utf-8-validate/-/utf-8-validate-5.0.4.tgz#72a1735983ddf7a05a43a9c6b67c5ce1c910f9b8"

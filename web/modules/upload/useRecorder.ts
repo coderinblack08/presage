@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useTimer } from "use-timer";
 
 const useRecorder = (
   setAudio: React.Dispatch<React.SetStateAction<string>>
@@ -6,13 +7,19 @@ const useRecorder = (
   const [recorder, setRecorder] = useState<MediaRecorder>();
   const [recording, setRecording] = useState(false);
   const [audioURL, setAudioURL] = useState("");
+  const { time, start, pause, reset } = useTimer();
 
   useEffect(() => {
     if (recorder) {
       if (recording) {
         recorder.start();
+        reset();
+        start();
       } else {
-        if (recorder.state !== "inactive") recorder.stop();
+        if (recorder.state !== "inactive") {
+          recorder.stop();
+          pause();
+        }
       }
     } else {
       if (recording) {
@@ -35,9 +42,10 @@ const useRecorder = (
   const clearAudio = () => {
     URL.revokeObjectURL(audioURL);
     setAudioURL("");
+    reset();
   };
 
-  return { clearAudio, toggleRecording, recording, audioURL };
+  return { duration: time, clearAudio, toggleRecording, recording, audioURL };
 };
 
 async function requestRecorder() {

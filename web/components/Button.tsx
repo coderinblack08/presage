@@ -9,6 +9,8 @@ const ButtonTheme = {
   size: {
     regular: "py-2 px-5 rounded-lg",
     small: "px-4 py-1 rounded-lg",
+    iconRegular: "p-4 rounded-full",
+    iconSmall: "p-3 rounded-full",
   },
   color: {
     transparent: "bg-transparent text-white",
@@ -47,7 +49,7 @@ export const Button: React.FC<ButtonProps> = ({
       {...props}
     >
       <span className={loading ? "opacity-0" : `flex items-center`}>
-        {icon && <span className="mr-2">{icon}</span>}
+        {icon && <span className={children ? "mr-2" : ""}>{icon}</span>}
         <p className={`font-bold ${size === "small" ? "small" : "body"}`}>
           {children}
         </p>

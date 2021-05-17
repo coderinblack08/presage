@@ -28,7 +28,7 @@ const Upload: React.FC = () => {
               <InputField
                 name="title"
                 placeholder="SoundBite Title"
-                className="mt-10"
+                className="mt-6"
               />
               <InputField
                 name="description"

@@ -122,7 +122,7 @@ export interface paths {
           title?: parameters["rowFilter.soundbites.title"];
           description?: parameters["rowFilter.soundbites.description"];
           thumbnailUrl?: parameters["rowFilter.soundbites.thumbnailUrl"];
-          soundbite?: parameters["rowFilter.soundbites.soundbite"];
+          audio?: parameters["rowFilter.soundbites.audio"];
           length?: parameters["rowFilter.soundbites.length"];
           views?: parameters["rowFilter.soundbites.views"];
           userId?: parameters["rowFilter.soundbites.userId"];
@@ -181,7 +181,7 @@ export interface paths {
           title?: parameters["rowFilter.soundbites.title"];
           description?: parameters["rowFilter.soundbites.description"];
           thumbnailUrl?: parameters["rowFilter.soundbites.thumbnailUrl"];
-          soundbite?: parameters["rowFilter.soundbites.soundbite"];
+          audio?: parameters["rowFilter.soundbites.audio"];
           length?: parameters["rowFilter.soundbites.length"];
           views?: parameters["rowFilter.soundbites.views"];
           userId?: parameters["rowFilter.soundbites.userId"];
@@ -204,7 +204,7 @@ export interface paths {
           title?: parameters["rowFilter.soundbites.title"];
           description?: parameters["rowFilter.soundbites.description"];
           thumbnailUrl?: parameters["rowFilter.soundbites.thumbnailUrl"];
-          soundbite?: parameters["rowFilter.soundbites.soundbite"];
+          audio?: parameters["rowFilter.soundbites.audio"];
           length?: parameters["rowFilter.soundbites.length"];
           views?: parameters["rowFilter.soundbites.views"];
           userId?: parameters["rowFilter.soundbites.userId"];
@@ -271,7 +271,7 @@ export interface definitions {
      * Note:
      * This is a Foreign Key to `objects.id`.<fk table='objects' column='id'/>
      */
-    soundbite: string;
+    audio: string;
     length: number;
     views?: number;
     userId: string;
@@ -314,7 +314,7 @@ export interface parameters {
   "rowFilter.soundbites.title": string;
   "rowFilter.soundbites.description": string;
   "rowFilter.soundbites.thumbnailUrl": string;
-  "rowFilter.soundbites.soundbite": string;
+  "rowFilter.soundbites.audio": string;
   "rowFilter.soundbites.length": string;
   "rowFilter.soundbites.views": string;
   "rowFilter.soundbites.userId": string;

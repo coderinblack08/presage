@@ -3,19 +3,19 @@ import Link from "next/link";
 import React from "react";
 import { MdPlayArrow } from "react-icons/md";
 import { usePlayerStore } from "../stores/playing";
+import { definitions } from "../types/supabase";
 
 export interface SoundBite {
   id: string;
   title: string;
+  description?: string;
+  thumbnailUrl?: string;
   audio: string;
-  description: string;
-  thumbnail: string;
-  users: {
-    id: string;
-    username: string;
-    email: string;
-    createdAt: string;
-  };
+  length: number;
+  views?: number;
+  userId: string;
+  createdAt?: string;
+  users: definitions["profiles"];
 }
 
 export const SoundbiteCard: React.FC<SoundBite> = ({
@@ -23,16 +23,16 @@ export const SoundbiteCard: React.FC<SoundBite> = ({
   audio,
   title,
   description,
-  thumbnail,
+  thumbnailUrl,
   users,
 }) => {
   return (
     <article className="col-span-1 flex items-start space-x-10">
-      {thumbnail ? (
+      {thumbnailUrl ? (
         <div className="relative flex-shrink-0 overflow-hidden">
           <Image
             className="absolute inset-0 object-cover rounded-lg"
-            src={thumbnail}
+            src={thumbnailUrl}
             width={84}
             height={84}
             priority
@@ -46,7 +46,7 @@ export const SoundbiteCard: React.FC<SoundBite> = ({
                   audio,
                   title,
                   description,
-                  thumbnail,
+                  thumbnailUrl,
                   users,
                 });
               }}

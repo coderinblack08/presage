@@ -51,6 +51,7 @@ export const useUploadSoundbite = () => {
         .createSignedUrl(filePath, 60 * 60 * 24 * 365 * 1000);
 
       body.thumbnail = signedURL;
+      URL.revokeObjectURL(audioURL);
     }
 
     const { error: soundbiteError } = await supabase
