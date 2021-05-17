@@ -32,7 +32,7 @@ export const Navbar: React.FC<NavbarProps> = () => {
           <Link href="/">
             <a
               className={`${
-                onPath("/") ? activeClass : "text-light-gray"
+                onPath(["/", "/bite/[id]"]) ? activeClass : "text-light-gray"
               } px-4 py-2`}
             >
               Feed

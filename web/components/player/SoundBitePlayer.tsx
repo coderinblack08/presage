@@ -55,7 +55,7 @@ export const SoundBitePlayer: React.FC = ({}) => {
                     {soundbite.title}
                   </p>
                   <p className="small text-white-primary truncate">
-                    By {soundbite.profiles.username}
+                    By {soundbite.profiles?.username}
                   </p>
                 </header>
               </div>

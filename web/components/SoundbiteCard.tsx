@@ -16,6 +16,7 @@ export interface SoundBite {
   userId: string;
   createdAt?: string;
   profiles: definitions["profiles"];
+  expanded?: boolean;
 }
 
 export const SoundbiteCard: React.FC<SoundBite> = ({
@@ -25,16 +26,21 @@ export const SoundbiteCard: React.FC<SoundBite> = ({
   description,
   thumbnailUrl,
   profiles,
+  expanded,
 }) => {
   return (
-    <article className="col-span-1 flex items-start space-x-10">
+    <article
+      className={`col-span-1 flex items-start ${
+        expanded ? "space-x-12" : "space-x-10"
+      }`}
+    >
       {thumbnailUrl ? (
-        <div className="relative flex-shrink-0 overflow-hidden">
+        <div className="group relative flex-shrink-0 overflow-hidden rounded-lg">
           <Image
-            className="absolute inset-0 object-cover rounded-lg"
+            className="absolute inset-0 object-cover transform group-hover:scale-110 transition duration-400"
             src={thumbnailUrl}
-            width={84}
-            height={84}
+            width={expanded ? 125 : 84}
+            height={expanded ? 125 : 84}
             priority
           />
           <div className="absolute bottom-2.5 right-1">
@@ -51,7 +57,9 @@ export const SoundbiteCard: React.FC<SoundBite> = ({
                 });
               }}
             >
-              <MdPlayArrow className="w-4 h-4 text-white" />
+              <MdPlayArrow
+                className={`${expanded ? "w-6 h-6" : "w-4 h-4"} text-white`}
+              />
             </button>
           </div>
         </div>
@@ -69,24 +77,28 @@ export const SoundbiteCard: React.FC<SoundBite> = ({
             });
           }}
         >
-          <MdPlayArrow className="w-5 h-5 text-white" />
+          <MdPlayArrow
+            className={`${expanded ? "w-6 h-6" : "w-4 h-4"} text-white`}
+          />
         </button>
       )}
-      <Link href="/bite/[id]" as={`/bite/${id}`}>
-        <a className="w-full block">
-          {/* <span className="text-primary">Programming — EP 2.</span> */}
-          <h4>{title}</h4>
-          <p className="text-gray mt-1">
-            Published by{" "}
-            <span className="text-lighter-gray">{profiles.username}</span>
-          </p>
-          <p className="mt-2 text-light-gray">{description}</p>
-          <p className="text-gray mt-2">
-            <span className="font-bold">4:12</span> · <time>2 days ago</time> ·
-            24k views
-          </p>
-        </a>
-      </Link>
+      <div>
+        <Link href="/bite/[id]" as={`/bite/${id}`}>
+          <a className="w-full block hover:white">
+            {/* <span className="text-primary">Programming — EP 2.</span> */}
+            <h4>{title}</h4>
+          </a>
+        </Link>
+        <p className="text-gray mt-1">
+          Published by{" "}
+          <span className="text-lighter-gray">{profiles.username}</span>
+        </p>
+        <p className="mt-2 text-light-gray">{description}</p>
+        <p className="text-gray mt-2">
+          <span className="font-bold">4:12</span> · <time>2 days ago</time> ·
+          24k views
+        </p>
+      </div>
     </article>
   );
 };

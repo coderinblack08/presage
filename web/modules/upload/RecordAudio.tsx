@@ -69,7 +69,7 @@ export const RecordAudio: React.FC<{
                 usePlayerStore.getState().play({
                   audio: audioURL,
                   title: "Preview Audio",
-                  users: profile,
+                  profiles: profile,
                 });
               }}
               color="secondary"

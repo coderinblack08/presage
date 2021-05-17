@@ -55,7 +55,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({}) => {
             <Dialog.Title as="h4" className="text-xl font-bold text-center">
               We've sent you an login email
             </Dialog.Title>
-            <p className="mt-2 text-gray text-center">
+            <p className="mt-2 text-gray text-center text-[13px]">
               We’ve sent your email a link to log into your account. You may
               close this tab after you're done.
             </p>

@@ -1,10 +1,10 @@
 import { GetServerSideProps, NextPage } from "next";
 import React from "react";
 import useSWR from "swr";
+import { Banner } from "../components/Banner";
 import { SoundbiteCard } from "../components/SoundBiteCard";
 import { Layout } from "../layout/Layout";
 import { supabase } from "../lib/supabase";
-import { definitions } from "../types/supabase";
 
 async function fetchSoundBites() {
   return await supabase.from("soundbites").select("*, profiles(*)").limit(4);
@@ -19,7 +19,7 @@ const Publishers: NextPage<{ soundbites?: any }> = ({ soundbites }) => {
 
   return (
     <Layout>
-      <div className="bg-gradient-to-b from-transparent to-[#1B202E66] pb-8 border-b border-darker-gray border-opacity-75">
+      <Banner>
         <main className="lg:max-w-7xl xl:max-w-8xl mx-auto w-full mt-16 px-6">
           <header className="mb-16">
             <h3>Your Personal, Curated Feed</h3>
@@ -43,7 +43,7 @@ const Publishers: NextPage<{ soundbites?: any }> = ({ soundbites }) => {
             </a>
           </div>
         </main>
-      </div>
+      </Banner>
     </Layout>
   );
 };

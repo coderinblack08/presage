@@ -80,17 +80,6 @@ export const UserDropdown: React.FC<UserDropdownProps> = ({}) => {
                     className={`focus:outline-none inline-flex items-center text-left py-3 px-5 font-medium w-full text-base ${
                       active ? "bg-darker-gray" : ""
                     }`}
-                  >
-                    Apply to Publish
-                  </button>
-                )}
-              </Menu.Item>
-              <Menu.Item>
-                {({ active }) => (
-                  <button
-                    className={`focus:outline-none inline-flex items-center text-left py-3 px-5 font-medium w-full text-base ${
-                      active ? "bg-darker-gray" : ""
-                    }`}
                     onClick={async () => {
                       await supabase.auth.signOut();
                       router.push("/");
