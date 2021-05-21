@@ -61,3 +61,68 @@ create policy "Thumbnails are publicly accessible."
 create policy "Anyone authenticated can upload an thumbnail."
   on storage.objects for insert
   with check ( bucket_id = 'thumbnails' and auth.role() = 'authenticated' );
+
+
+-- triggers
+
+create table soundbite_details (
+  soundbite_id uuid primary key references soundbites(id) not null,
+  upvotes bigint default 0,
+  views bigint default 0
+);
+
+create or replace function public.handle_new_soundbite() 
+returns trigger as $$
+begin
+  insert into soundbite_details (soundbite_id, upvotes, views)
+  values (new.id, 0, 0);
+  return new;
+end;
+$$ language plpgsql security definer;
+
+create trigger on_soundbite_created
+  after insert on soundbites
+  for each row execute procedure public.handle_new_soundbite();
+
+-- upvote stuff
+create or replace function public.handle_new_upvote() 
+returns trigger as $$
+begin
+  update soundbite_details
+  set upvotes = upvotes + new.value
+  where soundbite_id = new.soundbite_id;
+  return new;
+end;
+$$ language plpgsql security definer;
+
+create trigger on_upvote_created
+  after insert on upvotes
+  for each row execute procedure public.handle_new_upvote();
+
+create or replace function public.handle_removed_upvote() 
+returns trigger as $$
+begin
+  update soundbite_details
+  set upvotes = upvotes - old.value
+  where soundbite_id = old.soundbite_id;
+  return old;
+end;
+$$ language plpgsql security definer;
+
+create trigger on_upvote_removed
+  after delete on upvotes
+  for each row execute procedure public.handle_removed_upvote();
+
+create or replace function public.handle_updated_upvote() 
+returns trigger as $$
+begin
+  update soundbite_details
+  set upvotes = upvotes + new.value - old.value
+  where soundbite_id = new.soundbite_id;
+  return new;
+end;
+$$ language plpgsql security definer;
+
+create trigger on_upvote_udpated
+  after update on upvotes
+  for each row execute procedure public.handle_updated_upvote();

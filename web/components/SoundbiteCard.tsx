@@ -1,7 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { MdPlayArrow } from "react-icons/md";
+import { MdArrowDownward, MdArrowUpward, MdPlayArrow } from "react-icons/md";
+import useSWR from "swr";
+import { supabase } from "../lib/supabase";
+import { useUpvoteStatus } from "../lib/useUpvoteStatus";
+import { useUser } from "../stores/auth";
 import { usePlayerStore } from "../stores/playing";
 import { definitions } from "../types/supabase";
 
@@ -28,22 +32,84 @@ export const SoundbiteCard: React.FC<SoundBite> = ({
   profiles,
   expanded,
 }) => {
+  const { user } = useUser();
+  const { status, myUpvote, mutate: mutateUpvote } = useUpvoteStatus(id);
+  const { data: details, mutate } = useSWR<definitions["soundbite_details"]>(
+    ["details", id],
+    async () =>
+      (
+        await supabase
+          .from("soundbite_details")
+          .select("*")
+          .eq("soundbite_id", id)
+          .single()
+      ).data
+  );
+
+  async function vote(value: number = 1) {
+    await supabase.from("upvotes").upsert(
+      {
+        soundbite_id: id,
+        user_id: user.id,
+        value,
+      },
+      {
+        onConflict: "soundbite_id, user_id",
+      }
+    );
+    mutate();
+    mutateUpvote({ ...myUpvote, value });
+  }
+
   return (
     <article
-      className={`col-span-1 flex items-start ${
-        expanded ? "space-x-12" : "space-x-10"
-      }`}
+      className={`col-span-1 flex items-start ${expanded ? "" : "space-x-10"}`}
     >
+      {expanded && (
+        <div className="flex flex-col items-center space-y-1 mr-6">
+          <button
+            onClick={() => vote(1)}
+            className={`p-1 focus:outline-none hover:text-primary hover:bg-primary hover:bg-opacity-10 rounded-md ${
+              status === "upvoted"
+                ? "text-primary bg-primary bg-opacity-10"
+                : "text-light-gray"
+            }`}
+          >
+            <MdArrowUpward className="w-4 h-4" />
+          </button>
+          <p
+            className={`small font-bold ${
+              status !== "unvoted" ? "text-primary" : ""
+            }`}
+          >
+            {details?.upvotes}
+          </p>
+          <button
+            onClick={() => vote(-1)}
+            className={`p-1 focus:outline-none hover:text-primary hover:bg-primary hover:bg-opacity-10 rounded-md ${
+              status === "downvoted"
+                ? "text-primary bg-primary bg-opacity-10"
+                : "text-light-gray"
+            }`}
+          >
+            <MdArrowDownward className="w-4 h-4" />
+          </button>
+        </div>
+      )}
       {thumbnailUrl ? (
-        <div className="group relative flex-shrink-0 overflow-hidden rounded-lg">
+        <div
+          className={`flex items-center group relative flex-shrink-0 overflow-hidden rounded-lg ${
+            expanded ? "mr-10" : ""
+          }`}
+        >
           <Image
-            className="absolute inset-0 object-cover transform group-hover:scale-110 transition duration-400"
+            className="absolute inset-0 object-cover rounded-lg transform group-hover:scale-110 transition duration-400"
             src={thumbnailUrl}
             width={expanded ? 125 : 84}
             height={expanded ? 125 : 84}
             priority
           />
-          <div className="absolute bottom-2.5 right-1">
+          <div className="absolute bottom-2 right-2">
             <button
               className="icon-button bg-black p-2 rounded-full"
               onClick={() => {
@@ -65,7 +131,9 @@ export const SoundbiteCard: React.FC<SoundBite> = ({
         </div>
       ) : (
         <button
-          className="icon-button bg-darker-gray p-2 rounded-full"
+          className={`icon-button bg-darker-gray p-2.5 rounded-full ${
+            expanded ? "mr-8" : ""
+          }`}
           onClick={() => {
             usePlayerStore.getState().play({
               id,
@@ -78,15 +146,15 @@ export const SoundbiteCard: React.FC<SoundBite> = ({
           }}
         >
           <MdPlayArrow
-            className={`${expanded ? "w-6 h-6" : "w-4 h-4"} text-white`}
+            className={`${expanded ? "w-6 h-6" : "w-5 h-5"} text-white`}
           />
         </button>
       )}
       <div>
         <Link href="/bite/[id]" as={`/bite/${id}`}>
-          <a className="w-full block hover:white">
+          <a className="block hover:white text-xl font-bold">
             {/* <span className="text-primary">Programming — EP 2.</span> */}
-            <h4>{title}</h4>
+            {title}
           </a>
         </Link>
         <p className="text-gray mt-1">

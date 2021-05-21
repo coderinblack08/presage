@@ -17,30 +17,30 @@ export const ExtraPlayerControls: React.FC<ExtraPlayerControlsProps> = ({}) => {
   );
 
   return (
-    <div className="flex items-center justify-end space-x-4">
+    <div className="flex items-center justify-end space-x-2">
       <Popover className="flex items-center relative">
         {({ open }) => (
           <>
-            <Popover.Button className="icon-button">
+            <Popover.Button className="player-button p-1">
               <MdVolumeUp className="w-7 h-7" />
             </Popover.Button>
             <Transition
               as={Fragment}
               show={open}
               enter="transition ease-out duration-200"
-              enterFrom="opacity-0 -translate-y-1"
-              enterTo="opacity-100 translate-y-0"
+              enterFrom="opacity-0"
+              enterTo="opacity-100"
               leave="transition ease-in duration-150"
-              leaveFrom="opacity-100 translate-y-0"
-              leaveTo="opacity-0 -translate-y-1"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
             >
               <Popover.Panel
                 as="div"
-                className="absolute z-10 p-4 mb-12 transform -translate-x-1/2 left-1/2 bottom-0 sm:px-0 shadow bg-primary rounded-full"
+                className="absolute z-10 p-2 w-40 -ml-4 transform -translate-y-1/2 -translate-x-full top-1/2 left-0 sm:px-0 shadow bg-primary rounded-full"
               >
                 <Slider
                   value={volume * 100}
-                  className="h-32 mx-1.5"
+                  className="mx-4 w-auto"
                   onChange={(v) => {
                     const value = parseFloat((Number(v) / 100).toFixed(2));
                     setVolume(value);
@@ -54,14 +54,14 @@ export const ExtraPlayerControls: React.FC<ExtraPlayerControlsProps> = ({}) => {
                   }}
                   min={0}
                   max={100}
-                  vertical
+                  reverse
                 />
               </Popover.Panel>
             </Transition>
           </>
         )}
       </Popover>
-      <button className="icon-button">
+      <button className="player-button p-1">
         <MdRepeat className="w-7 h-7" />
       </button>
     </div>

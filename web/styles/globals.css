@@ -60,6 +60,13 @@
     letter-spacing: 0.005em;
   }
 
+  .tiny {
+    font-weight: 500;
+    font-size: 10px !important;
+    line-height: 22px;
+    letter-spacing: 0.005em;
+  }
+
   .autoresize > input {
     @apply bg-transparent pr-1.5 focus:outline-none;
   }
@@ -70,10 +77,14 @@
   }
 
   .icon-button {
-    @apply text-white transition transform hover:scale-110 focus:outline-none;
+    @apply text-white transition transform hover:scale-110 focus:outline-none focus-visible:ring;
   }
 
   .button {
     @apply focus:outline-none focus-visible:ring;
+  }
+
+  .player-button {
+    @apply icon-button focus-visible:ring-faint-primary rounded-lg;
   }
 }

@@ -72,6 +72,7 @@ export const RecordAudio: React.FC<{
                   profiles: profile,
                 });
               }}
+              type="button"
               color="secondary"
               size="iconSmall"
             />
@@ -84,6 +85,7 @@ export const RecordAudio: React.FC<{
                   stop();
                 }
               }}
+              type="button"
               color="secondary"
               size="iconSmall"
             />

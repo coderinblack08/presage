@@ -28,20 +28,20 @@ export const PlayPauseSkipControls: React.FC<{ url: string; show?: boolean }> =
 
     return (
       <div className="flex justify-end lg:justify-start items-center space-x-4">
-        <button className="icon-button">
+        <button className="player-button">
           <MdSkipPrevious className="w-7 h-7" />
         </button>
-        <button className="icon-button" onClick={() => togglePlayPause()}>
+        <button className="player-button" onClick={() => togglePlayPause()}>
           {playing ? (
             <MdPause className="w-10 h-10" />
           ) : (
             <MdPlayArrow className="w-10 h-10" />
           )}
         </button>
-        <button className="icon-button">
+        <button className="player-button">
           <MdSkipNext className="w-7 h-7" />
         </button>
-        <button className="icon-button block lg:hidden">
+        <button className="player-button block lg:hidden">
           <MdMoreVert className="w-7 h-7" />
         </button>
       </div>

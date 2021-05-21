@@ -7,7 +7,10 @@ import { Layout } from "../layout/Layout";
 import { supabase } from "../lib/supabase";
 
 async function fetchSoundBites() {
-  return await supabase.from("soundbites").select("*, profiles(*)").limit(4);
+  return await supabase
+    .from("soundbites")
+    .select("*, profiles:userId(*)")
+    .limit(4);
 }
 
 const Publishers: NextPage<{ soundbites?: any }> = ({ soundbites }) => {

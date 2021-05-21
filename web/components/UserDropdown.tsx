@@ -5,6 +5,7 @@ import React, { Fragment } from "react";
 import Avatar from "react-avatar";
 import { supabase } from "../lib/supabase";
 import { useUser } from "../stores/auth";
+import { Spinner } from "./Spinner";
 
 interface UserDropdownProps {}
 
@@ -17,13 +18,19 @@ export const UserDropdown: React.FC<UserDropdownProps> = ({}) => {
       {({ open }) => (
         <>
           <div>
-            <Menu.Button className="focus:outline-none">
-              <Avatar
-                name={profile?.username}
-                alt={profile?.username}
-                className="flex-shrink-0 rounded-full"
-                size="36px"
-              />
+            <Menu.Button className="focus:outline-none focus:ring rounded-full">
+              {profile ? (
+                <Avatar
+                  name={profile?.username}
+                  alt={profile?.username}
+                  className="flex-shrink-0 rounded-full"
+                  size="36px"
+                />
+              ) : (
+                <div className="flex items-center justify-center w-9 h-9 rounded-full bg-darker-gray">
+                  <Spinner size="4" />
+                </div>
+              )}
             </Menu.Button>
           </div>
           <Transition
@@ -37,8 +44,8 @@ export const UserDropdown: React.FC<UserDropdownProps> = ({}) => {
             leaveTo="transform opacity-0 scale-95"
           >
             <Menu.Items
+              className="absolute right-0 w-52 mt-4 origin-top-right bg-darkest-gray border border-darker-gray rounded-lg focus:outline-none overflow-hidden"
               static
-              className="absolute right-0 w-52 mt-4 origin-top-right bg-darkest-gray rounded-lg focus:outline-none overflow-hidden"
             >
               <Menu.Item>
                 {({ active }) => (

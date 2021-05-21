@@ -8,9 +8,12 @@ interface BannerProps
 
 export const Banner: React.FC<BannerProps> = ({ className, ...props }) => {
   return (
-    <div
-      className={`bg-gradient-to-b from-transparent to-[#1B202E66] pb-8 border-b border-darker-gray border-opacity-75 ${className}`}
-      {...props}
-    />
+    <div>
+      <div
+        className={`bg-gradient-to-b from-transparent to-[#1B202E66] pb-8 ${className}`}
+        {...props}
+      />
+      <div className="h-[1px] w-full bg-gradient-to-r from-darker-gray via-[#404963] to-darker-gray opacity-50" />
+    </div>
   );
 };
