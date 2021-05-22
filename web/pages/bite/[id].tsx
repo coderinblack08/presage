@@ -58,7 +58,7 @@ const Id: React.FC<{ soundbite?: any }> = ({ soundbite }) => {
         <h6 className="font-bold">Comment (0)</h6>
         <Formik
           initialValues={{ body: "" }}
-          onSubmit={async (values) => {
+          onSubmit={async (values, { resetForm }) => {
             const {
               data: [data],
             } = await supabase.from("comments").insert({
@@ -68,6 +68,7 @@ const Id: React.FC<{ soundbite?: any }> = ({ soundbite }) => {
             });
             data.profiles = profile;
             mutate(["comments", id], [data, ...comments], false);
+            resetForm({});
           }}
         >
           {({ isSubmitting }) => (
