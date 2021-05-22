@@ -4,7 +4,7 @@ import React from "react";
 import Avatar from "react-avatar";
 import { supabase } from "../lib/supabase";
 import { useUser } from "../stores/auth";
-import { Dropdown } from "./Dropdown";
+import { Dropdown, DropdownItem } from "./Dropdown";
 import { Spinner } from "./Spinner";
 
 interface UserDropdownProps {}
@@ -15,6 +15,7 @@ export const UserDropdown: React.FC<UserDropdownProps> = ({}) => {
 
   return (
     <Dropdown
+      marginTop
       menuButton={
         <Menu.Button className="focus:outline-none focus:ring rounded-full">
           {profile ? (
@@ -31,17 +32,17 @@ export const UserDropdown: React.FC<UserDropdownProps> = ({}) => {
           )}
         </Menu.Button>
       }
-      items={[
-        "Profile",
-        "Settings",
-        {
-          name: "Logout",
-          onClick: async () => {
-            await supabase.auth.signOut();
-            router.push("/");
-          },
-        },
-      ]}
-    />
+    >
+      <DropdownItem>Profile</DropdownItem>
+      <DropdownItem>Settings</DropdownItem>
+      <DropdownItem
+        onClick={async () => {
+          await supabase.auth.signOut();
+          router.push("/");
+        }}
+      >
+        Logout
+      </DropdownItem>
+    </Dropdown>
   );
 };

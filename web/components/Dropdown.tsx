@@ -3,10 +3,14 @@ import React, { Fragment } from "react";
 
 interface DropdownProps {
   menuButton: React.ReactNode;
-  items: (React.ReactNode | { name: string; onClick: () => void })[];
+  marginTop?: boolean;
 }
 
-export const Dropdown: React.FC<DropdownProps> = ({ menuButton, items }) => {
+export const Dropdown: React.FC<DropdownProps> = ({
+  menuButton,
+  children,
+  marginTop,
+}) => {
   return (
     <Menu as="div" className="relative inline-block text-left">
       {({ open }) => (
@@ -23,27 +27,39 @@ export const Dropdown: React.FC<DropdownProps> = ({ menuButton, items }) => {
             leaveTo="transform opacity-0 scale-95"
           >
             <Menu.Items
-              className="absolute right-0 w-52 mt-4 origin-top-right bg-darkest-gray border border-darker-gray rounded-lg focus:outline-none overflow-hidden"
+              className={`absolute z-50 right-0 w-52 ${
+                marginTop ? "mt-4" : ""
+              } origin-top-right bg-darkest-gray border border-darker-gray rounded-lg focus:outline-none overflow-hidden`}
               static
             >
-              {items.map((item, key) => (
-                <Menu.Item key={key}>
-                  {({ active }) => (
-                    <button
-                      className={`focus:outline-none inline-flex items-center text-left py-3 px-5 font-medium w-full text-base ${
-                        active ? "bg-darker-gray" : ""
-                      }`}
-                      onClick={typeof item === "object" ? item.onClick : null}
-                    >
-                      {typeof item === "string" ? item : item.name}
-                    </button>
-                  )}
-                </Menu.Item>
-              ))}
+              {children}
             </Menu.Items>
           </Transition>
         </>
       )}
     </Menu>
+  );
+};
+
+export const DropdownItem: React.FC<
+  React.DetailedHTMLProps<
+    React.ButtonHTMLAttributes<HTMLButtonElement>,
+    HTMLButtonElement
+  > & { icon?: React.ReactNode }
+> = ({ children, icon, ...props }) => {
+  return (
+    <Menu.Item>
+      {({ active }) => (
+        <button
+          className={`focus:outline-none inline-flex items-center text-left py-3 px-5 font-medium w-full text-base ${
+            active ? "bg-darker-gray" : ""
+          }`}
+          {...props}
+        >
+          {icon ? <div className="mr-2">{icon}</div> : null}
+          {children}
+        </button>
+      )}
+    </Menu.Item>
   );
 };
