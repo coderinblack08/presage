@@ -12,6 +12,105 @@ export interface paths {
       };
     };
   };
+  "/comments": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.comments.id"];
+          user_id?: parameters["rowFilter.comments.user_id"];
+          soundbite_id?: parameters["rowFilter.comments.soundbite_id"];
+          parent_id?: parameters["rowFilter.comments.parent_id"];
+          body?: parameters["rowFilter.comments.body"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["comments"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** comments */
+          comments?: definitions["comments"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.comments.id"];
+          user_id?: parameters["rowFilter.comments.user_id"];
+          soundbite_id?: parameters["rowFilter.comments.soundbite_id"];
+          parent_id?: parameters["rowFilter.comments.parent_id"];
+          body?: parameters["rowFilter.comments.body"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.comments.id"];
+          user_id?: parameters["rowFilter.comments.user_id"];
+          soundbite_id?: parameters["rowFilter.comments.soundbite_id"];
+          parent_id?: parameters["rowFilter.comments.parent_id"];
+          body?: parameters["rowFilter.comments.body"];
+        };
+        body: {
+          /** comments */
+          comments?: definitions["comments"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
   "/profiles": {
     get: {
       parameters: {
@@ -892,6 +991,23 @@ export interface paths {
       };
     };
   };
+  "/rpc/handle_updated_upvote": {
+    post: {
+      parameters: {
+        body: {
+          args: { [key: string]: any };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
   "/rpc/http_head": {
     post: {
       parameters: {
@@ -972,6 +1088,29 @@ export interface paths {
 }
 
 export interface definitions {
+  comments: {
+    /**
+     * Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: number;
+    /**
+     * Note:
+     * This is a Foreign Key to `profiles.id`.<fk table='profiles' column='id'/>
+     */
+    user_id: string;
+    /**
+     * Note:
+     * This is a Foreign Key to `soundbites.id`.<fk table='soundbites' column='id'/>
+     */
+    soundbite_id: string;
+    /**
+     * Note:
+     * This is a Foreign Key to `comments.id`.<fk table='comments' column='id'/>
+     */
+    parent_id: number;
+    body: string;
+  };
   profiles: {
     /**
      * Note:
@@ -1076,6 +1215,13 @@ export interface parameters {
   offset: string;
   /** Limiting and Pagination */
   limit: string;
+  /** comments */
+  "body.comments": definitions["comments"];
+  "rowFilter.comments.id": string;
+  "rowFilter.comments.user_id": string;
+  "rowFilter.comments.soundbite_id": string;
+  "rowFilter.comments.parent_id": string;
+  "rowFilter.comments.body": string;
   /** profiles */
   "body.profiles": definitions["profiles"];
   "rowFilter.profiles.id": string;
