@@ -61,6 +61,15 @@ export const SoundbiteCard: React.FC<SoundBite> = ({
     mutateUpvote({ ...myUpvote, value });
   }
 
+  async function deleteUpvote() {
+    await supabase
+      .from("upvotes")
+      .delete()
+      .match({ soundbite_id: id, user_id: user.id });
+    mutate();
+    mutateUpvote(null);
+  }
+
   return (
     <article
       className={`col-span-1 flex items-start ${expanded ? "" : "space-x-10"}`}
