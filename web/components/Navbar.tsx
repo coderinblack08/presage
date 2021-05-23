@@ -58,7 +58,13 @@ export const Navbar: React.FC<NavbarProps> = () => {
   const activeClass = "text-faint-primary bg-primary bg-opacity-10 rounded-xl";
 
   return (
-    <nav className="backdrop-filter backdrop-blur-lg sticky z-40 top-0 bg-black bg-opacity-75 flex items-center justify-between lg:max-w-7xl xl:max-w-8xl mx-auto p-6">
+    <nav
+      className={`${
+        onPath("/u/[username]")
+          ? ""
+          : "backdrop-filter backdrop-blur-lg bg-black bg-opacity-75"
+      } sticky z-40 top-0 flex items-center justify-between lg:max-w-7xl xl:max-w-8xl mx-auto p-6`}
+    >
       <Link href="/">
         <a className="cursor-pointer flex-shrink-0">
           <img src="/static/logo.png" className="w-auto h-10" />
@@ -73,7 +79,9 @@ export const Navbar: React.FC<NavbarProps> = () => {
             <Link href="/">
               <a
                 className={`${
-                  onPath(["/", "/bite/[id]"]) ? activeClass : "text-light-gray"
+                  onPath(["/", "/bite/[id]"])
+                    ? activeClass
+                    : "text-light-gray hover:text-lighter-gray"
                 } px-4 py-2`}
               >
                 Feed
@@ -84,7 +92,9 @@ export const Navbar: React.FC<NavbarProps> = () => {
             <Link href="/explore">
               <a
                 className={`${
-                  onPath("/explore") ? activeClass : "text-light-gray"
+                  onPath("/explore")
+                    ? activeClass
+                    : "text-light-gray hover:text-lighter-gray"
                 } px-4 py-2`}
               >
                 Explore
@@ -95,7 +105,9 @@ export const Navbar: React.FC<NavbarProps> = () => {
             <Link href="/upload">
               <a
                 className={`${
-                  onPath("/upload") ? activeClass : "text-light-gray"
+                  onPath("/upload")
+                    ? activeClass
+                    : "text-light-gray hover:text-lighter-gray"
                 } px-4 py-2`}
               >
                 Upload
@@ -107,7 +119,7 @@ export const Navbar: React.FC<NavbarProps> = () => {
               onClick={() => {
                 setShowSearch(true);
               }}
-              className="text-light-gray flex items-center px-4 py-2 focus:outline-none font-medium"
+              className="text-light-gray hover:text-lighter-gray flex items-center px-4 py-2 focus:outline-none font-medium"
             >
               <MdSearch className="w-5 h-5 mr-2" />
               Search

@@ -1,6 +1,6 @@
 import { Menu } from "@headlessui/react";
 import React from "react";
-import { MdDelete, MdMoreHoriz, MdShare } from "react-icons/md";
+import { MdDelete, MdEdit, MdMoreHoriz } from "react-icons/md";
 import { mutate } from "swr";
 import { supabase } from "../lib/supabase";
 import { definitions } from "../types/supabase";
@@ -43,8 +43,8 @@ export const Comment: React.FC<
             >
               Delete
             </DropdownItem>
-            <DropdownItem icon={<MdShare className="w-5 h-5" />}>
-              Share
+            <DropdownItem icon={<MdEdit className="w-5 h-5" />}>
+              Edit
             </DropdownItem>
           </Dropdown>
         </div>

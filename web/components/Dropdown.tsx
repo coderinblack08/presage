@@ -1,4 +1,6 @@
 import { Menu, Transition } from "@headlessui/react";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import React, { Fragment } from "react";
 
 interface DropdownProps {
@@ -45,8 +47,10 @@ export const DropdownItem: React.FC<
   React.DetailedHTMLProps<
     React.ButtonHTMLAttributes<HTMLButtonElement>,
     HTMLButtonElement
-  > & { icon?: React.ReactNode }
-> = ({ children, icon, ...props }) => {
+  > & { icon?: React.ReactNode; href?: string }
+> = ({ children, icon, href, ...props }) => {
+  const router = useRouter();
+
   return (
     <Menu.Item>
       {({ active }) => (
@@ -54,6 +58,9 @@ export const DropdownItem: React.FC<
           className={`focus:outline-none inline-flex items-center text-left py-3 px-5 font-medium w-full text-base ${
             active ? "bg-darker-gray" : ""
           }`}
+          onClick={
+            props.onClick || (href ? () => router.push(href) : undefined)
+          }
           {...props}
         >
           {icon ? <div className="mr-2">{icon}</div> : null}

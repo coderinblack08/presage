@@ -2,12 +2,14 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { MdArrowDownward, MdArrowUpward, MdPlayArrow } from "react-icons/md";
+import format from "format-duration";
 import useSWR from "swr";
 import { supabase } from "../lib/supabase";
 import { useUpvoteStatus } from "../lib/useUpvoteStatus";
 import { useUser } from "../stores/auth";
 import { usePlayerStore } from "../stores/playing";
 import { definitions } from "../types/supabase";
+import { formatDistanceToNow } from "date-fns";
 
 export interface SoundBite {
   id: string;
@@ -31,6 +33,8 @@ export const SoundbiteCard: React.FC<SoundBite> = ({
   thumbnailUrl,
   profiles,
   expanded,
+  length,
+  createdAt,
 }) => {
   const { user } = useUser();
   const { status, myUpvote, mutate: mutateUpvote } = useUpvoteStatus(id);
@@ -168,12 +172,18 @@ export const SoundbiteCard: React.FC<SoundBite> = ({
         </Link>
         <p className="text-gray mt-1">
           Published by{" "}
-          <span className="text-lighter-gray">{profiles.username}</span>
+          <Link href="/u/[username]" as={`/u/${profiles.username}`}>
+            <a className="text-lighter-gray hover:underline">
+              {profiles.username}
+            </a>
+          </Link>
         </p>
         <p className="mt-2 text-light-gray">{description}</p>
         <p className="text-gray mt-2">
-          <span className="font-bold">4:12</span> · <time>2 days ago</time> ·
-          24k views
+          {format(length * 1000)} ·{" "}
+          <time>
+            {formatDistanceToNow(new Date(createdAt), { addSuffix: true })}
+          </time>
         </p>
       </div>
     </article>

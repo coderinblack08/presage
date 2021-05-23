@@ -33,7 +33,7 @@ export const UserDropdown: React.FC<UserDropdownProps> = ({}) => {
         </Menu.Button>
       }
     >
-      <DropdownItem>Profile</DropdownItem>
+      <DropdownItem href={`/u/${profile?.username}`}>Profile</DropdownItem>
       <DropdownItem>Settings</DropdownItem>
       <DropdownItem
         onClick={async () => {

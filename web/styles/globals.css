@@ -87,4 +87,16 @@
   .player-button {
     @apply icon-button focus-visible:ring-faint-primary rounded-lg;
   }
+
+  .banner::after {
+    content: "";
+    background-image: "url(https://pbs.twimg.com/profile_banners/1272587991274274816/1621488651/600x200)";
+    background-size: cover;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    opacity: 0.75;
+  }
 }
