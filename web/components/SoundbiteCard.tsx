@@ -73,12 +73,18 @@ export const SoundbiteCard: React.FC<SoundBite> = ({
   }
 
   async function deleteUpvote() {
+    mutate(
+      {
+        ...details,
+        upvotes: details.upvotes - myUpvote.value,
+      },
+      false
+    );
+    mutateUpvote(null, false);
     await supabase
       .from("upvotes")
       .delete()
       .match({ soundbite_id: id, user_id: user.id });
-    mutate();
-    mutateUpvote(null);
   }
 
   return (
@@ -88,7 +94,7 @@ export const SoundbiteCard: React.FC<SoundBite> = ({
       {expanded && (
         <div className="flex flex-col items-center space-y-1 mr-6">
           <button
-            onClick={() => vote(1)}
+            onClick={() => (status === "upvoted" ? deleteUpvote() : vote(1))}
             className={`p-1 focus:outline-none hover:text-primary hover:bg-primary hover:bg-opacity-10 rounded-md ${
               status === "upvoted"
                 ? "text-primary bg-primary bg-opacity-10"
@@ -105,7 +111,7 @@ export const SoundbiteCard: React.FC<SoundBite> = ({
             {details?.upvotes}
           </p>
           <button
-            onClick={() => vote(-1)}
+            onClick={() => (status === "downvoted" ? deleteUpvote() : vote(-1))}
             className={`p-1 focus:outline-none hover:text-primary hover:bg-primary hover:bg-opacity-10 rounded-md ${
               status === "downvoted"
                 ? "text-primary bg-primary bg-opacity-10"
