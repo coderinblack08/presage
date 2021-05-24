@@ -1,5 +1,6 @@
 import { Form, Formik } from "formik";
 import { GetServerSideProps } from "next";
+import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
@@ -48,6 +49,9 @@ const Id: React.FC<{ soundbite?: any }> = ({ soundbite }) => {
 
   return (
     <Layout>
+      <Head>
+        <title>{data.title}</title>
+      </Head>
       <Banner>
         <div className="max-w-2xl mx-auto py-12 px-6">
           <SoundbiteCard {...data} expanded />

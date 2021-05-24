@@ -49,8 +49,17 @@ export const SoundbiteCard: React.FC<SoundBite> = ({
           .single()
       ).data
   );
-
   async function vote(value: number = 1) {
+    mutate(
+      {
+        ...details,
+        upvotes: myUpvote
+          ? details.upvotes + value * 2
+          : details.upvotes + value,
+      },
+      false
+    );
+    mutateUpvote({ ...myUpvote, value }, false);
     await supabase.from("upvotes").upsert(
       {
         soundbite_id: id,
@@ -61,8 +70,6 @@ export const SoundbiteCard: React.FC<SoundBite> = ({
         onConflict: "soundbite_id, user_id",
       }
     );
-    mutate();
-    mutateUpvote({ ...myUpvote, value });
   }
 
   async function deleteUpvote() {

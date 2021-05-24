@@ -1,7 +1,6 @@
 import { Dialog } from "@headlessui/react";
 import { Form, Formik } from "formik";
 import React, { useEffect, useState } from "react";
-import { mutate } from "swr";
 import { Button } from "../../components/Button";
 import { Modal } from "../../components/Modal";
 import { InputField } from "../../formik/InputField";

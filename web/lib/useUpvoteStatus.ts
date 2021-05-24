@@ -20,8 +20,7 @@ export function useUpvoteStatus(id: string) {
           .from("upvotes")
           .select("*")
           .match({ soundbite_id: id, user_id: user.id })
-          .single()
-      ).data
+      ).data[0]
   );
 
   useEffect(() => {
@@ -34,7 +33,6 @@ export function useUpvoteStatus(id: string) {
         setStatus("unvoted");
       }
     }
-    console.log(myUpvote);
   }, [myUpvote, isValidating]);
 
   return { myUpvote, mutate, status };
