@@ -31,7 +31,7 @@ const SearchBar: React.FC<{
         className="w-full"
         onSubmit={(e) => {
           e.preventDefault();
-          // router.push("/search", { query: { q: query } });
+          router.push({ pathname: "/search", query: { q: query } });
         }}
       >
         <Input
