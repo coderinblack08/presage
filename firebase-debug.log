@@ -1,0 +1,123 @@
+[debug] [2021-05-26T02:45:58.453Z] ----------------------------------------------------------------------
+[debug] [2021-05-26T02:45:58.457Z] Command:       /Users/kevin/.nvm/versions/node/v15.13.0/bin/node /usr/local/bin/firebase emulators:start
+[debug] [2021-05-26T02:45:58.458Z] CLI Version:   9.11.0
+[debug] [2021-05-26T02:45:58.458Z] Platform:      darwin
+[debug] [2021-05-26T02:45:58.458Z] Node Version:  v15.13.0
+[debug] [2021-05-26T02:45:58.460Z] Time:          Tue May 25 2021 19:45:58 GMT-0700 (Pacific Daylight Time)
+[debug] [2021-05-26T02:45:58.460Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2021-05-26T02:45:58.470Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2021-05-26T02:45:58.471Z] > authorizing via signed-in user (kevinlu.email@gmail.com)
+[info] i  emulators: Starting emulators: auth, functions, firestore, storage {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: auth, functions, firestore, storage"}}
+[debug] [2021-05-26T02:45:58.488Z] [hub] writing locator at /var/folders/60/fqh5kt851rb5tc2mq3w37fj00000gn/T/hub-presage-2e270.json
+[warn] ⚠  functions: The following emulators are not running, calls to these services from the Functions emulator will affect production: database, hosting, pubsub {"metadata":{"emulator":{"name":"functions"},"message":"The following emulators are not running, calls to these services from the Functions emulator will affect production: \u001b[1mdatabase, hosting, pubsub\u001b[22m"}}
+[warn] ⚠  Your functions directory does not specify a Node version.
+   - Learn more at https://firebase.google.com/docs/functions/manage-functions#set_runtime_options {"metadata":{"emulator":{"name":"functions"},"message":"Your functions directory does not specify a Node version.\n   - Learn more at https://firebase.google.com/docs/functions/manage-functions#set_runtime_options"}}
+[debug] [2021-05-26T02:45:58.498Z] defaultcredentials: writing to file /Users/kevin/.config/firebase/kevinlu_email_gmail.com_application_default_credentials.json
+[debug] [2021-05-26T02:45:58.499Z] Setting GAC to /Users/kevin/.config/firebase/kevinlu_email_gmail.com_application_default_credentials.json {"metadata":{"emulator":{"name":"functions"},"message":"Setting GAC to /Users/kevin/.config/firebase/kevinlu_email_gmail.com_application_default_credentials.json"}}
+[debug] [2021-05-26T02:45:58.501Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/presage-2e270/adminSdkConfig [none]
+[debug] [2021-05-26T02:45:58.826Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/presage-2e270/adminSdkConfig 200
+[debug] [2021-05-26T02:45:58.826Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/presage-2e270/adminSdkConfig {"projectId":"presage-2e270","storageBucket":"presage-2e270.appspot.com","locationId":"us-central"}
+[debug] [2021-05-26T02:45:58.850Z] Ignoring unsupported arg: projectId {"metadata":{"emulator":{"name":"firestore"},"message":"Ignoring unsupported arg: projectId"}}
+[debug] [2021-05-26T02:45:58.850Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"firestore"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2021-05-26T02:45:58.850Z] Starting Firestore Emulator with command {"binary":"java","args":["-Dgoogle.cloud_firestore.debug_log_level=FINE","-Duser.language=en","-jar","/Users/kevin/.cache/firebase/emulators/cloud-firestore-emulator-v1.11.15.jar","--host","localhost","--port",8080,"--rules","/Users/kevin/code/presage/firestore.rules","--functions_emulator","localhost:5001"],"optionalArgs":["port","webchannel_port","host","rules","functions_emulator","seed_from_export"],"joinArgs":false} {"metadata":{"emulator":{"name":"firestore"},"message":"Starting Firestore Emulator with command {\"binary\":\"java\",\"args\":[\"-Dgoogle.cloud_firestore.debug_log_level=FINE\",\"-Duser.language=en\",\"-jar\",\"/Users/kevin/.cache/firebase/emulators/cloud-firestore-emulator-v1.11.15.jar\",\"--host\",\"localhost\",\"--port\",8080,\"--rules\",\"/Users/kevin/code/presage/firestore.rules\",\"--functions_emulator\",\"localhost:5001\"],\"optionalArgs\":[\"port\",\"webchannel_port\",\"host\",\"rules\",\"functions_emulator\",\"seed_from_export\"],\"joinArgs\":false}"}}
+[info] i  firestore: Firestore Emulator logging to firestore-debug.log {"metadata":{"emulator":{"name":"firestore"},"message":"Firestore Emulator logging to \u001b[1mfirestore-debug.log\u001b[22m"}}
+[debug] [2021-05-26T02:46:05.269Z] May 25, 2021 7:46:05 PM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketServer start
+INFO: Started WebSocket server on ws://localhost:54775
+ {"metadata":{"emulator":{"name":"firestore"},"message":"May 25, 2021 7:46:05 PM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketServer start\nINFO: Started WebSocket server on ws://localhost:54775\n"}}
+[debug] [2021-05-26T02:46:05.298Z] API endpoint: http://localhost:8080 {"metadata":{"emulator":{"name":"firestore"},"message":"API endpoint: http://localhost:8080"}}
+[debug] [2021-05-26T02:46:05.298Z] 
+If you are using a library that supports the FIRESTORE_EMULATOR_HOST environment variable, run:
+
+   export FIRESTORE_EMULATOR_HOST=localhost:8080
+
+Dev App Server is now running.
+
+ {"metadata":{"emulator":{"name":"firestore"},"message":"\nIf you are using a library that supports the FIRESTORE_EMULATOR_HOST environment variable, run:\n\n   export FIRESTORE_EMULATOR_HOST=localhost:8080\n\nDev App Server is now running.\n\n"}}
+[debug] [2021-05-26T02:46:07.887Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"storage"},"message":"Ignoring unsupported arg: port"}}
+[debug] [2021-05-26T02:46:08.087Z] Temp file directory for storage emulator: /var/folders/60/fqh5kt851rb5tc2mq3w37fj00000gn/T/firebase/storage/blobs {"metadata":{"emulator":{"name":"storage"},"message":"Temp file directory for storage emulator: /var/folders/60/fqh5kt851rb5tc2mq3w37fj00000gn/T/firebase/storage/blobs"}}
+[debug] [2021-05-26T02:46:09.187Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2021-05-26T02:46:09.188Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: port"}}
+[debug] [2021-05-26T02:46:09.188Z] Starting Emulator UI with command {"binary":"node","args":["/Users/kevin/.cache/firebase/emulators/ui-v1.5.0/server.bundle.js"],"optionalArgs":[],"joinArgs":false} {"metadata":{"emulator":{"name":"ui"},"message":"Starting Emulator UI with command {\"binary\":\"node\",\"args\":[\"/Users/kevin/.cache/firebase/emulators/ui-v1.5.0/server.bundle.js\"],\"optionalArgs\":[],\"joinArgs\":false}"}}
+[info] i  ui: Emulator UI logging to ui-debug.log {"metadata":{"emulator":{"name":"ui"},"message":"Emulator UI logging to \u001b[1mui-debug.log\u001b[22m"}}
+[debug] [2021-05-26T02:46:09.289Z] Web / API server started at http://localhost:4000
+ {"metadata":{"emulator":{"name":"ui"},"message":"Web / API server started at http://localhost:4000\n"}}
+[info] i  functions: Watching "/Users/kevin/code/presage/functions" for Cloud Functions... {"metadata":{"emulator":{"name":"functions"},"message":"Watching \"/Users/kevin/code/presage/functions\" for Cloud Functions..."}}
+[debug] [2021-05-26T02:46:09.470Z] [worker-pool] addWorker(~diagnostic~) {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] addWorker(~diagnostic~)"}}
+[debug] [2021-05-26T02:46:09.471Z] [worker-pool] Adding worker with key ~diagnostic~, total=1 {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] Adding worker with key ~diagnostic~, total=1"}}
+[debug] [2021-05-26T02:46:09.471Z] [worker-pool] submitWork(triggerId=) {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] submitWork(triggerId=)"}}
+[debug] [2021-05-26T02:46:09.471Z] [worker-~diagnostic~-e54d467b-eaa3-4b7a-b93e-05a47278e739]: Assigning socketPath: /var/folders/60/fqh5kt851rb5tc2mq3w37fj00000gn/T/fire_emu_89151.sock {"metadata":{"emulator":{"name":"functions"},"message":"[worker-~diagnostic~-e54d467b-eaa3-4b7a-b93e-05a47278e739]: Assigning socketPath: /var/folders/60/fqh5kt851rb5tc2mq3w37fj00000gn/T/fire_emu_89151.sock"}}
+[debug] [2021-05-26T02:46:09.471Z] [worker-~diagnostic~-e54d467b-eaa3-4b7a-b93e-05a47278e739]: BUSY {"metadata":{"emulator":{"name":"functions"},"message":"[worker-~diagnostic~-e54d467b-eaa3-4b7a-b93e-05a47278e739]: BUSY"}}
+[debug] [2021-05-26T02:46:09.673Z] [runtime-status] [89151] Functions runtime initialized. {"cwd":"/Users/kevin/code/presage/functions","node_version":"15.13.0"} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [89151] Functions runtime initialized. {\"cwd\":\"/Users/kevin/code/presage/functions\",\"node_version\":\"15.13.0\"}"}}
+[debug] [2021-05-26T02:46:09.677Z] [runtime-status] [89151] Disabled runtime features: undefined {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [89151] Disabled runtime features: undefined"}}
+[debug] [2021-05-26T02:46:09.680Z] [runtime-status] [89151] Resolved module firebase-admin {"declared":true,"installed":true,"version":"9.8.0","resolution":"/Users/kevin/code/presage/functions/node_modules/firebase-admin/lib/index.js"} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [89151] Resolved module firebase-admin {\"declared\":true,\"installed\":true,\"version\":\"9.8.0\",\"resolution\":\"/Users/kevin/code/presage/functions/node_modules/firebase-admin/lib/index.js\"}"}}
+[debug] [2021-05-26T02:46:09.681Z] [runtime-status] [89151] Resolved module firebase-functions {"declared":true,"installed":true,"version":"3.14.1","resolution":"/Users/kevin/code/presage/functions/node_modules/firebase-functions/lib/index.js"} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [89151] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"3.14.1\",\"resolution\":\"/Users/kevin/code/presage/functions/node_modules/firebase-functions/lib/index.js\"}"}}
+[debug] [2021-05-26T02:46:09.682Z] [runtime-status] [89151] Resolved module firebase-functions {"declared":true,"installed":true,"version":"3.14.1","resolution":"/Users/kevin/code/presage/functions/node_modules/firebase-functions/lib/index.js"} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [89151] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"3.14.1\",\"resolution\":\"/Users/kevin/code/presage/functions/node_modules/firebase-functions/lib/index.js\"}"}}
+[debug] [2021-05-26T02:46:09.684Z] [runtime-status] [89151] Outgoing network have been stubbed. [{"name":"http","status":"mocked"},{"name":"http","status":"mocked"},{"name":"https","status":"mocked"},{"name":"https","status":"mocked"},{"name":"net","status":"mocked"}] {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [89151] Outgoing network have been stubbed. [{\"name\":\"http\",\"status\":\"mocked\"},{\"name\":\"http\",\"status\":\"mocked\"},{\"name\":\"https\",\"status\":\"mocked\"},{\"name\":\"https\",\"status\":\"mocked\"},{\"name\":\"net\",\"status\":\"mocked\"}]"}}
+[debug] [2021-05-26T02:46:09.685Z] [runtime-status] [89151] Resolved module firebase-functions {"declared":true,"installed":true,"version":"3.14.1","resolution":"/Users/kevin/code/presage/functions/node_modules/firebase-functions/lib/index.js"} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [89151] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"3.14.1\",\"resolution\":\"/Users/kevin/code/presage/functions/node_modules/firebase-functions/lib/index.js\"}"}}
+[debug] [2021-05-26T02:46:09.731Z] [runtime-status] [89151] Checked functions.config() {"config":{}} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [89151] Checked functions.config() {\"config\":{}}"}}
+[debug] [2021-05-26T02:46:09.731Z] [runtime-status] [89151] firebase-functions has been stubbed. {"functionsResolution":{"declared":true,"installed":true,"version":"3.14.1","resolution":"/Users/kevin/code/presage/functions/node_modules/firebase-functions/lib/index.js"}} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [89151] firebase-functions has been stubbed. {\"functionsResolution\":{\"declared\":true,\"installed\":true,\"version\":\"3.14.1\",\"resolution\":\"/Users/kevin/code/presage/functions/node_modules/firebase-functions/lib/index.js\"}}"}}
+[debug] [2021-05-26T02:46:09.732Z] [runtime-status] [89151] Resolved module firebase-functions {"declared":true,"installed":true,"version":"3.14.1","resolution":"/Users/kevin/code/presage/functions/node_modules/firebase-functions/lib/index.js"} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [89151] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"3.14.1\",\"resolution\":\"/Users/kevin/code/presage/functions/node_modules/firebase-functions/lib/index.js\"}"}}
+[debug] [2021-05-26T02:46:09.732Z] [runtime-status] [89151] Resolved module firebase-admin {"declared":true,"installed":true,"version":"9.8.0","resolution":"/Users/kevin/code/presage/functions/node_modules/firebase-admin/lib/index.js"} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [89151] Resolved module firebase-admin {\"declared\":true,\"installed\":true,\"version\":\"9.8.0\",\"resolution\":\"/Users/kevin/code/presage/functions/node_modules/firebase-admin/lib/index.js\"}"}}
+[debug] [2021-05-26T02:46:09.732Z] [runtime-status] [89151] Resolved module firebase-functions {"declared":true,"installed":true,"version":"3.14.1","resolution":"/Users/kevin/code/presage/functions/node_modules/firebase-functions/lib/index.js"} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [89151] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"3.14.1\",\"resolution\":\"/Users/kevin/code/presage/functions/node_modules/firebase-functions/lib/index.js\"}"}}
+[debug] [2021-05-26T02:46:09.733Z] [runtime-status] [89151] firebase-admin has been stubbed. {"adminResolution":{"declared":true,"installed":true,"version":"9.8.0","resolution":"/Users/kevin/code/presage/functions/node_modules/firebase-admin/lib/index.js"}} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [89151] firebase-admin has been stubbed. {\"adminResolution\":{\"declared\":true,\"installed\":true,\"version\":\"9.8.0\",\"resolution\":\"/Users/kevin/code/presage/functions/node_modules/firebase-admin/lib/index.js\"}}"}}
+[info] 
+┌─────────────────────────────────────────────────────────────┐
+│ ✔  All emulators ready! It is now safe to connect your app. │
+│ i  View Emulator UI at http://localhost:4000                │
+└─────────────────────────────────────────────────────────────┘
+
+┌────────────────┬────────────────┬─────────────────────────────────┐
+│ Emulator       │ Host:Port      │ View in Emulator UI             │
+├────────────────┼────────────────┼─────────────────────────────────┤
+│ Authentication │ localhost:9099 │ http://localhost:4000/auth      │
+├────────────────┼────────────────┼─────────────────────────────────┤
+│ Functions      │ localhost:5001 │ http://localhost:4000/functions │
+├────────────────┼────────────────┼─────────────────────────────────┤
+│ Firestore      │ localhost:8080 │ http://localhost:4000/firestore │
+├────────────────┼────────────────┼─────────────────────────────────┤
+│ Storage        │ localhost:9199 │ http://localhost:4000/storage   │
+└────────────────┴────────────────┴─────────────────────────────────┘
+  Emulator Hub running at localhost:4400
+  Other reserved ports: 4500
+
+Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
+ 
+[debug] [2021-05-26T02:46:09.738Z] [worker-~diagnostic~-e54d467b-eaa3-4b7a-b93e-05a47278e739]: IDLE {"metadata":{"emulator":{"name":"functions"},"message":"[worker-~diagnostic~-e54d467b-eaa3-4b7a-b93e-05a47278e739]: IDLE"}}
+[debug] [2021-05-26T02:46:14.296Z] >>> [apiv2][query] POST http://localhost:5001/functions/projects/presage-2e270/trigger_multicast [none]
+[debug] [2021-05-26T02:46:14.296Z] >>> [apiv2][body] POST http://localhost:5001/functions/projects/presage-2e270/trigger_multicast {"eventType":"providers/firebase.auth/eventTypes/user.create","data":{"uid":"QEIYQjp078SW6zHd7Ff4QmMJwx8R","email":"otter.orange.170@example.com","emailVerified":true,"displayName":"Otter Orange","metadata":{"creationTime":"1621997174296","lastSignInTime":"1621997174295"},"customClaims":{},"providerData":[{"providerId":"google.com","rawId":"9108426302956077917055276881171892829489","federatedId":"9108426302956077917055276881171892829489","displayName":"Otter Orange","email":"otter.orange.170@example.com","screenName":"orange_otter"}]}}
+[debug] [2021-05-26T02:46:14.305Z] <<< [apiv2][status] POST http://localhost:5001/functions/projects/presage-2e270/trigger_multicast 200
+[debug] [2021-05-26T02:46:14.305Z] <<< [apiv2][body] POST http://localhost:5001/functions/projects/presage-2e270/trigger_multicast {"status":"multicast_acknowledged"}
+[debug] [2021-05-26T02:46:14.620Z] May 25, 2021 7:46:14 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"May 25, 2021 7:46:14 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2021-05-26T02:46:15.369Z] May 25, 2021 7:46:15 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"May 25, 2021 7:46:15 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2021-05-26T02:46:15.393Z] May 25, 2021 7:46:15 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"May 25, 2021 7:46:15 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2021-05-26T02:46:23.198Z] May 25, 2021 7:46:23 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"May 25, 2021 7:46:23 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2021-05-26T02:46:23.212Z] May 25, 2021 7:46:23 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"May 25, 2021 7:46:23 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2021-05-26T02:46:23.355Z] May 25, 2021 7:46:23 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"May 25, 2021 7:46:23 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected HTTP/2 connection.\n"}}
+[debug] [2021-05-26T02:46:23.409Z] May 25, 2021 7:46:23 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"May 25, 2021 7:46:23 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2021-05-26T02:46:23.457Z] May 25, 2021 7:46:23 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"May 25, 2021 7:46:23 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2021-05-26T02:46:23.473Z] May 25, 2021 7:46:23 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"May 25, 2021 7:46:23 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2021-05-26T02:46:24.995Z] May 25, 2021 7:46:24 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"May 25, 2021 7:46:24 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2021-05-26T02:46:47.859Z] May 25, 2021 7:46:47 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"May 25, 2021 7:46:47 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}

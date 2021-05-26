@@ -8,6 +8,7 @@ import { SoundBitePlayer } from "../components/player/SoundBitePlayer";
 import { ProfileModal } from "../modules/login/ProfileModal";
 import { UserProvider } from "../stores/auth";
 import "../styles/globals.css";
+import "../lib/firebase";
 
 function App({ Component, pageProps }: AppProps) {
   return (

@@ -88,3 +88,7 @@
     @apply icon-button focus-visible:ring-faint-primary rounded-lg;
   }
 }
+
+.firebase-emulator-warning {
+  display: none;
+}

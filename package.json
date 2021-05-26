@@ -1,6 +1,9 @@
 {
   "name": "presage",
   "private": true,
+  "scripts": {
+    "emulate": "firebase emulators:start"
+  },
   "workspaces": {
     "packages": [
       "scrapper",
