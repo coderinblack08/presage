@@ -1,6 +1,6 @@
 import { config } from "dotenv";
 config();
-import { ApolloServer } from "apollo-server-express";
+import { ApolloError, ApolloServer } from "apollo-server-express";
 import connectRedis from "connect-redis";
 import cors from "cors";
 import express from "express";
@@ -14,6 +14,13 @@ import { createConnection } from "typeorm";
 import { PORT, __prod__ } from "./constants";
 import { authRouter } from "./modules/auth/google";
 import { HelloResolver } from "./modules/hello";
+import { UserResolver } from "./modules/auth";
+import {
+  fieldExtensionsEstimator,
+  getComplexity,
+  simpleEstimator,
+} from "graphql-query-complexity";
+import { User } from "./entities/User";
 
 const main = async () => {
   const conn = await createConnection({
@@ -32,14 +39,40 @@ const main = async () => {
 
   app.use(
     cors({
-      origin: process.env.SERVER_URL,
+      origin: "http://localhost:3000",
       credentials: true,
     })
   );
 
+  const schema = await buildSchema({
+    resolvers: [HelloResolver, UserResolver],
+    validate: false,
+  });
   const apolloServer = new ApolloServer({
-    schema: await buildSchema({ resolvers: [HelloResolver], validate: false }),
+    schema,
     context: async ({ req, res }) => ({ req, res, redis }),
+    plugins: [
+      {
+        requestDidStart: () => ({
+          didResolveOperation({ request, document }) {
+            const complexity = getComplexity({
+              schema,
+              operationName: request.operationName,
+              query: document,
+              variables: request.variables,
+              estimators: [
+                fieldExtensionsEstimator(),
+                simpleEstimator({ defaultComplexity: 0 }),
+              ],
+            });
+
+            if (complexity > 50) {
+              throw new ApolloError("Query complexity was bigger than 50!");
+            }
+          },
+        }),
+      },
+    ],
   });
 
   app.use(express.json());
@@ -64,8 +97,11 @@ const main = async () => {
   );
   app.use(passport.initialize());
   app.use(passport.session());
-  passport.serializeUser((user: any, done) => done(null, user));
-  passport.deserializeUser((user: any, done) => done(null, user));
+  passport.serializeUser((user: any, done) => done(null, user.id));
+  passport.deserializeUser(async (id: string, done) => {
+    const user = await User.findOne(id);
+    done(null, user);
+  });
 
   app.use("/api/auth", authRouter);
 

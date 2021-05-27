@@ -15,7 +15,12 @@ export const createBaseResolver = (
       name: `paginate${suffix}s`,
       complexity: ({ args }) => args.limit,
     })
-    paginate(@Arg("limit") limit: number, @Arg("offset") offset: number) {}
+    paginate(
+      @Arg("limit") limit: number,
+      @Arg("offset", { defaultValue: 0 }) offset: number
+    ) {
+      return entity.find({ skip: offset, take: limit });
+    }
   }
   return BaseResolver;
 };

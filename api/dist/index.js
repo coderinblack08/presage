@@ -28,6 +28,9 @@ const typeorm_1 = require("typeorm");
 const constants_1 = require("./constants");
 const google_1 = require("./modules/auth/google");
 const hello_1 = require("./modules/hello");
+const auth_1 = require("./modules/auth");
+const graphql_query_complexity_1 = require("graphql-query-complexity");
+const User_1 = require("./entities/User");
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
     const conn = yield typeorm_1.createConnection({
         type: "postgres",
@@ -42,12 +45,37 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
     const RedisStore = connect_redis_1.default(express_session_1.default);
     const redis = new ioredis_1.default();
     app.use(cors_1.default({
-        origin: process.env.SERVER_URL,
+        origin: "http://localhost:3000",
         credentials: true,
     }));
+    const schema = yield type_graphql_1.buildSchema({
+        resolvers: [hello_1.HelloResolver, auth_1.UserResolver],
+        validate: false,
+    });
     const apolloServer = new apollo_server_express_1.ApolloServer({
-        schema: yield type_graphql_1.buildSchema({ resolvers: [hello_1.HelloResolver], validate: false }),
+        schema,
         context: ({ req, res }) => __awaiter(void 0, void 0, void 0, function* () { return ({ req, res, redis }); }),
+        plugins: [
+            {
+                requestDidStart: () => ({
+                    didResolveOperation({ request, document }) {
+                        const complexity = graphql_query_complexity_1.getComplexity({
+                            schema,
+                            operationName: request.operationName,
+                            query: document,
+                            variables: request.variables,
+                            estimators: [
+                                graphql_query_complexity_1.fieldExtensionsEstimator(),
+                                graphql_query_complexity_1.simpleEstimator({ defaultComplexity: 0 }),
+                            ],
+                        });
+                        if (complexity > 50) {
+                            throw new apollo_server_express_1.ApolloError("Query complexity was bigger than 50!");
+                        }
+                    },
+                }),
+            },
+        ],
     });
     app.use(express_1.default.json());
     app.use(express_1.default.urlencoded({ extended: true }));
@@ -69,8 +97,11 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
     }));
     app.use(passport_1.default.initialize());
     app.use(passport_1.default.session());
-    passport_1.default.serializeUser((user, done) => done(null, user));
-    passport_1.default.deserializeUser((user, done) => done(null, user));
+    passport_1.default.serializeUser((user, done) => done(null, user.id));
+    passport_1.default.deserializeUser((id, done) => __awaiter(void 0, void 0, void 0, function* () {
+        const user = yield User_1.User.findOne(id);
+        done(null, user);
+    }));
     app.use("/api/auth", google_1.authRouter);
     apolloServer.applyMiddleware({ app, cors: false });
     app.listen(constants_1.PORT, () => console.log(`🚀 Listening on port ${constants_1.PORT}`));

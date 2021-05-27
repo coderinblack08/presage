@@ -19,7 +19,9 @@ const createBaseResolver = (suffix, entity) => {
         get(id) {
             return entity.findOne(id);
         }
-        paginate(limit, offset) { }
+        paginate(limit, offset) {
+            return entity.find({ skip: offset, take: limit });
+        }
     };
     __decorate([
         type_graphql_1.Query(() => entity, { name: `get${suffix}` }),
@@ -33,7 +35,8 @@ const createBaseResolver = (suffix, entity) => {
             name: `paginate${suffix}s`,
             complexity: ({ args }) => args.limit,
         }),
-        __param(0, type_graphql_1.Arg("limit")), __param(1, type_graphql_1.Arg("offset")),
+        __param(0, type_graphql_1.Arg("limit")),
+        __param(1, type_graphql_1.Arg("offset", { defaultValue: 0 })),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Number, Number]),
         __metadata("design:returntype", void 0)
