@@ -1,14 +1,14 @@
 import { Dialog } from "@headlessui/react";
-import { Form, Formik } from "formik";
-import React, { useEffect } from "react";
 import firebase from "firebase/app";
 import "firebase/firestore";
+import { Form, Formik } from "formik";
+import React, { useEffect } from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
 import create from "zustand";
 import { Button } from "../../components/Button";
 import { Modal } from "../../components/Modal";
 import { InputField } from "../../formik/InputField";
 import { profileSchema } from "./ProfileSchema";
-import { useAuthState } from "react-firebase-hooks/auth";
 
 interface ProfileModalProps {}
 
@@ -28,8 +28,6 @@ export const ProfileModal: React.FC<ProfileModalProps> = () => {
   const auth = firebase.auth();
   const [user] = useAuthState(auth);
 
-  // useEffect(() => setOpen(true), []);
-
   return (
     <Modal open={open} className="py-8 max-w-xl">
       <Dialog.Title as="h4" className="text-xl font-bold">
@@ -41,16 +39,21 @@ export const ProfileModal: React.FC<ProfileModalProps> = () => {
           displayName: defaultValues.displayName || "",
           bio: "",
         }}
-        onSubmit={async (values) => {
-          await firebase
-            .firestore()
-            .collection("users")
-            .doc(user.uid)
-            .set({
-              uid: user.uid,
-              ...values,
-              createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-            });
+        onSubmit={async (values, { setErrors }) => {
+          try {
+            await firebase
+              .firestore()
+              .collection("users")
+              .doc(user.uid)
+              .set({
+                uid: user.uid,
+                ...values,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+              });
+            setOpen(false);
+          } catch (error) {
+            setErrors({ username: "Username is taken " });
+          }
         }}
         validationSchema={profileSchema}
         enableReinitialize

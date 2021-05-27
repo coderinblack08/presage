@@ -41,18 +41,8 @@ export const LoginModal: React.FC<LoginModalProps> = ({}) => {
                 );
                 setOpen(false);
                 if (additionalUserInfo.isNewUser) {
-                  await firebase
-                    .firestore()
-                    .collection("users")
-                    .doc(user.uid)
-                    .set({
-                      uid: user.uid,
-                      displayName: user.displayName,
-                      createdAt:
-                        firebase.firestore.FieldValue.serverTimestamp(),
-                    });
-                  // setProfileModalOpen(true);
-                  // setDefaultValues({ displayName: user.displayName });
+                  setProfileModalOpen(true);
+                  setDefaultValues({ displayName: user.displayName });
                 }
               } catch (error) {
                 console.error(error);

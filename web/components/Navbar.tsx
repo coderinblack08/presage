@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { MdArrowBack, MdSearch } from "react-icons/md";
 import { useOnPath } from "../lib/onPath";
 import { LoginModal } from "../modules/login/LoginModal";
-import { useUser } from "../stores/auth";
+import { useUser } from "../stores/user";
 import { Input } from "./Input";
 import { UserDropdown } from "./UserDropdown";
 

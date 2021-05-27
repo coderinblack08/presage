@@ -5,6 +5,7 @@ import { Banner } from "../components/Banner";
 import { SoundbiteCard } from "../components/SoundBiteCard";
 import { Layout } from "../layout/Layout";
 import { supabase } from "../lib/supabase";
+import { useUser } from "../stores/user";
 
 async function fetchSoundBites() {
   return await supabase

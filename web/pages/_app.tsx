@@ -6,7 +6,8 @@ import { SWRConfig } from "swr";
 import { Navbar } from "../components/Navbar";
 import { SoundBitePlayer } from "../components/player/SoundBitePlayer";
 import { ProfileModal } from "../modules/login/ProfileModal";
-import { UserProvider } from "../stores/auth";
+import { UserProvider as SupabaseUserProvider } from "../stores/auth";
+import { UserProvider } from "../stores/user";
 import "../styles/globals.css";
 import "../lib/firebase";
 
@@ -14,17 +15,22 @@ function App({ Component, pageProps }: AppProps) {
   return (
     <SWRConfig value={{ revalidateOnFocus: false }}>
       <AudioPlayerProvider>
-        <UserProvider>
-          <Head>
-            <title>Presage</title>
-            <meta httpEquiv="Content-Type" content="text/html;charset=UTF-8" />
-            <link rel="icon" href="/favicon.ico" type="image/x-icon" />
-          </Head>
-          <Navbar />
-          <ProfileModal />
-          <Component {...pageProps} />
-          <SoundBitePlayer />
-        </UserProvider>
+        <SupabaseUserProvider>
+          <UserProvider>
+            <Head>
+              <title>Presage</title>
+              <meta
+                httpEquiv="Content-Type"
+                content="text/html;charset=UTF-8"
+              />
+              <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+            </Head>
+            <Navbar />
+            <ProfileModal />
+            <Component {...pageProps} />
+            <SoundBitePlayer />
+          </UserProvider>
+        </SupabaseUserProvider>
       </AudioPlayerProvider>
     </SWRConfig>
   );

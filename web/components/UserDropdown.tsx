@@ -1,8 +1,9 @@
 import { Menu } from "@headlessui/react";
+import firebase from "firebase/app";
+import "firebase/auth";
 import { useRouter } from "next/router";
 import React from "react";
-import { supabase } from "../lib/supabase";
-import { useUser } from "../stores/auth";
+import { useUser } from "../stores/user";
 import { Avatar } from "./avatar/Avatar";
 import { Dropdown, DropdownItem } from "./Dropdown";
 import { Spinner } from "./Spinner";
@@ -11,16 +12,17 @@ interface UserDropdownProps {}
 
 export const UserDropdown: React.FC<UserDropdownProps> = ({}) => {
   const router = useRouter();
-  const { profile } = useUser();
+  const { user } = useUser();
 
   return (
     <Dropdown
       marginTop
       menuButton={
         <Menu.Button className="focus:outline-none focus:ring rounded-full">
-          {profile ? (
+          {user ? (
             <Avatar
-              displayName={profile?.username}
+              src={user?.authUser.profilePicture}
+              displayName={user?.username}
               className="flex-shrink-0 rounded-full"
               size="sm"
             />
@@ -32,11 +34,11 @@ export const UserDropdown: React.FC<UserDropdownProps> = ({}) => {
         </Menu.Button>
       }
     >
-      <DropdownItem href={`/u/${profile?.username}`}>Profile</DropdownItem>
+      <DropdownItem href={`/u/${user?.username}`}>Profile</DropdownItem>
       <DropdownItem>Settings</DropdownItem>
       <DropdownItem
         onClick={async () => {
-          await supabase.auth.signOut();
+          await firebase.auth().signOut();
           router.push("/");
         }}
       >
