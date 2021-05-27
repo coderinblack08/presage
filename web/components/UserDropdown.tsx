@@ -39,6 +39,7 @@ export const UserDropdown: React.FC<UserDropdownProps> = ({}) => {
       <DropdownItem
         onClick={async () => {
           await firebase.auth().signOut();
+          router.reload();
           router.push("/");
         }}
       >

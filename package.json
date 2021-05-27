@@ -8,7 +8,7 @@
     "packages": [
       "scrapper",
       "web",
-      "functions"
+      "api"
     ],
     "nohoist": [
       "**"
