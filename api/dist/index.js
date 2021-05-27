@@ -12,19 +12,43 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
 const dotenv_1 = require("dotenv");
 dotenv_1.config();
-const constants_1 = require("./constants");
-const passport_1 = __importDefault(require("passport"));
+const apollo_server_express_1 = require("apollo-server-express");
+const connect_redis_1 = __importDefault(require("connect-redis"));
+const cors_1 = __importDefault(require("cors"));
+const express_1 = __importDefault(require("express"));
 const express_session_1 = __importDefault(require("express-session"));
 const ioredis_1 = __importDefault(require("ioredis"));
-const auth_1 = require("./modules/auth");
-const connect_redis_1 = __importDefault(require("connect-redis"));
+const passport_1 = __importDefault(require("passport"));
+const path_1 = require("path");
+require("reflect-metadata");
+const type_graphql_1 = require("type-graphql");
+const typeorm_1 = require("typeorm");
+const constants_1 = require("./constants");
+const google_1 = require("./modules/auth/google");
+const hello_1 = require("./modules/hello");
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
+    const conn = yield typeorm_1.createConnection({
+        type: "postgres",
+        database: "presage",
+        entities: [path_1.join(__dirname, "./entities/*")],
+        migrations: [path_1.join(__dirname, "./migrations/*")],
+        logging: !constants_1.__prod__,
+        synchronize: !constants_1.__prod__,
+    });
+    yield conn.runMigrations();
     const app = express_1.default();
     const RedisStore = connect_redis_1.default(express_session_1.default);
     const redis = new ioredis_1.default();
+    app.use(cors_1.default({
+        origin: process.env.SERVER_URL,
+        credentials: true,
+    }));
+    const apolloServer = new apollo_server_express_1.ApolloServer({
+        schema: yield type_graphql_1.buildSchema({ resolvers: [hello_1.HelloResolver], validate: false }),
+        context: ({ req, res }) => __awaiter(void 0, void 0, void 0, function* () { return ({ req, res, redis }); }),
+    });
     app.use(express_1.default.json());
     app.use(express_1.default.urlencoded({ extended: true }));
     app.use(express_session_1.default({
@@ -47,7 +71,8 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
     app.use(passport_1.default.session());
     passport_1.default.serializeUser((user, done) => done(null, user));
     passport_1.default.deserializeUser((user, done) => done(null, user));
-    app.use("/api/auth", auth_1.authRouter);
+    app.use("/api/auth", google_1.authRouter);
+    apolloServer.applyMiddleware({ app, cors: false });
     app.listen(constants_1.PORT, () => console.log(`🚀 Listening on port ${constants_1.PORT}`));
 });
 main().catch((e) => console.error(e));
