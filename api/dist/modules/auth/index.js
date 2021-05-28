@@ -22,9 +22,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserResolver = void 0;
+const apollo_server_errors_1 = require("apollo-server-errors");
 const type_graphql_1 = require("type-graphql");
+const typeorm_1 = require("typeorm");
 const User_1 = require("../../entities/User");
 const createBaseResolver_1 = require("../../lib/createBaseResolver");
+const UserArgs_1 = require("./UserArgs");
+const PG_UNIQUE_CONSTRAINT_VIOLATION = "23505";
 let UserResolver = class UserResolver extends createBaseResolver_1.createBaseResolver("User", User_1.User) {
     email(user, { req }) {
         var _a;
@@ -36,6 +40,25 @@ let UserResolver = class UserResolver extends createBaseResolver_1.createBaseRes
     me({ req }) {
         return __awaiter(this, void 0, void 0, function* () {
             return req.user;
+        });
+    }
+    updateUser(data, { req }) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const user = yield typeorm_1.getConnection()
+                    .createQueryBuilder()
+                    .update(User_1.User)
+                    .set(data)
+                    .where("id = :id", { id: req.user.id })
+                    .returning("*")
+                    .execute();
+                return user.raw[0];
+            }
+            catch (error) {
+                if (error && error.code === PG_UNIQUE_CONSTRAINT_VIOLATION) {
+                    throw new apollo_server_errors_1.ApolloError("Username is already taken");
+                }
+            }
         });
     }
 };
@@ -53,6 +76,14 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], UserResolver.prototype, "me", null);
+__decorate([
+    type_graphql_1.Mutation(() => User_1.User),
+    __param(0, type_graphql_1.Arg("data", () => UserArgs_1.UserArgs)),
+    __param(1, type_graphql_1.Ctx()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [UserArgs_1.UserArgs, Object]),
+    __metadata("design:returntype", Promise)
+], UserResolver.prototype, "updateUser", null);
 UserResolver = __decorate([
     type_graphql_1.Resolver(() => User_1.User)
 ], UserResolver);
