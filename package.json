@@ -8,10 +8,8 @@
     "packages": [
       "scrapper",
       "web",
+      "gql",
       "api"
-    ],
-    "nohoist": [
-      "**"
     ]
   }
 }

@@ -1,10 +1,10 @@
+import { useMeQuery } from "@presage/gql";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
 import { MdArrowBack, MdSearch } from "react-icons/md";
 import { useOnPath } from "../lib/onPath";
 import { LoginModal } from "../modules/login/LoginModal";
-import { useUser } from "../stores/user";
 import { Input } from "./Input";
 import { UserDropdown } from "./UserDropdown";
 
@@ -53,7 +53,8 @@ const SearchBar: React.FC<{
 
 export const Navbar: React.FC<NavbarProps> = () => {
   const onPath = useOnPath();
-  const { user } = useUser();
+  const { data: user } = useMeQuery();
+
   const [showSearch, setShowSearch] = useState(false);
   const activeClass = "text-faint-primary bg-primary bg-opacity-10 rounded-xl";
 
@@ -139,7 +140,7 @@ export const Navbar: React.FC<NavbarProps> = () => {
             <img src="/static/notification.svg" className="w-6 h-6" />
           </button>
         </div>
-        {user ? <UserDropdown /> : <LoginModal />}
+        {user?.me ? <UserDropdown /> : <LoginModal />}
       </div>
     </nav>
   );

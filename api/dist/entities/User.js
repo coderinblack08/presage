@@ -8,6 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 const type_graphql_1 = require("type-graphql");
@@ -19,6 +20,11 @@ __decorate([
     typeorm_1.PrimaryGeneratedColumn("uuid"),
     __metadata("design:type", String)
 ], User.prototype, "id", void 0);
+__decorate([
+    type_graphql_1.Field(() => String, { nullable: true }),
+    typeorm_1.Column("text", { nullable: true }),
+    __metadata("design:type", Object)
+], User.prototype, "profilePicture", void 0);
 __decorate([
     type_graphql_1.Field(() => String, { nullable: true }),
     typeorm_1.Column("text", { nullable: true }),
@@ -41,7 +47,7 @@ __decorate([
 __decorate([
     type_graphql_1.Field(),
     typeorm_1.CreateDateColumn(),
-    __metadata("design:type", Date)
+    __metadata("design:type", typeof (_a = typeof Date !== "undefined" && Date) === "function" ? _a : Object)
 ], User.prototype, "createdAt", void 0);
 User = __decorate([
     typeorm_1.Entity(),

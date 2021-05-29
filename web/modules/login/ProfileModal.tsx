@@ -1,10 +1,6 @@
 import { Dialog } from "@headlessui/react";
-import firebase from "firebase/app";
-import "firebase/firestore";
 import { Form, Formik } from "formik";
-import React, { useEffect } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
-import create from "zustand";
+import React, { useState } from "react";
 import { Button } from "../../components/Button";
 import { Modal } from "../../components/Modal";
 import { InputField } from "../../formik/InputField";
@@ -12,21 +8,8 @@ import { profileSchema } from "./ProfileSchema";
 
 interface ProfileModalProps {}
 
-export const useProfileModalStore = create((set) => ({
-  open: false,
-  defaultValues: {},
-  setDefaultValues: (values: any) => set({ defaultValues: values }),
-  setOpen: (open: boolean) => set({ open }),
-}));
-
 export const ProfileModal: React.FC<ProfileModalProps> = () => {
-  const [open, setOpen, defaultValues] = useProfileModalStore((x: any) => [
-    x.open,
-    x.setOpen,
-    x.defaultValues,
-  ]);
-  const auth = firebase.auth();
-  const [user] = useAuthState(auth);
+  const [open, setOpen] = useState(false);
 
   return (
     <Modal open={open} className="py-8 max-w-xl">
@@ -36,20 +19,11 @@ export const ProfileModal: React.FC<ProfileModalProps> = () => {
       <Formik
         initialValues={{
           username: "",
-          displayName: defaultValues.displayName || "",
+          displayName: "",
           bio: "",
         }}
         onSubmit={async (values, { setErrors }) => {
           try {
-            await firebase
-              .firestore()
-              .collection("users")
-              .doc(user.uid)
-              .set({
-                uid: user.uid,
-                ...values,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-              });
             setOpen(false);
           } catch (error) {
             setErrors({ username: "Username is taken " });

@@ -1,9 +1,9 @@
 import { Menu } from "@headlessui/react";
+import { useMeQuery } from "@presage/gql";
 import firebase from "firebase/app";
 import "firebase/auth";
 import { useRouter } from "next/router";
 import React from "react";
-import { useUser } from "../stores/user";
 import { Avatar } from "./avatar/Avatar";
 import { Dropdown, DropdownItem } from "./Dropdown";
 import { Spinner } from "./Spinner";
@@ -12,7 +12,7 @@ interface UserDropdownProps {}
 
 export const UserDropdown: React.FC<UserDropdownProps> = ({}) => {
   const router = useRouter();
-  const { user } = useUser();
+  const { data: user } = useMeQuery();
 
   return (
     <Dropdown
@@ -21,8 +21,8 @@ export const UserDropdown: React.FC<UserDropdownProps> = ({}) => {
         <Menu.Button className="focus:outline-none focus:ring rounded-full">
           {user ? (
             <Avatar
-              src={user?.authUser.profilePicture}
-              displayName={user?.username}
+              src={user?.me.profilePicture}
+              displayName={user?.me.username}
               className="flex-shrink-0 rounded-full"
               size="sm"
             />
@@ -34,7 +34,7 @@ export const UserDropdown: React.FC<UserDropdownProps> = ({}) => {
         </Menu.Button>
       }
     >
-      <DropdownItem href={`/u/${user?.username}`}>Profile</DropdownItem>
+      <DropdownItem href={`/u/${user?.me.username}`}>Profile</DropdownItem>
       <DropdownItem>Settings</DropdownItem>
       <DropdownItem
         onClick={async () => {

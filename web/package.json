@@ -8,8 +8,10 @@
     "start": "next start"
   },
   "dependencies": {
+    "@apollo/client": "^3.3.19",
     "@headlessui/react": "^1.0.0",
     "@heroicons/react": "^1.0.1",
+    "@presage/gql": "0.1.0",
     "@prismicio/client": "^4.0.0",
     "@supabase/supabase-js": "^1.11.6",
     "@tailwindcss/aspect-ratio": "^0.2.0",
@@ -23,6 +25,7 @@
     "formik": "^2.2.6",
     "framer-motion": "^4.1.13",
     "get-blob-duration": "^1.2.0",
+    "graphql": "^15.5.0",
     "http-errors": "^1.8.0",
     "multer": "^1.4.2",
     "next": "^10.2.0",

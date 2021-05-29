@@ -1,5 +1,6 @@
 import { Router } from "express";
 import passport from "passport";
+import rug from "random-username-generator";
 import { Strategy } from "passport-google-oauth20";
 import { User } from "../../entities/User";
 
@@ -11,16 +12,19 @@ const strategy = new Strategy(
     clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     callbackURL: `${process.env.SERVER_URL}/api/auth/google/callback`,
   },
-  async (_, __, { id, displayName, emails }, done) => {
+  async (_, __, { id, displayName, photos, emails }, done) => {
     try {
       const user =
         (await User.findOne({ where: { googleId: id } })) || User.create();
       const email = emails ? emails[0].value : null;
+      const photo = photos ? photos[0].value : null;
 
       if (!user.id) {
+        user.username = rug.generate();
         user.displayName = displayName;
         user.googleId = id;
         user.email = email;
+        user.profilePicture = photo;
       }
 
       await user.save();
@@ -46,8 +50,7 @@ authRouter.get(
 authRouter.get(
   "/google/callback",
   passport.authenticate("google", {
-    successReturnToOrRedirect: "/auth/success",
-    failureRedirect: "/login",
+    successReturnToOrRedirect: "http://localhost:3000",
     session: true,
   })
 );
