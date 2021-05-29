@@ -4,8 +4,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from "typeorm";
+import { Soundbite } from "./Soundbite";
 
 @Entity()
 @ObjectType()
@@ -33,7 +36,14 @@ export class User extends BaseEntity {
   @Column()
   displayName: string;
 
+  @OneToMany(() => Soundbite, (soundbite) => soundbite.user)
+  soundbites: Soundbite[];
+
   @Field()
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt: string;
+
+  @Field()
+  @UpdateDateColumn()
+  updatedAt: string;
 }

@@ -8,18 +8,22 @@
     "build": "tsc"
   },
   "devDependencies": {
+    "@types/audio-context": "^1.0.0",
     "@types/connect-redis": "^0.0.16",
     "@types/express": "^4.17.12",
     "@types/express-session": "^1.17.3",
+    "@types/graphql-upload": "^8.0.4",
     "@types/node": "^15.6.1",
     "@types/passport": "^1.0.6",
     "@types/passport-google-oauth20": "^2.0.7",
     "@types/redis": "^2.8.28",
+    "@types/uuid": "^8.3.0",
     "nodemon": "^2.0.7",
     "typescript": "^4.3.2"
   },
   "dependencies": {
     "apollo-server-express": "^2.25.0",
+    "audio-context": "^1.0.3",
     "class-validator": "^0.13.1",
     "concurrently": "^6.2.0",
     "connect-redis": "^5.2.0",
@@ -27,8 +31,10 @@
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "express-session": "^1.17.2",
+    "get-audio-duration": "^2.0.3",
     "graphql": "^15.5.0",
     "graphql-query-complexity": "^0.8.1",
+    "graphql-upload": "^12.0.0",
     "ioredis": "^4.27.3",
     "passport": "^0.4.1",
     "passport-google-oauth20": "^2.0.0",
@@ -37,6 +43,7 @@
     "redis": "^3.1.2",
     "reflect-metadata": "^0.1.13",
     "type-graphql": "^1.1.1",
-    "typeorm": "^0.2.32"
+    "typeorm": "^0.2.32",
+    "uuid": "^8.3.2"
   }
 }
