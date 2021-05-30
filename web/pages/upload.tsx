@@ -13,7 +13,7 @@ const Upload: React.FC = () => {
 
   return (
     <Layout>
-      <div className="max-w-3xl mx-auto py-16 md:py-28 px-6">
+      <div className="max-w-3xl mx-auto py-16 md:py-24 px-6">
         <Formik
           initialValues={{ description: "", title: "" }}
           onSubmit={async (values) => {

@@ -10,6 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Soundbite = void 0;
+const class_validator_1 = require("class-validator");
 const type_graphql_1 = require("type-graphql");
 const typeorm_1 = require("typeorm");
 const User_1 = require("./User");
@@ -26,9 +27,9 @@ __decorate([
     __metadata("design:type", String)
 ], Soundbite.prototype, "title", void 0);
 __decorate([
-    type_graphql_1.Field(),
-    typeorm_1.Column(),
-    __metadata("design:type", String)
+    type_graphql_1.Field(() => String, { nullable: true }),
+    typeorm_1.Column("text", { nullable: true }),
+    __metadata("design:type", Object)
 ], Soundbite.prototype, "description", void 0);
 __decorate([
     type_graphql_1.Field(() => String, { nullable: true }),
@@ -41,11 +42,14 @@ __decorate([
     __metadata("design:type", String)
 ], Soundbite.prototype, "audio", void 0);
 __decorate([
+    class_validator_1.Min(0),
+    class_validator_1.Max(60 * 5),
     type_graphql_1.Field(() => type_graphql_1.Int),
     typeorm_1.Column("int"),
     __metadata("design:type", Number)
 ], Soundbite.prototype, "length", void 0);
 __decorate([
+    type_graphql_1.Field(() => User_1.User),
     typeorm_1.ManyToOne(() => User_1.User, (user) => user.soundbites),
     __metadata("design:type", User_1.User)
 ], Soundbite.prototype, "user", void 0);

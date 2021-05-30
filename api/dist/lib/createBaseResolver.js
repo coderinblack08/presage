@@ -14,13 +14,13 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createBaseResolver = void 0;
 const type_graphql_1 = require("type-graphql");
-const createBaseResolver = (suffix, entity) => {
+const createBaseResolver = (suffix, entity, props = {}) => {
     let BaseResolver = class BaseResolver {
         get(id) {
-            return entity.findOne(id);
+            return entity.findOne(id, props);
         }
         paginate(limit, offset) {
-            return entity.find({ skip: offset, take: limit });
+            return entity.find(Object.assign({ skip: offset, take: limit }, props));
         }
     };
     __decorate([

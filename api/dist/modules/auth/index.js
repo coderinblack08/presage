@@ -20,7 +20,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserResolver = void 0;
 const apollo_server_errors_1 = require("apollo-server-errors");
@@ -83,7 +82,7 @@ __decorate([
     __param(1, type_graphql_1.Ctx()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [UserArgs_1.UserArgs, Object]),
-    __metadata("design:returntype", typeof (_a = typeof Promise !== "undefined" && Promise) === "function" ? _a : Object)
+    __metadata("design:returntype", Promise)
 ], UserResolver.prototype, "updateUser", null);
 UserResolver = __decorate([
     type_graphql_1.Resolver(() => User_1.User)

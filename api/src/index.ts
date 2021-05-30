@@ -21,6 +21,8 @@ import {
   simpleEstimator,
 } from "graphql-query-complexity";
 import { User } from "./entities/User";
+import { SoundbiteResolver } from "./modules/soundbites";
+import { graphqlUploadExpress } from "graphql-upload";
 
 const main = async () => {
   const conn = await createConnection({
@@ -43,13 +45,15 @@ const main = async () => {
       credentials: true,
     })
   );
+  app.use("/uploads", express.static(join(__dirname, "../uploads")));
 
   const schema = await buildSchema({
-    resolvers: [HelloResolver, UserResolver],
+    resolvers: [HelloResolver, UserResolver, SoundbiteResolver],
     validate: false,
   });
   const apolloServer = new ApolloServer({
     schema,
+    uploads: false,
     context: async ({ req, res }) => ({ req, res, redis }),
     plugins: [
       {
@@ -75,8 +79,6 @@ const main = async () => {
     ],
   });
 
-  app.use(express.json());
-  app.use(express.urlencoded({ extended: true }));
   app.use(
     session({
       name: "qid",
@@ -97,6 +99,7 @@ const main = async () => {
   );
   app.use(passport.initialize());
   app.use(passport.session());
+  app.use(graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }));
   passport.serializeUser((user: any, done) => done(null, user.id));
   passport.deserializeUser(async (id: string, done) => {
     const user = await User.findOne(id);

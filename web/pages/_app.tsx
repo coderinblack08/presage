@@ -8,14 +8,20 @@ import { SoundBitePlayer } from "../components/player/SoundBitePlayer";
 import { ProfileModal } from "../modules/login/ProfileModal";
 import { UserProvider as SupabaseUserProvider } from "../stores/auth";
 import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
+import { createUploadLink } from "apollo-upload-client";
 import { UserProvider } from "../stores/user";
 import "../styles/globals.css";
 import "../lib/firebase";
 
-const client = new ApolloClient({
+const link = createUploadLink({
   uri: "http://localhost:4000/graphql",
-  cache: new InMemoryCache(),
   credentials: "include",
+});
+
+export const client = new ApolloClient({
+  link,
+  ssrMode: typeof window === "undefined",
+  cache: new InMemoryCache(),
 });
 
 function App({ Component, pageProps }: AppProps) {

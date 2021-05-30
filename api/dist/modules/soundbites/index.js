@@ -26,15 +26,14 @@ const fs_1 = require("fs");
 const graphql_upload_1 = require("graphql-upload");
 const type_graphql_1 = require("type-graphql");
 const uuid_1 = require("uuid");
-const get_audio_duration_1 = require("get-audio-duration");
 const constants_1 = require("../../constants");
 const Soundbite_1 = require("../../entities/Soundbite");
 const createBaseResolver_1 = require("../../lib/createBaseResolver");
 const SoundbiteArgs_1 = require("./SoundbiteArgs");
-let SoundbiteResolver = class SoundbiteResolver extends createBaseResolver_1.createBaseResolver("Soundbite", Soundbite_1.Soundbite) {
+let SoundbiteResolver = class SoundbiteResolver extends createBaseResolver_1.createBaseResolver("Soundbite", Soundbite_1.Soundbite, { relations: ["user"] }) {
     createSoundbite(data, audio, { req }) {
         return __awaiter(this, void 0, void 0, function* () {
-            const audioPath = `${audio.filename}-${uuid_1.v4()}`;
+            const audioPath = `${uuid_1.v4()}-${audio.filename}`;
             if (!constants_1.__prod__) {
                 yield new Promise((resolve, reject) => audio
                     .createReadStream()
@@ -42,8 +41,7 @@ let SoundbiteResolver = class SoundbiteResolver extends createBaseResolver_1.cre
                     .on("finish", () => resolve(true))
                     .on("error", () => reject(false)));
             }
-            const length = yield get_audio_duration_1.getAudioDurationInSeconds(audio.createReadStream());
-            const soundbite = yield Soundbite_1.Soundbite.create(Object.assign(Object.assign({}, data), { length, user: req.user, audio: `http://localhost:4000/uploads/${audioPath}` })).save();
+            const soundbite = yield Soundbite_1.Soundbite.create(Object.assign(Object.assign({}, data), { user: req.user, audio: `http://localhost:4000/uploads/${audioPath}` })).save();
             return soundbite;
         });
     }

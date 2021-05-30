@@ -18,9 +18,13 @@ __decorate([
     __metadata("design:type", String)
 ], SoundbiteArgs.prototype, "title", void 0);
 __decorate([
-    type_graphql_1.Field(),
+    type_graphql_1.Field(() => String, { nullable: true }),
     __metadata("design:type", String)
 ], SoundbiteArgs.prototype, "description", void 0);
+__decorate([
+    type_graphql_1.Field(() => type_graphql_1.Int),
+    __metadata("design:type", Number)
+], SoundbiteArgs.prototype, "length", void 0);
 SoundbiteArgs = __decorate([
     type_graphql_1.InputType()
 ], SoundbiteArgs);

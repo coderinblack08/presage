@@ -19,10 +19,29 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.useMeLazyQuery = exports.useMeQuery = exports.MeDocument = exports.useHelloLazyQuery = exports.useHelloQuery = exports.HelloDocument = void 0;
+exports.useSoundbitesLazyQuery = exports.useSoundbitesQuery = exports.SoundbitesDocument = exports.useMeLazyQuery = exports.useMeQuery = exports.MeDocument = exports.useHelloLazyQuery = exports.useHelloQuery = exports.HelloDocument = exports.useCreateSoundbiteMutation = exports.CreateSoundbiteDocument = void 0;
 const client_1 = require("@apollo/client");
 const Apollo = __importStar(require("@apollo/client"));
 const defaultOptions = {};
+exports.CreateSoundbiteDocument = client_1.gql `
+    mutation CreateSoundbite($audio: Upload!, $data: SoundbiteArgs!) {
+  createSoundbite(audio: $audio, data: $data) {
+    id
+    title
+    description
+    thumbnail
+    audio
+    length
+    createdAt
+    updatedAt
+  }
+}
+    `;
+function useCreateSoundbiteMutation(baseOptions) {
+    const options = Object.assign(Object.assign({}, defaultOptions), baseOptions);
+    return Apollo.useMutation(exports.CreateSoundbiteDocument, options);
+}
+exports.useCreateSoundbiteMutation = useCreateSoundbiteMutation;
 exports.HelloDocument = client_1.gql `
     query Hello {
   hello
@@ -60,4 +79,36 @@ function useMeLazyQuery(baseOptions) {
     return Apollo.useLazyQuery(exports.MeDocument, options);
 }
 exports.useMeLazyQuery = useMeLazyQuery;
+exports.SoundbitesDocument = client_1.gql `
+    query Soundbites($limit: Float!, $offset: Float) {
+  paginateSoundbites(limit: $limit, offset: $offset) {
+    id
+    title
+    description
+    thumbnail
+    audio
+    length
+    updatedAt
+    createdAt
+    user {
+      id
+      username
+      profilePicture
+      displayName
+      createdAt
+      updatedAt
+    }
+  }
+}
+    `;
+function useSoundbitesQuery(baseOptions) {
+    const options = Object.assign(Object.assign({}, defaultOptions), baseOptions);
+    return Apollo.useQuery(exports.SoundbitesDocument, options);
+}
+exports.useSoundbitesQuery = useSoundbitesQuery;
+function useSoundbitesLazyQuery(baseOptions) {
+    const options = Object.assign(Object.assign({}, defaultOptions), baseOptions);
+    return Apollo.useLazyQuery(exports.SoundbitesDocument, options);
+}
+exports.useSoundbitesLazyQuery = useSoundbitesLazyQuery;
 //# sourceMappingURL=index.js.map

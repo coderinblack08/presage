@@ -32,7 +32,8 @@ export const SoundBitePlayer: React.FC = ({}) => {
       if (isPreview) {
         setUrl(soundbite.audio);
       } else {
-        downloadAudio();
+        setUrl(soundbite.audio);
+        // downloadAudio();
       }
     }
   }, [soundbite]);
@@ -54,9 +55,7 @@ export const SoundBitePlayer: React.FC = ({}) => {
                   <p className="text-white font-bold truncate">
                     {soundbite.title}
                   </p>
-                  <p className="small text-white-primary truncate">
-                    By {soundbite.profiles?.username}
-                  </p>
+                  <p className="small text-white-primary truncate">By {}</p>
                 </header>
               </div>
               <div className="hidden md:block">

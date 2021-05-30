@@ -19,7 +19,7 @@ export const PlayPauseSkipControls: React.FC<{ url: string; show?: boolean }> =
     const { togglePlayPause, playing } = useAudioPlayer({
       volume,
       src: url,
-      format: ["wav", "m4a", "mp3", "ogg"],
+      format: ["wav", "webm", "m4a", "mp3", "ogg"],
       autoplay: true,
       onplay: () => setPlaying(true),
       onend: () => setPlaying(false),

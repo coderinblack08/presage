@@ -1,8 +1,9 @@
+import { Soundbite } from "@presage/gql";
 import create from "zustand";
 import { combine } from "zustand/middleware";
 
 const defaultValue = {
-  soundbite: null,
+  soundbite: null as Soundbite,
   playing: false,
   preview: false,
   url: "",

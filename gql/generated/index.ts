@@ -12,19 +12,25 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /** The javascript `Date` as string. Type represents date and time as the ISO Date string. */
-  DateTime: any;
+  /** The `Upload` scalar type represents a file upload. */
+  Upload: any;
 };
-
 
 export type Mutation = {
   __typename?: 'Mutation';
   updateUser: User;
+  createSoundbite: Soundbite;
 };
 
 
 export type MutationUpdateUserArgs = {
   data: UserArgs;
+};
+
+
+export type MutationCreateSoundbiteArgs = {
+  audio: Scalars['Upload'];
+  data: SoundbiteArgs;
 };
 
 export type Query = {
@@ -33,6 +39,8 @@ export type Query = {
   getUser: User;
   paginateUsers: Array<User>;
   me: User;
+  getSoundbite: Soundbite;
+  paginateSoundbites: Array<Soundbite>;
 };
 
 
@@ -46,6 +54,37 @@ export type QueryPaginateUsersArgs = {
   limit: Scalars['Float'];
 };
 
+
+export type QueryGetSoundbiteArgs = {
+  id: Scalars['String'];
+};
+
+
+export type QueryPaginateSoundbitesArgs = {
+  offset?: Maybe<Scalars['Float']>;
+  limit: Scalars['Float'];
+};
+
+export type Soundbite = {
+  __typename?: 'Soundbite';
+  id: Scalars['String'];
+  title: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+  thumbnail?: Maybe<Scalars['String']>;
+  audio: Scalars['String'];
+  length: Scalars['Int'];
+  user: User;
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+};
+
+export type SoundbiteArgs = {
+  title: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+  length: Scalars['Int'];
+};
+
+
 export type User = {
   __typename?: 'User';
   id: Scalars['ID'];
@@ -53,7 +92,8 @@ export type User = {
   email?: Maybe<Scalars['String']>;
   username?: Maybe<Scalars['String']>;
   displayName: Scalars['String'];
-  createdAt: Scalars['DateTime'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
 };
 
 export type UserArgs = {
@@ -61,6 +101,20 @@ export type UserArgs = {
   username?: Maybe<Scalars['String']>;
   displayName?: Maybe<Scalars['String']>;
 };
+
+export type CreateSoundbiteMutationVariables = Exact<{
+  audio: Scalars['Upload'];
+  data: SoundbiteArgs;
+}>;
+
+
+export type CreateSoundbiteMutation = (
+  { __typename?: 'Mutation' }
+  & { createSoundbite: (
+    { __typename?: 'Soundbite' }
+    & Pick<Soundbite, 'id' | 'title' | 'description' | 'thumbnail' | 'audio' | 'length' | 'createdAt' | 'updatedAt'>
+  ) }
+);
 
 export type HelloQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -81,7 +135,66 @@ export type MeQuery = (
   ) }
 );
 
+export type SoundbitesQueryVariables = Exact<{
+  limit: Scalars['Float'];
+  offset?: Maybe<Scalars['Float']>;
+}>;
 
+
+export type SoundbitesQuery = (
+  { __typename?: 'Query' }
+  & { paginateSoundbites: Array<(
+    { __typename?: 'Soundbite' }
+    & Pick<Soundbite, 'id' | 'title' | 'description' | 'thumbnail' | 'audio' | 'length' | 'updatedAt' | 'createdAt'>
+    & { user: (
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username' | 'profilePicture' | 'displayName' | 'createdAt' | 'updatedAt'>
+    ) }
+  )> }
+);
+
+
+export const CreateSoundbiteDocument = gql`
+    mutation CreateSoundbite($audio: Upload!, $data: SoundbiteArgs!) {
+  createSoundbite(audio: $audio, data: $data) {
+    id
+    title
+    description
+    thumbnail
+    audio
+    length
+    createdAt
+    updatedAt
+  }
+}
+    `;
+export type CreateSoundbiteMutationFn = Apollo.MutationFunction<CreateSoundbiteMutation, CreateSoundbiteMutationVariables>;
+
+/**
+ * __useCreateSoundbiteMutation__
+ *
+ * To run a mutation, you first call `useCreateSoundbiteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateSoundbiteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createSoundbiteMutation, { data, loading, error }] = useCreateSoundbiteMutation({
+ *   variables: {
+ *      audio: // value for 'audio'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateSoundbiteMutation(baseOptions?: Apollo.MutationHookOptions<CreateSoundbiteMutation, CreateSoundbiteMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateSoundbiteMutation, CreateSoundbiteMutationVariables>(CreateSoundbiteDocument, options);
+      }
+export type CreateSoundbiteMutationHookResult = ReturnType<typeof useCreateSoundbiteMutation>;
+export type CreateSoundbiteMutationResult = Apollo.MutationResult<CreateSoundbiteMutation>;
+export type CreateSoundbiteMutationOptions = Apollo.BaseMutationOptions<CreateSoundbiteMutation, CreateSoundbiteMutationVariables>;
 export const HelloDocument = gql`
     query Hello {
   hello
@@ -153,3 +266,54 @@ export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const SoundbitesDocument = gql`
+    query Soundbites($limit: Float!, $offset: Float) {
+  paginateSoundbites(limit: $limit, offset: $offset) {
+    id
+    title
+    description
+    thumbnail
+    audio
+    length
+    updatedAt
+    createdAt
+    user {
+      id
+      username
+      profilePicture
+      displayName
+      createdAt
+      updatedAt
+    }
+  }
+}
+    `;
+
+/**
+ * __useSoundbitesQuery__
+ *
+ * To run a query within a React component, call `useSoundbitesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSoundbitesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSoundbitesQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useSoundbitesQuery(baseOptions: Apollo.QueryHookOptions<SoundbitesQuery, SoundbitesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SoundbitesQuery, SoundbitesQueryVariables>(SoundbitesDocument, options);
+      }
+export function useSoundbitesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SoundbitesQuery, SoundbitesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SoundbitesQuery, SoundbitesQueryVariables>(SoundbitesDocument, options);
+        }
+export type SoundbitesQueryHookResult = ReturnType<typeof useSoundbitesQuery>;
+export type SoundbitesLazyQueryHookResult = ReturnType<typeof useSoundbitesLazyQuery>;
+export type SoundbitesQueryResult = Apollo.QueryResult<SoundbitesQuery, SoundbitesQueryVariables>;

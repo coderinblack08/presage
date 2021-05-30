@@ -1,3 +1,4 @@
+import { Max, Min } from "class-validator";
 import { Field, Int, ObjectType } from "type-graphql";
 import {
   BaseEntity,
@@ -21,9 +22,9 @@ export class Soundbite extends BaseEntity {
   @Column()
   title: string;
 
-  @Field()
-  @Column()
-  description: string;
+  @Field(() => String, { nullable: true })
+  @Column("text", { nullable: true })
+  description: string | null;
 
   @Field(() => String, { nullable: true })
   @Column("text", { nullable: true })
@@ -33,10 +34,13 @@ export class Soundbite extends BaseEntity {
   @Column()
   audio: string;
 
+  @Min(0)
+  @Max(60 * 5)
   @Field(() => Int)
   @Column("int")
   length: number; // seconds, not minutes
 
+  @Field(() => User)
   @ManyToOne(() => User, (user) => user.soundbites)
   user: User;
 

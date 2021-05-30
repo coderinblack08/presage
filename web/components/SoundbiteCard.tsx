@@ -1,128 +1,24 @@
+import { Soundbite } from "@presage/gql";
+import { formatDistanceToNow } from "date-fns";
+import format from "format-duration";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { MdArrowDownward, MdArrowUpward, MdPlayArrow } from "react-icons/md";
-import format from "format-duration";
-import useSWR from "swr";
-import { supabase } from "../lib/supabase";
-import { useUpvoteStatus } from "../lib/useUpvoteStatus";
-import { useUser } from "../stores/auth";
+import { MdPlayArrow } from "react-icons/md";
 import { usePlayerStore } from "../stores/playing";
-import { definitions } from "../types/supabase";
-import { formatDistanceToNow } from "date-fns";
+import { UpvoteButtons } from "./UpvoteButtons";
 
-export interface SoundBite {
-  id: string;
-  title: string;
-  description?: string;
-  thumbnailUrl?: string;
-  audio: string;
-  length: number;
-  views?: number;
-  userId: string;
-  createdAt?: string;
-  profiles: definitions["profiles"];
-  expanded?: boolean;
-}
-
-export const SoundbiteCard: React.FC<SoundBite> = ({
-  id,
-  audio,
-  title,
-  description,
-  thumbnailUrl,
-  profiles,
+export const SoundbiteCard: React.FC<Soundbite & { expanded?: boolean }> = ({
+  __typename: _,
   expanded,
-  length,
-  createdAt,
+  ...props
 }) => {
-  const { user } = useUser();
-  const { status, myUpvote, mutate: mutateUpvote } = useUpvoteStatus(id);
-  const { data: details, mutate } = useSWR<definitions["soundbite_details"]>(
-    ["details", id],
-    async () =>
-      (
-        await supabase
-          .from("soundbite_details")
-          .select("*")
-          .eq("soundbite_id", id)
-          .single()
-      ).data
-  );
-  async function vote(value: number = 1) {
-    mutate(
-      {
-        ...details,
-        upvotes: myUpvote
-          ? details.upvotes + value * 2
-          : details.upvotes + value,
-      },
-      false
-    );
-    mutateUpvote({ ...myUpvote, value }, false);
-    await supabase.from("upvotes").upsert(
-      {
-        soundbite_id: id,
-        user_id: user.id,
-        value,
-      },
-      {
-        onConflict: "soundbite_id, user_id",
-      }
-    );
-  }
-
-  async function deleteUpvote() {
-    mutate(
-      {
-        ...details,
-        upvotes: details.upvotes - myUpvote.value,
-      },
-      false
-    );
-    mutateUpvote(null, false);
-    await supabase
-      .from("upvotes")
-      .delete()
-      .match({ soundbite_id: id, user_id: user.id });
-  }
-
   return (
     <article
       className={`col-span-1 flex items-start ${expanded ? "" : "space-x-10"}`}
     >
-      {expanded && (
-        <div className="flex flex-col items-center space-y-1 mr-6">
-          <button
-            onClick={() => (status === "upvoted" ? deleteUpvote() : vote(1))}
-            className={`p-1 focus:outline-none hover:text-primary hover:bg-primary hover:bg-opacity-10 rounded-md ${
-              status === "upvoted"
-                ? "text-primary bg-primary bg-opacity-10"
-                : "text-light-gray"
-            }`}
-          >
-            <MdArrowUpward className="w-4 h-4" />
-          </button>
-          <p
-            className={`small font-bold ${
-              status !== "unvoted" ? "text-primary" : ""
-            }`}
-          >
-            {details?.upvotes}
-          </p>
-          <button
-            onClick={() => (status === "downvoted" ? deleteUpvote() : vote(-1))}
-            className={`p-1 focus:outline-none hover:text-primary hover:bg-primary hover:bg-opacity-10 rounded-md ${
-              status === "downvoted"
-                ? "text-primary bg-primary bg-opacity-10"
-                : "text-light-gray"
-            }`}
-          >
-            <MdArrowDownward className="w-4 h-4" />
-          </button>
-        </div>
-      )}
-      {thumbnailUrl ? (
+      {expanded && <UpvoteButtons />}
+      {props.thumbnail ? (
         <div
           className={`flex items-center group relative flex-shrink-0 overflow-hidden rounded-lg ${
             expanded ? "mr-10" : ""
@@ -130,7 +26,7 @@ export const SoundbiteCard: React.FC<SoundBite> = ({
         >
           <Image
             className="absolute inset-0 object-cover rounded-lg transform group-hover:scale-110 transition duration-400"
-            src={thumbnailUrl}
+            src={props.thumbnail}
             width={expanded ? 125 : 84}
             height={expanded ? 125 : 84}
             priority
@@ -139,14 +35,7 @@ export const SoundbiteCard: React.FC<SoundBite> = ({
             <button
               className="icon-button bg-black p-2 rounded-full"
               onClick={() => {
-                usePlayerStore.getState().play({
-                  id,
-                  audio,
-                  title,
-                  description,
-                  thumbnailUrl,
-                  profiles,
-                });
+                usePlayerStore.getState().play(props);
               }}
             >
               <MdPlayArrow
@@ -161,14 +50,7 @@ export const SoundbiteCard: React.FC<SoundBite> = ({
             expanded ? "mr-8" : ""
           }`}
           onClick={() => {
-            usePlayerStore.getState().play({
-              id,
-              audio,
-              title,
-              description,
-              thumbnailUrl,
-              profiles,
-            });
+            usePlayerStore.getState().play(props);
           }}
         >
           <MdPlayArrow
@@ -177,25 +59,24 @@ export const SoundbiteCard: React.FC<SoundBite> = ({
         </button>
       )}
       <div>
-        <Link href="/bite/[id]" as={`/bite/${id}`}>
-          <a className="block hover:white text-xl font-bold">
-            {/* <span className="text-primary">Programming — EP 2.</span> */}
-            {title}
-          </a>
+        <Link href="/bite/[id]" as={`/bite/${props.id}`}>
+          <a className="block hover:white text-xl font-bold">{props.title}</a>
         </Link>
-        <p className="text-gray mt-1">
+        <p className="text-gray mt-2">
           Published by{" "}
-          <Link href="/u/[username]" as={`/u/${profiles.username}`}>
+          <Link href="/u/[username]" as={`/u/${props.user.username}`}>
             <a className="text-lighter-gray hover:underline">
-              {profiles.username}
+              {props.user.displayName}
             </a>
           </Link>
         </p>
-        <p className="mt-2 text-light-gray">{description}</p>
+        <p className="mt-2 text-light-gray">{props.description}</p>
         <p className="text-gray mt-2">
-          {format(length * 1000)} ·{" "}
+          {format(props.length * 1000)} ·{" "}
           <time>
-            {formatDistanceToNow(new Date(createdAt), { addSuffix: true })}
+            {formatDistanceToNow(new Date(parseInt(props.createdAt)), {
+              addSuffix: true,
+            }).replace("about ", "")}
           </time>
         </p>
       </div>

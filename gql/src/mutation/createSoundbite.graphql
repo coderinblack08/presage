@@ -1,0 +1,12 @@
+mutation CreateSoundbite($audio: Upload!, $data: SoundbiteArgs!) {
+  createSoundbite(audio: $audio, data: $data) {
+    id
+    title
+    description
+    thumbnail
+    audio
+    length
+    createdAt
+    updatedAt
+  }
+}

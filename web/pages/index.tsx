@@ -1,24 +1,11 @@
-import { GetServerSideProps, NextPage } from "next";
+import { useSoundbitesQuery } from "@presage/gql";
 import React from "react";
-import useSWR from "swr";
 import { Banner } from "../components/Banner";
 import { SoundbiteCard } from "../components/SoundBiteCard";
 import { Layout } from "../layout/Layout";
-import { supabase } from "../lib/supabase";
 
-async function fetchSoundBites() {
-  return await supabase
-    .from("soundbites")
-    .select("*, profiles:userId(*)")
-    .limit(4);
-}
-
-const Publishers: NextPage<{ soundbites?: any }> = ({ soundbites }) => {
-  const { data, isValidating } = useSWR(
-    "soundbites",
-    async () => (await fetchSoundBites()).data,
-    { revalidateOnFocus: false, initialData: soundbites }
-  );
+const Publishers: React.FC = () => {
+  const { data } = useSoundbitesQuery({ variables: { limit: 4 } });
 
   return (
     <Layout>
@@ -34,13 +21,9 @@ const Publishers: NextPage<{ soundbites?: any }> = ({ soundbites }) => {
             </p>
           </header>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
-            {!isValidating ? (
-              data?.map((bite: any) => (
-                <SoundbiteCard key={bite.id} {...bite} />
-              ))
-            ) : (
-              <p>Loading...</p>
-            )}
+            {data?.paginateSoundbites.map((soundbite) => (
+              <SoundbiteCard key={soundbite.id} {...soundbite} />
+            ))}
             <a href="#" className="text-primary lg:text-center lg:col-span-2">
               Show me more →
             </a>
@@ -49,15 +32,6 @@ const Publishers: NextPage<{ soundbites?: any }> = ({ soundbites }) => {
       </Banner>
     </Layout>
   );
-};
-
-export const getServerSideProps: GetServerSideProps = async () => {
-  const soundbites = await fetchSoundBites();
-  return {
-    props: {
-      soundbites: soundbites.data,
-    },
-  };
 };
 
 export default Publishers;
