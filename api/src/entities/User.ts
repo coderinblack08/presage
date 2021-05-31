@@ -9,6 +9,7 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 import { Soundbite } from "./Soundbite";
+import { Upvote } from "./Upvote";
 
 @Entity()
 @ObjectType()
@@ -38,6 +39,9 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Soundbite, (soundbite) => soundbite.user)
   soundbites: Soundbite[];
+
+  @OneToMany(() => Upvote, (upvote) => upvote.user)
+  upvotes: Upvote[];
 
   @Field()
   @CreateDateColumn()

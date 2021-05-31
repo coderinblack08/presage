@@ -33,6 +33,7 @@ const graphql_query_complexity_1 = require("graphql-query-complexity");
 const User_1 = require("./entities/User");
 const soundbites_1 = require("./modules/soundbites");
 const graphql_upload_1 = require("graphql-upload");
+const upvotes_1 = require("./modules/upvotes");
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
     const conn = yield typeorm_1.createConnection({
         type: "postgres",
@@ -52,7 +53,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
     }));
     app.use("/uploads", express_1.default.static(path_1.join(__dirname, "../uploads")));
     const schema = yield type_graphql_1.buildSchema({
-        resolvers: [hello_1.HelloResolver, auth_1.UserResolver, soundbites_1.SoundbiteResolver],
+        resolvers: [hello_1.HelloResolver, auth_1.UserResolver, soundbites_1.SoundbiteResolver, upvotes_1.UpvoteResolver],
         validate: false,
     });
     const apolloServer = new apollo_server_express_1.ApolloServer({

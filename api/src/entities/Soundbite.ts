@@ -1,20 +1,22 @@
 import { Max, Min } from "class-validator";
-import { Field, Int, ObjectType } from "type-graphql";
+import { Field, ID, Int, ObjectType } from "type-graphql";
 import {
   BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { Upvote } from "./Upvote";
 import { User } from "./User";
 
 @Entity()
 @ObjectType()
 export class Soundbite extends BaseEntity {
-  @Field()
+  @Field(() => ID)
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
@@ -43,6 +45,13 @@ export class Soundbite extends BaseEntity {
   @Field(() => User)
   @ManyToOne(() => User, (user) => user.soundbites)
   user: User;
+
+  @Field()
+  @Column({ default: 0 })
+  upvoteCount: number;
+
+  @OneToMany(() => Upvote, (upvote) => upvote.soundbite)
+  upvotes: Upvote[];
 
   @Field()
   @CreateDateColumn()

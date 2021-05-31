@@ -137,6 +137,23 @@ export type MeQuery = (
   ) }
 );
 
+export type SoundbiteQueryVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type SoundbiteQuery = (
+  { __typename?: 'Query' }
+  & { getSoundbite: (
+    { __typename?: 'Soundbite' }
+    & Pick<Soundbite, 'id' | 'title' | 'description' | 'thumbnail' | 'audio' | 'length' | 'updatedAt' | 'createdAt'>
+    & { user: (
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username' | 'profilePicture' | 'displayName' | 'createdAt' | 'updatedAt'>
+    ) }
+  ) }
+);
+
 export type SoundbitesQueryVariables = Exact<{
   limit: Scalars['Float'];
   offset?: Maybe<Scalars['Float']>;
@@ -269,6 +286,56 @@ export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const SoundbiteDocument = gql`
+    query Soundbite($id: String!) {
+  getSoundbite(id: $id) {
+    id
+    title
+    description
+    thumbnail
+    audio
+    length
+    updatedAt
+    createdAt
+    user {
+      id
+      username
+      profilePicture
+      displayName
+      createdAt
+      updatedAt
+    }
+  }
+}
+    `;
+
+/**
+ * __useSoundbiteQuery__
+ *
+ * To run a query within a React component, call `useSoundbiteQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSoundbiteQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSoundbiteQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useSoundbiteQuery(baseOptions: Apollo.QueryHookOptions<SoundbiteQuery, SoundbiteQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SoundbiteQuery, SoundbiteQueryVariables>(SoundbiteDocument, options);
+      }
+export function useSoundbiteLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SoundbiteQuery, SoundbiteQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SoundbiteQuery, SoundbiteQueryVariables>(SoundbiteDocument, options);
+        }
+export type SoundbiteQueryHookResult = ReturnType<typeof useSoundbiteQuery>;
+export type SoundbiteLazyQueryHookResult = ReturnType<typeof useSoundbiteLazyQuery>;
+export type SoundbiteQueryResult = Apollo.QueryResult<SoundbiteQuery, SoundbiteQueryVariables>;
 export const SoundbitesDocument = gql`
     query Soundbites($limit: Float!, $offset: Float) {
   paginateSoundbites(limit: $limit, offset: $offset) {

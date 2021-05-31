@@ -23,6 +23,7 @@ import {
 import { User } from "./entities/User";
 import { SoundbiteResolver } from "./modules/soundbites";
 import { graphqlUploadExpress } from "graphql-upload";
+import { UpvoteResolver } from "./modules/upvotes";
 
 const main = async () => {
   const conn = await createConnection({
@@ -48,7 +49,7 @@ const main = async () => {
   app.use("/uploads", express.static(join(__dirname, "../uploads")));
 
   const schema = await buildSchema({
-    resolvers: [HelloResolver, UserResolver, SoundbiteResolver],
+    resolvers: [HelloResolver, UserResolver, SoundbiteResolver, UpvoteResolver],
     validate: false,
   });
   const apolloServer = new ApolloServer({

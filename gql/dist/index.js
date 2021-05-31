@@ -19,7 +19,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.useSoundbitesLazyQuery = exports.useSoundbitesQuery = exports.SoundbitesDocument = exports.useMeLazyQuery = exports.useMeQuery = exports.MeDocument = exports.useHelloLazyQuery = exports.useHelloQuery = exports.HelloDocument = exports.useCreateSoundbiteMutation = exports.CreateSoundbiteDocument = void 0;
+exports.useSoundbitesLazyQuery = exports.useSoundbitesQuery = exports.SoundbitesDocument = exports.useSoundbiteLazyQuery = exports.useSoundbiteQuery = exports.SoundbiteDocument = exports.useMeLazyQuery = exports.useMeQuery = exports.MeDocument = exports.useHelloLazyQuery = exports.useHelloQuery = exports.HelloDocument = exports.useCreateSoundbiteMutation = exports.CreateSoundbiteDocument = void 0;
 const client_1 = require("@apollo/client");
 const Apollo = __importStar(require("@apollo/client"));
 const defaultOptions = {};
@@ -79,6 +79,38 @@ function useMeLazyQuery(baseOptions) {
     return Apollo.useLazyQuery(exports.MeDocument, options);
 }
 exports.useMeLazyQuery = useMeLazyQuery;
+exports.SoundbiteDocument = client_1.gql `
+    query Soundbite($id: String!) {
+  getSoundbite(id: $id) {
+    id
+    title
+    description
+    thumbnail
+    audio
+    length
+    updatedAt
+    createdAt
+    user {
+      id
+      username
+      profilePicture
+      displayName
+      createdAt
+      updatedAt
+    }
+  }
+}
+    `;
+function useSoundbiteQuery(baseOptions) {
+    const options = Object.assign(Object.assign({}, defaultOptions), baseOptions);
+    return Apollo.useQuery(exports.SoundbiteDocument, options);
+}
+exports.useSoundbiteQuery = useSoundbiteQuery;
+function useSoundbiteLazyQuery(baseOptions) {
+    const options = Object.assign(Object.assign({}, defaultOptions), baseOptions);
+    return Apollo.useLazyQuery(exports.SoundbiteDocument, options);
+}
+exports.useSoundbiteLazyQuery = useSoundbiteLazyQuery;
 exports.SoundbitesDocument = client_1.gql `
     query Soundbites($limit: Float!, $offset: Float) {
   paginateSoundbites(limit: $limit, offset: $offset) {

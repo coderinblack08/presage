@@ -1,60 +1,34 @@
+import { useSoundbiteQuery } from "@presage/gql";
 import { Form, Formik } from "formik";
-import { GetServerSideProps } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
-import useSWR, { mutate } from "swr";
 import { Banner } from "../../components/Banner";
 import { Button } from "../../components/Button";
-import { Comment } from "../../components/Comment";
 import { SoundbiteCard } from "../../components/SoundBiteCard";
 import { InputField } from "../../formik/InputField";
 import { Layout } from "../../layout/Layout";
-import { supabase } from "../../lib/supabase";
-import { useUser } from "../../stores/auth";
+import { URLSafeString } from "../../lib/URLSafeString";
 
-async function fetchSoundbite(id: string | string[]) {
-  return (
-    await supabase
-      .from("soundbites")
-      .select("*, profiles:userId(*)")
-      .filter("id", "eq", typeof id === "string" ? id : id[0])
-      .single()
-  ).data;
-}
-
-async function fetchComments(_, id: string | string[]) {
-  return (
-    await supabase
-      .from("comments")
-      .select("*, profiles:user_id(*)")
-      .eq("soundbite_id", typeof id === "string" ? id : id[0])
-  ).data;
-}
-
-const Id: React.FC<{ soundbite?: any }> = ({ soundbite }) => {
+const Bite: React.FC = () => {
   const {
     query: { id },
   } = useRouter();
-  const { data } = useSWR(
-    ["soundbite", id],
-    async () => await fetchSoundbite(id),
-    {
-      initialData: soundbite,
-    }
-  );
-  const { data: comments } = useSWR(["comments", id], fetchComments);
-  const { user, profile } = useUser();
+  const { data, loading } = useSoundbiteQuery({
+    variables: { id: URLSafeString(id) },
+  });
 
   return (
     <Layout>
       <Head>
-        <title>{data.title}</title>
+        <title>{data?.getSoundbite.title}</title>
       </Head>
       <Banner>
         <div className="max-w-2xl mx-auto py-12 px-6">
-          <SoundbiteCard {...data} expanded />
+          {!loading && data?.getSoundbite ? (
+            <SoundbiteCard {...data?.getSoundbite} expanded />
+          ) : null}
           {/* <h6 className="font-bold mt-12">Recommended Soundbites</h6> */}
         </div>
       </Banner>
@@ -63,15 +37,15 @@ const Id: React.FC<{ soundbite?: any }> = ({ soundbite }) => {
         <Formik
           initialValues={{ body: "" }}
           onSubmit={async (values, { resetForm }) => {
-            const {
-              data: [data],
-            } = await supabase.from("comments").insert({
-              ...values,
-              soundbite_id: id,
-              user_id: user.id,
-            });
-            data.profiles = profile;
-            mutate(["comments", id], [data, ...comments], false);
+            // const {
+            //   data: [data],
+            // } = await supabase.from("comments").insert({
+            //   ...values,
+            //   soundbite_id: id,
+            //   user_id: user.id,
+            // });
+            // data.profiles = profile;
+            // mutate(["comments", id], [data, ...comments], false);
             resetForm({});
           }}
         >
@@ -90,24 +64,14 @@ const Id: React.FC<{ soundbite?: any }> = ({ soundbite }) => {
             <a className="link small">Soundbite</a>
           </Link>
         </p>
-        <div className="space-y-8 mt-10">
+        {/* <div className="space-y-8 mt-10">
           {comments?.map((comment) => (
             <Comment key={comment.id} {...comment} />
           ))}
-        </div>
+        </div> */}
       </main>
     </Layout>
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({
-  query: { id },
-}) => {
-  return {
-    props: {
-      soundbite: await fetchSoundbite(id),
-    },
-  };
-};
-
-export default Id;
+export default Bite;

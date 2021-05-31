@@ -1,6 +1,7 @@
 import { FileUpload, GraphQLUpload } from "graphql-upload";
 import { Arg, Ctx, Mutation, Resolver } from "type-graphql";
 import { Soundbite } from "../../entities/Soundbite";
+import { Upvote } from "../../entities/Upvote";
 import { createBaseResolver } from "../../lib/createBaseResolver";
 import { Context } from "../../types/Context";
 import { SoundbiteArgs } from "./SoundbiteArgs";

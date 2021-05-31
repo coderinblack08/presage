@@ -115,6 +115,20 @@ export declare type MeQuery = ({
         __typename?: 'User';
     } & Pick<User, 'id' | 'email' | 'username' | 'displayName' | 'profilePicture' | 'createdAt'>);
 });
+export declare type SoundbiteQueryVariables = Exact<{
+    id: Scalars['String'];
+}>;
+export declare type SoundbiteQuery = ({
+    __typename?: 'Query';
+} & {
+    getSoundbite: ({
+        __typename?: 'Soundbite';
+    } & Pick<Soundbite, 'id' | 'title' | 'description' | 'thumbnail' | 'audio' | 'length' | 'updatedAt' | 'createdAt'> & {
+        user: ({
+            __typename?: 'User';
+        } & Pick<User, 'id' | 'username' | 'profilePicture' | 'displayName' | 'createdAt' | 'updatedAt'>);
+    });
+});
 export declare type SoundbitesQueryVariables = Exact<{
     limit: Scalars['Float'];
     offset?: Maybe<Scalars['Float']>;
@@ -160,6 +174,16 @@ export declare function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export declare type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export declare type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export declare type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export declare const SoundbiteDocument: Apollo.DocumentNode;
+export declare function useSoundbiteQuery(baseOptions: Apollo.QueryHookOptions<SoundbiteQuery, SoundbiteQueryVariables>): Apollo.QueryResult<SoundbiteQuery, Exact<{
+    id: string;
+}>>;
+export declare function useSoundbiteLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SoundbiteQuery, SoundbiteQueryVariables>): Apollo.QueryTuple<SoundbiteQuery, Exact<{
+    id: string;
+}>>;
+export declare type SoundbiteQueryHookResult = ReturnType<typeof useSoundbiteQuery>;
+export declare type SoundbiteLazyQueryHookResult = ReturnType<typeof useSoundbiteLazyQuery>;
+export declare type SoundbiteQueryResult = Apollo.QueryResult<SoundbiteQuery, SoundbiteQueryVariables>;
 export declare const SoundbitesDocument: Apollo.DocumentNode;
 export declare function useSoundbitesQuery(baseOptions: Apollo.QueryHookOptions<SoundbitesQuery, SoundbitesQueryVariables>): Apollo.QueryResult<SoundbitesQuery, Exact<{
     limit: number;

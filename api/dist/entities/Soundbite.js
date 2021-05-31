@@ -13,11 +13,12 @@ exports.Soundbite = void 0;
 const class_validator_1 = require("class-validator");
 const type_graphql_1 = require("type-graphql");
 const typeorm_1 = require("typeorm");
+const Upvote_1 = require("./Upvote");
 const User_1 = require("./User");
 let Soundbite = class Soundbite extends typeorm_1.BaseEntity {
 };
 __decorate([
-    type_graphql_1.Field(),
+    type_graphql_1.Field(() => type_graphql_1.ID),
     typeorm_1.PrimaryGeneratedColumn("uuid"),
     __metadata("design:type", String)
 ], Soundbite.prototype, "id", void 0);
@@ -53,6 +54,15 @@ __decorate([
     typeorm_1.ManyToOne(() => User_1.User, (user) => user.soundbites),
     __metadata("design:type", User_1.User)
 ], Soundbite.prototype, "user", void 0);
+__decorate([
+    type_graphql_1.Field(),
+    typeorm_1.Column({ default: 0 }),
+    __metadata("design:type", Number)
+], Soundbite.prototype, "upvoteCount", void 0);
+__decorate([
+    typeorm_1.OneToMany(() => Upvote_1.Upvote, (upvote) => upvote.soundbite),
+    __metadata("design:type", Array)
+], Soundbite.prototype, "upvotes", void 0);
 __decorate([
     type_graphql_1.Field(),
     typeorm_1.CreateDateColumn(),
