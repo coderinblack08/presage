@@ -1,16 +1,16 @@
 import React, { useRef } from "react";
 import byteSize from "byte-size";
+import { useUploadSoundbiteStore } from "./useUploadSoundbite";
+import shallow from "zustand/shallow";
 
-interface ThumbnailUploadProps {
-  thumbnail: File;
-  setThumbnail: React.Dispatch<React.SetStateAction<File>>;
-}
+interface ThumbnailUploadProps {}
 
-export const ThumbnailUpload: React.FC<ThumbnailUploadProps> = ({
-  thumbnail,
-  setThumbnail,
-}) => {
+export const ThumbnailUpload: React.FC<ThumbnailUploadProps> = () => {
   const uploadRef = useRef<HTMLInputElement>();
+  const [thumbnail, setThumbnail] = useUploadSoundbiteStore(
+    (x) => [x.thumbnail, x.setThumbnail],
+    shallow
+  );
 
   return (
     <div>

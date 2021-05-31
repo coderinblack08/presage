@@ -1,5 +1,9 @@
-mutation CreateSoundbite($audio: Upload!, $data: SoundbiteArgs!) {
-  createSoundbite(audio: $audio, data: $data) {
+mutation CreateSoundbite(
+  $thumbnail: Upload
+  $audio: Upload!
+  $data: SoundbiteArgs!
+) {
+  createSoundbite(audio: $audio, data: $data, thumbnail: $thumbnail) {
     id
     title
     description

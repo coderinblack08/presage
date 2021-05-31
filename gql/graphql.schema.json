@@ -51,6 +51,18 @@
             "description": null,
             "args": [
               {
+                "name": "thumbnail",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Upload",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
                 "name": "audio",
                 "description": null,
                 "type": {

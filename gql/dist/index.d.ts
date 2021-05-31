@@ -28,6 +28,7 @@ export declare type MutationUpdateUserArgs = {
     data: UserArgs;
 };
 export declare type MutationCreateSoundbiteArgs = {
+    thumbnail?: Maybe<Scalars['Upload']>;
     audio: Scalars['Upload'];
     data: SoundbiteArgs;
 };
@@ -87,6 +88,7 @@ export declare type UserArgs = {
     displayName?: Maybe<Scalars['String']>;
 };
 export declare type CreateSoundbiteMutationVariables = Exact<{
+    thumbnail?: Maybe<Scalars['Upload']>;
     audio: Scalars['Upload'];
     data: SoundbiteArgs;
 }>;
@@ -131,6 +133,7 @@ export declare type SoundbitesQuery = ({
 export declare const CreateSoundbiteDocument: Apollo.DocumentNode;
 export declare type CreateSoundbiteMutationFn = Apollo.MutationFunction<CreateSoundbiteMutation, CreateSoundbiteMutationVariables>;
 export declare function useCreateSoundbiteMutation(baseOptions?: Apollo.MutationHookOptions<CreateSoundbiteMutation, CreateSoundbiteMutationVariables>): Apollo.MutationTuple<CreateSoundbiteMutation, Exact<{
+    thumbnail?: any;
     audio: any;
     data: SoundbiteArgs;
 }>>;

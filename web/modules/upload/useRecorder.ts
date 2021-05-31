@@ -1,13 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { useTimer } from "use-timer";
+import shallow from "zustand/shallow";
+import { useUploadSoundbiteStore } from "./useUploadSoundbite";
 
-const useRecorder = (
-  setAudio: React.Dispatch<React.SetStateAction<string>>
-) => {
+const useRecorder = () => {
   const [recorder, setRecorder] = useState<MediaRecorder>();
   const [recording, setRecording] = useState(false);
-  const [audioURL, setAudioURL] = useState("");
+  const [audio, setAudio] = useUploadSoundbiteStore(
+    (x) => [x.audio, x.setAudio],
+    shallow
+  );
   const { time, start, pause, reset } = useTimer();
+
+  useEffect(() => {
+    if (time === 5 * 60) {
+      setRecording(false);
+      pause();
+    }
+  }, [time]);
 
   useEffect(() => {
     if (recorder) {
@@ -30,7 +40,6 @@ const useRecorder = (
 
     const handleData = (e: BlobEvent) => {
       const url = URL.createObjectURL(e.data);
-      setAudioURL(url);
       setAudio(url);
     };
 
@@ -40,12 +49,12 @@ const useRecorder = (
 
   const toggleRecording = () => setRecording(!recording);
   const clearAudio = () => {
-    URL.revokeObjectURL(audioURL);
-    setAudioURL("");
+    URL.revokeObjectURL(audio);
+    setAudio("");
     reset();
   };
 
-  return { duration: time, clearAudio, toggleRecording, recording, audioURL };
+  return { duration: time, clearAudio, toggleRecording, recording };
 };
 
 async function requestRecorder() {

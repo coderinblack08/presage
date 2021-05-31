@@ -1,3 +1,4 @@
+import { useMeQuery } from "@presage/gql";
 import format from "format-duration";
 import React, { useRef } from "react";
 import {
@@ -9,22 +10,20 @@ import {
 import { useAudioPlayer } from "react-use-audio-player";
 import shallow from "zustand/shallow";
 import { Button } from "../../components/Button";
-import { useUser } from "../../stores/auth";
 import { usePlayerStore } from "../../stores/playing";
 import useRecorder from "./useRecorder";
+import { useUploadSoundbiteStore } from "./useUploadSoundbite";
 
-export const RecordAudio: React.FC<{
-  setAudio: React.Dispatch<React.SetStateAction<string>>;
-}> = ({ setAudio }) => {
-  const { profile } = useUser();
+export const RecordAudio: React.FC = () => {
   const uploadRef = useRef<HTMLInputElement>();
   const [soundbite, isPreview] = usePlayerStore(
     (x) => [x.soundbite, x.preview],
     shallow
   );
+  const { data: me } = useMeQuery();
   const { stop } = useAudioPlayer();
-  const { duration, clearAudio, audioURL, recording, toggleRecording } =
-    useRecorder(setAudio);
+  const { duration, clearAudio, recording, toggleRecording } = useRecorder();
+  const audio = useUploadSoundbiteStore((x) => x.audio);
 
   return (
     <div>
@@ -60,16 +59,16 @@ export const RecordAudio: React.FC<{
             </p>
           </div>
         </div>
-        {audioURL && (
+        {audio && (
           <div className="flex items-center space-x-4">
             <Button
               icon={<MdPlayArrow className="w-6 h-6 text-white" />}
               onClick={() => {
                 usePlayerStore.getState().setPreview(true);
                 usePlayerStore.getState().play({
-                  audio: audioURL,
+                  audio,
                   title: "Preview Audio",
-                  profiles: profile,
+                  user: me?.me,
                 });
               }}
               type="button"

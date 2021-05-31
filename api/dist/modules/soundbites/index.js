@@ -22,26 +22,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SoundbiteResolver = void 0;
-const fs_1 = require("fs");
 const graphql_upload_1 = require("graphql-upload");
 const type_graphql_1 = require("type-graphql");
-const uuid_1 = require("uuid");
-const constants_1 = require("../../constants");
 const Soundbite_1 = require("../../entities/Soundbite");
 const createBaseResolver_1 = require("../../lib/createBaseResolver");
 const SoundbiteArgs_1 = require("./SoundbiteArgs");
+const uploadFile_1 = require("./uploadFile");
 let SoundbiteResolver = class SoundbiteResolver extends createBaseResolver_1.createBaseResolver("Soundbite", Soundbite_1.Soundbite, { relations: ["user"] }) {
-    createSoundbite(data, audio, { req }) {
+    createSoundbite(data, audio, thumbnail, { req }) {
         return __awaiter(this, void 0, void 0, function* () {
-            const audioPath = `${uuid_1.v4()}-${audio.filename}`;
-            if (!constants_1.__prod__) {
-                yield new Promise((resolve, reject) => audio
-                    .createReadStream()
-                    .pipe(fs_1.createWriteStream(`${__dirname}/../../../uploads/${audioPath}`))
-                    .on("finish", () => resolve(true))
-                    .on("error", () => reject(false)));
-            }
-            const soundbite = yield Soundbite_1.Soundbite.create(Object.assign(Object.assign({}, data), { user: req.user, audio: `http://localhost:4000/uploads/${audioPath}` })).save();
+            const audioPath = yield uploadFile_1.uploadFile(audio);
+            const thumbnailPath = thumbnail ? yield uploadFile_1.uploadFile(thumbnail) : null;
+            const soundbite = yield Soundbite_1.Soundbite.create(Object.assign(Object.assign({}, data), { user: req.user, audio: `http://localhost:4000/uploads/${audioPath}`, thumbnail: `http://localhost:4000/uploads/${thumbnailPath}` })).save();
             return soundbite;
         });
     }
@@ -50,9 +42,10 @@ __decorate([
     type_graphql_1.Mutation(() => Soundbite_1.Soundbite),
     __param(0, type_graphql_1.Arg("data", () => SoundbiteArgs_1.SoundbiteArgs)),
     __param(1, type_graphql_1.Arg("audio", () => graphql_upload_1.GraphQLUpload)),
-    __param(2, type_graphql_1.Ctx()),
+    __param(2, type_graphql_1.Arg("thumbnail", () => graphql_upload_1.GraphQLUpload, { nullable: true })),
+    __param(3, type_graphql_1.Ctx()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [SoundbiteArgs_1.SoundbiteArgs, Object, Object]),
+    __metadata("design:paramtypes", [SoundbiteArgs_1.SoundbiteArgs, Object, Object, Object]),
     __metadata("design:returntype", Promise)
 ], SoundbiteResolver.prototype, "createSoundbite", null);
 SoundbiteResolver = __decorate([

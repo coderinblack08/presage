@@ -24,8 +24,8 @@ const client_1 = require("@apollo/client");
 const Apollo = __importStar(require("@apollo/client"));
 const defaultOptions = {};
 exports.CreateSoundbiteDocument = client_1.gql `
-    mutation CreateSoundbite($audio: Upload!, $data: SoundbiteArgs!) {
-  createSoundbite(audio: $audio, data: $data) {
+    mutation CreateSoundbite($thumbnail: Upload, $audio: Upload!, $data: SoundbiteArgs!) {
+  createSoundbite(audio: $audio, data: $data, thumbnail: $thumbnail) {
     id
     title
     description

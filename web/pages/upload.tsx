@@ -24,7 +24,7 @@ const Upload: React.FC = () => {
           {({ isSubmitting }) => (
             <Form>
               <h4 className="mb-5 text-white">Upload Soundbite</h4>
-              <RecordAudio setAudio={setAudio} />
+              <RecordAudio />
               <div className="space-y-5 mt-5">
                 <InputField name="title" placeholder="Title" />
                 <InputField
@@ -33,10 +33,7 @@ const Upload: React.FC = () => {
                   className="h-32"
                   textarea
                 />
-                <ThumbnailUpload
-                  thumbnail={thumbnail}
-                  setThumbnail={setThumbnail}
-                />
+                <ThumbnailUpload />
                 <Button
                   type="submit"
                   className="w-full"

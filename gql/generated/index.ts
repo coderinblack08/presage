@@ -29,6 +29,7 @@ export type MutationUpdateUserArgs = {
 
 
 export type MutationCreateSoundbiteArgs = {
+  thumbnail?: Maybe<Scalars['Upload']>;
   audio: Scalars['Upload'];
   data: SoundbiteArgs;
 };
@@ -103,6 +104,7 @@ export type UserArgs = {
 };
 
 export type CreateSoundbiteMutationVariables = Exact<{
+  thumbnail?: Maybe<Scalars['Upload']>;
   audio: Scalars['Upload'];
   data: SoundbiteArgs;
 }>;
@@ -155,8 +157,8 @@ export type SoundbitesQuery = (
 
 
 export const CreateSoundbiteDocument = gql`
-    mutation CreateSoundbite($audio: Upload!, $data: SoundbiteArgs!) {
-  createSoundbite(audio: $audio, data: $data) {
+    mutation CreateSoundbite($thumbnail: Upload, $audio: Upload!, $data: SoundbiteArgs!) {
+  createSoundbite(audio: $audio, data: $data, thumbnail: $thumbnail) {
     id
     title
     description
@@ -183,6 +185,7 @@ export type CreateSoundbiteMutationFn = Apollo.MutationFunction<CreateSoundbiteM
  * @example
  * const [createSoundbiteMutation, { data, loading, error }] = useCreateSoundbiteMutation({
  *   variables: {
+ *      thumbnail: // value for 'thumbnail'
  *      audio: // value for 'audio'
  *      data: // value for 'data'
  *   },
