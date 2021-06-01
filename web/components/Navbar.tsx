@@ -1,6 +1,6 @@
 import { useMeQuery } from "@presage/gql";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import { MdSearch } from "react-icons/md";
 import { useOnPath } from "../lib/onPath";
 import { LoginModal } from "../modules/login/LoginModal";

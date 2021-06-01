@@ -1,10 +1,15 @@
-import { config } from "dotenv";
-config();
+require("dotenv").config();
 import { ApolloError, ApolloServer } from "apollo-server-express";
 import connectRedis from "connect-redis";
 import cors from "cors";
 import express from "express";
 import session from "express-session";
+import {
+  fieldExtensionsEstimator,
+  getComplexity,
+  simpleEstimator,
+} from "graphql-query-complexity";
+import { graphqlUploadExpress } from "graphql-upload";
 import Redis from "ioredis";
 import passport from "passport";
 import { join } from "path";
@@ -12,18 +17,12 @@ import "reflect-metadata";
 import { buildSchema } from "type-graphql";
 import { createConnection } from "typeorm";
 import { PORT, __prod__ } from "./constants";
+import { User } from "./entities/User";
+import { createUpvoteLoader } from "./lib/upvoteLoader";
+import { UserResolver } from "./modules/auth";
 import { authRouter } from "./modules/auth/google";
 import { HelloResolver } from "./modules/hello";
-import { UserResolver } from "./modules/auth";
-import {
-  fieldExtensionsEstimator,
-  getComplexity,
-  simpleEstimator,
-} from "graphql-query-complexity";
-import { User } from "./entities/User";
 import { SoundbiteResolver } from "./modules/soundbites";
-import { graphqlUploadExpress } from "graphql-upload";
-import { UpvoteResolver } from "./modules/upvotes";
 
 const main = async () => {
   const conn = await createConnection({
@@ -49,13 +48,18 @@ const main = async () => {
   app.use("/uploads", express.static(join(__dirname, "../uploads")));
 
   const schema = await buildSchema({
-    resolvers: [HelloResolver, UserResolver, SoundbiteResolver, UpvoteResolver],
+    resolvers: [HelloResolver, UserResolver, SoundbiteResolver],
     validate: false,
   });
   const apolloServer = new ApolloServer({
     schema,
     uploads: false,
-    context: async ({ req, res }) => ({ req, res, redis }),
+    context: async ({ req, res }) => ({
+      req,
+      res,
+      redis,
+      upvoteLoader: createUpvoteLoader(),
+    }),
     plugins: [
       {
         requestDidStart: () => ({

@@ -58,7 +58,11 @@ __decorate([
     type_graphql_1.Field(),
     typeorm_1.Column({ default: 0 }),
     __metadata("design:type", Number)
-], Soundbite.prototype, "upvoteCount", void 0);
+], Soundbite.prototype, "points", void 0);
+__decorate([
+    type_graphql_1.Field(() => type_graphql_1.Int, { nullable: true }),
+    __metadata("design:type", Object)
+], Soundbite.prototype, "voteStatus", void 0);
 __decorate([
     typeorm_1.OneToMany(() => Upvote_1.Upvote, (upvote) => upvote.soundbite),
     __metadata("design:type", Array)

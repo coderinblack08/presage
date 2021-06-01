@@ -25,10 +25,10 @@ exports.UserResolver = void 0;
 const apollo_server_errors_1 = require("apollo-server-errors");
 const type_graphql_1 = require("type-graphql");
 const typeorm_1 = require("typeorm");
+const constants_1 = require("../../constants");
 const User_1 = require("../../entities/User");
 const createBaseResolver_1 = require("../../lib/createBaseResolver");
 const UserArgs_1 = require("./UserArgs");
-const PG_UNIQUE_CONSTRAINT_VIOLATION = "23505";
 let UserResolver = class UserResolver extends createBaseResolver_1.createBaseResolver("User", User_1.User) {
     email(user, { req }) {
         var _a;
@@ -38,9 +38,7 @@ let UserResolver = class UserResolver extends createBaseResolver_1.createBaseRes
         return null;
     }
     me({ req }) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return req.user;
-        });
+        return req.user;
     }
     updateUser(data, { req }) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -55,7 +53,7 @@ let UserResolver = class UserResolver extends createBaseResolver_1.createBaseRes
                 return user.raw[0];
             }
             catch (error) {
-                if (error && error.code === PG_UNIQUE_CONSTRAINT_VIOLATION) {
+                if (error && error.code === constants_1.PG_UNIQUE_CONSTRAINT_VIOLATION) {
                     throw new apollo_server_errors_1.ApolloError("Username is already taken");
                 }
             }
@@ -70,11 +68,11 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], UserResolver.prototype, "email", null);
 __decorate([
-    type_graphql_1.Query(() => User_1.User),
+    type_graphql_1.Query(() => User_1.User, { nullable: true }),
     __param(0, type_graphql_1.Ctx()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", Promise)
+    __metadata("design:returntype", void 0)
 ], UserResolver.prototype, "me", null);
 __decorate([
     type_graphql_1.Mutation(() => User_1.User),

@@ -48,7 +48,10 @@ export class Soundbite extends BaseEntity {
 
   @Field()
   @Column({ default: 0 })
-  upvoteCount: number;
+  points: number;
+
+  @Field(() => Int, { nullable: true })
+  voteStatus: number | null;
 
   @OneToMany(() => Upvote, (upvote) => upvote.soundbite)
   upvotes: Upvote[];

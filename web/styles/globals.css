@@ -17,7 +17,7 @@
     }
   }
 
-  #next,
+  #__next,
   body,
   html {
     @apply bg-black;

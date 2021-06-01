@@ -19,10 +19,37 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.useSoundbitesLazyQuery = exports.useSoundbitesQuery = exports.SoundbitesDocument = exports.useSoundbiteLazyQuery = exports.useSoundbiteQuery = exports.SoundbiteDocument = exports.useMeLazyQuery = exports.useMeQuery = exports.MeDocument = exports.useHelloLazyQuery = exports.useHelloQuery = exports.HelloDocument = exports.useCreateSoundbiteMutation = exports.CreateSoundbiteDocument = void 0;
+exports.useSoundbitesLazyQuery = exports.useSoundbitesQuery = exports.SoundbitesDocument = exports.useSoundbiteLazyQuery = exports.useSoundbiteQuery = exports.SoundbiteDocument = exports.useMeLazyQuery = exports.useMeQuery = exports.MeDocument = exports.useHelloLazyQuery = exports.useHelloQuery = exports.HelloDocument = exports.useVoteMutation = exports.VoteDocument = exports.useCreateSoundbiteMutation = exports.CreateSoundbiteDocument = exports.SoundbiteFragmentFragmentDoc = exports.UserFragmentFragmentDoc = void 0;
 const client_1 = require("@apollo/client");
 const Apollo = __importStar(require("@apollo/client"));
 const defaultOptions = {};
+exports.UserFragmentFragmentDoc = client_1.gql `
+    fragment UserFragment on User {
+  id
+  email
+  username
+  displayName
+  profilePicture
+  createdAt
+}
+    `;
+exports.SoundbiteFragmentFragmentDoc = client_1.gql `
+    fragment SoundbiteFragment on Soundbite {
+  id
+  title
+  description
+  thumbnail
+  audio
+  length
+  points
+  updatedAt
+  createdAt
+  voteStatus
+  user {
+    ...UserFragment
+  }
+}
+    ${exports.UserFragmentFragmentDoc}`;
 exports.CreateSoundbiteDocument = client_1.gql `
     mutation CreateSoundbite($thumbnail: Upload, $audio: Upload!, $data: SoundbiteArgs!) {
   createSoundbite(audio: $audio, data: $data, thumbnail: $thumbnail) {
@@ -42,6 +69,16 @@ function useCreateSoundbiteMutation(baseOptions) {
     return Apollo.useMutation(exports.CreateSoundbiteDocument, options);
 }
 exports.useCreateSoundbiteMutation = useCreateSoundbiteMutation;
+exports.VoteDocument = client_1.gql `
+    mutation Vote($value: Int!, $soundbiteId: String!) {
+  vote(value: $value, soundbiteId: $soundbiteId)
+}
+    `;
+function useVoteMutation(baseOptions) {
+    const options = Object.assign(Object.assign({}, defaultOptions), baseOptions);
+    return Apollo.useMutation(exports.VoteDocument, options);
+}
+exports.useVoteMutation = useVoteMutation;
 exports.HelloDocument = client_1.gql `
     query Hello {
   hello
@@ -60,15 +97,10 @@ exports.useHelloLazyQuery = useHelloLazyQuery;
 exports.MeDocument = client_1.gql `
     query Me {
   me {
-    id
-    email
-    username
-    displayName
-    profilePicture
-    createdAt
+    ...UserFragment
   }
 }
-    `;
+    ${exports.UserFragmentFragmentDoc}`;
 function useMeQuery(baseOptions) {
     const options = Object.assign(Object.assign({}, defaultOptions), baseOptions);
     return Apollo.useQuery(exports.MeDocument, options);
@@ -82,25 +114,10 @@ exports.useMeLazyQuery = useMeLazyQuery;
 exports.SoundbiteDocument = client_1.gql `
     query Soundbite($id: String!) {
   getSoundbite(id: $id) {
-    id
-    title
-    description
-    thumbnail
-    audio
-    length
-    updatedAt
-    createdAt
-    user {
-      id
-      username
-      profilePicture
-      displayName
-      createdAt
-      updatedAt
-    }
+    ...SoundbiteFragment
   }
 }
-    `;
+    ${exports.SoundbiteFragmentFragmentDoc}`;
 function useSoundbiteQuery(baseOptions) {
     const options = Object.assign(Object.assign({}, defaultOptions), baseOptions);
     return Apollo.useQuery(exports.SoundbiteDocument, options);
@@ -114,25 +131,10 @@ exports.useSoundbiteLazyQuery = useSoundbiteLazyQuery;
 exports.SoundbitesDocument = client_1.gql `
     query Soundbites($limit: Float!, $offset: Float) {
   paginateSoundbites(limit: $limit, offset: $offset) {
-    id
-    title
-    description
-    thumbnail
-    audio
-    length
-    updatedAt
-    createdAt
-    user {
-      id
-      username
-      profilePicture
-      displayName
-      createdAt
-      updatedAt
-    }
+    ...SoundbiteFragment
   }
 }
-    `;
+    ${exports.SoundbiteFragmentFragmentDoc}`;
 function useSoundbitesQuery(baseOptions) {
     const options = Object.assign(Object.assign({}, defaultOptions), baseOptions);
     return Apollo.useQuery(exports.SoundbitesDocument, options);

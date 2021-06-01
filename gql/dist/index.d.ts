@@ -23,6 +23,7 @@ export declare type Mutation = {
     __typename?: 'Mutation';
     updateUser: User;
     createSoundbite: Soundbite;
+    vote: Scalars['Boolean'];
 };
 export declare type MutationUpdateUserArgs = {
     data: UserArgs;
@@ -32,12 +33,16 @@ export declare type MutationCreateSoundbiteArgs = {
     audio: Scalars['Upload'];
     data: SoundbiteArgs;
 };
+export declare type MutationVoteArgs = {
+    value: Scalars['Int'];
+    soundbiteId: Scalars['String'];
+};
 export declare type Query = {
     __typename?: 'Query';
-    hello: Scalars['String'];
     getUser: User;
     paginateUsers: Array<User>;
-    me: User;
+    me?: Maybe<User>;
+    hello: Scalars['String'];
     getSoundbite: Soundbite;
     paginateSoundbites: Array<Soundbite>;
 };
@@ -57,13 +62,15 @@ export declare type QueryPaginateSoundbitesArgs = {
 };
 export declare type Soundbite = {
     __typename?: 'Soundbite';
-    id: Scalars['String'];
+    id: Scalars['ID'];
     title: Scalars['String'];
     description?: Maybe<Scalars['String']>;
     thumbnail?: Maybe<Scalars['String']>;
     audio: Scalars['String'];
     length: Scalars['Int'];
     user: User;
+    points: Scalars['Float'];
+    voteStatus?: Maybe<Scalars['Int']>;
     createdAt: Scalars['String'];
     updatedAt: Scalars['String'];
 };
@@ -87,6 +94,16 @@ export declare type UserArgs = {
     username?: Maybe<Scalars['String']>;
     displayName?: Maybe<Scalars['String']>;
 };
+export declare type SoundbiteFragmentFragment = ({
+    __typename?: 'Soundbite';
+} & Pick<Soundbite, 'id' | 'title' | 'description' | 'thumbnail' | 'audio' | 'length' | 'points' | 'updatedAt' | 'createdAt' | 'voteStatus'> & {
+    user: ({
+        __typename?: 'User';
+    } & UserFragmentFragment);
+});
+export declare type UserFragmentFragment = ({
+    __typename?: 'User';
+} & Pick<User, 'id' | 'email' | 'username' | 'displayName' | 'profilePicture' | 'createdAt'>);
 export declare type CreateSoundbiteMutationVariables = Exact<{
     thumbnail?: Maybe<Scalars['Upload']>;
     audio: Scalars['Upload'];
@@ -99,6 +116,13 @@ export declare type CreateSoundbiteMutation = ({
         __typename?: 'Soundbite';
     } & Pick<Soundbite, 'id' | 'title' | 'description' | 'thumbnail' | 'audio' | 'length' | 'createdAt' | 'updatedAt'>);
 });
+export declare type VoteMutationVariables = Exact<{
+    value: Scalars['Int'];
+    soundbiteId: Scalars['String'];
+}>;
+export declare type VoteMutation = ({
+    __typename?: 'Mutation';
+} & Pick<Mutation, 'vote'>);
 export declare type HelloQueryVariables = Exact<{
     [key: string]: never;
 }>;
@@ -111,9 +135,9 @@ export declare type MeQueryVariables = Exact<{
 export declare type MeQuery = ({
     __typename?: 'Query';
 } & {
-    me: ({
+    me?: Maybe<({
         __typename?: 'User';
-    } & Pick<User, 'id' | 'email' | 'username' | 'displayName' | 'profilePicture' | 'createdAt'>);
+    } & UserFragmentFragment)>;
 });
 export declare type SoundbiteQueryVariables = Exact<{
     id: Scalars['String'];
@@ -123,11 +147,7 @@ export declare type SoundbiteQuery = ({
 } & {
     getSoundbite: ({
         __typename?: 'Soundbite';
-    } & Pick<Soundbite, 'id' | 'title' | 'description' | 'thumbnail' | 'audio' | 'length' | 'updatedAt' | 'createdAt'> & {
-        user: ({
-            __typename?: 'User';
-        } & Pick<User, 'id' | 'username' | 'profilePicture' | 'displayName' | 'createdAt' | 'updatedAt'>);
-    });
+    } & SoundbiteFragmentFragment);
 });
 export declare type SoundbitesQueryVariables = Exact<{
     limit: Scalars['Float'];
@@ -138,12 +158,10 @@ export declare type SoundbitesQuery = ({
 } & {
     paginateSoundbites: Array<({
         __typename?: 'Soundbite';
-    } & Pick<Soundbite, 'id' | 'title' | 'description' | 'thumbnail' | 'audio' | 'length' | 'updatedAt' | 'createdAt'> & {
-        user: ({
-            __typename?: 'User';
-        } & Pick<User, 'id' | 'username' | 'profilePicture' | 'displayName' | 'createdAt' | 'updatedAt'>);
-    })>;
+    } & SoundbiteFragmentFragment)>;
 });
+export declare const UserFragmentFragmentDoc: Apollo.DocumentNode;
+export declare const SoundbiteFragmentFragmentDoc: Apollo.DocumentNode;
 export declare const CreateSoundbiteDocument: Apollo.DocumentNode;
 export declare type CreateSoundbiteMutationFn = Apollo.MutationFunction<CreateSoundbiteMutation, CreateSoundbiteMutationVariables>;
 export declare function useCreateSoundbiteMutation(baseOptions?: Apollo.MutationHookOptions<CreateSoundbiteMutation, CreateSoundbiteMutationVariables>): Apollo.MutationTuple<CreateSoundbiteMutation, Exact<{
@@ -154,6 +172,15 @@ export declare function useCreateSoundbiteMutation(baseOptions?: Apollo.Mutation
 export declare type CreateSoundbiteMutationHookResult = ReturnType<typeof useCreateSoundbiteMutation>;
 export declare type CreateSoundbiteMutationResult = Apollo.MutationResult<CreateSoundbiteMutation>;
 export declare type CreateSoundbiteMutationOptions = Apollo.BaseMutationOptions<CreateSoundbiteMutation, CreateSoundbiteMutationVariables>;
+export declare const VoteDocument: Apollo.DocumentNode;
+export declare type VoteMutationFn = Apollo.MutationFunction<VoteMutation, VoteMutationVariables>;
+export declare function useVoteMutation(baseOptions?: Apollo.MutationHookOptions<VoteMutation, VoteMutationVariables>): Apollo.MutationTuple<VoteMutation, Exact<{
+    value: number;
+    soundbiteId: string;
+}>>;
+export declare type VoteMutationHookResult = ReturnType<typeof useVoteMutation>;
+export declare type VoteMutationResult = Apollo.MutationResult<VoteMutation>;
+export declare type VoteMutationOptions = Apollo.BaseMutationOptions<VoteMutation, VoteMutationVariables>;
 export declare const HelloDocument: Apollo.DocumentNode;
 export declare function useHelloQuery(baseOptions?: Apollo.QueryHookOptions<HelloQuery, HelloQueryVariables>): Apollo.QueryResult<HelloQuery, Exact<{
     [key: string]: never;

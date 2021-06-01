@@ -9,12 +9,11 @@ import {
   Root,
 } from "type-graphql";
 import { getConnection } from "typeorm";
+import { PG_UNIQUE_CONSTRAINT_VIOLATION } from "../../constants";
 import { User } from "../../entities/User";
 import { createBaseResolver } from "../../lib/createBaseResolver";
 import { Context } from "../../types/Context";
 import { UserArgs } from "./UserArgs";
-
-const PG_UNIQUE_CONSTRAINT_VIOLATION = "23505";
 
 @Resolver(() => User)
 export class UserResolver extends createBaseResolver("User", User) {
@@ -26,8 +25,8 @@ export class UserResolver extends createBaseResolver("User", User) {
     return null;
   }
 
-  @Query(() => User)
-  async me(@Ctx() { req }: Context) {
+  @Query(() => User, { nullable: true })
+  me(@Ctx() { req }: Context) {
     return req.user;
   }
 

@@ -27,7 +27,7 @@ const Bite: React.FC = () => {
       <Banner>
         <div className="max-w-2xl mx-auto py-12 px-6">
           {!loading && data?.getSoundbite ? (
-            <SoundbiteCard {...data?.getSoundbite} expanded />
+            <SoundbiteCard {...(data?.getSoundbite as any)} expanded />
           ) : null}
           {/* <h6 className="font-bold mt-12">Recommended Soundbites</h6> */}
         </div>

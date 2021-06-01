@@ -17,7 +17,7 @@ export const SoundbiteCard: React.FC<Soundbite & { expanded?: boolean }> = ({
     <article
       className={`col-span-1 flex items-start ${expanded ? "" : "space-x-10"}`}
     >
-      {expanded && <UpvoteButtons />}
+      {expanded && <UpvoteButtons id={props.id} />}
       {props.thumbnail ? (
         <div
           className={`flex items-center group relative flex-shrink-0 overflow-hidden rounded-lg ${

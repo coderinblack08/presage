@@ -20,6 +20,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   updateUser: User;
   createSoundbite: Soundbite;
+  vote: Scalars['Boolean'];
 };
 
 
@@ -34,12 +35,18 @@ export type MutationCreateSoundbiteArgs = {
   data: SoundbiteArgs;
 };
 
+
+export type MutationVoteArgs = {
+  value: Scalars['Int'];
+  soundbiteId: Scalars['String'];
+};
+
 export type Query = {
   __typename?: 'Query';
-  hello: Scalars['String'];
   getUser: User;
   paginateUsers: Array<User>;
-  me: User;
+  me?: Maybe<User>;
+  hello: Scalars['String'];
   getSoundbite: Soundbite;
   paginateSoundbites: Array<Soundbite>;
 };
@@ -68,13 +75,15 @@ export type QueryPaginateSoundbitesArgs = {
 
 export type Soundbite = {
   __typename?: 'Soundbite';
-  id: Scalars['String'];
+  id: Scalars['ID'];
   title: Scalars['String'];
   description?: Maybe<Scalars['String']>;
   thumbnail?: Maybe<Scalars['String']>;
   audio: Scalars['String'];
   length: Scalars['Int'];
   user: User;
+  points: Scalars['Float'];
+  voteStatus?: Maybe<Scalars['Int']>;
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
 };
@@ -103,6 +112,20 @@ export type UserArgs = {
   displayName?: Maybe<Scalars['String']>;
 };
 
+export type SoundbiteFragmentFragment = (
+  { __typename?: 'Soundbite' }
+  & Pick<Soundbite, 'id' | 'title' | 'description' | 'thumbnail' | 'audio' | 'length' | 'points' | 'updatedAt' | 'createdAt' | 'voteStatus'>
+  & { user: (
+    { __typename?: 'User' }
+    & UserFragmentFragment
+  ) }
+);
+
+export type UserFragmentFragment = (
+  { __typename?: 'User' }
+  & Pick<User, 'id' | 'email' | 'username' | 'displayName' | 'profilePicture' | 'createdAt'>
+);
+
 export type CreateSoundbiteMutationVariables = Exact<{
   thumbnail?: Maybe<Scalars['Upload']>;
   audio: Scalars['Upload'];
@@ -118,6 +141,17 @@ export type CreateSoundbiteMutation = (
   ) }
 );
 
+export type VoteMutationVariables = Exact<{
+  value: Scalars['Int'];
+  soundbiteId: Scalars['String'];
+}>;
+
+
+export type VoteMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'vote'>
+);
+
 export type HelloQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -131,10 +165,10 @@ export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type MeQuery = (
   { __typename?: 'Query' }
-  & { me: (
+  & { me?: Maybe<(
     { __typename?: 'User' }
-    & Pick<User, 'id' | 'email' | 'username' | 'displayName' | 'profilePicture' | 'createdAt'>
-  ) }
+    & UserFragmentFragment
+  )> }
 );
 
 export type SoundbiteQueryVariables = Exact<{
@@ -146,11 +180,7 @@ export type SoundbiteQuery = (
   { __typename?: 'Query' }
   & { getSoundbite: (
     { __typename?: 'Soundbite' }
-    & Pick<Soundbite, 'id' | 'title' | 'description' | 'thumbnail' | 'audio' | 'length' | 'updatedAt' | 'createdAt'>
-    & { user: (
-      { __typename?: 'User' }
-      & Pick<User, 'id' | 'username' | 'profilePicture' | 'displayName' | 'createdAt' | 'updatedAt'>
-    ) }
+    & SoundbiteFragmentFragment
   ) }
 );
 
@@ -164,15 +194,37 @@ export type SoundbitesQuery = (
   { __typename?: 'Query' }
   & { paginateSoundbites: Array<(
     { __typename?: 'Soundbite' }
-    & Pick<Soundbite, 'id' | 'title' | 'description' | 'thumbnail' | 'audio' | 'length' | 'updatedAt' | 'createdAt'>
-    & { user: (
-      { __typename?: 'User' }
-      & Pick<User, 'id' | 'username' | 'profilePicture' | 'displayName' | 'createdAt' | 'updatedAt'>
-    ) }
+    & SoundbiteFragmentFragment
   )> }
 );
 
-
+export const UserFragmentFragmentDoc = gql`
+    fragment UserFragment on User {
+  id
+  email
+  username
+  displayName
+  profilePicture
+  createdAt
+}
+    `;
+export const SoundbiteFragmentFragmentDoc = gql`
+    fragment SoundbiteFragment on Soundbite {
+  id
+  title
+  description
+  thumbnail
+  audio
+  length
+  points
+  updatedAt
+  createdAt
+  voteStatus
+  user {
+    ...UserFragment
+  }
+}
+    ${UserFragmentFragmentDoc}`;
 export const CreateSoundbiteDocument = gql`
     mutation CreateSoundbite($thumbnail: Upload, $audio: Upload!, $data: SoundbiteArgs!) {
   createSoundbite(audio: $audio, data: $data, thumbnail: $thumbnail) {
@@ -215,6 +267,38 @@ export function useCreateSoundbiteMutation(baseOptions?: Apollo.MutationHookOpti
 export type CreateSoundbiteMutationHookResult = ReturnType<typeof useCreateSoundbiteMutation>;
 export type CreateSoundbiteMutationResult = Apollo.MutationResult<CreateSoundbiteMutation>;
 export type CreateSoundbiteMutationOptions = Apollo.BaseMutationOptions<CreateSoundbiteMutation, CreateSoundbiteMutationVariables>;
+export const VoteDocument = gql`
+    mutation Vote($value: Int!, $soundbiteId: String!) {
+  vote(value: $value, soundbiteId: $soundbiteId)
+}
+    `;
+export type VoteMutationFn = Apollo.MutationFunction<VoteMutation, VoteMutationVariables>;
+
+/**
+ * __useVoteMutation__
+ *
+ * To run a mutation, you first call `useVoteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useVoteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [voteMutation, { data, loading, error }] = useVoteMutation({
+ *   variables: {
+ *      value: // value for 'value'
+ *      soundbiteId: // value for 'soundbiteId'
+ *   },
+ * });
+ */
+export function useVoteMutation(baseOptions?: Apollo.MutationHookOptions<VoteMutation, VoteMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<VoteMutation, VoteMutationVariables>(VoteDocument, options);
+      }
+export type VoteMutationHookResult = ReturnType<typeof useVoteMutation>;
+export type VoteMutationResult = Apollo.MutationResult<VoteMutation>;
+export type VoteMutationOptions = Apollo.BaseMutationOptions<VoteMutation, VoteMutationVariables>;
 export const HelloDocument = gql`
     query Hello {
   hello
@@ -250,15 +334,10 @@ export type HelloQueryResult = Apollo.QueryResult<HelloQuery, HelloQueryVariable
 export const MeDocument = gql`
     query Me {
   me {
-    id
-    email
-    username
-    displayName
-    profilePicture
-    createdAt
+    ...UserFragment
   }
 }
-    `;
+    ${UserFragmentFragmentDoc}`;
 
 /**
  * __useMeQuery__
@@ -289,25 +368,10 @@ export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
 export const SoundbiteDocument = gql`
     query Soundbite($id: String!) {
   getSoundbite(id: $id) {
-    id
-    title
-    description
-    thumbnail
-    audio
-    length
-    updatedAt
-    createdAt
-    user {
-      id
-      username
-      profilePicture
-      displayName
-      createdAt
-      updatedAt
-    }
+    ...SoundbiteFragment
   }
 }
-    `;
+    ${SoundbiteFragmentFragmentDoc}`;
 
 /**
  * __useSoundbiteQuery__
@@ -339,25 +403,10 @@ export type SoundbiteQueryResult = Apollo.QueryResult<SoundbiteQuery, SoundbiteQ
 export const SoundbitesDocument = gql`
     query Soundbites($limit: Float!, $offset: Float) {
   paginateSoundbites(limit: $limit, offset: $offset) {
-    id
-    title
-    description
-    thumbnail
-    audio
-    length
-    updatedAt
-    createdAt
-    user {
-      id
-      username
-      profilePicture
-      displayName
-      createdAt
-      updatedAt
-    }
+    ...SoundbiteFragment
   }
 }
-    `;
+    ${SoundbiteFragmentFragmentDoc}`;
 
 /**
  * __useSoundbitesQuery__

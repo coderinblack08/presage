@@ -1,0 +1,15 @@
+fragment SoundbiteFragment on Soundbite {
+  id
+  title
+  description
+  thumbnail
+  audio
+  length
+  points
+  updatedAt
+  createdAt
+  voteStatus
+  user {
+    ...UserFragment
+  }
+}

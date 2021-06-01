@@ -16,6 +16,10 @@ const User_1 = require("./User");
 let Upvote = class Upvote extends typeorm_1.BaseEntity {
 };
 __decorate([
+    typeorm_1.Column("int"),
+    __metadata("design:type", Number)
+], Upvote.prototype, "value", void 0);
+__decorate([
     typeorm_1.PrimaryColumn(),
     __metadata("design:type", String)
 ], Upvote.prototype, "userId", void 0);
