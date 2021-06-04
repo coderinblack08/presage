@@ -1,5 +1,0 @@
-query Soundbites($limit: Float!, $offset: Float) {
-  paginateSoundbites(limit: $limit, offset: $offset) {
-    ...SoundbiteFragment
-  }
-}

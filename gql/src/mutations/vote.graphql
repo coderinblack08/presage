@@ -1,3 +1,0 @@
-mutation Vote($value: Int!, $soundbiteId: String!) {
-  vote(value: $value, soundbiteId: $soundbiteId)
-}

@@ -1,5 +1,0 @@
-query Soundbite($id: String!) {
-  getSoundbite(id: $id) {
-    ...SoundbiteFragment
-  }
-}
