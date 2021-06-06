@@ -1,7 +1,8 @@
 import { Router } from "express";
 import passport from "passport";
-import rug from "random-username-generator";
 import { Strategy } from "passport-google-oauth20";
+import rug from "random-username-generator";
+import { prisma } from "../../lib/prisma";
 
 export const authRouter = Router();
 
@@ -13,16 +14,18 @@ const strategy = new Strategy(
   },
   async (_, __, { id, displayName, photos, emails }, done) => {
     try {
-      const user: any = {};
       const email = emails ? emails[0].value : null;
       const photo = photos ? photos[0].value : null;
 
-      user.username = rug.generate();
-      user.displayName = displayName;
-      user.googleId = id;
-      user.email = email;
-      user.profilePicture = photo;
-
+      const user = await prisma.user.create({
+        data: {
+          username: rug.generate(),
+          displayName: displayName,
+          googleId: id,
+          email: email,
+          profilePicture: photo,
+        },
+      });
       return done(null, { id: user.id });
     } catch (error) {
       return done(error, undefined);

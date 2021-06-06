@@ -22,6 +22,7 @@ const express_session_1 = __importDefault(require("express-session"));
 const connect_redis_1 = __importDefault(require("connect-redis"));
 const constants_1 = require("./lib/constants");
 const helmet_1 = __importDefault(require("helmet"));
+const prisma_1 = require("./lib/prisma");
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
     const RedisStore = connect_redis_1.default(express_session_1.default);
     const redisClient = redis_1.default.createClient();
@@ -46,9 +47,13 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
     app.use(passport_1.default.initialize());
     app.use(passport_1.default.session());
     passport_1.default.serializeUser((user, done) => done(null, user.id));
-    passport_1.default.deserializeUser((id, done) => __awaiter(void 0, void 0, void 0, function* () { return done(null, id); }));
+    passport_1.default.deserializeUser((id, done) => __awaiter(void 0, void 0, void 0, function* () { return done(null, yield prisma_1.prisma.user.findFirst({ where: { id } })); }));
     app.use("/api/auth", google_1.authRouter);
-    app.listen(4000, () => console.log("Server started at port 3000"));
+    app.listen(4000, () => console.log("Server started at port 4000"));
 });
-main().catch((e) => console.error(e));
+main()
+    .catch((e) => console.error(e))
+    .finally(() => __awaiter(void 0, void 0, void 0, function* () {
+    yield prisma_1.prisma.$disconnect();
+}));
 //# sourceMappingURL=index.js.map

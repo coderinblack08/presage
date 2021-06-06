@@ -15,8 +15,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.authRouter = void 0;
 const express_1 = require("express");
 const passport_1 = __importDefault(require("passport"));
-const random_username_generator_1 = __importDefault(require("random-username-generator"));
 const passport_google_oauth20_1 = require("passport-google-oauth20");
+const random_username_generator_1 = __importDefault(require("random-username-generator"));
+const prisma_1 = require("../../lib/prisma");
 exports.authRouter = express_1.Router();
 const strategy = new passport_google_oauth20_1.Strategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
@@ -24,14 +25,17 @@ const strategy = new passport_google_oauth20_1.Strategy({
     callbackURL: `${process.env.SERVER_URL}/api/auth/google/callback`,
 }, (_, __, { id, displayName, photos, emails }, done) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const user = {};
         const email = emails ? emails[0].value : null;
         const photo = photos ? photos[0].value : null;
-        user.username = random_username_generator_1.default.generate();
-        user.displayName = displayName;
-        user.googleId = id;
-        user.email = email;
-        user.profilePicture = photo;
+        const user = yield prisma_1.prisma.user.create({
+            data: {
+                username: random_username_generator_1.default.generate(),
+                displayName: displayName,
+                googleId: id,
+                email: email,
+                profilePicture: photo,
+            },
+        });
         return done(null, { id: user.id });
     }
     catch (error) {
