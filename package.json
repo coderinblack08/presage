@@ -1,0 +1,14 @@
+{
+  "name": "presage",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "diff": "lerna diff",
+    "new-version": "lerna version --conventional-commits --yes"
+  },
+  "devDependencies": {
+    "lerna": "^4.0.0"
+  }
+}
