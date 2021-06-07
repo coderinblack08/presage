@@ -9,7 +9,7 @@
   body,
   html,
   #__next {
-    @apply bg-gray-900 text-gray-100;
+    @apply antialiased bg-gray-900 text-gray-100;
   }
 
   :root {
@@ -54,8 +54,13 @@
     font-weight: 700;
   }
 
-  p {
+  p,
+  span,
+  div,
+  a,
+  button {
     font-size: 1rem;
+    font-weight: 500;
     @apply font-body;
   }
 

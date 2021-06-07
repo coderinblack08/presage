@@ -13,7 +13,7 @@ const ButtonTheme = {
   color: {
     primary:
       "text-white bg-primary hover:bg-faint-primary disabled:text-white-primary disabled:bg-faint-primary",
-    gray: "text-white bg-darker-gray hover:bg-dark-gray disabled:bg-dark-gray disabled:text-light-gray",
+    gray: "text-white bg-gray-800 hover:bg-gray-700 disabled:text-gray-200",
   },
 };
 

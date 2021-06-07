@@ -10,16 +10,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = (props) => {
 
   useEffect(() => {
     if (
-      typeof query.accessToken === "string" &&
-      typeof query.refreshToken === "string" &&
-      query.accessToken &&
-      query.refreshToken
+      typeof query.access_token === "string" &&
+      typeof query.refresh_token === "string" &&
+      query.access_token &&
+      query.refresh_token
     ) {
-      const { accessToken, refreshToken } = query;
+      const { access_token, refresh_token } = query;
       replace("/", undefined, { shallow: true });
       useTokenStore.getState().setTokens({
-        accessToken,
-        refreshToken,
+        accessToken: access_token,
+        refreshToken: refresh_token,
       });
     }
   }, []);

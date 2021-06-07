@@ -12,6 +12,7 @@
     "next": "latest",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-icons": "^4.2.0",
     "react-query": "^3.16.1",
     "zustand": "^3.5.2"
   },
