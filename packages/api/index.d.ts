@@ -4,3 +4,9 @@ declare module "random-username-generator" {
   function setAdjectives(adjectives: string[]): void;
   function setSeperator(new_seperator: string): void;
 }
+
+declare namespace Express {
+  export interface Request {
+    userId?: string;
+  }
+}

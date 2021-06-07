@@ -13,7 +13,6 @@ import {
   RefreshTokenData,
 } from "./modules/auth/createTokens";
 import { authRouter } from "./modules/auth/google";
-import { postRouter } from "./modules/post";
 import { presageRouter } from "./modules/presage";
 
 const main = async () => {
@@ -77,7 +76,6 @@ const main = async () => {
   });
 
   app.use("/api/auth", authRouter);
-  app.use("/api/posts", postRouter);
   app.use("/api/presage", presageRouter);
   app.get("/api/me", async (req, res) =>
     res.json(

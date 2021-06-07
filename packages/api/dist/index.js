@@ -23,7 +23,6 @@ const constants_1 = require("./lib/constants");
 const prisma_1 = require("./lib/prisma");
 const createTokens_1 = require("./modules/auth/createTokens");
 const google_1 = require("./modules/auth/google");
-const post_1 = require("./modules/post");
 const presage_1 = require("./modules/presage");
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
     const app = express_1.default();
@@ -77,7 +76,6 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         next();
     }));
     app.use("/api/auth", google_1.authRouter);
-    app.use("/api/posts", post_1.postRouter);
     app.use("/api/presage", presage_1.presageRouter);
     app.get("/api/me", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         return res.json(req.userId

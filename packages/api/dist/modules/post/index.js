@@ -11,11 +11,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.postRouter = void 0;
 const express_1 = require("express");
+const isAuth_1 = require("../../lib/isAuth");
 const prisma_1 = require("../../lib/prisma");
 exports.postRouter = express_1.Router();
-exports.postRouter.post("/", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    if (!req.userId)
-        return next(new Error("not authorized"));
+exports.postRouter.post("/", isAuth_1.isAuth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { content } = req.body;
     const post = yield prisma_1.prisma.post.create({
         data: {
