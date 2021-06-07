@@ -37,9 +37,28 @@ module.exports = {
         "sans-serif",
       ],
     },
+    spinner: () => ({
+      default: {
+        color: "var(--color-gray-100)",
+        size: "1em",
+        border: "2px",
+        speed: "500ms",
+      },
+      md: {
+        color: "var(--color-gray-100)",
+        size: "1.5em",
+        border: "2px",
+        speed: "500ms",
+      },
+    }),
   },
   variants: {
     extend: {},
   },
-  plugins: [],
+  plugins: [
+    require("tailwindcss-spinner")({
+      className: "spinner",
+      themeKey: "spinner",
+    }),
+  ],
 };
