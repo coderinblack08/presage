@@ -18,6 +18,7 @@ const passport_1 = __importDefault(require("passport"));
 const passport_google_oauth20_1 = require("passport-google-oauth20");
 const random_username_generator_1 = __importDefault(require("random-username-generator"));
 const prisma_1 = require("../../lib/prisma");
+const createTokens_1 = require("./createTokens");
 exports.authRouter = express_1.Router();
 const strategy = new passport_google_oauth20_1.Strategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
@@ -27,16 +28,21 @@ const strategy = new passport_google_oauth20_1.Strategy({
     try {
         const email = emails ? emails[0].value : null;
         const photo = photos ? photos[0].value : null;
-        const user = yield prisma_1.prisma.user.create({
-            data: {
-                username: random_username_generator_1.default.generate(),
-                displayName: displayName,
-                googleId: id,
-                email: email,
-                profilePicture: photo,
-            },
-        });
-        return done(null, { id: user.id });
+        let user = yield prisma_1.prisma.user.findFirst({ where: { googleId: id } });
+        const data = {
+            username: random_username_generator_1.default.generate(),
+            displayName: displayName,
+            googleId: id,
+            email: email,
+            profilePicture: photo,
+        };
+        if (user) {
+            yield prisma_1.prisma.user.update({ where: { id: user.id }, data });
+        }
+        else {
+            user = yield prisma_1.prisma.user.create({ data });
+        }
+        return done(null, createTokens_1.createTokens(user));
     }
     catch (error) {
         return done(error, undefined);
@@ -48,10 +54,11 @@ exports.authRouter.get("/google", passport_1.default.authenticate("google", {
         "https://www.googleapis.com/auth/userinfo.profile",
         "https://www.googleapis.com/auth/userinfo.email",
     ],
-    session: true,
+    session: false,
 }));
 exports.authRouter.get("/google/callback", passport_1.default.authenticate("google", {
-    successReturnToOrRedirect: process.env.AUTH_REDIRECT_URL,
-    session: true,
-}));
+    session: false,
+}), (req, res) => {
+    res.redirect(`${process.env.AUTH_REDIRECT_URL}/?access_token=${req.user.accessToken}&refresh_token=${req.user.refreshToken}`);
+});
 //# sourceMappingURL=google.js.map

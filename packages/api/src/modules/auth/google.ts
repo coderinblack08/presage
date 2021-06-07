@@ -3,6 +3,7 @@ import passport from "passport";
 import { Strategy } from "passport-google-oauth20";
 import rug from "random-username-generator";
 import { prisma } from "../../lib/prisma";
+import { createTokens } from "./createTokens";
 
 export const authRouter = Router();
 
@@ -16,17 +17,22 @@ const strategy = new Strategy(
     try {
       const email = emails ? emails[0].value : null;
       const photo = photos ? photos[0].value : null;
+      let user = await prisma.user.findFirst({ where: { googleId: id } });
+      const data = {
+        username: rug.generate(),
+        displayName: displayName,
+        googleId: id,
+        email: email,
+        profilePicture: photo,
+      };
 
-      const user = await prisma.user.create({
-        data: {
-          username: rug.generate(),
-          displayName: displayName,
-          googleId: id,
-          email: email,
-          profilePicture: photo,
-        },
-      });
-      return done(null, { id: user.id });
+      if (user) {
+        await prisma.user.update({ where: { id: user.id }, data });
+      } else {
+        user = await prisma.user.create({ data });
+      }
+
+      return done(null, createTokens(user));
     } catch (error) {
       return done(error, undefined);
     }
@@ -41,14 +47,18 @@ authRouter.get(
       "https://www.googleapis.com/auth/userinfo.profile",
       "https://www.googleapis.com/auth/userinfo.email",
     ],
-    session: true,
+    session: false,
   })
 );
 
 authRouter.get(
   "/google/callback",
   passport.authenticate("google", {
-    successReturnToOrRedirect: process.env.AUTH_REDIRECT_URL,
-    session: true,
-  })
+    session: false,
+  }),
+  (req: any, res) => {
+    res.redirect(
+      `${process.env.AUTH_REDIRECT_URL}/?access_token=${req.user.accessToken}&refresh_token=${req.user.refreshToken}`
+    );
+  }
 );
