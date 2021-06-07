@@ -18,6 +18,7 @@
     --color-gray-100: #e3e8ee;
     --color-gray-200: #b6c0cf;
     --color-gray-300: #77889f;
+    --color-gray-600: #3e4861;
     --color-gray-700: #283046;
     --color-gray-800: #1e2333;
     --color-gray-900: #0e1421;
@@ -37,21 +38,25 @@
   h1 {
     font-size: 4.6rem;
     font-weight: 700;
+    @apply font-sans;
   }
 
   h2 {
     font-size: 2.9rem;
     font-weight: 700;
+    @apply font-sans;
   }
 
   h3 {
     font-size: 2rem;
     font-weight: 700;
+    @apply font-sans;
   }
 
   h4 {
     font-size: 1.5rem;
     font-weight: 700;
+    @apply font-sans;
   }
 
   p,

@@ -1,18 +1,25 @@
 module.exports = {
-  purge: ["./pages/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}"],
+  purge: [
+    "./modules/**/*.{js,ts,jsx,tsx}",
+    "./pages/**/*.{js,ts,jsx,tsx}",
+    "./components/**/*.{js,ts,jsx,tsx}",
+  ],
   mode: "jit",
   darkMode: false,
   theme: {
     colors: {
-      "gray-100": "var(--color-gray-100)",
-      "gray-200": "var(--color-gray-200)",
-      "gray-300": "var(--color-gray-300)",
-      "gray-700": "var(--color-gray-700)",
-      "gray-800": "var(--color-gray-800)",
-      "gray-900": "var(--color-gray-900)",
-      primary: "var(--color-primary)",
-      "faint-primary": "var(--color-faint-primary)",
-      "white-primary": "var(--color-white-primary)",
+      "gray-100": "#e3e8ee",
+      "gray-200": "#b6c0cf",
+      "gray-300": "#77889f",
+      "gray-600": "#3e4861",
+      "gray-700": "#283046",
+      "gray-800": "#1e2333",
+      "gray-900": "#0e1421",
+      primary: "#547cf5",
+      "faint-primary": "#7a9afc",
+      "white-primary": "#dce5fe",
+      white: "#ffffff",
+      black: "#000000",
     },
     fontFamily: {
       sans: [

@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import { MdSearch } from "react-icons/md";
 import { useQuery } from "react-query";
 import { User } from "../types";
@@ -12,7 +13,11 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
 
   return (
     <nav className="flex items-center justify-between px-8 py-6 max-w-7xl mx-auto">
-      <Logo />
+      <Link href="/">
+        <a>
+          <Logo />
+        </a>
+      </Link>
       <ul className="flex items-center space-x-12">
         <li>
           <a href="#">Feed</a>

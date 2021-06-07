@@ -9,3 +9,17 @@ export interface User {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface Presage {
+  id: string;
+  type: "audio" | "text";
+  title?: string;
+  content?: string;
+  description?: string;
+  audio?: string;
+  thumbnail?: string;
+  userId: string;
+  user: User;
+  createdAt: Date;
+  updatedAt: Date;
+}
