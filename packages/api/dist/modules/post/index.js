@@ -14,16 +14,34 @@ const express_1 = require("express");
 const prisma_1 = require("../../lib/prisma");
 exports.postRouter = express_1.Router();
 exports.postRouter.post("/", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
-    if (!req.user)
+    if (!req.userId)
         return next(new Error("not authorized"));
     const { content } = req.body;
     const post = yield prisma_1.prisma.post.create({
         data: {
             user: {
-                connect: { id: (_a = req.user) === null || _a === void 0 ? void 0 : _a.id },
+                connect: { id: req.userId },
             },
             content,
+        },
+    });
+    res.json(post);
+}));
+exports.postRouter.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { limit = 10 } = req.query;
+    const posts = yield prisma_1.prisma.post.findMany({
+        take: parseInt(limit === null || limit === void 0 ? void 0 : limit.toString()),
+        include: {
+            user: true,
+        },
+    });
+    res.json(posts);
+}));
+exports.postRouter.get("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const post = yield prisma_1.prisma.post.findFirst({
+        where: { id: req.params.id },
+        include: {
+            user: true,
         },
     });
     res.json(post);

@@ -13,22 +13,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 require("dotenv").config();
-const express_1 = __importDefault(require("express"));
-const passport_1 = __importDefault(require("passport"));
-const google_1 = require("./modules/auth/google");
-const redis_1 = __importDefault(require("redis"));
-const express_session_1 = __importDefault(require("express-session"));
-const connect_redis_1 = __importDefault(require("connect-redis"));
-const constants_1 = require("./lib/constants");
-const helmet_1 = __importDefault(require("helmet"));
-const prisma_1 = require("./lib/prisma");
-const post_1 = require("./modules/post");
 const cors_1 = __importDefault(require("cors"));
-const createTokens_1 = require("./modules/auth/createTokens");
+const express_1 = __importDefault(require("express"));
+const helmet_1 = __importDefault(require("helmet"));
 const jsonwebtoken_1 = require("jsonwebtoken");
+const passport_1 = __importDefault(require("passport"));
+const constants_1 = require("./lib/constants");
+const prisma_1 = require("./lib/prisma");
+const createTokens_1 = require("./modules/auth/createTokens");
+const google_1 = require("./modules/auth/google");
+const post_1 = require("./modules/post");
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
-    const RedisStore = connect_redis_1.default(express_session_1.default);
-    const redisClient = redis_1.default.createClient();
     const app = express_1.default();
     app.use(helmet_1.default());
     app.use(express_1.default.json());
@@ -42,22 +37,6 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
             "content-type",
             "content-length",
         ],
-    }));
-    app.use(express_session_1.default({
-        name: "qid",
-        store: new RedisStore({
-            client: redisClient,
-            disableTouch: true,
-        }),
-        cookie: {
-            maxAge: 1000 * 60 * 60 * 24 * 365 * 10,
-            httpOnly: true,
-            sameSite: "lax",
-            secure: !constants_1.isDev(),
-        },
-        saveUninitialized: false,
-        secret: process.env.SESSION_SECRET,
-        resave: false,
     }));
     app.use(passport_1.default.initialize());
     app.use(passport_1.default.session());
@@ -96,7 +75,11 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
     }));
     app.use("/api/auth", google_1.authRouter);
     app.use("/api/posts", post_1.postRouter);
-    app.get("/api/me", (req, res) => __awaiter(void 0, void 0, void 0, function* () { return res.json(yield prisma_1.prisma.user.findFirst({ where: { id: req.userId } })); }));
+    app.get("/api/me", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        return res.json(req.userId
+            ? yield prisma_1.prisma.user.findFirst({ where: { id: req.userId } })
+            : null);
+    }));
     app.listen(4000, () => console.log("Server started at port 4000"));
 });
 main()
