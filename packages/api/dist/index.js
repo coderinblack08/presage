@@ -18,16 +18,19 @@ const express_1 = __importDefault(require("express"));
 const helmet_1 = __importDefault(require("helmet"));
 const jsonwebtoken_1 = require("jsonwebtoken");
 const passport_1 = __importDefault(require("passport"));
+const posix_1 = require("path/posix");
 const constants_1 = require("./lib/constants");
 const prisma_1 = require("./lib/prisma");
 const createTokens_1 = require("./modules/auth/createTokens");
 const google_1 = require("./modules/auth/google");
 const post_1 = require("./modules/post");
+const presage_1 = require("./modules/presage");
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
     const app = express_1.default();
     app.use(helmet_1.default());
     app.use(express_1.default.json());
     app.use(express_1.default.urlencoded({ extended: false }));
+    app.use("/uploads", express_1.default.static(posix_1.join(__dirname, "../uploads")));
     app.use(cors_1.default({
         origin: "*",
         maxAge: !constants_1.isDev() ? 86400 : undefined,
@@ -75,6 +78,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
     }));
     app.use("/api/auth", google_1.authRouter);
     app.use("/api/posts", post_1.postRouter);
+    app.use("/api/presage", presage_1.presageRouter);
     app.get("/api/me", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         return res.json(req.userId
             ? yield prisma_1.prisma.user.findFirst({ where: { id: req.userId } })

@@ -4,6 +4,7 @@ import express from "express";
 import helmet from "helmet";
 import { verify } from "jsonwebtoken";
 import passport from "passport";
+import { join } from "path/posix";
 import { isDev } from "./lib/constants";
 import { prisma } from "./lib/prisma";
 import {
@@ -13,12 +14,14 @@ import {
 } from "./modules/auth/createTokens";
 import { authRouter } from "./modules/auth/google";
 import { postRouter } from "./modules/post";
+import { presageRouter } from "./modules/presage";
 
 const main = async () => {
   const app = express();
   app.use(helmet());
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
+  app.use("/uploads", express.static(join(__dirname, "../uploads")));
   app.use(
     cors({
       origin: "*",
@@ -75,6 +78,7 @@ const main = async () => {
 
   app.use("/api/auth", authRouter);
   app.use("/api/posts", postRouter);
+  app.use("/api/presage", presageRouter);
   app.get("/api/me", async (req, res) =>
     res.json(
       req.userId
