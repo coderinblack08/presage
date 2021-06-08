@@ -32,7 +32,9 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
       </ul>
       {me ? (
         <div className="flex items-center space-x-5">
-          <Button color="gray">Upload</Button>
+          <Link href="/upload">
+            <Button color="gray">Upload</Button>
+          </Link>
           <img
             src={me.profilePicture}
             alt={me.displayName}

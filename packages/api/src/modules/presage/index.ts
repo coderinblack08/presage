@@ -56,10 +56,10 @@ presageRouter.post("/", isAuth, presageUpload, async (req, res, next) => {
     return next(new Error("Please provide an audio file"));
   }
 
-  const audio = files.audio?.length
+  const audio = files?.audio?.length
     ? `http://localhost:4000/uploads/${files.audio[0].filename}`
     : null;
-  const thumbnail = files.thumbnail?.length
+  const thumbnail = files?.thumbnail?.length
     ? `http://localhost:4000/uploads/${files.thumbnail[0].filename}`
     : null;
 
@@ -86,6 +86,9 @@ presageRouter.get("/", async (req, res) => {
     take: parseInt(limit?.toString()),
     include: {
       user: true,
+    },
+    orderBy: {
+      createdAt: "desc",
     },
   });
   res.json(presages);

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { useQuery } from "react-query";
 import {
   MdPlaylistAdd,
@@ -10,6 +10,7 @@ import { Button } from "../components/Button";
 import { Layout } from "../components/Layout";
 import { SideBar } from "../modules/feed/SideBar";
 import { Presage } from "../types";
+import { PresageCard } from "../modules/feed/PresageCard";
 
 const Feed: React.FC = () => {
   const { data } = useQuery<Presage[]>("/api/presage");
@@ -20,10 +21,8 @@ const Feed: React.FC = () => {
         <main>
           <h4>Your Personal, Curated Feed</h4>
           <p className="text-gray-300">
-            <div className="inline-block transform hover:-rotate-1 hover:scale-105 transition text-primary">
-              Did you know?
-            </div>{" "}
-            — Add filters to search through presages
+            <span className="text-primary">Did you know?</span> — Add filters to
+            search through presages
           </p>
           <div className="flex items-center space-x-2 mt-4">
             <Button
@@ -78,50 +77,9 @@ const Feed: React.FC = () => {
               Customize
             </Button>
           </div>
-          <div className="mt-14">
+          <div className="mt-14 space-y-12">
             {data?.map((presage) => (
-              <article className="flex items-start space-x-9" key={presage.id}>
-                {presage.thumbnail && (
-                  <div className="relative w-36 h-36 rounded-lg overflow-hidden">
-                    <img
-                      src={presage.thumbnail}
-                      alt={presage.title}
-                      className="w-full h-full object-cover"
-                    />
-                    <div className="flex items-center justify-center absolute inset-0">
-                      <button className="bg-gray-800 bg-opacity-85 backdrop-filter backdrop-blur-lg p-2.5 rounded-full">
-                        <MdPlayArrow className="text-white w-6 h-6" />
-                      </button>
-                    </div>
-                  </div>
-                )}
-                {presage.type === "audio" ? (
-                  <div>
-                    <h4>{presage.title}</h4>
-                    <div className="text-gray-300 mt-1">
-                      Published by{" "}
-                      <a href="#" className="text-white">
-                        {presage.user.displayName}
-                      </a>{" "}
-                      · {presage.createdAt}
-                    </div>
-                    {presage.description && (
-                      <p className="mt-2">{presage.description}</p>
-                    )}
-                    <div className="flex items-center space-x-5 mt-4">
-                      <button>
-                        <MdThumbUp className="w-6 h-6" />
-                      </button>
-                      <button>
-                        <MdComment className="w-6 h-6" />
-                      </button>
-                      <button>
-                        <MdPlaylistAdd className="w-7 h-7" />
-                      </button>
-                    </div>
-                  </div>
-                ) : null}
-              </article>
+              <PresageCard presage={presage} />
             ))}
           </div>
         </main>

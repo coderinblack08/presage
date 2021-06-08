@@ -8,12 +8,16 @@
     "type-check": "tsc"
   },
   "dependencies": {
+    "@headlessui/react": "^1.2.0",
     "@svgr/webpack": "^5.5.0",
+    "date-fns": "^2.22.1",
+    "formik": "^2.2.9",
     "next": "latest",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-icons": "^4.2.0",
     "react-query": "^3.16.1",
+    "yup": "^0.32.9",
     "zustand": "^3.5.2"
   },
   "devDependencies": {

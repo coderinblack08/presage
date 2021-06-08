@@ -1,14 +1,18 @@
-import { QueryFunctionContext } from "react-query";
 import { useTokenStore } from "../store/useTokenStore";
 import { apiBaseUrl } from "./constants";
 
-export const fetcher = async <T = any>(
-  context: QueryFunctionContext<any>
-): Promise<T> => {
+export const mutator = async ([path, body, method = "POST"]: [
+  string,
+  any,
+  "POST" | "PUT"
+]) => {
   const { accessToken, refreshToken, setTokens } = useTokenStore.getState();
 
-  const request = await fetch(apiBaseUrl + context.queryKey, {
+  const request = await fetch(apiBaseUrl + path, {
+    method,
+    body: JSON.stringify(body),
     headers: {
+      "content-type": "application/json",
       "access-token": accessToken,
       "refresh-token": refreshToken,
     },

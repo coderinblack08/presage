@@ -84,10 +84,10 @@ exports.presageRouter.post("/", isAuth_1.isAuth, presageUpload, (req, res, next)
     if (type === "audio" && !("audio" in files)) {
         return next(new Error("Please provide an audio file"));
     }
-    const audio = ((_a = files.audio) === null || _a === void 0 ? void 0 : _a.length)
+    const audio = ((_a = files === null || files === void 0 ? void 0 : files.audio) === null || _a === void 0 ? void 0 : _a.length)
         ? `http://localhost:4000/uploads/${files.audio[0].filename}`
         : null;
-    const thumbnail = ((_b = files.thumbnail) === null || _b === void 0 ? void 0 : _b.length)
+    const thumbnail = ((_b = files === null || files === void 0 ? void 0 : files.thumbnail) === null || _b === void 0 ? void 0 : _b.length)
         ? `http://localhost:4000/uploads/${files.thumbnail[0].filename}`
         : null;
     const presage = yield prisma_1.prisma.presage.create({
@@ -111,6 +111,9 @@ exports.presageRouter.get("/", (req, res) => __awaiter(void 0, void 0, void 0, f
         take: parseInt(limit === null || limit === void 0 ? void 0 : limit.toString()),
         include: {
             user: true,
+        },
+        orderBy: {
+            createdAt: "desc",
         },
     });
     res.json(presages);
