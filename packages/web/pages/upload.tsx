@@ -6,6 +6,7 @@ import { Button } from "../components/Button";
 import { InputField } from "../components/InputField";
 import { Layout } from "../components/Layout";
 import { mutator } from "../lib/mutator";
+import { AudioRecorder } from "../modules/upload/AudioRecorder";
 import { TypeRadioOption } from "../modules/upload/TypeRadioOption";
 import { Presage } from "../types";
 
@@ -75,7 +76,9 @@ const Upload: React.FC = () => {
             )}
           </Formik>
         ) : type === "audio" ? (
-          <div></div>
+          <div className="mt-8">
+            <AudioRecorder />
+          </div>
         ) : null}
       </main>
     </Layout>

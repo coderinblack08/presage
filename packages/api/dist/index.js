@@ -24,9 +24,7 @@ const prisma_1 = require("./lib/prisma");
 const createTokens_1 = require("./modules/auth/createTokens");
 const google_1 = require("./modules/auth/google");
 const presage_1 = require("./modules/presage");
-const scrapper_1 = require("./modules/scrapper");
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
-    yield scrapper_1.generatePresages();
     const app = express_1.default();
     app.use(helmet_1.default());
     app.use(express_1.default.json());

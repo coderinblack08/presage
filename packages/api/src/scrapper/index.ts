@@ -2,7 +2,7 @@ import Parser from "rss-parser";
 import axios from "axios";
 import cheerio from "cheerio";
 import { newsFeeds } from "./rss";
-import { prisma } from "../../lib/prisma";
+import { prisma } from "../lib/prisma";
 const parser = new Parser();
 
 const parsers = {
