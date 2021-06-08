@@ -4,6 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "concurrently \"tsc -w\" \"nodemon dist/index.js\"",
+    "build": "tsc",
     "prisma:gen": "prisma generate --schema ./prisma/schema.prisma",
     "prisma:migrate": "prisma migrate dev"
   },
@@ -28,6 +29,8 @@
   "dependencies": {
     "@decorators/express": "^2.5.0",
     "@prisma/client": "^2.24.1",
+    "axios": "^0.21.1",
+    "cheerio": "^1.0.0-rc.10",
     "connect-redis": "^6.0.0",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
@@ -40,6 +43,7 @@
     "passport-google-oauth20": "^2.0.0",
     "random-username-generator": "^1.0.4",
     "redis": "^3.1.2",
+    "rss-parser": "^3.12.0",
     "uuid": "^8.3.2",
     "yup": "^0.32.9"
   }

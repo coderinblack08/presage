@@ -24,7 +24,9 @@ const prisma_1 = require("./lib/prisma");
 const createTokens_1 = require("./modules/auth/createTokens");
 const google_1 = require("./modules/auth/google");
 const presage_1 = require("./modules/presage");
+const scrapper_1 = require("./modules/scrapper");
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
+    yield scrapper_1.generatePresages();
     const app = express_1.default();
     app.use(helmet_1.default());
     app.use(express_1.default.json());
@@ -85,7 +87,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
     app.listen(4000, () => console.log("Server started at port 4000"));
 });
 main()
-    .catch((e) => console.error(e))
+    .catch(console.error)
     .finally(() => __awaiter(void 0, void 0, void 0, function* () {
     yield prisma_1.prisma.$disconnect();
 }));

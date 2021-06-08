@@ -20,16 +20,23 @@ model User {
   Presage        Presage[]
 }
 
+enum Type {
+  audio
+  text
+}
+
 model Presage {
   id          String   @id @default(cuid())
-  type        String
+  type        Type
   title       String?  @db.VarChar(100)
   content     String?  @db.VarChar(500)
   description String?  @db.VarChar(500)
   audio       String?
   thumbnail   String?
-  user        User     @relation(fields: [userId], references: [id])
-  userId      String
+  user        User?    @relation(fields: [userId], references: [id])
+  userId      String?
+  official    Boolean  @default(false)
+  publisher   String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }

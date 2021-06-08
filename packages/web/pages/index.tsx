@@ -1,16 +1,10 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { useQuery } from "react-query";
-import {
-  MdPlaylistAdd,
-  MdPlayArrow,
-  MdThumbUp,
-  MdComment,
-} from "react-icons/md";
 import { Button } from "../components/Button";
 import { Layout } from "../components/Layout";
+import { PresageCard } from "../modules/feed/PresageCard";
 import { SideBar } from "../modules/feed/SideBar";
 import { Presage } from "../types";
-import { PresageCard } from "../modules/feed/PresageCard";
 
 const Feed: React.FC = () => {
   const { data } = useQuery<Presage[]>("/api/presage");

@@ -1,0 +1,80 @@
+Arguments: 
+  /Users/kevin/.nvm/versions/node/v15.13.0/bin/node /Users/kevin/code/presage/.yarn/releases/yarn-1.22.10.cjs watch
+
+PATH: 
+  /Users/kevin/.cabal/bin:/Users/kevin/.ghcup/bin:/Users/kevin/google-cloud-sdk/bin:/Applications/Android Studio.app/Contents/jre/jdk/Contents/Home/bin:/Users/kevin/.cargo/bin:/Users/kevin/Library/Android/sdk/emulator:/Users/kevin/Library/Android/sdk/platform-tools:/Users/kevin/Library/Android/sdk/tools/bin:/Users/kevin/Library/Android/sdk/tools:/Users/kevin/Downloads/flutter/bin:/Users/kevin/.nvm/versions/node/v15.13.0/bin:/Users/kevin/bin:/opt/bin:/Users/kevin/.opam/default/bin:/usr/local/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/kevin/npm/bin:/Library/TeX/texbin:/Library/Apple/usr/bin:/Users/kevin/.cargo/bin:/Users/kevin/Library/Application Support/Coursier/bin:/usr/local/bin:/Users/kevin/Library/Application Support/Coursier/bin:/Users/kevin/go/bin
+
+Yarn version: 
+  1.22.10
+
+Node version: 
+  15.13.0
+
+Platform: 
+  darwin x64
+
+Trace: 
+  SyntaxError: /Users/kevin/code/presage/packages/api/package.json: Unexpected token / in JSON at position 96
+      at JSON.parse (<anonymous>)
+      at /Users/kevin/code/presage/.yarn/releases/yarn-1.22.10.cjs:1098:57
+      at Generator.next (<anonymous>)
+      at step (/Users/kevin/code/presage/.yarn/releases/yarn-1.22.10.cjs:310:30)
+      at /Users/kevin/code/presage/.yarn/releases/yarn-1.22.10.cjs:321:13
+
+npm manifest: 
+  {
+    "name": "@presage/api",
+    "main": "dist/index.js",
+    "version": "0.0.1",
+    "scripts": {
+      // "dev": "concurrently \"tsc -w\" \"nodemon dist/index.js\"",
+      "dev": "nodemon index.ts",
+      "watch": "tsc -w",
+      "build": "tsc",
+      "prisma:gen": "prisma generate --schema ./prisma/schema.prisma",
+      "prisma:migrate": "prisma migrate dev"
+    },
+    "devDependencies": {
+      "@types/connect-redis": "^0.0.16",
+      "@types/cors": "^2.8.10",
+      "@types/express": "^4.17.12",
+      "@types/express-session": "^1.17.3",
+      "@types/jsonwebtoken": "^8.5.1",
+      "@types/multer": "^1.4.5",
+      "@types/node": "^15.12.1",
+      "@types/passport": "^1.0.6",
+      "@types/passport-google-oauth20": "^2.0.8",
+      "@types/redis": "^2.8.29",
+      "@types/uuid": "^8.3.0",
+      "@yarnpkg/pnpify": "^3.0.0-rc.6",
+      "concurrently": "^6.2.0",
+      "nodemon": "^2.0.7",
+      "prisma": "^2.24.1",
+      "typescript": "^4.3.2"
+    },
+    "dependencies": {
+      "@decorators/express": "^2.5.0",
+      "@prisma/client": "^2.24.1",
+      "connect-redis": "^6.0.0",
+      "cors": "^2.8.5",
+      "dotenv": "^10.0.0",
+      "express": "^4.17.1",
+      "express-session": "^1.17.2",
+      "helmet": "^4.6.0",
+      "jsonwebtoken": "^8.5.1",
+      "multer": "^1.4.2",
+      "passport": "^0.4.1",
+      "passport-google-oauth20": "^2.0.0",
+      "random-username-generator": "^1.0.4",
+      "redis": "^3.1.2",
+      "rss-parser": "^3.12.0",
+      "uuid": "^8.3.2",
+      "yup": "^0.32.9"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

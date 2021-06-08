@@ -14,8 +14,10 @@ import {
 } from "./modules/auth/createTokens";
 import { authRouter } from "./modules/auth/google";
 import { presageRouter } from "./modules/presage";
+import { generatePresages } from "./modules/scrapper";
 
 const main = async () => {
+  await generatePresages();
   const app = express();
   app.use(helmet());
   app.use(express.json());
@@ -88,7 +90,7 @@ const main = async () => {
 };
 
 main()
-  .catch((e) => console.error(e))
+  .catch(console.error)
   .finally(async () => {
     await prisma.$disconnect();
   });

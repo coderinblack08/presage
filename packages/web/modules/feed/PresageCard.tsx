@@ -36,7 +36,7 @@ export const PresageCard: React.FC<PresageCardProps> = ({ presage }) => {
         />
       ) : null}
       <div>
-        {presage.title ? <h4>{presage.title}</h4> : null}
+        {presage.title ? <h4 className="text-xl">{presage.title}</h4> : null}
         <div className="text-gray-300 mt-1">
           Published by{" "}
           <a href="#" className="text-white">
@@ -44,8 +44,8 @@ export const PresageCard: React.FC<PresageCardProps> = ({ presage }) => {
           </a>{" "}
           · {presage.createdAt}
         </div>
-        {presage.description && <p className="mt-2">{presage.description}</p>}
-        {presage.content && <p className="mt-2">{presage.content}</p>}
+        {presage.description && <p className="mt-1">{presage.description}</p>}
+        {presage.content && <p className="mt-1">{presage.content}</p>}
         <div className="flex items-center space-x-5 mt-4">
           <button>
             <MdThumbUp className="w-6 h-6" />

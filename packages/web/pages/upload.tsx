@@ -42,7 +42,7 @@ const Upload: React.FC = () => {
                 onSuccess: (data) => {
                   queryClient.setQueryData<Presage[]>("/api/presage", (old) => [
                     { ...data, user: queryClient.getQueryData("/api/me") },
-                    ...old,
+                    ...(old ? old : []),
                   ]);
                 },
               });
