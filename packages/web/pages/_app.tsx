@@ -8,7 +8,7 @@ import { fetcher } from "../lib/fetcher";
 import "rc-slider/assets/index.css";
 import "../styles/globals.css";
 import { PresagePlayer } from "../modules/player/PresagePlayer";
-import { usePlayerStore } from "../store/usePlayerSTore";
+import { usePlayerStore } from "../store/usePlayerStore";
 
 const queryClient = new QueryClient({
   defaultOptions: {

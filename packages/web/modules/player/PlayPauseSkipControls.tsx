@@ -8,7 +8,7 @@ import {
 } from "react-icons/md";
 import { useAudioPlayer } from "react-use-audio-player";
 import shallow from "zustand/shallow";
-import { usePlayerStore } from "../../store/usePlayerSTore";
+import { usePlayerStore } from "../../store/usePlayerStore";
 
 export const PlayPauseSkipControls: React.FC<{ url: string; show?: boolean }> =
   ({ url }) => {

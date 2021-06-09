@@ -3,7 +3,7 @@
   "main": "dist/index.js",
   "version": "0.0.1",
   "scripts": {
-    "dev": "concurrently \"tsc -w\" \"nodemon dist/index.js\"",
+    "dev": "concurrently \"tsc -w\" \"npx kill-port 4000 && nodemon dist/index.js\"",
     "build": "tsc",
     "prisma:gen": "prisma generate --schema ./prisma/schema.prisma",
     "prisma:migrate": "prisma migrate dev"

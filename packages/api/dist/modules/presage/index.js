@@ -108,15 +108,28 @@ exports.presageRouter.post("/", isAuth_1.isAuth, presageUpload, (req, res, next)
 }));
 exports.presageRouter.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { limit = 10 } = req.query;
-    const presages = yield prisma_1.prisma.presage.findMany({
-        take: parseInt(limit === null || limit === void 0 ? void 0 : limit.toString()),
-        include: {
-            user: true,
-        },
-        orderBy: {
-            createdAt: "desc",
-        },
-    });
+    const presages = yield prisma_1.prisma.$queryRaw `
+    select p.*,
+    (case when 
+      exists (
+        select * from "Like" l
+        where l."userId" = ${req.userId} and l."presageId" = p.id
+      ) 
+      then true else false
+    end) as liked,
+    json_build_object(
+      'id', u.id,
+      'username', u.username,
+      'profilePicture', u."profilePicture",
+      'displayName', u."displayName",
+      'updatedAt', u."updatedAt",
+      'createdAt', u."createdAt"
+    ) as user
+    from "Presage" p
+    left join "User" u on p."userId" = u.id
+    order by p."createdAt" desc
+    limit ${limit};
+  `;
     res.json(presages);
 }));
 exports.presageRouter.get("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -126,6 +139,34 @@ exports.presageRouter.get("/:id", (req, res) => __awaiter(void 0, void 0, void 0
             user: true,
         },
     });
-    res.json(presage);
+    const like = yield prisma_1.prisma.like.findFirst({
+        where: { userId: req.userId, presageId: req.params.id },
+    });
+    res.json(Object.assign(Object.assign({}, presage), { liked: like !== null }));
+}));
+exports.presageRouter.post("/like", isAuth_1.isAuth, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.body;
+    const like = yield prisma_1.prisma.like.findFirst({
+        where: { userId: req.userId, presageId: id },
+    });
+    try {
+        const [, presage] = yield prisma_1.prisma.$transaction([
+            like
+                ? prisma_1.prisma.like.delete({
+                    where: { presageId_userId: { presageId: id, userId: req.userId } },
+                })
+                : prisma_1.prisma.like.create({
+                    data: {
+                        presage: { connect: { id } },
+                        user: { connect: { id: req.userId } },
+                    },
+                }),
+            prisma_1.prisma.$executeRaw `update "Presage" set likes = likes + ${like ? -1 : 1} where id = ${id} returning *;`,
+        ]);
+        res.json(presage);
+    }
+    catch (error) {
+        next(new Error(error));
+    }
 }));
 //# sourceMappingURL=index.js.map

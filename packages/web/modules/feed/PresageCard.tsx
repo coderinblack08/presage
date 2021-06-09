@@ -2,8 +2,10 @@ import { formatDistanceToNow } from "date-fns";
 import React from "react";
 import Image from "next/image";
 import { MdComment, MdMoreVert, MdPlayArrow, MdThumbUp } from "react-icons/md";
-import { usePlayerStore } from "../../store/usePlayerSTore";
+import { usePlayerStore } from "../../store/usePlayerStore";
 import { Presage } from "../../types";
+import { useMutation, useQueryClient } from "react-query";
+import { mutator } from "../../lib/mutator";
 
 interface PresageCardProps {
   presage: Presage;
@@ -11,9 +13,11 @@ interface PresageCardProps {
 
 export const PresageCard: React.FC<PresageCardProps> = ({ presage }) => {
   const play = usePlayerStore((x) => x.play);
+  const { mutateAsync } = useMutation(mutator);
+  const queryClient = useQueryClient();
 
   return (
-    <article className="flex items-start space-x-9" key={presage.id}>
+    <article className="flex items-start space-x-9">
       {presage.type === "audio" && (
         <>
           {presage.thumbnail ? (
@@ -66,8 +70,34 @@ export const PresageCard: React.FC<PresageCardProps> = ({ presage }) => {
         {presage.description && <p className="mt-1">{presage.description}</p>}
         {presage.content && <p className="mt-1">{presage.content}</p>}
         <div className="flex items-center space-x-5 mt-4">
-          <button>
+          <button
+            className="flex items-center space-x-3"
+            onClick={async () => {
+              await mutateAsync(
+                ["/api/presage/like", { id: presage.id }, "POST"],
+                {
+                  onSuccess: () => {
+                    queryClient.setQueryData<Presage[]>(
+                      "/api/presage",
+                      (old) => {
+                        const index = old.findIndex((x) => x.id === presage.id);
+                        old[index] = {
+                          ...old[index],
+                          liked: !presage.liked,
+                          likes: old[index].likes + (presage.liked ? -1 : 1),
+                        };
+                        console.log(old, index);
+
+                        return old;
+                      }
+                    );
+                  },
+                }
+              );
+            }}
+          >
             <MdThumbUp className="w-6 h-6" />
+            <span>{presage.likes}</span>
           </button>
           <button>
             <MdComment className="w-6 h-6" />

@@ -18,8 +18,12 @@ export interface Presage {
   description?: string;
   audio?: string;
   thumbnail?: string;
-  userId: string;
-  user: User;
+  userId?: string;
+  user?: User;
+  likes: number;
+  liked?: boolean;
+  official?: boolean;
+  publisher?: string;
   createdAt: Date;
   updatedAt: Date;
 }

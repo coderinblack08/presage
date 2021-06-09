@@ -4,7 +4,7 @@ import React, { Fragment } from "react";
 import { MdRepeat, MdVolumeUp } from "react-icons/md";
 import { useAudioPlayer } from "react-use-audio-player";
 import shallow from "zustand/shallow";
-import { usePlayerStore } from "../../store/usePlayerSTore";
+import { usePlayerStore } from "../../store/usePlayerStore";
 
 interface ExtraPlayerControlsProps {}
 

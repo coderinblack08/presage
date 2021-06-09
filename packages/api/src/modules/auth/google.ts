@@ -26,9 +26,7 @@ const strategy = new Strategy(
         profilePicture: photo,
       };
 
-      if (user) {
-        await prisma.user.update({ where: { id: user.id }, data });
-      } else {
+      if (!user) {
         user = await prisma.user.create({ data });
       }
 

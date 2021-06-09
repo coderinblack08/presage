@@ -84,15 +84,28 @@ presageRouter.post("/", isAuth, presageUpload, async (req, res, next) => {
 
 presageRouter.get("/", async (req, res) => {
   const { limit = 10 } = req.query;
-  const presages = await prisma.presage.findMany({
-    take: parseInt(limit?.toString()),
-    include: {
-      user: true,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
+  const presages = await prisma.$queryRaw`
+    select p.*,
+    (case when 
+      exists (
+        select * from "Like" l
+        where l."userId" = ${req.userId} and l."presageId" = p.id
+      ) 
+      then true else false
+    end) as liked,
+    json_build_object(
+      'id', u.id,
+      'username', u.username,
+      'profilePicture', u."profilePicture",
+      'displayName', u."displayName",
+      'updatedAt', u."updatedAt",
+      'createdAt', u."createdAt"
+    ) as user
+    from "Presage" p
+    left join "User" u on p."userId" = u.id
+    order by p."createdAt" desc
+    limit ${limit};
+  `;
   res.json(presages);
 });
 
@@ -103,5 +116,35 @@ presageRouter.get("/:id", async (req, res) => {
       user: true,
     },
   });
-  res.json(presage);
+  const like = await prisma.like.findFirst({
+    where: { userId: req.userId, presageId: req.params.id },
+  });
+  res.json({ ...presage, liked: like !== null });
+});
+
+presageRouter.post("/like", isAuth, async (req, res, next) => {
+  const { id } = req.body;
+  const like = await prisma.like.findFirst({
+    where: { userId: req.userId, presageId: id },
+  });
+  try {
+    const [, presage] = await prisma.$transaction([
+      like
+        ? prisma.like.delete({
+            where: { presageId_userId: { presageId: id, userId: req.userId! } },
+          })
+        : prisma.like.create({
+            data: {
+              presage: { connect: { id } },
+              user: { connect: { id: req.userId } },
+            },
+          }),
+      prisma.$executeRaw`update "Presage" set likes = likes + ${
+        like ? -1 : 1
+      } where id = ${id} returning *;`,
+    ]);
+    res.json(presage);
+  } catch (error) {
+    next(new Error(error));
+  }
 });

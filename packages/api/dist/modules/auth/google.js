@@ -36,10 +36,7 @@ const strategy = new passport_google_oauth20_1.Strategy({
             email: email,
             profilePicture: photo,
         };
-        if (user) {
-            yield prisma_1.prisma.user.update({ where: { id: user.id }, data });
-        }
-        else {
+        if (!user) {
             user = yield prisma_1.prisma.user.create({ data });
         }
         return done(null, createTokens_1.createTokens(user));

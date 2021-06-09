@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect } from "react";
 import shallow from "zustand/shallow";
-import { usePlayerStore } from "../../store/usePlayerSTore";
+import { usePlayerStore } from "../../store/usePlayerStore";
 import { ExtraPlayerControls } from "./ExtraPlayerControls";
 import { PlayerSlider } from "./PlayerSlider";
 import { PlayPauseSkipControls } from "./PlayPauseSkipControls";
