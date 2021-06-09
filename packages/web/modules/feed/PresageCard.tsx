@@ -1,11 +1,11 @@
 import { formatDistanceToNow } from "date-fns";
-import React from "react";
 import Image from "next/image";
-import { MdComment, MdMoreVert, MdPlayArrow, MdThumbUp } from "react-icons/md";
+import { useRouter } from "next/router";
+import React, { useRef } from "react";
+import { MdComment, MdMoreVert, MdPlayArrow } from "react-icons/md";
 import { usePlayerStore } from "../../store/usePlayerStore";
 import { Presage } from "../../types";
-import { useMutation, useQueryClient } from "react-query";
-import { mutator } from "../../lib/mutator";
+import { LikeButton } from "./LikeButton";
 
 interface PresageCardProps {
   presage: Presage;
@@ -13,11 +13,20 @@ interface PresageCardProps {
 
 export const PresageCard: React.FC<PresageCardProps> = ({ presage }) => {
   const play = usePlayerStore((x) => x.play);
-  const { mutateAsync } = useMutation(mutator);
-  const queryClient = useQueryClient();
+  const router = useRouter();
+  const ref = useRef();
 
   return (
-    <article className="flex items-start space-x-9">
+    <a
+      onClick={() => {
+        if (document.activeElement === ref.current) {
+          router.push("/presage/[id]", `/presage/${presage.id}`);
+        }
+      }}
+      className="flex items-start space-x-9 cursor-pointer text-left"
+      ref={ref}
+      href="#"
+    >
       {presage.type === "audio" && (
         <>
           {presage.thumbnail ? (
@@ -30,7 +39,10 @@ export const PresageCard: React.FC<PresageCardProps> = ({ presage }) => {
               <div className="flex items-center justify-center absolute inset-0">
                 <button
                   className="bg-gray-800 bg-opacity-85 backdrop-filter backdrop-blur-lg p-2.5 rounded-full"
-                  onClick={() => play(presage)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    play(presage);
+                  }}
                 >
                   <MdPlayArrow className="text-white w-6 h-6" />
                 </button>
@@ -59,46 +71,18 @@ export const PresageCard: React.FC<PresageCardProps> = ({ presage }) => {
         {presage.title ? <h4 className="text-xl">{presage.title}</h4> : null}
         <div className="text-gray-300 mt-1">
           Published by{" "}
-          <a href="#" className="text-white">
+          <span tabIndex={0} role="link" className="text-white">
             {presage.user.displayName}
-          </a>{" "}
+          </span>{" "}
           ·{" "}
           {formatDistanceToNow(new Date(presage.createdAt), {
             addSuffix: true,
           })}
         </div>
-        {presage.description && <p className="mt-1">{presage.description}</p>}
-        {presage.content && <p className="mt-1">{presage.content}</p>}
+        {presage.description && <p className="mt-2">{presage.description}</p>}
+        {presage.content && <p className="mt-2">{presage.content}</p>}
         <div className="flex items-center space-x-5 mt-4">
-          <button
-            className="flex items-center space-x-3"
-            onClick={async () => {
-              await mutateAsync(
-                ["/api/presage/like", { id: presage.id }, "POST"],
-                {
-                  onSuccess: () => {
-                    queryClient.setQueryData<Presage[]>(
-                      "/api/presage",
-                      (old) => {
-                        const index = old.findIndex((x) => x.id === presage.id);
-                        old[index] = {
-                          ...old[index],
-                          liked: !presage.liked,
-                          likes: old[index].likes + (presage.liked ? -1 : 1),
-                        };
-                        console.log(old, index);
-
-                        return old;
-                      }
-                    );
-                  },
-                }
-              );
-            }}
-          >
-            <MdThumbUp className="w-6 h-6" />
-            <span>{presage.likes}</span>
-          </button>
+          <LikeButton presage={presage} />
           <button>
             <MdComment className="w-6 h-6" />
           </button>
@@ -107,6 +91,6 @@ export const PresageCard: React.FC<PresageCardProps> = ({ presage }) => {
           </button>
         </div>
       </div>
-    </article>
+    </a>
   );
 };
