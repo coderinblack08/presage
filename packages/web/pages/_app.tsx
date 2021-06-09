@@ -31,7 +31,7 @@ function MyApp({ Component, pageProps }: AppProps) {
             <title>Presage</title>
             <link rel="icon" href="/favicon.ico" type="image/x-icon" />
           </Head>
-          <div className={presage ? "pb-28" : ""}>
+          <div className={presage ? "pb-28" : "pb-10"}>
             <Component {...pageProps} />
           </div>
           <PresagePlayer />

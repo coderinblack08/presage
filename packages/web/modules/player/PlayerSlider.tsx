@@ -14,7 +14,7 @@ export const PlayerSlider: React.FC<PlayerSliderProps> = ({}) => {
   });
 
   return (
-    <div className="flex items-center space-x-4">
+    <div className="flex items-center space-x-4 text-white">
       <p className="small font-bold">{getCurrentTime()}</p>
       <Slider
         value={percentComplete}

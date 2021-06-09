@@ -21,7 +21,7 @@ export const ExtraPlayerControls: React.FC<ExtraPlayerControlsProps> = ({}) => {
         {({ open }) => (
           <>
             <Popover.Button className="player-button p-1">
-              <MdVolumeUp className="w-7 h-7" />
+              <MdVolumeUp className="w-7 h-7 text-white" />
             </Popover.Button>
             <Transition
               as={Fragment}
@@ -61,7 +61,7 @@ export const ExtraPlayerControls: React.FC<ExtraPlayerControlsProps> = ({}) => {
         )}
       </Popover>
       <button className="player-button p-1">
-        <MdRepeat className="w-7 h-7" />
+        <MdRepeat className="w-7 h-7 text-white" />
       </button>
     </div>
   );
