@@ -1,8 +1,12 @@
+import React from "react";
 import { AppProps } from "next/app";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { AudioPlayerProvider } from "react-use-audio-player";
 import { AuthProvider } from "../components/AuthProvider";
 import { fetcher } from "../lib/fetcher";
+import "rc-slider/assets/index.css";
 import "../styles/globals.css";
+import { PresagePlayer } from "../modules/player/PresagePlayer";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -18,7 +22,10 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <Component {...pageProps} />
+        <AudioPlayerProvider>
+          <Component {...pageProps} />
+          <PresagePlayer />
+        </AudioPlayerProvider>
       </AuthProvider>
     </QueryClientProvider>
   );

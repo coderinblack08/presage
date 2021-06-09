@@ -58,6 +58,12 @@ module.exports = {
         speed: "500ms",
       },
     }),
+    extend: {
+      gridTemplateColumns: {
+        "player-desktop": "1fr 2fr 1fr",
+        "player-mobile": "1fr 3fr 1fr",
+      },
+    },
   },
   variants: {
     extend: {},

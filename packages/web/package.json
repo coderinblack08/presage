@@ -17,10 +17,13 @@
     "formik": "^2.2.9",
     "next": "latest",
     "object-to-formdata": "^4.1.0",
+    "rc-slider": "^9.7.2",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-icons": "^4.2.0",
     "react-query": "^3.16.1",
+    "react-responsive": "^8.2.0",
+    "react-use-audio-player": "^1.2.4",
     "use-timer": "^2.0.1",
     "yup": "^0.32.9",
     "zustand": "^3.5.2"

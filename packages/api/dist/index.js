@@ -29,7 +29,6 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
     app.use(helmet_1.default());
     app.use(express_1.default.json());
     app.use(express_1.default.urlencoded({ extended: false }));
-    app.use("/uploads", express_1.default.static(posix_1.join(__dirname, "../uploads")));
     app.use(cors_1.default({
         origin: "*",
         maxAge: !constants_1.isDev() ? 86400 : undefined,
@@ -40,6 +39,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
             "content-length",
         ],
     }));
+    app.use("/uploads", express_1.default.static(posix_1.join(__dirname, "../uploads")));
     app.use(passport_1.default.initialize());
     app.use(passport_1.default.session());
     passport_1.default.serializeUser((user, done) => {

@@ -72,4 +72,8 @@
   .small {
     font-size: 0.85rem;
   }
+
+  .player-button {
+    @apply focus:outline-none focus-visible:ring focus-visible:ring-faint-primary rounded-md;
+  }
 }
