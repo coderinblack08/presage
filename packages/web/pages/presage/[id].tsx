@@ -31,14 +31,18 @@ const PresagePage: React.FC<{ id: string }> = ({ id }) => {
         <main className="max-w-3xl mx-auto">
           <AvatarGroup user={data.user} />
           <article className="flex space-x-10 mt-8">
-            <PresageCardLeftSide presage={data} />
+            <PresageCardLeftSide presage={data} noAvatar />
             <div>
               <h4>{data.title}</h4>
               <p className="text-gray-200">
                 {format(new Date(data.createdAt), "MMMM d, yyyy")} · 3:24
               </p>
-              <p className="mt-1.5 leading-7 text-gray-300">
-                {data.description}
+              <p
+                className={`mt-1.5 leading-7 ${
+                  data.type === "audio" ? "text-gray-300" : "text-lg"
+                }`}
+              >
+                {data.description || data.content}
               </p>
             </div>
           </article>

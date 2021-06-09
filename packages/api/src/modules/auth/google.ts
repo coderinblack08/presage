@@ -1,5 +1,5 @@
 import { Router } from "express";
-import passport from "passport";
+import passport, { authorize } from "passport";
 import { Strategy } from "passport-google-oauth20";
 import rug from "random-username-generator";
 import { prisma } from "../../lib/prisma";
@@ -60,3 +60,9 @@ authRouter.get(
     );
   }
 );
+
+authRouter.get("/:username", async (req, res) => {
+  res.json(
+    await prisma.user.findFirst({ where: { username: req.params.username } })
+  );
+});

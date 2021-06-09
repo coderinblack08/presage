@@ -1,5 +1,6 @@
 import { Menu } from "@headlessui/react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React from "react";
 import { MdMenu, MdSearch } from "react-icons/md";
 import { useQuery, useQueryClient } from "react-query";
@@ -14,6 +15,7 @@ interface NavbarProps {}
 export const Navbar: React.FC<NavbarProps> = ({}) => {
   const { data: me } = useQuery<User>("/api/me");
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   return (
     <nav className="flex items-center justify-between px-8 py-6 max-w-7xl mx-auto">
@@ -55,7 +57,13 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
               </Menu.Button>
             }
           >
-            <DropdownItem>Profile</DropdownItem>
+            <DropdownItem
+              onClick={() =>
+                router.push("/user/[username]", `/user/${me.username}`)
+              }
+            >
+              Profile
+            </DropdownItem>
             <DropdownItem>Settings</DropdownItem>
             <DropdownItem
               onClick={() => {

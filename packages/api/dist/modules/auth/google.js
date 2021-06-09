@@ -58,4 +58,7 @@ exports.authRouter.get("/google/callback", passport_1.default.authenticate("goog
 }), (req, res) => {
     res.redirect(`${process.env.AUTH_REDIRECT_URL}/?access_token=${req.user.accessToken}&refresh_token=${req.user.refreshToken}`);
 });
+exports.authRouter.get("/:username", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    res.json(yield prisma_1.prisma.user.findFirst({ where: { username: req.params.username } }));
+}));
 //# sourceMappingURL=google.js.map

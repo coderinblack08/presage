@@ -6,10 +6,12 @@ import { Presage } from "../../types";
 
 interface PresageCardLeftSideProps {
   presage: Presage;
+  noAvatar?: boolean;
 }
 
 export const PresageCardLeftSide: React.FC<PresageCardLeftSideProps> = ({
   presage,
+  noAvatar,
 }) => {
   const play = usePlayerStore((x) => x.play);
 
@@ -38,7 +40,7 @@ export const PresageCardLeftSide: React.FC<PresageCardLeftSideProps> = ({
             </div>
           ) : (
             <button
-              className="bg-gray-700 p-2.5 rounded-full"
+              className="inline-flex items-center justify-center bg-gray-700 w-12 h-12 rounded-full"
               onClick={() => play(presage)}
             >
               <MdPlayArrow className="text-white w-6 h-6" />
@@ -46,7 +48,7 @@ export const PresageCardLeftSide: React.FC<PresageCardLeftSideProps> = ({
           )}
         </>
       )}
-      {presage.type === "text" && presage.user.profilePicture ? (
+      {!noAvatar && presage.type === "text" && presage.user.profilePicture ? (
         <Image
           className={`flex-shrink-0 rounded-full`}
           src={presage.user.profilePicture}
