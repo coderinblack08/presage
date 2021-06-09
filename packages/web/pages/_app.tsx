@@ -1,4 +1,5 @@
 import React from "react";
+import Head from "next/head";
 import { AppProps } from "next/app";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { AudioPlayerProvider } from "react-use-audio-player";
@@ -7,6 +8,7 @@ import { fetcher } from "../lib/fetcher";
 import "rc-slider/assets/index.css";
 import "../styles/globals.css";
 import { PresagePlayer } from "../modules/player/PresagePlayer";
+import { usePlayerStore } from "../store/usePlayerSTore";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -19,11 +21,19 @@ const queryClient = new QueryClient({
 });
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const presage = usePlayerStore((x) => x.presage);
+
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <AudioPlayerProvider>
-          <Component {...pageProps} />
+          <Head>
+            <title>Presage</title>
+            <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+          </Head>
+          <div className={presage ? "pb-28" : ""}>
+            <Component {...pageProps} />
+          </div>
           <PresagePlayer />
         </AudioPlayerProvider>
       </AuthProvider>
