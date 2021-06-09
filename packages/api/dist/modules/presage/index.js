@@ -54,6 +54,7 @@ const presageUpload = upload.fields([
 ]);
 exports.presageRouter.post("/", isAuth_1.isAuth, presageUpload, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b;
+    console.log(req.body);
     const nullType = yup.string().nullable().oneOf([null, undefined]);
     const presageSchema = yup.object().shape({
         type: yup.string().oneOf(["audio", "text"]).required(),

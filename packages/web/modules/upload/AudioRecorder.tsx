@@ -1,9 +1,11 @@
 import useMediaRecorder from "@wmik/use-media-recorder";
 import format from "format-duration";
 import React, { useRef } from "react";
+import { useEffect } from "react";
 import { MdMic, MdPlayArrow, MdRadioButtonChecked } from "react-icons/md";
 import { useTimer } from "use-timer";
 import { Button } from "../../components/Button";
+import { useAudioUpload } from "../../pages/upload";
 
 interface AudioRecorderProps {}
 
@@ -14,6 +16,13 @@ export const AudioRecorder: React.FC<AudioRecorderProps> = ({}) => {
       mediaStreamConstraints: { audio: true },
     });
   const { time, start, pause, reset } = useTimer();
+  const setAudio = useAudioUpload((x) => x.setAudio);
+
+  useEffect(() => {
+    if (mediaBlob) {
+      setAudio(mediaBlob);
+    }
+  }, [mediaBlob]);
 
   return (
     <div>

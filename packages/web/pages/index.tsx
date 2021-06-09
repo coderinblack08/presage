@@ -73,7 +73,7 @@ const Feed: React.FC = () => {
           </div>
           <div className="mt-14 space-y-12">
             {data?.map((presage) => (
-              <PresageCard presage={presage} />
+              <PresageCard key={presage.id} presage={presage} />
             ))}
           </div>
         </main>

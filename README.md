@@ -1,6 +1,6 @@
 # Presage
 
-The next generation of news and media 🗞 focused on short-form audio and podcasts 🎧
+The next generation of news and media focused on short-form audio and podcasts 🗞 🎧
 
 ![Presage Thumbnail](thumbnail.png)
 

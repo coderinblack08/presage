@@ -1,7 +1,10 @@
 import { RadioGroup } from "@headlessui/react";
 import { Form, Formik } from "formik";
+import { useRouter } from "next/router";
+import { serialize } from "object-to-formdata";
 import React, { useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
+import create from "zustand";
 import { Button } from "../components/Button";
 import { InputField } from "../components/InputField";
 import { Layout } from "../components/Layout";
@@ -10,11 +13,35 @@ import { AudioRecorder } from "../modules/upload/AudioRecorder";
 import { TypeRadioOption } from "../modules/upload/TypeRadioOption";
 import { Presage } from "../types";
 
+export const useAudioUpload = create<{
+  audio: Blob | null;
+  setAudio: (audio: Blob) => void;
+}>((set) => ({
+  audio: null,
+  setAudio: (audio: Blob) => set({ audio }),
+}));
+
 const Upload: React.FC = () => {
   const [type, setType] = useState<Presage["type"] | null>(null);
   const { mutateAsync } = useMutation(mutator);
   const length = (s: string) => s.trim().length;
+  const audio = useAudioUpload((x) => x.audio);
   const queryClient = useQueryClient();
+  const router = useRouter();
+
+  const createPresage = async (body: {
+    [key: string]: string | File | Blob;
+  }) => {
+    await mutateAsync(["/api/presage", serialize(body), "POST"], {
+      onSuccess: (data) => {
+        queryClient.setQueryData<Presage[]>("/api/presage", (old) => [
+          { ...data, user: queryClient.getQueryData("/api/me") },
+          ...(old ? old : []),
+        ]);
+      },
+    });
+    router.push("/");
+  };
 
   return (
     <Layout>
@@ -38,19 +65,11 @@ const Upload: React.FC = () => {
               content: "",
             }}
             onSubmit={async (values) => {
-              const body = { ...values, type };
-              await mutateAsync(["/api/presage", body, "POST"], {
-                onSuccess: (data) => {
-                  queryClient.setQueryData<Presage[]>("/api/presage", (old) => [
-                    { ...data, user: queryClient.getQueryData("/api/me") },
-                    ...(old ? old : []),
-                  ]);
-                },
-              });
+              await createPresage({ ...values, type });
             }}
           >
             {({ values, isSubmitting }) => (
-              <Form className="mt-8">
+              <Form className="mt-10">
                 <InputField
                   name="content"
                   placeholder="Message"
@@ -69,15 +88,44 @@ const Upload: React.FC = () => {
                   </span>{" "}
                   characters used
                 </p>
-                <Button className="mt-5 w-full" loading={isSubmitting}>
+                <Button
+                  type="submit"
+                  className="mt-5 w-full"
+                  loading={isSubmitting}
+                >
                   Publish Presage
                 </Button>
               </Form>
             )}
           </Formik>
         ) : type === "audio" ? (
-          <div className="mt-8">
+          <div className="mt-10">
             <AudioRecorder />
+            <Formik
+              initialValues={{ title: "", description: "" }}
+              onSubmit={async (values) => {
+                createPresage({ ...values, type, audio });
+              }}
+            >
+              {({ isSubmitting }) => (
+                <Form className="space-y-5">
+                  <InputField name="title" placeholder="Title" />
+                  <InputField
+                    name="description"
+                    placeholder="Description"
+                    className="h-32"
+                    textarea
+                  />
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    loading={isSubmitting}
+                  >
+                    Publish Presage
+                  </Button>
+                </Form>
+              )}
+            </Formik>
           </div>
         ) : null}
       </main>
