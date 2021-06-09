@@ -3,16 +3,19 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useRef } from "react";
 import { MdComment, MdMoreVert, MdPlayArrow } from "react-icons/md";
-import { usePlayerStore } from "../../store/usePlayerStore";
 import { Presage } from "../../types";
 import { LikeButton } from "./LikeButton";
+import { PresageCardLeftSide } from "./PresageCardLeftSide";
 
 interface PresageCardProps {
   presage: Presage;
+  compact?: boolean;
 }
 
-export const PresageCard: React.FC<PresageCardProps> = ({ presage }) => {
-  const play = usePlayerStore((x) => x.play);
+export const PresageCard: React.FC<PresageCardProps> = ({
+  presage,
+  compact = false,
+}) => {
   const router = useRouter();
   const ref = useRef();
 
@@ -27,46 +30,7 @@ export const PresageCard: React.FC<PresageCardProps> = ({ presage }) => {
       ref={ref}
       href="#"
     >
-      {presage.type === "audio" && (
-        <>
-          {presage.thumbnail ? (
-            <div className="flex-shrink-0 relative w-36 h-36 rounded-lg overflow-hidden">
-              <img
-                src={presage.thumbnail}
-                alt={presage.title}
-                className="object-cover w-full h-full"
-              />
-              <div className="flex items-center justify-center absolute inset-0">
-                <button
-                  className="bg-gray-800 bg-opacity-85 backdrop-filter backdrop-blur-lg p-2.5 rounded-full"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    play(presage);
-                  }}
-                >
-                  <MdPlayArrow className="text-white w-6 h-6" />
-                </button>
-              </div>
-            </div>
-          ) : (
-            <button
-              className="bg-gray-700 p-2.5 rounded-full"
-              onClick={() => play(presage)}
-            >
-              <MdPlayArrow className="text-white w-6 h-6" />
-            </button>
-          )}
-        </>
-      )}
-      {presage.type === "text" && presage.user.profilePicture ? (
-        <Image
-          className={`flex-shrink-0 rounded-full`}
-          src={presage.user.profilePicture}
-          alt={presage.title}
-          height={80}
-          width={80}
-        />
-      ) : null}
+      <PresageCardLeftSide presage={presage} />
       <div>
         {presage.title ? <h4 className="text-xl">{presage.title}</h4> : null}
         <div className="text-gray-300 mt-1">
@@ -79,10 +43,18 @@ export const PresageCard: React.FC<PresageCardProps> = ({ presage }) => {
             addSuffix: true,
           })}
         </div>
-        {presage.description && <p className="mt-2">{presage.description}</p>}
+        {presage.description && (
+          <p
+            className={`mt-2 text-gray-200 leading-7 ${
+              compact ? "line-clamp-2" : ""
+            }`}
+          >
+            {presage.description}
+          </p>
+        )}
         {presage.content && <p className="mt-2">{presage.content}</p>}
-        <div className="flex items-center space-x-5 mt-4">
-          <LikeButton presage={presage} />
+        <div className="flex items-center space-x-5 mt-5">
+          <LikeButton presage={presage} compact />
           <button>
             <MdComment className="w-6 h-6" />
           </button>

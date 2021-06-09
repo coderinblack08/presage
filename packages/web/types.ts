@@ -22,6 +22,7 @@ export interface Presage {
   user?: User;
   likes: number;
   liked?: boolean;
+  duration?: number;
   official?: boolean;
   publisher?: string;
   createdAt: Date;

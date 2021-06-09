@@ -32,7 +32,7 @@ const Feed: React.FC = () => {
           </div>
           <div className="mt-14 space-y-16">
             {data?.map((presage) => (
-              <PresageCard key={presage.id} presage={presage} />
+              <PresageCard key={presage.id} presage={presage} compact />
             ))}
           </div>
         </main>

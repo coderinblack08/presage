@@ -1,10 +1,12 @@
 import { Router } from "express";
 import multer from "multer";
 import { join } from "path";
-import * as yup from "yup";
+import { getAudioDurationInSeconds } from "get-audio-duration";
 import { isAuth } from "../../lib/isAuth";
 import { prisma } from "../../lib/prisma";
+import { fetchFileUrl } from "./fetchFileUrl";
 import { fileTypeValidation } from "./fileTypeValidation";
+import { presageSchema } from "./presageSchema";
 
 export const presageRouter = Router();
 const upload = multer({
@@ -22,28 +24,6 @@ const presageUpload = upload.fields([
 ]);
 
 presageRouter.post("/", isAuth, presageUpload, async (req, res, next) => {
-  console.log(req.body);
-
-  const nullType = yup.string().nullable().oneOf([null, undefined]);
-  const presageSchema = yup.object().shape({
-    type: yup.string().oneOf(["audio", "text"]).required(),
-    title: yup.string().when("type", {
-      is: "audio",
-      then: yup.string().max(100).required(),
-      otherwise: nullType,
-    }),
-    description: yup.string().when("type", {
-      is: "audio",
-      then: yup.string().max(500).nullable(),
-      otherwise: nullType,
-    }),
-    content: yup.string().when("type", {
-      is: "text",
-      then: yup.string().max(500).required(),
-      otherwise: nullType,
-    }),
-  });
-
   try {
     await presageSchema.validate(req.body);
   } catch (error) {
@@ -54,16 +34,18 @@ presageRouter.post("/", isAuth, presageUpload, async (req, res, next) => {
   const files = req.files as {
     [fieldname: string]: Express.Multer.File[];
   };
+
   if (type === "audio" && !("audio" in files)) {
     return next(new Error("Please provide an audio file"));
   }
 
-  const audio = files?.audio?.length
-    ? `http://localhost:4000/uploads/${files.audio[0].filename}`
-    : null;
-  const thumbnail = files?.thumbnail?.length
-    ? `http://localhost:4000/uploads/${files.thumbnail[0].filename}`
-    : null;
+  const audio = fetchFileUrl(files, "audio");
+  const thumbnail = fetchFileUrl(files, "thumbnail");
+
+  const duration =
+    type === "audio"
+      ? await getAudioDurationInSeconds(files["audio"][0].path)
+      : null;
 
   const presage = await prisma.presage.create({
     data: {
@@ -73,6 +55,7 @@ presageRouter.post("/", isAuth, presageUpload, async (req, res, next) => {
       title,
       content,
       description,
+      duration,
       user: {
         connect: { id: req.userId },
       },

@@ -11,6 +11,8 @@ const ButtonTheme = {
     sm: "px-5 py-1.5 rounded-lg",
   },
   color: {
+    transparent: "bg-transparent text-gray-200",
+    faintPrimary: "bg-primary bg-opacity-20 text-primary",
     primary:
       "text-white bg-primary hover:bg-faint-primary disabled:text-white-primary disabled:bg-faint-primary",
     gray: "text-white bg-gray-700 hover:bg-gray-600 disabled:text-gray-200",

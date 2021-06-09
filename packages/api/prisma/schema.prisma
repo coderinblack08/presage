@@ -38,6 +38,7 @@ model Presage {
   userId      String?
   official    Boolean  @default(false)
   publisher   String?
+  duration    Int?
   likes       Int      @default(0)
   Like        Like[]
   createdAt   DateTime @default(now())

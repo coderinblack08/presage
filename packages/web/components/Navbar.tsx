@@ -18,7 +18,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
   return (
     <nav className="flex items-center justify-between px-8 py-6 max-w-7xl mx-auto">
       <div className="flex items-center">
-        <button className="block md:hidden mr-5 md:mr-0">
+        <button className="block md:hidden mr-6 md:mr-0">
           <MdMenu className="w-8 h-8" />
         </button>
         <Link href="/">

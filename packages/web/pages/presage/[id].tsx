@@ -1,17 +1,27 @@
+import { format } from "date-fns";
 import { GetServerSideProps } from "next";
 import React from "react";
+import {
+  MdComment,
+  MdPlayArrow,
+  MdPlaylistAdd,
+  MdThumbUp,
+} from "react-icons/md";
 import { QueryClient, useQuery } from "react-query";
 import { dehydrate } from "react-query/hydration";
 import { Button } from "../../components/Button";
-import { Input } from "../../components/Input";
 import { Layout } from "../../components/Layout";
 import { Spinner } from "../../components/Spinner";
 import { fetcher } from "../../lib/fetcher";
-import { PresageCard } from "../../modules/feed/PresageCard";
+import { LikeButton } from "../../modules/feed/LikeButton";
+import { PresageCardLeftSide } from "../../modules/feed/PresageCardLeftSide";
+import { AvatarGroup } from "../../modules/presage/AvatarGroup";
+import { usePlayerStore } from "../../store/usePlayerStore";
 import { Presage } from "../../types";
 
 const PresagePage: React.FC<{ id: string }> = ({ id }) => {
   const { data, isFetching } = useQuery<Presage>(`/api/presage/${id}`);
+  const play = usePlayerStore((x) => x.play);
 
   return (
     <Layout>
@@ -19,16 +29,36 @@ const PresagePage: React.FC<{ id: string }> = ({ id }) => {
         <Spinner />
       ) : (
         <main className="max-w-3xl mx-auto">
-          <PresageCard presage={data} />
-          <hr className="border-b border-gray-800 my-16" />
-          <div className="flex items-center space-x-2">
-            <Input placeholder="What are your thoughts?" />
-            <Button>Comment</Button>
+          <AvatarGroup user={data.user} />
+          <article className="flex space-x-10 mt-8">
+            <PresageCardLeftSide presage={data} />
+            <div>
+              <h4>{data.title}</h4>
+              <p className="text-gray-200">
+                {format(new Date(data.createdAt), "MMMM d, yyyy")} · 3:24
+              </p>
+              <p className="mt-1.5 leading-7 text-gray-300">
+                {data.description}
+              </p>
+            </div>
+          </article>
+          <div className="flex justify-between w-full border-t border-b border-gray-700 py-3 my-10">
+            <LikeButton presage={data} />
+            <Button
+              icon={<MdComment className="w-6 h-6" />}
+              color="transparent"
+              size="sm"
+            >
+              <span className="font-bold">Comment</span>
+            </Button>
+            <Button
+              icon={<MdPlaylistAdd className="w-6 h-6" />}
+              color="transparent"
+              size="sm"
+            >
+              <span className="font-bold">Bookmark</span>
+            </Button>
           </div>
-          <a href="#" className="text-gray-300 small mt-2 inline-block">
-            Or reply with a{" "}
-            <span className="small text-primary">Audio Presage</span>
-          </a>
         </main>
       )}
     </Layout>
