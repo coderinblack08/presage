@@ -15,7 +15,7 @@ export const LikeButton: React.FC<LikeButtonProps> = ({ presage, compact }) => {
   const queryClient = useQueryClient();
 
   async function like() {
-    await mutateAsync(["/api/presage/like", { id: presage.id }, "POST"], {
+    await mutateAsync(["/api/presage/like", { id: presage.id }, "post"], {
       onSuccess: () => {
         const newData = (data: Presage) => ({
           ...data,

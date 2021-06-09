@@ -30,7 +30,7 @@ const PresagePage: React.FC<{ id: string }> = ({ id }) => {
       ) : (
         <main className="max-w-3xl mx-auto">
           <AvatarGroup user={data.user} />
-          <article className="flex space-x-10 mt-8">
+          <article className="flex space-x-8 mt-8">
             <PresageCardLeftSide presage={data} noAvatar />
             <div>
               <h4>{data.title}</h4>

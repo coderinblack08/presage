@@ -2,10 +2,10 @@ import axios from "axios";
 import { useTokenStore } from "../store/useTokenStore";
 import { apiBaseUrl } from "./constants";
 
-export const mutator = async ([path, body, method = "POST"]: [
+export const mutator = async ([path, body, method = "post"]: [
   string,
   any,
-  "POST" | "PUT"
+  "post" | "put" | "patch"
 ]) => {
   const { accessToken, refreshToken, setTokens } = useTokenStore.getState();
   const isMultipart = body instanceof FormData;
@@ -18,7 +18,7 @@ export const mutator = async ([path, body, method = "POST"]: [
     },
   };
 
-  const request = await axios.post(apiBaseUrl + path, body, config);
+  const request = await axios[method](apiBaseUrl + path, body, config);
 
   if (request.status !== 200) {
     throw new Error(request.data);

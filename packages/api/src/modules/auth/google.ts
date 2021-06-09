@@ -1,7 +1,9 @@
+import { next } from "cheerio/lib/api/traversing";
 import { Router } from "express";
-import passport, { authorize } from "passport";
+import passport from "passport";
 import { Strategy } from "passport-google-oauth20";
 import rug from "random-username-generator";
+import * as yup from "yup";
 import { prisma } from "../../lib/prisma";
 import { createTokens } from "./createTokens";
 
@@ -65,4 +67,36 @@ authRouter.get("/:username", async (req, res) => {
   res.json(
     await prisma.user.findFirst({ where: { username: req.params.username } })
   );
+});
+
+authRouter.patch("/", async (req, res, next) => {
+  const { username, displayName, bio } = req.body;
+
+  const userSchema = yup.object().shape({
+    username: yup
+      .string()
+      .strip()
+      .max(16)
+      .matches(/^\w+$/, "Alphanumeric values only")
+      .nullable(),
+    displayName: yup.string().trim().max(50).nullable(),
+    bio: yup.string().max(100).nullable(),
+  });
+
+  try {
+    await userSchema.validate(req.body);
+  } catch (error) {
+    next(new Error(error));
+  }
+
+  const user = await prisma.user.update({
+    where: { id: req.userId },
+    data: {
+      username: username || undefined,
+      displayName: displayName || undefined,
+      bio: bio || undefined,
+    },
+  });
+
+  res.json(user);
 });

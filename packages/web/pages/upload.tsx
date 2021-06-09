@@ -32,7 +32,7 @@ const Upload: React.FC = () => {
   const createPresage = async (body: {
     [key: string]: string | File | Blob;
   }) => {
-    await mutateAsync(["/api/presage", serialize(body), "POST"], {
+    await mutateAsync(["/api/presage", serialize(body), "post"], {
       onSuccess: (data) => {
         queryClient.setQueryData<Presage[]>("/api/presage", (old) => [
           { ...data, user: queryClient.getQueryData("/api/me") },

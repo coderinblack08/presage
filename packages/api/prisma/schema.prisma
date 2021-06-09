@@ -13,6 +13,7 @@ model User {
   username       String    @unique
   profilePicture String?
   displayName    String
+  bio            String?
   googleId       String?
   tokenVersion   Int       @default(1)
   createdAt      DateTime  @default(now())
