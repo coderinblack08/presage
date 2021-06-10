@@ -10,6 +10,7 @@ import { User } from "../../types";
 
 const UserPage: React.FC<{ username: string }> = ({ username }) => {
   const { data, isFetching } = useQuery<User>(`/api/auth/${username}`);
+  const { data: me } = useQuery<User>("/api/me");
 
   return (
     <Layout>
@@ -27,7 +28,7 @@ const UserPage: React.FC<{ username: string }> = ({ username }) => {
               <h4>{data.displayName}</h4>
               <p className="text-gray-300">@{data.username}</p>
               {data.bio && <p className="mt-2 text-gray-200">{data.bio}</p>}
-              <EditModal />
+              {me?.username === username ? <EditModal /> : null}
             </div>
           </div>
           <nav className="flex items-center space-x-12 mt-14">

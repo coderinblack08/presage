@@ -12,7 +12,7 @@ export const DropdownItem: React.FC<React.ComponentProps<typeof Menu.Item>> = ({
           <button
             className={`${
               active ? "bg-gray-700 text-white" : "text-gray-100"
-            } group flex items-center rounded-lg w-full px-4 py-2.5`}
+            } group flex items-center rounded-lg w-full px-4 py-2.5 focus:outline-none`}
           >
             {children}
           </button>
@@ -31,7 +31,7 @@ export const Dropdown: React.FC<DropdownProps> = ({ openButton, children }) => {
     <Menu as="div" className="relative inline-block text-left">
       {({ open }) => (
         <>
-          <div>{openButton}</div>
+          {openButton}
           <Transition
             show={open}
             as={Fragment}

@@ -1,5 +1,6 @@
 import { formatDistanceToNow } from "date-fns";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useRef } from "react";
 import { MdComment, MdMoreVert, MdPlayArrow } from "react-icons/md";
@@ -35,9 +36,15 @@ export const PresageCard: React.FC<PresageCardProps> = ({
         {presage.title ? <h4 className="text-xl">{presage.title}</h4> : null}
         <div className="text-gray-300 mt-1">
           Published by{" "}
-          <span tabIndex={0} role="link" className="text-white">
-            {presage.user.displayName}
-          </span>{" "}
+          <Link href="/user/[username]" as={`/user/${presage.user.username}`}>
+            <span
+              tabIndex={0}
+              role="link"
+              className="text-white hover:underline"
+            >
+              {presage.user.displayName}
+            </span>
+          </Link>{" "}
           ·{" "}
           {formatDistanceToNow(new Date(presage.createdAt), {
             addSuffix: true,

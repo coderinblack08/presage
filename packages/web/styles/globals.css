@@ -9,7 +9,7 @@
   body,
   html,
   #__next {
-    @apply antialiased bg-gray-900 text-gray-100;
+    @apply antialiased bg-gray-900 text-gray-100 font-body;
   }
 
   :root {
@@ -66,7 +66,6 @@
   button {
     font-size: 1rem;
     font-weight: 500;
-    @apply font-body;
   }
 
   .small {

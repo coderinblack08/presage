@@ -9,7 +9,7 @@ interface AvatarGroupProps {
 export const AvatarGroup: React.FC<AvatarGroupProps> = ({ user }) => {
   return (
     <Link href="/user/[username]" as={`/user/${user.username}`}>
-      <a className="flex items-center space-x-5">
+      <a className="inline-flex items-center space-x-5">
         <img
           className="w-14 h-14 rounded-full"
           src={user.profilePicture}

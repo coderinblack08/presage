@@ -30,7 +30,7 @@ presageRouter.post("/", isAuth, presageUpload, async (req, res, next) => {
     return next(new Error(error));
   }
 
-  const { type, title, description, content } = req.body;
+  const { type, title, description, content, parentId } = req.body;
   const files = req.files as {
     [fieldname: string]: Express.Multer.File[];
   };
@@ -56,6 +56,9 @@ presageRouter.post("/", isAuth, presageUpload, async (req, res, next) => {
       content,
       description,
       duration,
+      parent: {
+        connect: { id: parentId },
+      },
       user: {
         connect: { id: req.userId },
       },
@@ -76,14 +79,7 @@ presageRouter.get("/", async (req, res) => {
       ) 
       then true else false
     end) as liked,
-    json_build_object(
-      'id', u.id,
-      'username', u.username,
-      'profilePicture', u."profilePicture",
-      'displayName', u."displayName",
-      'updatedAt', u."updatedAt",
-      'createdAt', u."createdAt"
-    ) as user
+    to_jsonb(u) as user
     from "Presage" p
     left join "User" u on p."userId" = u.id
     order by p."createdAt" desc

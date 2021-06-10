@@ -16,6 +16,7 @@ import { fetcher } from "../../lib/fetcher";
 import { LikeButton } from "../../modules/feed/LikeButton";
 import { PresageCardLeftSide } from "../../modules/feed/PresageCardLeftSide";
 import { AvatarGroup } from "../../modules/presage/AvatarGroup";
+import { CommentModal } from "../../modules/presage/CommentModal";
 import { usePlayerStore } from "../../store/usePlayerStore";
 import { Presage } from "../../types";
 
@@ -28,7 +29,7 @@ const PresagePage: React.FC<{ id: string }> = ({ id }) => {
       {isFetching ? (
         <Spinner />
       ) : (
-        <main className="max-w-3xl mx-auto">
+        <main className="max-w-2xl mx-auto">
           <AvatarGroup user={data.user} />
           <article className="flex space-x-8 mt-8">
             <PresageCardLeftSide presage={data} noAvatar />
@@ -48,13 +49,7 @@ const PresagePage: React.FC<{ id: string }> = ({ id }) => {
           </article>
           <div className="flex justify-between w-full border-t border-b border-gray-700 py-3 my-10">
             <LikeButton presage={data} />
-            <Button
-              icon={<MdComment className="w-6 h-6" />}
-              color="transparent"
-              size="sm"
-            >
-              <span className="font-bold">Comment</span>
-            </Button>
+            <CommentModal presage={data} />
             <Button
               icon={<MdPlaylistAdd className="w-6 h-6" />}
               color="transparent"

@@ -28,22 +28,25 @@ enum Type {
 }
 
 model Presage {
-  id          String   @id @default(cuid())
+  id          String    @id @default(cuid())
   type        Type
-  title       String?  @db.VarChar(100)
-  content     String?  @db.VarChar(500)
-  description String?  @db.VarChar(500)
+  title       String?   @db.VarChar(100)
+  content     String?   @db.VarChar(500)
+  description String?   @db.VarChar(500)
   audio       String?
   thumbnail   String?
-  user        User?    @relation(fields: [userId], references: [id])
+  parent      Presage?  @relation(fields: [parentId], references: [id])
+  parentId    String?
+  user        User?     @relation(fields: [userId], references: [id])
   userId      String?
-  official    Boolean  @default(false)
+  official    Boolean   @default(false)
   publisher   String?
   duration    Int?
-  likes       Int      @default(0)
+  likes       Int       @default(0)
   Like        Like[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  Presage     Presage[] @relation("PresageToPresage")
 }
 
 model Like {

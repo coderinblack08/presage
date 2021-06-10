@@ -42,7 +42,7 @@ exports.presageRouter.post("/", isAuth_1.isAuth, presageUpload, (req, res, next)
     catch (error) {
         return next(new Error(error));
     }
-    const { type, title, description, content } = req.body;
+    const { type, title, description, content, parentId } = req.body;
     const files = req.files;
     if (type === "audio" && !("audio" in files)) {
         return next(new Error("Please provide an audio file"));
@@ -61,6 +61,9 @@ exports.presageRouter.post("/", isAuth_1.isAuth, presageUpload, (req, res, next)
             content,
             description,
             duration,
+            parent: {
+                connect: { id: parentId },
+            },
             user: {
                 connect: { id: req.userId },
             },
@@ -79,14 +82,7 @@ exports.presageRouter.get("/", (req, res) => __awaiter(void 0, void 0, void 0, f
       ) 
       then true else false
     end) as liked,
-    json_build_object(
-      'id', u.id,
-      'username', u.username,
-      'profilePicture', u."profilePicture",
-      'displayName', u."displayName",
-      'updatedAt', u."updatedAt",
-      'createdAt', u."createdAt"
-    ) as user
+    to_jsonb(u) as user
     from "Presage" p
     left join "User" u on p."userId" = u.id
     order by p."createdAt" desc

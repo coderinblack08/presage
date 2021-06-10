@@ -18,4 +18,5 @@ export const presageSchema = yup.object().shape({
     then: yup.string().max(500).required(),
     otherwise: nullType,
   }),
+  parentId: yup.string().nullable(),
 });
