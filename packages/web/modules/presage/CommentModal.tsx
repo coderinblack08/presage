@@ -30,8 +30,8 @@ export const CommentModal: React.FC<CommentModalProps> = ({ presage }) => {
         <span className="font-bold">Comment</span>
       </Button>
       <Modal isOpen={open} closeModal={() => setOpen(false)} initialFocus={ref}>
-        <div className="relative">
-          <div className="relative m-1.5 p-5 bg-gray-800 rounded-xl">
+        <div>
+          <div className="flex relative m-1.5 p-5 bg-gray-800 bg-opacity-75 rounded-xl">
             <div>
               <AvatarGroup user={presage.user} />
             </div>

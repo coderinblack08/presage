@@ -1,10 +1,11 @@
-import { next } from "cheerio/lib/api/traversing";
 import { Router } from "express";
 import passport from "passport";
 import { Strategy } from "passport-google-oauth20";
 import rug from "random-username-generator";
+import { getConnection } from "typeorm";
 import * as yup from "yup";
-import { prisma } from "../../lib/prisma";
+import { User } from "../../entity/User";
+import { isAuth } from "../../lib/isAuth";
 import { createTokens } from "./createTokens";
 
 export const authRouter = Router();
@@ -19,7 +20,8 @@ const strategy = new Strategy(
     try {
       const email = emails ? emails[0].value : null;
       const photo = photos ? photos[0].value : null;
-      let user = await prisma.user.findFirst({ where: { googleId: id } });
+
+      let user = await User.findOne({ where: { googleId: id } });
       const data = {
         username: rug.generate(),
         displayName: displayName,
@@ -29,7 +31,7 @@ const strategy = new Strategy(
       };
 
       if (!user) {
-        user = await prisma.user.create({ data });
+        user = await User.create(data).save();
       }
 
       return done(null, createTokens(user));
@@ -65,11 +67,24 @@ authRouter.get(
 
 authRouter.get("/:username", async (req, res) => {
   res.json(
-    await prisma.user.findFirst({ where: { username: req.params.username } })
+    await User.findOne(
+      { username: req.params.username },
+      {
+        select: [
+          "id",
+          "username",
+          "displayName",
+          "bio",
+          "profilePicture",
+          "createdAt",
+          "updatedAt",
+        ],
+      }
+    )
   );
 });
 
-authRouter.patch("/", async (req, res, next) => {
+authRouter.patch("/", isAuth(true), async (req, res, next) => {
   const { username, displayName, bio } = req.body;
 
   const userSchema = yup.object().shape({
@@ -89,14 +104,17 @@ authRouter.patch("/", async (req, res, next) => {
     next(new Error(error));
   }
 
-  const user = await prisma.user.update({
-    where: { id: req.userId },
-    data: {
+  const user = await getConnection()
+    .createQueryBuilder()
+    .update(User)
+    .set({
       username: username || undefined,
       displayName: displayName || undefined,
       bio: bio || undefined,
-    },
-  });
+    })
+    .where("id = :id", { id: req.userId })
+    .returning("*")
+    .execute();
 
-  res.json(user);
+  res.json(user.raw);
 });

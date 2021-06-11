@@ -36,8 +36,10 @@ const express_1 = require("express");
 const passport_1 = __importDefault(require("passport"));
 const passport_google_oauth20_1 = require("passport-google-oauth20");
 const random_username_generator_1 = __importDefault(require("random-username-generator"));
+const typeorm_1 = require("typeorm");
 const yup = __importStar(require("yup"));
-const prisma_1 = require("../../lib/prisma");
+const User_1 = require("../../entity/User");
+const isAuth_1 = require("../../lib/isAuth");
 const createTokens_1 = require("./createTokens");
 exports.authRouter = express_1.Router();
 const strategy = new passport_google_oauth20_1.Strategy({
@@ -48,7 +50,7 @@ const strategy = new passport_google_oauth20_1.Strategy({
     try {
         const email = emails ? emails[0].value : null;
         const photo = photos ? photos[0].value : null;
-        let user = yield prisma_1.prisma.user.findFirst({ where: { googleId: id } });
+        let user = yield User_1.User.findOne({ where: { googleId: id } });
         const data = {
             username: random_username_generator_1.default.generate(),
             displayName: displayName,
@@ -57,7 +59,7 @@ const strategy = new passport_google_oauth20_1.Strategy({
             profilePicture: photo,
         };
         if (!user) {
-            user = yield prisma_1.prisma.user.create({ data });
+            user = yield User_1.User.create(data).save();
         }
         return done(null, createTokens_1.createTokens(user));
     }
@@ -79,9 +81,19 @@ exports.authRouter.get("/google/callback", passport_1.default.authenticate("goog
     res.redirect(`${process.env.AUTH_REDIRECT_URL}/?access_token=${req.user.accessToken}&refresh_token=${req.user.refreshToken}`);
 });
 exports.authRouter.get("/:username", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.json(yield prisma_1.prisma.user.findFirst({ where: { username: req.params.username } }));
+    res.json(yield User_1.User.findOne({ username: req.params.username }, {
+        select: [
+            "id",
+            "username",
+            "displayName",
+            "bio",
+            "profilePicture",
+            "createdAt",
+            "updatedAt",
+        ],
+    }));
 }));
-exports.authRouter.patch("/", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+exports.authRouter.patch("/", isAuth_1.isAuth(true), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { username, displayName, bio } = req.body;
     const userSchema = yup.object().shape({
         username: yup
@@ -99,14 +111,17 @@ exports.authRouter.patch("/", (req, res, next) => __awaiter(void 0, void 0, void
     catch (error) {
         next(new Error(error));
     }
-    const user = yield prisma_1.prisma.user.update({
-        where: { id: req.userId },
-        data: {
-            username: username || undefined,
-            displayName: displayName || undefined,
-            bio: bio || undefined,
-        },
-    });
-    res.json(user);
+    const user = yield typeorm_1.getConnection()
+        .createQueryBuilder()
+        .update(User_1.User)
+        .set({
+        username: username || undefined,
+        displayName: displayName || undefined,
+        bio: bio || undefined,
+    })
+        .where("id = :id", { id: req.userId })
+        .returning("*")
+        .execute();
+    res.json(user.raw);
 }));
 //# sourceMappingURL=google.js.map

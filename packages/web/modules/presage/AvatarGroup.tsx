@@ -15,7 +15,7 @@ export const AvatarGroup: React.FC<AvatarGroupProps> = ({ user }) => {
           src={user.profilePicture}
           alt={user.displayName}
         />
-        <div>
+        <div className="flex-grow-0">
           <p className="font-bold text-lg">{user.displayName}</p>
           <p className="text-gray-300">@{user.username}</p>
         </div>

@@ -15,17 +15,15 @@ export interface Presage {
   id: string;
   type: "audio" | "text";
   title?: string;
-  content?: string;
   description?: string;
+  content?: string;
   audio?: string;
   thumbnail?: string;
-  userId?: string;
-  user?: User;
-  likes: number;
+  userId: string;
+  user: User;
+  points: number;
   liked?: boolean;
   duration?: number;
-  official?: boolean;
-  publisher?: string;
   createdAt: Date;
   updatedAt: Date;
 }

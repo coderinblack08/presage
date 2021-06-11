@@ -55,11 +55,7 @@ export const Button: React.FC<ButtonProps> = React.forwardRef(
             {children}
           </p>
         </span>
-        {loading ? (
-          <span className="absolute">
-            <Spinner />
-          </span>
-        ) : null}
+        {loading ? <div className="spinner absolute" /> : null}
       </button>
     );
   }

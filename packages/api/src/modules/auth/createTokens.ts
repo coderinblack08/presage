@@ -1,5 +1,5 @@
-import { User } from "@prisma/client";
 import { sign } from "jsonwebtoken";
+import { User } from "../../entity/User";
 
 export type RefreshTokenData = {
   userId: string;

@@ -20,7 +20,7 @@ export const LikeButton: React.FC<LikeButtonProps> = ({ presage, compact }) => {
         const newData = (data: Presage) => ({
           ...data,
           liked: !presage.liked,
-          likes: data.likes + (presage.liked ? -1 : 1),
+          points: data.points + (presage.liked ? -1 : 1),
         });
 
         let key = "/api/presage";
@@ -49,7 +49,7 @@ export const LikeButton: React.FC<LikeButtonProps> = ({ presage, compact }) => {
         onClick={like}
       >
         <MdThumbUp className="w-6 h-6" />
-        <span>{presage.likes}</span>
+        <span>{presage.points}</span>
       </button>
     );
   }
@@ -62,7 +62,7 @@ export const LikeButton: React.FC<LikeButtonProps> = ({ presage, compact }) => {
       size="sm"
     >
       <span className="font-bold">
-        {presage.likes} · {presage.liked ? "Unlike" : "Like"}
+        {presage.points} · {presage.liked ? "Unlike" : "Like"}
       </span>
     </Button>
   );

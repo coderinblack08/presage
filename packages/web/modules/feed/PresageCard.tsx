@@ -52,14 +52,14 @@ export const PresageCard: React.FC<PresageCardProps> = ({
         </div>
         {presage.description && (
           <p
-            className={`mt-2 text-gray-200 leading-7 ${
+            className={`mt-1.5 text-gray-200 leading-7 ${
               compact ? "line-clamp-2" : ""
             }`}
           >
             {presage.description}
           </p>
         )}
-        {presage.content && <p className="mt-2">{presage.content}</p>}
+        {presage.content && <p className="mt-1.5">{presage.content}</p>}
         <div className="flex items-center space-x-5 mt-5">
           <LikeButton presage={presage} compact />
           <button>
