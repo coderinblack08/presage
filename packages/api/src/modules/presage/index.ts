@@ -1,70 +1,88 @@
 import { Request, Router } from "express";
-import { getAudioDurationInSeconds } from "get-audio-duration";
 import multer from "multer";
+import * as mm from "music-metadata";
 import { join } from "path";
+import path from "path/posix";
 import { getConnection } from "typeorm";
 import { Like } from "../../entity/Like";
 import { Presage } from "../../entity/Presage";
 import { isAuth } from "../../lib/isAuth";
-import { fetchFileUrl } from "./fetchFileUrl";
 import { fileTypeValidation } from "./fileTypeValidation";
 import { presageSchema } from "./presageSchema";
-
-export type MulterFiles = {
-  [fieldname: string]: Express.Multer.File[];
-};
 
 export const presageRouter = Router();
 const upload = multer({
   dest: join(__dirname, "../../../uploads"),
-  limits: { fileSize: 5e6 },
-  fileFilter(_, file, cb) {
-    fileTypeValidation("image", "thumbnail", file, cb);
+  fileFilter: (_, file, cb) => {
     fileTypeValidation("audio", "audio", file, cb);
+    fileTypeValidation("image", "thumbnail", file, cb);
   },
 });
 
-const presageUpload = upload.fields([
-  { name: "thumbnail", maxCount: 1 },
-  { name: "audio", maxCount: 1 },
-]);
+type MulterFiles = { [fieldname: string]: Express.Multer.File[] };
 
-presageRouter.post("/", isAuth(true), presageUpload, async (req, res, next) => {
-  try {
-    await presageSchema.validate(req.body);
-  } catch (error) {
-    return next(new Error(error));
+function getSingleFile(files: MulterFiles, field: string) {
+  if (field in files) {
+    return files[field][0];
   }
+  return null;
+}
 
-  const { type, title, description, content } = req.body;
-  const files = req.files as MulterFiles;
+presageRouter.post(
+  "/",
+  isAuth(true),
+  upload.fields([
+    { name: "audio", maxCount: 1 },
+    { name: "thumbnail", maxCount: 1 },
+  ]),
+  async (req: Request & { files: any }, res, next) => {
+    try {
+      await presageSchema.validate(req.body);
+    } catch (error) {
+      return next(new Error(error));
+    }
 
-  if (type === "audio" && !files?.hasOwnProperty("audio")) {
-    return next(new Error("Please provide an audio file"));
+    const { type, title, description, content } = req.body;
+    let duration: number | null = null;
+
+    try {
+      const audioFile = getSingleFile(req.files, "audio");
+
+      const metadata = audioFile
+        ? await mm.parseFile(audioFile.path, {
+            duration: true,
+          })
+        : null;
+
+      duration = metadata?.format.duration
+        ? Math.floor(metadata.format.duration) || null
+        : null;
+    } catch (error) {
+      console.error(error.message);
+    }
+
+    function fileURL(field: string) {
+      const file = getSingleFile(req.files, field);
+      return file
+        ? `http://localhost:4000/uploads/${path.basename(file.path)}`
+        : null;
+    }
+
+    const data = {
+      type,
+      title,
+      description,
+      content,
+      audio: fileURL("audio"),
+      thumbnail: fileURL("thumbnail"),
+      duration,
+      userId: req.userId,
+    };
+
+    const presage = await Presage.create(data).save();
+    res.json(presage);
   }
-
-  const audio = fetchFileUrl(files, "audio");
-  const thumbnail = fetchFileUrl(files, "thumbnail");
-
-  const duration =
-    type === "audio"
-      ? Math.floor(await getAudioDurationInSeconds(files["audio"][0].path))
-      : null;
-
-  const data = {
-    type,
-    title,
-    description,
-    content,
-    audio,
-    thumbnail,
-    duration,
-    userId: req.userId,
-  };
-
-  const presage = await Presage.create(data).save();
-  res.json(presage);
-});
+);
 
 presageRouter.get("/", isAuth(), async (req: Request, res) => {
   const { limit = 10 } = req.query;

@@ -1,12 +1,14 @@
 import { formatDistanceToNow } from "date-fns";
-import Image from "next/image";
+import formatDuration from "format-duration";
+import format from "format-duration";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useRef } from "react";
-import { MdComment, MdMoreVert, MdPlayArrow } from "react-icons/md";
+import { MdComment, MdMoreVert } from "react-icons/md";
 import { Presage } from "../../types";
 import { LikeButton } from "./LikeButton";
 import { PresageCardLeftSide } from "./PresageCardLeftSide";
+import { useDuration } from "./useDuration";
 
 interface PresageCardProps {
   presage: Presage;
@@ -17,6 +19,7 @@ export const PresageCard: React.FC<PresageCardProps> = ({
   presage,
   compact = false,
 }) => {
+  const duration = useDuration(presage);
   const router = useRouter();
   const ref = useRef();
 
@@ -61,6 +64,7 @@ export const PresageCard: React.FC<PresageCardProps> = ({
         )}
         {presage.content && <p className="mt-1.5">{presage.content}</p>}
         <div className="flex items-center space-x-5 mt-5">
+          <span>{duration ? formatDuration(duration) : null}</span>
           <LikeButton presage={presage} compact />
           <button>
             <MdComment className="w-6 h-6" />

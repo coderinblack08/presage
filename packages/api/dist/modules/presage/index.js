@@ -1,4 +1,23 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -14,30 +33,34 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.presageRouter = void 0;
 const express_1 = require("express");
-const get_audio_duration_1 = require("get-audio-duration");
 const multer_1 = __importDefault(require("multer"));
+const mm = __importStar(require("music-metadata"));
 const path_1 = require("path");
+const posix_1 = __importDefault(require("path/posix"));
 const typeorm_1 = require("typeorm");
 const Like_1 = require("../../entity/Like");
 const Presage_1 = require("../../entity/Presage");
 const isAuth_1 = require("../../lib/isAuth");
-const fetchFileUrl_1 = require("./fetchFileUrl");
 const fileTypeValidation_1 = require("./fileTypeValidation");
 const presageSchema_1 = require("./presageSchema");
 exports.presageRouter = express_1.Router();
 const upload = multer_1.default({
     dest: path_1.join(__dirname, "../../../uploads"),
-    limits: { fileSize: 5e6 },
-    fileFilter(_, file, cb) {
-        fileTypeValidation_1.fileTypeValidation("image", "thumbnail", file, cb);
+    fileFilter: (_, file, cb) => {
         fileTypeValidation_1.fileTypeValidation("audio", "audio", file, cb);
+        fileTypeValidation_1.fileTypeValidation("image", "thumbnail", file, cb);
     },
 });
-const presageUpload = upload.fields([
-    { name: "thumbnail", maxCount: 1 },
+function getSingleFile(files, field) {
+    if (field in files) {
+        return files[field][0];
+    }
+    return null;
+}
+exports.presageRouter.post("/", isAuth_1.isAuth(true), upload.fields([
     { name: "audio", maxCount: 1 },
-]);
-exports.presageRouter.post("/", isAuth_1.isAuth(true), presageUpload, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    { name: "thumbnail", maxCount: 1 },
+]), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield presageSchema_1.presageSchema.validate(req.body);
     }
@@ -45,22 +68,34 @@ exports.presageRouter.post("/", isAuth_1.isAuth(true), presageUpload, (req, res,
         return next(new Error(error));
     }
     const { type, title, description, content } = req.body;
-    const files = req.files;
-    if (type === "audio" && !(files === null || files === void 0 ? void 0 : files.hasOwnProperty("audio"))) {
-        return next(new Error("Please provide an audio file"));
+    let duration = null;
+    try {
+        const audioFile = getSingleFile(req.files, "audio");
+        const metadata = audioFile
+            ? yield mm.parseFile(audioFile.path, {
+                duration: true,
+            })
+            : null;
+        duration = (metadata === null || metadata === void 0 ? void 0 : metadata.format.duration)
+            ? Math.floor(metadata.format.duration) || null
+            : null;
     }
-    const audio = fetchFileUrl_1.fetchFileUrl(files, "audio");
-    const thumbnail = fetchFileUrl_1.fetchFileUrl(files, "thumbnail");
-    const duration = type === "audio"
-        ? Math.floor(yield get_audio_duration_1.getAudioDurationInSeconds(files["audio"][0].path))
-        : null;
+    catch (error) {
+        console.error(error.message);
+    }
+    function fileURL(field) {
+        const file = getSingleFile(req.files, field);
+        return file
+            ? `http://localhost:4000/uploads/${posix_1.default.basename(file.path)}`
+            : null;
+    }
     const data = {
         type,
         title,
         description,
         content,
-        audio,
-        thumbnail,
+        audio: fileURL("audio"),
+        thumbnail: fileURL("thumbnail"),
         duration,
         userId: req.userId,
     };

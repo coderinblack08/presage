@@ -9,7 +9,7 @@ export const fileTypeValidation = (
 ) => {
   const types: Record<fileTypes, RegExp> = {
     image: /(gif|jpe?g|tiff?|png|webp|bmp)/,
-    audio: /(wav|m4a|mp(3|4)|webm|mpeg)/,
+    audio: /(wav|m4a|mp(3|4)|webm|mpeg|ogg)/,
   };
 
   if (file.fieldname === field) {

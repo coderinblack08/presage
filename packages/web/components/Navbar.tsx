@@ -19,16 +19,16 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
 
   return (
     <nav className="flex items-center justify-between px-8 py-6 max-w-7xl mx-auto">
-      <div className="flex items-center">
+      {/* <div className="flex items-center">
         <button className="block md:hidden mr-6 md:mr-0">
           <MdMenu className="w-8 h-8" />
-        </button>
-        <Link href="/">
-          <a>
-            <Logo />
-          </a>
-        </Link>
-      </div>
+        </button> */}
+      <Link href="/">
+        <a>
+          <Logo />
+        </a>
+      </Link>
+      {/* </div> */}
       <ul className="hidden md:flex items-center space-x-12">
         <li>
           <a href="#">Feed</a>

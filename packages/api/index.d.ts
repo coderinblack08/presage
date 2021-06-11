@@ -8,5 +8,6 @@ declare module "random-username-generator" {
 declare namespace Express {
   export interface Request {
     userId?: string;
+    // fields: { [fieldname: string]: any };
   }
 }

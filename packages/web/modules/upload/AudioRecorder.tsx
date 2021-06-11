@@ -14,6 +14,7 @@ export const AudioRecorder: React.FC<AudioRecorderProps> = ({}) => {
   const { status, mediaBlob, stopRecording, startRecording, getMediaStream } =
     useMediaRecorder({
       mediaStreamConstraints: { audio: true },
+      blobOptions: { type: "audio/ogg; codecs=opus" },
     });
   const { time, start, pause, reset } = useTimer();
   const setAudio = useAudioUpload((x) => x.setAudio);

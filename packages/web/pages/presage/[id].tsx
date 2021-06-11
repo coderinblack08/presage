@@ -1,4 +1,5 @@
 import { format } from "date-fns";
+import formatDuration from "format-duration";
 import { GetServerSideProps } from "next";
 import React from "react";
 import {
@@ -15,6 +16,7 @@ import { Spinner } from "../../components/Spinner";
 import { fetcher } from "../../lib/fetcher";
 import { LikeButton } from "../../modules/feed/LikeButton";
 import { PresageCardLeftSide } from "../../modules/feed/PresageCardLeftSide";
+import { useDuration } from "../../modules/feed/useDuration";
 import { AvatarGroup } from "../../modules/presage/AvatarGroup";
 import { CommentModal } from "../../modules/presage/CommentModal";
 import { usePlayerStore } from "../../store/usePlayerStore";
@@ -22,6 +24,7 @@ import { Presage } from "../../types";
 
 const PresagePage: React.FC<{ id: string }> = ({ id }) => {
   const { data, isFetching } = useQuery<Presage>(`/api/presage/${id}`);
+  const duration = useDuration(data);
   const play = usePlayerStore((x) => x.play);
 
   return (
@@ -36,7 +39,8 @@ const PresagePage: React.FC<{ id: string }> = ({ id }) => {
             <div>
               <h4>{data.title}</h4>
               <p className="text-gray-200">
-                {format(new Date(data.createdAt), "MMMM d, yyyy")} · 3:24
+                {format(new Date(data.createdAt), "MMMM d, yyyy")}
+                {duration ? " · " + formatDuration(duration) : null}
               </p>
               <p
                 className={`mt-1.5 leading-7 ${

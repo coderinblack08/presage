@@ -31,7 +31,7 @@ export const CommentModal: React.FC<CommentModalProps> = ({ presage }) => {
       </Button>
       <Modal isOpen={open} closeModal={() => setOpen(false)} initialFocus={ref}>
         <div>
-          <div className="flex relative m-1.5 p-5 bg-gray-800 bg-opacity-75 rounded-xl">
+          <div className="flex flex-col relative m-1.5 p-5 bg-gray-800 bg-opacity-75 rounded-xl">
             <div>
               <AvatarGroup user={presage.user} />
             </div>
@@ -50,7 +50,9 @@ export const CommentModal: React.FC<CommentModalProps> = ({ presage }) => {
               >
                 {presage.title}
               </Dialog.Title>
-              <p className="truncate text-gray-200">{presage.description}</p>
+              <p className="truncate text-gray-200">
+                {presage.description || presage.content}
+              </p>
             </div>
           </div>
           <div className="flex space-x-4 m-6 p-0.5 mb-0">
