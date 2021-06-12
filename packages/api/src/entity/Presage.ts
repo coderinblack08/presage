@@ -6,16 +6,12 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
-  Tree,
-  TreeChildren,
-  TreeParent,
   UpdateDateColumn,
 } from "typeorm";
 import { Like } from "./Like";
 import { User } from "./User";
 
 @Entity()
-@Tree("materialized-path")
 export class Presage extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
@@ -47,17 +43,14 @@ export class Presage extends BaseEntity {
   @OneToMany(() => Like, (like) => like.presage)
   likes: Like[];
 
+  @Column("text", { array: true })
+  path: string[];
+
   @Column()
   userId: string;
 
   @ManyToOne(() => User, (user) => user.presages)
   user: User;
-
-  @TreeChildren()
-  children: Presage[];
-
-  @TreeParent()
-  parent: Presage;
 
   @CreateDateColumn()
   createdAt: Date;

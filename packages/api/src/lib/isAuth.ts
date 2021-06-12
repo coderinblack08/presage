@@ -9,7 +9,7 @@ import {
 } from "../modules/auth/createTokens";
 
 export const isAuth: (st?: boolean) => RequestHandler<{}, any, any, {}> =
-  (shouldThrow = true) =>
+  (shouldThrow = false) =>
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const accessToken = req.headers["access-token"];
     if (!accessToken || typeof accessToken !== "string")

@@ -11,9 +11,13 @@ import { AvatarGroup } from "./AvatarGroup";
 
 interface CommentModalProps {
   presage: Presage;
+  compact?: boolean;
 }
 
-export const CommentModal: React.FC<CommentModalProps> = ({ presage }) => {
+export const CommentModal: React.FC<CommentModalProps> = ({
+  presage,
+  compact = false,
+}) => {
   const ref = useRef();
   const [open, setOpen] = useState(false);
   const { mutateAsync } = useMutation(mutator);
@@ -46,7 +50,7 @@ export const CommentModal: React.FC<CommentModalProps> = ({ presage }) => {
             <div className="mt-4">
               <Dialog.Title
                 as="h6"
-                className="font-sans text-gray-100 font-bold"
+                className="font-sans text-gray-100 font-bold text-lg"
               >
                 {presage.title}
               </Dialog.Title>
@@ -83,6 +87,7 @@ export const CommentModal: React.FC<CommentModalProps> = ({ presage }) => {
                 { type: "text", content: comment, parentId: presage.id },
                 "post",
               ]);
+              setOpen(false);
             }}
             className="disabled:opacity-30 float-right m-2"
           >

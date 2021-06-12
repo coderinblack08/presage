@@ -17,7 +17,7 @@ const jsonwebtoken_1 = require("jsonwebtoken");
 const http_errors_1 = __importDefault(require("http-errors"));
 const User_1 = require("../entity/User");
 const createTokens_1 = require("../modules/auth/createTokens");
-const isAuth = (shouldThrow = true) => (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const isAuth = (shouldThrow = false) => (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const accessToken = req.headers["access-token"];
     if (!accessToken || typeof accessToken !== "string")
         return next(shouldThrow && http_errors_1.default(401, "not authenticated"));

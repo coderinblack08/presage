@@ -39,15 +39,16 @@ export const PresageCard: React.FC<PresageCardProps> = ({
         {presage.title ? <h4 className="text-xl">{presage.title}</h4> : null}
         <div className="text-gray-300 mt-1">
           Published by{" "}
-          <Link href="/user/[username]" as={`/user/${presage.user.username}`}>
-            <span
-              tabIndex={0}
-              role="link"
-              className="text-white hover:underline"
-            >
-              {presage.user.displayName}
-            </span>
-          </Link>{" "}
+          <span
+            role="link"
+            tabIndex={0}
+            onClick={() => {
+              router.push("/user/[username]", `/user/${presage.user.username}`);
+            }}
+            className="text-white hover:underline"
+          >
+            {presage.user.displayName}
+          </span>
           ·{" "}
           {formatDistanceToNow(new Date(presage.createdAt), {
             addSuffix: true,
@@ -63,8 +64,8 @@ export const PresageCard: React.FC<PresageCardProps> = ({
           </p>
         )}
         {presage.content && <p className="mt-1.5">{presage.content}</p>}
-        <div className="flex items-center space-x-5 mt-5">
-          <span>{duration ? formatDuration(duration) : null}</span>
+        <div className="flex items-center space-x-5 mt-4">
+          {duration ? <span>{formatDuration(duration)}</span> : null}
           <LikeButton presage={presage} compact />
           <button>
             <MdComment className="w-6 h-6" />

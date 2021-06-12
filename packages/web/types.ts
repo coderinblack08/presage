@@ -27,3 +27,6 @@ export interface Presage {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export type TreePresageResponse = { tree: TreePresage };
+export type TreePresage = Presage & { children: TreePresage[] };

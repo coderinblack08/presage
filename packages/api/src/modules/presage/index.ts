@@ -4,6 +4,7 @@ import * as mm from "music-metadata";
 import { join } from "path";
 import path from "path/posix";
 import { getConnection } from "typeorm";
+import { v4 } from "uuid";
 import { Like } from "../../entity/Like";
 import { Presage } from "../../entity/Presage";
 import { isAuth } from "../../lib/isAuth";
@@ -22,7 +23,7 @@ const upload = multer({
 type MulterFiles = { [fieldname: string]: Express.Multer.File[] };
 
 function getSingleFile(files: MulterFiles, field: string) {
-  if (field in files) {
+  if (files && field in files) {
     return files[field][0];
   }
   return null;
@@ -42,7 +43,7 @@ presageRouter.post(
       return next(new Error(error));
     }
 
-    const { type, title, description, content } = req.body;
+    const { type, title, description, content, parentId } = req.body;
     let duration: number | null = null;
 
     try {
@@ -68,7 +69,10 @@ presageRouter.post(
         : null;
     }
 
+    const parent = parentId ? await Presage.findOne(parentId) : null;
+    const id = v4();
     const data = {
+      id,
       type,
       title,
       description,
@@ -77,8 +81,8 @@ presageRouter.post(
       thumbnail: fileURL("thumbnail"),
       duration,
       userId: req.userId,
+      path: parent ? [...parent.path, id] : [id],
     };
-
     const presage = await Presage.create(data).save();
     res.json(presage);
   }
@@ -86,9 +90,50 @@ presageRouter.post(
 
 presageRouter.get("/", isAuth(), async (req: Request, res) => {
   const { limit = 10 } = req.query;
+  const params = [limit];
+  if (req.userId) params.push(req.userId);
+
   const presages = await getConnection().query(
     `
     select p.*,
+    ${
+      req.userId
+        ? `(case when 
+        exists (
+          select * from public.like l
+          where l."userId" = $2 and l."presageId" = p.id
+        ) 
+        then true else false
+       end) as liked,`
+        : ""
+    }
+    json_build_object(
+      'id', u.id,
+      'username', u.username,
+      'displayName', u."displayName",
+      'profilePicture', u."profilePicture",
+      'updatedAt', u."updatedAt",
+      'createdAt', u."createdAt"
+    ) as user
+    from presage p
+    left join public.user u on p."userId" = u.id
+    where array_length(p.path, 1) = 1
+    order by p."createdAt" desc
+    limit $1;
+  `,
+    params
+  );
+  res.json(presages);
+});
+
+presageRouter.get("/:id", isAuth(), async (req: Request, res) => {
+  const params = [req.params.id];
+  if (req.userId) params.push(req.userId);
+
+  let data = await getConnection().query(
+    `
+    select 
+    p.*,
     ${
       req.userId
         ? `(case when 
@@ -110,21 +155,23 @@ presageRouter.get("/", isAuth(), async (req: Request, res) => {
     ) as user
     from presage p
     left join public.user u on p."userId" = u.id
-    order by p."createdAt" desc
-    limit $2;
+    where path && array[$1];
   `,
-    [req.userId, limit]
+    params
   );
-  res.json(presages);
-});
 
-presageRouter.get("/:id", isAuth(), async (req: Request, res) => {
-  const presage = await Presage.findOne(req.params.id, { relations: ["user"] });
-  const like = await Like.findOne({
-    where: { userId: req.userId, presageId: req.params.id },
-  });
+  const tree: any = { ...data[0], children: [] };
+  data = data.sort((a: any, b: any) => a.path.length - b.path.length);
+  for (const node of data.slice(1)) {
+    const depth = node.path.length - 2;
+    let treeNode: any = tree;
+    for (let k = 0; k < depth; k++) {
+      treeNode = treeNode.children.find((x: any) => x.id === node.path[k + 1]);
+    }
+    treeNode.children.push({ ...node, children: [] });
+  }
 
-  res.json({ ...presage, liked: like !== undefined });
+  res.json({ tree });
 });
 
 presageRouter.post("/like", isAuth(true), async (req, res, next) => {

@@ -2,12 +2,7 @@ import { format } from "date-fns";
 import formatDuration from "format-duration";
 import { GetServerSideProps } from "next";
 import React from "react";
-import {
-  MdComment,
-  MdPlayArrow,
-  MdPlaylistAdd,
-  MdThumbUp,
-} from "react-icons/md";
+import { MdPlaylistAdd } from "react-icons/md";
 import { QueryClient, useQuery } from "react-query";
 import { dehydrate } from "react-query/hydration";
 import { Button } from "../../components/Button";
@@ -19,41 +14,42 @@ import { PresageCardLeftSide } from "../../modules/feed/PresageCardLeftSide";
 import { useDuration } from "../../modules/feed/useDuration";
 import { AvatarGroup } from "../../modules/presage/AvatarGroup";
 import { CommentModal } from "../../modules/presage/CommentModal";
-import { usePlayerStore } from "../../store/usePlayerStore";
-import { Presage } from "../../types";
+import { CommentTree } from "../../modules/presage/CommentTree";
+import { TreePresageResponse } from "../../types";
 
 const PresagePage: React.FC<{ id: string }> = ({ id }) => {
-  const { data, isFetching } = useQuery<Presage>(`/api/presage/${id}`);
-  const duration = useDuration(data);
-  const play = usePlayerStore((x) => x.play);
+  const { data, isFetching } = useQuery<TreePresageResponse>(
+    `/api/presage/${id}`
+  );
+  const duration = useDuration(data?.tree);
 
   return (
     <Layout>
-      {isFetching ? (
+      {isFetching && !data?.tree ? (
         <Spinner />
       ) : (
         <main className="max-w-2xl mx-auto">
-          <AvatarGroup user={data.user} />
+          <AvatarGroup user={data?.tree.user} />
           <article className="flex space-x-8 mt-6">
-            <PresageCardLeftSide presage={data} noAvatar />
+            <PresageCardLeftSide presage={data?.tree} noAvatar />
             <div>
-              <h4>{data.title}</h4>
+              <h4>{data?.tree.title}</h4>
               <p className="text-gray-200">
-                {format(new Date(data.createdAt), "MMMM d, yyyy")}
+                {format(new Date(data?.tree.createdAt), "MMMM d, yyyy")}
                 {duration ? " · " + formatDuration(duration) : null}
               </p>
               <p
                 className={`mt-1.5 leading-7 ${
-                  data.type === "audio" ? "text-gray-300" : "text-lg"
+                  data?.tree.type === "audio" ? "text-gray-300" : "text-lg"
                 }`}
               >
-                {data.description || data.content}
+                {data?.tree.description || data?.tree.content}
               </p>
             </div>
           </article>
           <div className="flex justify-between w-full border-t border-b border-gray-700 py-3 my-10">
-            <LikeButton presage={data} />
-            <CommentModal presage={data} />
+            <LikeButton presage={data?.tree} />
+            <CommentModal presage={data?.tree} />
             <Button
               icon={<MdPlaylistAdd className="w-6 h-6" />}
               color="transparent"
@@ -62,6 +58,7 @@ const PresagePage: React.FC<{ id: string }> = ({ id }) => {
               <span className="font-bold">Bookmark</span>
             </Button>
           </div>
+          <CommentTree comments={data?.tree.children} />
         </main>
       )}
     </Layout>

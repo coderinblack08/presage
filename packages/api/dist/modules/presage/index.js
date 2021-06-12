@@ -38,6 +38,7 @@ const mm = __importStar(require("music-metadata"));
 const path_1 = require("path");
 const posix_1 = __importDefault(require("path/posix"));
 const typeorm_1 = require("typeorm");
+const uuid_1 = require("uuid");
 const Like_1 = require("../../entity/Like");
 const Presage_1 = require("../../entity/Presage");
 const isAuth_1 = require("../../lib/isAuth");
@@ -52,7 +53,7 @@ const upload = multer_1.default({
     },
 });
 function getSingleFile(files, field) {
-    if (field in files) {
+    if (files && field in files) {
         return files[field][0];
     }
     return null;
@@ -67,7 +68,7 @@ exports.presageRouter.post("/", isAuth_1.isAuth(true), upload.fields([
     catch (error) {
         return next(new Error(error));
     }
-    const { type, title, description, content } = req.body;
+    const { type, title, description, content, parentId } = req.body;
     let duration = null;
     try {
         const audioFile = getSingleFile(req.files, "audio");
@@ -89,7 +90,10 @@ exports.presageRouter.post("/", isAuth_1.isAuth(true), upload.fields([
             ? `http://localhost:4000/uploads/${posix_1.default.basename(file.path)}`
             : null;
     }
+    const parent = parentId ? yield Presage_1.Presage.findOne(parentId) : null;
+    const id = uuid_1.v4();
     const data = {
+        id,
         type,
         title,
         description,
@@ -98,14 +102,50 @@ exports.presageRouter.post("/", isAuth_1.isAuth(true), upload.fields([
         thumbnail: fileURL("thumbnail"),
         duration,
         userId: req.userId,
+        path: parent ? [...parent.path, id] : [id],
     };
     const presage = yield Presage_1.Presage.create(data).save();
     res.json(presage);
 }));
 exports.presageRouter.get("/", isAuth_1.isAuth(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { limit = 10 } = req.query;
+    const params = [limit];
+    if (req.userId)
+        params.push(req.userId);
     const presages = yield typeorm_1.getConnection().query(`
     select p.*,
+    ${req.userId
+        ? `(case when 
+        exists (
+          select * from public.like l
+          where l."userId" = $2 and l."presageId" = p.id
+        ) 
+        then true else false
+       end) as liked,`
+        : ""}
+    json_build_object(
+      'id', u.id,
+      'username', u.username,
+      'displayName', u."displayName",
+      'profilePicture', u."profilePicture",
+      'updatedAt', u."updatedAt",
+      'createdAt', u."createdAt"
+    ) as user
+    from presage p
+    left join public.user u on p."userId" = u.id
+    where array_length(p.path, 1) = 1
+    order by p."createdAt" desc
+    limit $1;
+  `, params);
+    res.json(presages);
+}));
+exports.presageRouter.get("/:id", isAuth_1.isAuth(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const params = [req.params.id];
+    if (req.userId)
+        params.push(req.userId);
+    let data = yield typeorm_1.getConnection().query(`
+    select 
+    p.*,
     ${req.userId
         ? `(case when 
         exists (
@@ -125,17 +165,19 @@ exports.presageRouter.get("/", isAuth_1.isAuth(), (req, res) => __awaiter(void 0
     ) as user
     from presage p
     left join public.user u on p."userId" = u.id
-    order by p."createdAt" desc
-    limit $2;
-  `, [req.userId, limit]);
-    res.json(presages);
-}));
-exports.presageRouter.get("/:id", isAuth_1.isAuth(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const presage = yield Presage_1.Presage.findOne(req.params.id, { relations: ["user"] });
-    const like = yield Like_1.Like.findOne({
-        where: { userId: req.userId, presageId: req.params.id },
-    });
-    res.json(Object.assign(Object.assign({}, presage), { liked: like !== undefined }));
+    where path && array[$1];
+  `, params);
+    const tree = Object.assign(Object.assign({}, data[0]), { children: [] });
+    data = data.sort((a, b) => a.path.length - b.path.length);
+    for (const node of data.slice(1)) {
+        const depth = node.path.length - 2;
+        let treeNode = tree;
+        for (let k = 0; k < depth; k++) {
+            treeNode = treeNode.children.find((x) => x.id === node.path[k + 1]);
+        }
+        treeNode.children.push(Object.assign(Object.assign({}, node), { children: [] }));
+    }
+    res.json({ tree });
 }));
 exports.presageRouter.post("/like", isAuth_1.isAuth(true), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.body;
