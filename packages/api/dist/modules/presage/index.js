@@ -143,6 +143,7 @@ exports.presageRouter.get("/:id", isAuth_1.isAuth(), (req, res) => __awaiter(voi
     const params = [req.params.id];
     if (req.userId)
         params.push(req.userId);
+    console.log(req.userId, params);
     let data = yield typeorm_1.getConnection().query(`
     select 
     p.*,
@@ -150,7 +151,7 @@ exports.presageRouter.get("/:id", isAuth_1.isAuth(), (req, res) => __awaiter(voi
         ? `(case when 
         exists (
           select * from public.like l
-          where l."userId" = $1 and l."presageId" = p.id
+          where l."userId" = $2 and l."presageId" = p.id
         ) 
         then true else false
        end) as liked,`
@@ -165,10 +166,10 @@ exports.presageRouter.get("/:id", isAuth_1.isAuth(), (req, res) => __awaiter(voi
     ) as user
     from presage p
     left join public.user u on p."userId" = u.id
-    where path && array[$1];
+    where path::uuid[] && array[$1]::uuid[];
   `, params);
-    const tree = Object.assign(Object.assign({}, data[0]), { children: [] });
     data = data.sort((a, b) => a.path.length - b.path.length);
+    const tree = Object.assign(Object.assign({}, data[0]), { children: [] });
     for (const node of data.slice(1)) {
         const depth = node.path.length - 2;
         let treeNode = tree;

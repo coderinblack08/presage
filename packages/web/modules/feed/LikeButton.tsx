@@ -1,17 +1,18 @@
 import React from "react";
 import { MdThumbUp } from "react-icons/md";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { Button } from "../../components/Button";
 import { mutator } from "../../lib/mutator";
-import { Presage } from "../../types";
+import { Presage, TreePresage } from "../../types";
 
 interface LikeButtonProps {
-  presage: Presage;
+  presage: Presage | TreePresage;
   compact?: boolean;
 }
 
 export const LikeButton: React.FC<LikeButtonProps> = ({ presage, compact }) => {
   const { mutateAsync } = useMutation(mutator);
+  const { refetch } = useQuery(`/api/presage/${presage.id}`);
   const queryClient = useQueryClient();
 
   async function like() {
@@ -34,7 +35,7 @@ export const LikeButton: React.FC<LikeButtonProps> = ({ presage, compact }) => {
 
         key = `/api/presage/${presage.id}`;
         if (queryClient.getQueryData(key)) {
-          queryClient.setQueryData<Presage>(key, (old) => newData(old));
+          refetch();
         }
       },
     });

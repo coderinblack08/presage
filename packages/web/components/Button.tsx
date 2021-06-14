@@ -45,7 +45,7 @@ export const Button: React.FC<ButtonProps> = React.forwardRef(
   ) => {
     return (
       <button
-        className={`${ButtonTheme.size[size]} ${ButtonTheme.color[color]} focus:outline-none focus-visible:ring inline-flex items-center justify-center transition shadow-sm ${className}`}
+        className={`${ButtonTheme.size[size]} ${ButtonTheme.color[color]} focus:outline-none focus-visible:ring inline-flex items-center justify-center transition ${className}`}
         ref={ref}
         {...props}
       >

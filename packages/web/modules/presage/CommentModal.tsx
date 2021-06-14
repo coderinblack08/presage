@@ -2,11 +2,11 @@ import { Dialog } from "@headlessui/react";
 import React, { useState } from "react";
 import { useRef } from "react";
 import { MdClose, MdComment } from "react-icons/md";
-import { useMutation } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { Button } from "../../components/Button";
 import { Modal } from "../../components/Modal";
 import { mutator } from "../../lib/mutator";
-import { Presage } from "../../types";
+import { Presage, User } from "../../types";
 import { AvatarGroup } from "./AvatarGroup";
 
 interface CommentModalProps {
@@ -19,20 +19,28 @@ export const CommentModal: React.FC<CommentModalProps> = ({
   compact = false,
 }) => {
   const ref = useRef();
+  const { data: me } = useQuery<User>("/api/me");
+  const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const { mutateAsync } = useMutation(mutator);
   const [comment, setComment] = useState("");
 
   return (
     <>
-      <Button
-        icon={<MdComment className="w-6 h-6" />}
-        onClick={() => setOpen(true)}
-        color="transparent"
-        size="sm"
-      >
-        <span className="font-bold">Comment</span>
-      </Button>
+      {compact ? (
+        <button onClick={() => setOpen(true)}>
+          <MdComment className="w-5 h-5" />
+        </button>
+      ) : (
+        <Button
+          icon={<MdComment className="w-6 h-6" />}
+          onClick={() => setOpen(true)}
+          color="transparent"
+          size="sm"
+        >
+          <span className="font-bold">Comment</span>
+        </Button>
+      )}
       <Modal isOpen={open} closeModal={() => setOpen(false)} initialFocus={ref}>
         <div>
           <div className="flex flex-col relative m-1.5 p-5 bg-gray-800 bg-opacity-75 rounded-xl">
@@ -61,14 +69,16 @@ export const CommentModal: React.FC<CommentModalProps> = ({
           </div>
           <div className="flex space-x-4 m-6 p-0.5 mb-0">
             <img
-              src={presage.user.profilePicture}
-              alt={presage.user.displayName}
+              src={me.profilePicture}
+              alt={me.displayName}
               className="w-9 h-9 rounded-full"
             />
             <div className="w-full">
               <p className="text-gray-200 mb-1">
                 Replying to{" "}
-                <span className="font-bold">{presage.user.displayName}</span>
+                <span className="font-bold text-gray-100">
+                  {presage.user.displayName}
+                </span>
               </p>
               <textarea
                 ref={ref}
@@ -82,11 +92,20 @@ export const CommentModal: React.FC<CommentModalProps> = ({
           <Button
             disabled={comment.trim().length == 0}
             onClick={async () => {
-              await mutateAsync([
-                "/api/presage",
-                { type: "text", content: comment, parentId: presage.id },
-                "post",
-              ]);
+              await mutateAsync(
+                [
+                  "/api/presage",
+                  { type: "text", content: comment, parentId: presage.id },
+                  "post",
+                ],
+                {
+                  onSuccess: () => {
+                    queryClient.refetchQueries({
+                      queryKey: `/api/presage/${presage.id}`,
+                    });
+                  },
+                }
+              );
               setOpen(false);
             }}
             className="disabled:opacity-30 float-right m-2"

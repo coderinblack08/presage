@@ -44,7 +44,7 @@ export const Dropdown: React.FC<DropdownProps> = ({ openButton, children }) => {
           >
             <Menu.Items
               static
-              className="origin-top-right absolute right-0 mt-2 w-56 rounded-lg shadow-lg bg-gray-800 bg-opacity-75 backdrop-filter backdrop-blur border border-gray-700 focus:outline-none"
+              className="origin-top-right absolute right-0 mt-2 w-56 rounded-lg shadow-lg bg-gray-800 border border-gray-700 focus:outline-none"
             >
               {children}
             </Menu.Items>

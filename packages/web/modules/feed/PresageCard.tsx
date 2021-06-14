@@ -38,6 +38,11 @@ export const PresageCard: React.FC<PresageCardProps> = ({
       <div>
         {presage.title ? <h4 className="text-xl">{presage.title}</h4> : null}
         <div className="text-gray-300 mt-1">
+          {duration ? (
+            <span className="text-gray-100 font-semibold">
+              {formatDuration(duration)} ·{" "}
+            </span>
+          ) : null}
           Published by{" "}
           <span
             role="link"
@@ -55,17 +60,12 @@ export const PresageCard: React.FC<PresageCardProps> = ({
           })}
         </div>
         {presage.description && (
-          <p
-            className={`mt-1.5 text-gray-200 leading-7 ${
-              compact ? "line-clamp-2" : ""
-            }`}
-          >
+          <p className={`mt-1.5 leading-7 ${compact ? "line-clamp-2" : ""}`}>
             {presage.description}
           </p>
         )}
         {presage.content && <p className="mt-1.5">{presage.content}</p>}
         <div className="flex items-center space-x-5 mt-4">
-          {duration ? <span>{formatDuration(duration)}</span> : null}
           <LikeButton presage={presage} compact />
           <button>
             <MdComment className="w-6 h-6" />

@@ -23,7 +23,7 @@ export const PresagePlayer: React.FC<PresagePlayerProps> = ({}) => {
   return (
     <div>
       {presage ? (
-        <div className="fixed bottom-0 inset-x-0 w-full">
+        <div className="fixed z-50 bottom-0 inset-x-0 w-full">
           <div className="block md:hidden w-full px-6 py-4 bg-gray-800 border-t border-gray-700">
             <PlayerSlider />
           </div>

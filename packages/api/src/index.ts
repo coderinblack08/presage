@@ -2,7 +2,6 @@ require("dotenv").config();
 import cors from "cors";
 import express from "express";
 import helmet from "helmet";
-import { verify } from "jsonwebtoken";
 import passport from "passport";
 import { join } from "path/posix";
 import "reflect-metadata";
@@ -11,11 +10,6 @@ import { User } from "./entity/User";
 import { isDev } from "./lib/constants";
 import { isAuth } from "./lib/isAuth";
 import { prisma } from "./lib/prisma";
-import {
-  AccessTokenData,
-  createTokens,
-  RefreshTokenData,
-} from "./modules/auth/createTokens";
 import { authRouter } from "./modules/auth/google";
 import { presageRouter } from "./modules/presage";
 
