@@ -32,6 +32,14 @@ const fileURL = (file: Express.Multer.File) => {
   return file ? `http://localhost:4000/uploads/${basename(file.path)}` : null;
 };
 
+router.get("/", isAuth(), async (req, res) => {
+  const echos = await Echo.find({
+    relations: ["user"],
+    order: { createdAt: "DESC" },
+  });
+  res.json(echos);
+});
+
 router.post(
   "/",
   isAuth(true),

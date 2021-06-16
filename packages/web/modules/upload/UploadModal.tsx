@@ -15,6 +15,7 @@ export const UploadModal: React.FC<UploadModalProps> = ({}) => {
   const [open, setOpen] = useState(false);
   const { mutateAsync } = useMutation(mutator);
   const audio = useRef<HTMLInputElement>(null);
+  const initialFocus = useRef(null);
   const thumbnail = useRef<HTMLInputElement>(null);
 
   return (
@@ -22,7 +23,11 @@ export const UploadModal: React.FC<UploadModalProps> = ({}) => {
       <Button color="gray" onClick={() => setOpen(true)}>
         Upload
       </Button>
-      <Modal isOpen={open} closeModal={() => setOpen(false)}>
+      <Modal
+        initialFocus={initialFocus}
+        isOpen={open}
+        closeModal={() => setOpen(false)}
+      >
         <Formik
           initialValues={{ title: "", description: "" }}
           onSubmit={async (values) => {
@@ -62,10 +67,15 @@ export const UploadModal: React.FC<UploadModalProps> = ({}) => {
               <div className="p-6">
                 <h4>Upload Echo</h4>
                 <div className="space-y-4 mt-4">
-                  <InputField placeholder="Title" name="title" />
+                  <InputField
+                    placeholder="Title"
+                    name="title"
+                    ref={initialFocus}
+                  />
                   <InputField
                     placeholder="Description"
                     name="description"
+                    className="h-28"
                     textarea
                   />
                   <div>
