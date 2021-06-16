@@ -29,7 +29,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
         </li>
       </ul>
       {me ? (
-        <div className="flex items-center space-x-5">
+        <div className="flex items-center space-x-6">
           <UploadModal />
           <img
             className="w-12 h-12 rounded-full"
