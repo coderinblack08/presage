@@ -1,10 +1,14 @@
 import React from "react";
 import { MdSearch } from "react-icons/md";
 import { Button } from "./Button";
+import { useQuery } from "react-query";
+import { User } from "../lib/types";
 
 interface NavbarProps {}
 
 export const Navbar: React.FC<NavbarProps> = ({}) => {
+  const { data: me } = useQuery<User>("/auth/me");
+
   return (
     <nav className="max-w-7xl mx-auto flex items-center justify-between py-6 px-8">
       <div className="flex items-center space-x-4">
@@ -23,9 +27,20 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
           <a href="#">Search</a>
         </li>
       </ul>
-      <a href="http://localhost:4000/auth/google">
-        <Button color="gray">Login</Button>
-      </a>
+      {me ? (
+        <div className="flex items-center space-x-5">
+          <Button color="gray">Upload</Button>
+          <img
+            className="w-12 h-12 rounded-full"
+            src={me.profilePicture}
+            alt={me.displayName}
+          />
+        </div>
+      ) : (
+        <a href="http://localhost:4000/auth/google">
+          <Button color="gray">Login</Button>
+        </a>
+      )}
     </nav>
   );
 };

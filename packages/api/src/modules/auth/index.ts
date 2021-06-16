@@ -70,12 +70,27 @@ router.get(
   "/google/callback",
   passport.authenticate("google", { session: false }),
   (req: any, res) => {
-    res.redirect(`http://localhost:3000/accessToken=${req.user.accessToken}`);
+    res.redirect(`http://localhost:3000/?accessToken=${req.user.accessToken}`);
   }
 );
 
 router.get("/me", isAuth(), async (req, res) => {
-  res.json(req.userId ? await User.findOne(req.userId) : null);
+  res.json(
+    req.userId
+      ? await User.findOne(req.userId, {
+          select: [
+            "id",
+            "email",
+            "username",
+            "bio",
+            "profilePicture",
+            "displayName",
+            "createdAt",
+            "updatedAt",
+          ],
+        })
+      : null
+  );
 });
 
 export default router;

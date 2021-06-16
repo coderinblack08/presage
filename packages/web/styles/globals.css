@@ -12,6 +12,12 @@
     color: theme("colors.gray.100");
   }
 
+  body,
+  html,
+  #__next {
+    @apply antialiased bg-gray-700 text-gray-100;
+  }
+
   h4 {
     font-weight: 600;
     font-size: 1.42rem;
@@ -25,6 +31,7 @@
   a,
   button {
     font-size: 1rem;
+    font-weight: 500;
   }
 
   .small {
