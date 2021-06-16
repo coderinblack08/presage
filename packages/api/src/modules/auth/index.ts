@@ -1,15 +1,16 @@
-import {
-  uniqueNamesGenerator,
-  adjectives,
-  colors,
-  animals,
-  NumberDictionary,
-} from "unique-names-generator";
 import { Router } from "express";
 import passport from "passport";
 import { Strategy } from "passport-google-oauth20";
-import { createToken } from "./createToken";
+import {
+  adjectives,
+  animals,
+  colors,
+  NumberDictionary,
+  uniqueNamesGenerator,
+} from "unique-names-generator";
 import { User } from "../../entities/User";
+import { createToken } from "./createToken";
+import { isAuth } from "./isAuth";
 
 const router = Router();
 
@@ -72,5 +73,9 @@ router.get(
     res.redirect(`http://localhost:3000/accessToken=${req.user.accessToken}`);
   }
 );
+
+router.get("/me", isAuth(), async (req, res) => {
+  res.json(req.userId ? await User.findOne(req.userId) : null);
+});
 
 export default router;

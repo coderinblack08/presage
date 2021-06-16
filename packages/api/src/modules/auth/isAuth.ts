@@ -8,13 +8,14 @@ export const isAuth: (
   (shouldThrow = false) =>
   (req, _, next) => {
     const authHeader = req.headers.authorization;
+    const code = new createError.Unauthorized();
     if (!authHeader) {
-      return next(shouldThrow && createError(401, "not authenticated"));
+      return next(shouldThrow && createError(code, "not authenticated"));
     }
 
     const token = authHeader.split(" ")[1];
     if (!token) {
-      return next(shouldThrow && createError(401, "not authenticated"));
+      return next(shouldThrow && createError(code, "not authenticated"));
     }
 
     try {
@@ -23,5 +24,5 @@ export const isAuth: (
       return next();
     } catch {}
 
-    return next(shouldThrow && createError(401, "not authenticated"));
+    return next(shouldThrow && createError(code, "not authenticated"));
   };
