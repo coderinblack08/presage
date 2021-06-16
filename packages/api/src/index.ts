@@ -6,6 +6,7 @@ import helmet from "helmet";
 import passport from "passport";
 import { isDev } from "./lib/constants";
 import authRouter from "./modules/auth";
+import echoRouter from "./modules/echo";
 import { createConnection } from "typeorm";
 import { join } from "path";
 
@@ -38,7 +39,9 @@ async function main() {
   );
   app.use(passport.initialize());
   passport.serializeUser((user: any, done) => done(null, user.accessToken));
+  app.use("/uploads", express.static(join(__dirname, "../uploads")));
   app.use("/auth", authRouter);
+  app.use("/echo", echoRouter);
   app.listen(4000, () => console.log("Server started on port 4000"));
 }
 

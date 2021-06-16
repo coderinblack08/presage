@@ -15,12 +15,15 @@
     "helmet": "^4.6.0",
     "http-errors": "^1.8.0",
     "jsonwebtoken": "^8.5.1",
+    "multer": "^1.4.2",
+    "music-metadata": "^7.8.6",
     "passport": "^0.4.1",
     "passport-google-oauth20": "^2.0.0",
     "pg": "^8.6.0",
     "reflect-metadata": "^0.1.13",
     "typeorm": "^0.2.34",
-    "unique-names-generator": "^4.5.0"
+    "unique-names-generator": "^4.5.0",
+    "yup": "^0.32.9"
   },
   "devDependencies": {
     "@types/cors": "^2.8.10",
@@ -29,6 +32,7 @@
     "@types/helmet": "^4.0.0",
     "@types/http-errors": "^1.8.0",
     "@types/jsonwebtoken": "^8.5.1",
+    "@types/multer": "^1.4.5",
     "@types/node": "^15.12.2",
     "@types/passport": "^1.0.6",
     "@types/passport-google-oauth20": "^2.0.8",

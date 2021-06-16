@@ -3,6 +3,7 @@ import { MdSearch } from "react-icons/md";
 import { Button } from "./Button";
 import { useQuery } from "react-query";
 import { User } from "../lib/types";
+import { UploadModal } from "../modules/upload/UploadModal";
 
 interface NavbarProps {}
 
@@ -29,7 +30,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
       </ul>
       {me ? (
         <div className="flex items-center space-x-5">
-          <Button color="gray">Upload</Button>
+          <UploadModal />
           <img
             className="w-12 h-12 rounded-full"
             src={me.profilePicture}
