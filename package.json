@@ -1,9 +1,14 @@
 {
   "name": "presage",
   "private": true,
-  "workspaces": [
-    "packages/*"
-  ],
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ],
+    "nohoist": [
+      "**/**"
+    ]
+  },
   "scripts": {
     "diff": "lerna diff",
     "new-version": "lerna version --conventional-commits --yes"

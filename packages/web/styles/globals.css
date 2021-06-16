@@ -1,2 +1,13 @@
-@import "tailwindcss/base";
-@import "tailwindcss/utilities";
+/* @import "tailwindcss/base";
+@import "tailwindcss/utilities"; */
+@import url("https://rsms.me/inter/inter.css");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    font-size: 14px;
+  }
+}

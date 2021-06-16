@@ -1,12 +1,10 @@
 module.exports = {
-  stories: [
-    "../stories/**/*.stories.mdx",
-    "../stories/**/*.stories.@(js|jsx|ts|tsx)",
-  ],
+  stories: ["../stories/**/*.stories.@(ts|tsx|js|jsx|mdx)"],
   addons: [
     "@storybook/addon-links",
     "@storybook/addon-essentials",
     "@storybook/addon-postcss",
+    "storybook-dark-mode",
   ],
   webpackFinal: async (config, { configType }) => {
     const cssRule = config.module.rules.find((rule) =>
