@@ -9,5 +9,25 @@
 @layer base {
   :root {
     font-size: 14px;
+    color: theme("colors.gray.100");
+  }
+
+  h4 {
+    font-weight: 600;
+    font-size: 1.42rem;
+    line-height: 1.6;
+  }
+
+  p,
+  span,
+  div,
+  li,
+  a,
+  button {
+    font-size: 1rem;
+  }
+
+  .small {
+    font-size: 0.85rem;
   }
 }
