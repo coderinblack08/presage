@@ -1,5 +1,4 @@
-// require("dotenv-safe").config();
-require("dotenv").config();
+require("dotenv-safe").config();
 import "reflect-metadata";
 import cors from "cors";
 import express from "express";
