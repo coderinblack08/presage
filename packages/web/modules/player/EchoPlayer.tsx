@@ -42,7 +42,9 @@ export const EchoPlayer: React.FC<EchoPlayerProps> = ({}) => {
                 </div>
               </div>
               <PlayPauseSkipControls url={url} />
-              <ExtraPlayerControls />
+              <div className="hidden md:block">
+                <ExtraPlayerControls />
+              </div>
             </div>
           </div>
         </div>

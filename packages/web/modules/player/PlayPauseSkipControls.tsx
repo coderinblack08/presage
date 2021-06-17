@@ -32,7 +32,7 @@ export const PlayPauseSkipControls: React.FC<PlayPauseSkipControlsProps> = ({
   });
 
   return (
-    <div className="flex justify-end lg:justify-center items-center space-x-8">
+    <div className="flex justify-end md:justify-center items-center space-x-4 sm:space-x-6">
       <button className="player-button">
         <MdSkipPrevious className="w-7 h-7 text-white" />
       </button>
@@ -46,7 +46,7 @@ export const PlayPauseSkipControls: React.FC<PlayPauseSkipControlsProps> = ({
       <button className="player-button">
         <MdSkipNext className="w-7 h-7 text-white" />
       </button>
-      <button className="player-button block lg:hidden">
+      <button className="player-button block md:hidden">
         <MdMoreVert className="w-7 h-7 text-white" />
       </button>
     </div>
