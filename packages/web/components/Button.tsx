@@ -40,16 +40,24 @@ export const Button: React.FC<ButtonProps> = ({
   return (
     <button
       disabled={disabled || loading}
-      className={`${sizes[size]} ${colors[color]} focus:outline-none focus-visible:ring inline-flex items-center justify-center transition ${className}`}
+      className={`${sizes[size]} ${colors[color]} focus:outline-none focus-visible:ring flex items-center justify-center transition ${className}`}
       {...props}
     >
-      <span className={loading ? "opacity-0" : `flex items-center`}>
+      <span className={`flex items-center ${loading ? "opacity-0" : ""}`}>
         {icon && <span className={children ? "mr-2" : ""}>{icon}</span>}
         <p className={`font-bold ${size === "small" ? "small" : ""}`}>
           {children}
         </p>
       </span>
-      {loading ? <div className="spinner absolute" /> : null}
+      {loading ? (
+        <span className="absolute">
+          <div
+            className={`${
+              color === "primary" ? "spinner-dark" : "spinner"
+            } absolute inset-x-auto`}
+          />
+        </span>
+      ) : null}
     </button>
   );
 };

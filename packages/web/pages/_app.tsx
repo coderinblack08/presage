@@ -5,6 +5,8 @@ import { Hydrate } from "react-query/hydration";
 import { fetcher } from "../lib/fetcher";
 import "../styles/globals.css";
 import { AuthProvider } from "../components/AuthProvider";
+import { AudioPlayerProvider } from "react-use-audio-player";
+import { EchoPlayer } from "../modules/player/EchoPlayer";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -20,9 +22,12 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <QueryClientProvider client={queryClient}>
       <Hydrate state={pageProps.dehydratedState}>
-        <AuthProvider>
-          <Component {...pageProps} />
-        </AuthProvider>
+        <AudioPlayerProvider>
+          <AuthProvider>
+            <Component {...pageProps} />
+            <EchoPlayer />
+          </AuthProvider>
+        </AudioPlayerProvider>
       </Hydrate>
     </QueryClientProvider>
   );

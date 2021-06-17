@@ -50,7 +50,7 @@ export const UploadModal: React.FC<UploadModalProps> = ({}) => {
             }
           }}
         >
-          {() => (
+          {({ isSubmitting }) => (
             <Form>
               <header className="flex items-center justify-between bg-gray-600 px-6 py-2 border-b border-gray-500">
                 <button
@@ -60,7 +60,12 @@ export const UploadModal: React.FC<UploadModalProps> = ({}) => {
                 >
                   <MdClose className="text-gray-300 w-5 h-5" />
                 </button>
-                <Button type="submit" icon={<MdFileUpload />} size="small">
+                <Button
+                  loading={isSubmitting}
+                  type="submit"
+                  icon={<MdFileUpload />}
+                  size="small"
+                >
                   Upload
                 </Button>
               </header>
