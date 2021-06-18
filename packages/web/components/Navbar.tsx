@@ -1,3 +1,5 @@
+import Image from "next/image";
+import logo from "../public/static/logo.png";
 import React from "react";
 import Link from "next/link";
 import { MdSearch } from "react-icons/md";
@@ -12,27 +14,27 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
   const { data: me } = useQuery<User>("/auth/me");
 
   return (
-    <nav className="max-w-7xl mx-auto flex items-center justify-between py-6 px-8">
+    <nav className="max-w-8xl mx-auto flex items-center justify-between py-6 px-8">
       <Link href="/">
-        <a className="flex items-center space-x-4">
-          <img src="http://localhost:3000/static/logo.png" alt="Logo" />
+        <a className="flex items-center gap-x-4">
+          <Image placeholder="blur" src={logo} alt="Logo" />
           <h4 className="text-white">Presage</h4>
         </a>
       </Link>
-      <ul className="hidden md:flex items-center space-x-12">
+      <ul className="hidden md:flex items-center gap-x-12">
         <li>
           <a href="#">Feed</a>
         </li>
         <li>
           <a href="#">Library</a>
         </li>
-        <li className="flex items-center space-x-2">
+        <li className="flex items-center gap-x-2">
           <MdSearch className="w-5 h-5" />
           <a href="#">Search</a>
         </li>
       </ul>
       {me ? (
-        <div className="flex items-center space-x-6">
+        <div className="flex items-center gap-x-6">
           <UploadModal />
           <img
             className="w-12 h-12 rounded-full"

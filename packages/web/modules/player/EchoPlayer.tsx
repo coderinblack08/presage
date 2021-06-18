@@ -26,8 +26,8 @@ export const EchoPlayer: React.FC<EchoPlayerProps> = ({}) => {
         <div className="fixed z-50 bottom-0 inset-x-0 w-full">
           <PlayerSlider />
           <div className="relative z-40 w-full bg-gray-600">
-            <div className="relative px-6 pb-4 py-6 md:px-8 max-w-7xl mx-auto flex justify-between md:justify-start md:grid md:grid-cols-3 items-center md:gap-x-12 lg:gap-x-16">
-              <div className="flex items-center space-x-6">
+            <div className="relative px-6 pb-4 py-6 md:px-8 max-w-8xl mx-auto flex justify-between md:justify-start md:grid md:grid-cols-3 items-center md:gap-x-12 lg:gap-x-16">
+              <div className="flex items-center gap-x-6">
                 <img
                   src={echo.thumbnail}
                   alt={echo.title}

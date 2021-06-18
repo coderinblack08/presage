@@ -18,6 +18,12 @@
     @apply antialiased bg-gray-700 text-gray-100;
   }
 
+  h3 {
+    font-weight: 700;
+    font-size: 2rem;
+    line-height: 1.6;
+  }
+
   h4 {
     font-weight: 700;
     font-size: 1.42rem;

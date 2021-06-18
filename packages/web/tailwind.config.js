@@ -58,7 +58,14 @@ module.exports = {
         speed: "500ms",
       },
     }),
-    extend: {},
+    extend: {
+      maxWidth: {
+        "8xl": "98rem",
+      },
+      screens: {
+        sxl: "1224px",
+      },
+    },
   },
   variants: {
     extend: {},

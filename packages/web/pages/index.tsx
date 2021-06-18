@@ -10,13 +10,13 @@ const Home: React.FC = () => {
 
   return (
     <Layout>
-      <div className="flex space-x-14 items-start">
+      <div className="flex gap-x-14 items-start">
         <aside className="w-80 flex-shrink-0">
           <h6 className="text-gray-200 font-semibold mb-5">
             Suggested Accounts
           </h6>
           <ul className="space-y-6 mb-14">
-            <li className="flex items-center space-x-4">
+            <li className="flex items-center gap-x-4">
               <img
                 src="https://lh3.googleusercontent.com/a-/AOh14Gh5CzIHKFoDwSR2cveuNl3jBNgjjdwjHKeLeH-cNA=s96-c"
                 className="w-14 h-14 rounded-full"
@@ -57,11 +57,11 @@ const Home: React.FC = () => {
         </aside>
         <main className="w-full">
           <h4>Recommended Echos</h4>
-          <div className="flex space-x-8 mt-5">
+          <div className="flex gap-x-8 mt-5">
             {isFetching && !echos ? (
               <div className="spinner" />
             ) : (
-              echos?.map((echo) => <EchoCard echo={echo} />)
+              echos?.map((echo) => <EchoCard key={echo.id} echo={echo} />)
             )}
           </div>
         </main>

@@ -13,7 +13,7 @@ const colors = {
   primary:
     "text-gray-700 bg-primary hover:bg-primary-light disabled:opacity-50",
   gray:
-    "text-gray-100 bg-gray-500 hover:bg-gray-400 disabled:text-gray-200 disabled:opacity-50",
+    "text-white bg-gray-500 hover:bg-gray-400 disabled:text-gray-200 disabled:opacity-50",
 };
 
 export type ButtonProps = DetailedHTMLProps<

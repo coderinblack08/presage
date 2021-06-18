@@ -12,7 +12,7 @@ export const ExtraPlayerControls: React.FC<ExtraPlayerControlsProps> = ({}) => {
   const getCurrentTime = () => formatDuration(percentComplete * duration * 10);
 
   return (
-    <div className="flex items-center justify-end space-x-4">
+    <div className="flex items-center justify-end gap-x-4">
       <p className="pr-2 font-semibold text-[13px]">
         {getCurrentTime()} / {formatDuration(duration * 1000)}
       </p>

@@ -13,8 +13,9 @@ export const PlayerSlider: React.FC<PlayerSliderProps> = ({}) => {
   return (
     <>
       <Slider
+        step={0.01}
         className="-mb-2 relative z-50"
-        onChange={(pos) => seek((duration * pos) / 100)}
+        onChange={(position) => seek((duration * position) / 100)}
         value={percentComplete}
         railStyle={{
           backgroundColor: "#283046",
@@ -25,10 +26,9 @@ export const PlayerSlider: React.FC<PlayerSliderProps> = ({}) => {
           borderRadius: 0,
         }}
         handleStyle={{
-          backgroundColor: "#F3BE52",
+          backgroundColor: "#F2BE52",
           border: "none",
         }}
-        step={0.01}
       />
     </>
   );

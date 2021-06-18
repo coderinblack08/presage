@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Request, Router } from "express";
 import createHttpError from "http-errors";
 import multer from "multer";
 import * as mm from "music-metadata";
@@ -36,8 +36,14 @@ router.get("/", isAuth(), async (req, res) => {
   const echos = await Echo.find({
     relations: ["user"],
     order: { createdAt: "DESC" },
+    take: parseInt((req.query as any).limit) || 5,
   });
   res.json(echos);
+});
+
+router.get("/:id", isAuth(), async (req: Request<{ id: string }>, res) => {
+  const echo = await Echo.findOne(req.params.id, { relations: ["user"] });
+  res.json(echo);
 });
 
 router.post(

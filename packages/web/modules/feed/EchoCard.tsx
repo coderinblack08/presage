@@ -1,5 +1,6 @@
 import formatDuration from "format-duration";
-import React from "react";
+import { useRouter } from "next/router";
+import React, { useRef } from "react";
 import { MdPlayArrow } from "react-icons/md";
 import { Echo } from "../../lib/types";
 import { usePlayerStore } from "../player/usePlayerStore";
@@ -10,9 +11,20 @@ interface EchoCardProps {
 
 export const EchoCard: React.FC<EchoCardProps> = ({ echo }) => {
   const play = usePlayerStore((x) => x.play);
+  const router = useRouter();
+  const cardRef = useRef<HTMLAnchorElement>(null);
 
   return (
-    <article className="w-52" key={echo.id}>
+    <a
+      tabIndex={0}
+      ref={cardRef}
+      className="w-52 text-left"
+      onClick={() => {
+        router.push("/echo/[id]", `/echo/${echo.id}`);
+        if (document.activeElement === cardRef.current) {
+        }
+      }}
+    >
       {echo.thumbnail ? (
         <div className="relative w-52 h-52">
           <img
@@ -22,7 +34,10 @@ export const EchoCard: React.FC<EchoCardProps> = ({ echo }) => {
           />
           <div className="absolute left-0 bottom-0 m-2">
             <button
-              onClick={() => play(echo)}
+              onClick={(e) => {
+                play(echo);
+                e.stopPropagation();
+              }}
               className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-gray-700 bg-opacity-60 backdrop-filter backdrop-blur"
             >
               <MdPlayArrow className="w-6 h-6 text-white" />
@@ -31,10 +46,9 @@ export const EchoCard: React.FC<EchoCardProps> = ({ echo }) => {
         </div>
       ) : null}
       <h6 className="font-bold mt-3 truncate">{echo.title}</h6>
-      <p className="text-primary small truncate">
-        {formatDuration(echo.duration * 1000)} •{" "}
-        <a href="#">{echo.user.displayName}</a>
+      <p className="text-primary small truncate mt-0.5">
+        {formatDuration(echo.duration * 1000)} • {echo.user.displayName}
       </p>
-    </article>
+    </a>
   );
 };
