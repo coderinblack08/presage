@@ -25,7 +25,7 @@ const Home: React.FC = () => {
                 <p className="font-bold text-lg">Kevin LooHoo</p>
                 <div>
                   <span className="text-gray-200 font-bold">12k</span>{" "}
-                  <span className="text-gray-300">Followers • </span>
+                  <span className="text-gray-300">Followers · </span>
                   <span className="text-primary">@coderinblack</span>
                 </div>
               </div>

@@ -7,6 +7,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { Category } from "./Category";
 import { User } from "./User";
 
 @Entity()
@@ -29,11 +30,17 @@ export class Echo extends BaseEntity {
   @Column()
   duration: number;
 
-  @Column()
+  @Column("uuid")
   userId: string;
 
   @ManyToOne(() => User, (user) => user.echos)
   user: User;
+
+  @Column("uuid", { nullable: true })
+  categoryId?: string;
+
+  @ManyToOne(() => Category, (category) => category.echos)
+  category?: Category[];
 
   @CreateDateColumn()
   createdAt: string;

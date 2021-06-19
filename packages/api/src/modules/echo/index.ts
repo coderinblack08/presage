@@ -57,6 +57,7 @@ router.post(
     const schema = yup.object().shape({
       title: yup.string().required(),
       description: yup.string().nullable(),
+      categoryId: yup.string().uuid().nullable(),
     });
 
     try {
