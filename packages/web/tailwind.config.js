@@ -75,5 +75,8 @@ module.exports = {
       className: "spinner",
       themeKey: "spinner",
     }),
+    require("@tailwindcss/forms")({
+      strategy: "class",
+    }),
   ],
 };

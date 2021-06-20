@@ -19,11 +19,11 @@ const EchoPage: React.FC<{ id: string }> = ({ id }) => {
         <div className="spinner-primary" />
       ) : (
         <div className="flex flex-col sxl:flex-row justify-between gap-20">
-          <div>
+          <div className="w-full">
             <div>
               <header className="flex items-center justify-between gap-14">
                 <div>
-                  <h3>{echo?.title}</h3>
+                  <h3 className="h4 md:h3">{echo?.title}</h3>
                   <div className="flex items-center gap-x-3 mt-1">
                     <img
                       src={echo?.user.profilePicture}
@@ -64,9 +64,19 @@ const EchoPage: React.FC<{ id: string }> = ({ id }) => {
                   <span className="text-gray-200">{echo?.title}</span>
                 </div>
                 <p className="text-gray-300 leading-7">{echo?.description}</p>
-                <div className="flex items-center gap-x-1 text-primary">
-                  <MdMusicNote className="w-5 h-5" />
-                  <p>186k Downloads</p>
+                <div className="flex items-center gap-6">
+                  <div className="flex items-center gap-x-1 text-primary">
+                    <MdMusicNote className="w-5 h-5" />
+                    <p>186k Downloads</p>
+                  </div>
+                  {echo?.category ? (
+                    <p>
+                      <span className="text-gray-300">Category: </span>
+                      <a href="#" className="underline">
+                        {echo?.category?.name}
+                      </a>
+                    </p>
+                  ) : null}
                 </div>
               </div>
             </div>

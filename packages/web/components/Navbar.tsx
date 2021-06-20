@@ -17,7 +17,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
     <nav className="max-w-8xl mx-auto flex items-center justify-between py-6 px-8">
       <Link href="/">
         <a className="flex items-center gap-x-4">
-          <Image placeholder="blur" src={logo} alt="Logo" />
+          <Image src={logo} alt="Logo" />
           <h4 className="text-white">Presage</h4>
         </a>
       </Link>

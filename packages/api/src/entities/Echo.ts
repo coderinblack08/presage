@@ -30,13 +30,13 @@ export class Echo extends BaseEntity {
   @Column()
   duration: number;
 
-  @Column("uuid")
+  @Column()
   userId: string;
 
   @ManyToOne(() => User, (user) => user.echos)
   user: User;
 
-  @Column("uuid", { nullable: true })
+  @Column("text", { nullable: true })
   categoryId?: string;
 
   @ManyToOne(() => Category, (category) => category.echos)

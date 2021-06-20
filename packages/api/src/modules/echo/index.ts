@@ -5,6 +5,7 @@ import * as mm from "music-metadata";
 import { basename, join } from "path";
 import { getManager } from "typeorm";
 import * as yup from "yup";
+import { Category } from "../../entities/Category";
 import { Echo } from "../../entities/Echo";
 import { isAuth } from "../auth/isAuth";
 import { fileValidator } from "./fileValidator";
@@ -41,8 +42,15 @@ router.get("/", isAuth(), async (req, res) => {
   res.json(echos);
 });
 
+router.get("/categories", async (_, res) => {
+  const categories = await Category.find({});
+  res.json(categories);
+});
+
 router.get("/:id", isAuth(), async (req: Request<{ id: string }>, res) => {
-  const echo = await Echo.findOne(req.params.id, { relations: ["user"] });
+  const echo = await Echo.findOne(req.params.id, {
+    relations: ["user", "category"],
+  });
   res.json(echo);
 });
 

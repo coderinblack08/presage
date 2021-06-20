@@ -1,13 +1,15 @@
-import { Form, Formik } from "formik";
+import { Field, Form, Formik } from "formik";
+import * as yup from "yup";
 import { serialize } from "object-to-formdata";
-import React, { useState } from "react";
-import { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { MdClose, MdFileUpload } from "react-icons/md";
-import { useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { Button } from "../../components/Button";
 import { InputField } from "../../components/InputField";
 import { Modal } from "../../components/Modal";
+import { Select } from "../../components/Select";
 import { mutator } from "../../lib/mutator";
+import { Category } from "../../lib/types";
 
 interface UploadModalProps {}
 
@@ -17,6 +19,7 @@ export const UploadModal: React.FC<UploadModalProps> = ({}) => {
   const audio = useRef<HTMLInputElement>(null);
   const initialFocus = useRef(null);
   const thumbnail = useRef<HTMLInputElement>(null);
+  const { data: categories } = useQuery<Category[]>("/echo/categories");
 
   return (
     <>
@@ -29,15 +32,24 @@ export const UploadModal: React.FC<UploadModalProps> = ({}) => {
         closeModal={() => setOpen(false)}
       >
         <Formik
-          initialValues={{ title: "", description: "" }}
+          initialValues={{ title: "", description: "", categoryId: "none" }}
+          validationSchema={yup.object().shape({
+            title: yup.string().required(),
+            description: yup.string().nullable(),
+            categoryId: yup.string().uuid().nullable(),
+          })}
           onSubmit={async (values) => {
             const body = {
               ...values,
+              categoryId:
+                values.categoryId === "none" ? null : values.categoryId,
               audio: audio.current?.files ? audio.current?.files[0] : null,
               thumbnail: thumbnail.current?.files
                 ? thumbnail.current?.files[0]
                 : null,
             };
+
+            console.log(body);
 
             try {
               await mutateAsync(["/echo", serialize(body), "post"], {
@@ -50,7 +62,7 @@ export const UploadModal: React.FC<UploadModalProps> = ({}) => {
             }
           }}
         >
-          {({ isSubmitting }) => (
+          {({ isSubmitting, values, setFieldValue }) => (
             <Form>
               <header className="flex items-center justify-between bg-gray-600 px-6 py-2 border-b border-gray-500">
                 <button
@@ -72,11 +84,28 @@ export const UploadModal: React.FC<UploadModalProps> = ({}) => {
               <div className="p-6">
                 <h4>Upload Echo</h4>
                 <div className="space-y-4 mt-4">
-                  <InputField
-                    placeholder="Title"
-                    name="title"
-                    ref={initialFocus}
-                  />
+                  <div className="flex items-start gap-4">
+                    <InputField
+                      placeholder="Title"
+                      name="title"
+                      ref={initialFocus}
+                    />
+                    <Select
+                      name="categoryId"
+                      id="categoryId"
+                      value={values.categoryId}
+                      onChange={(e) => {
+                        setFieldValue("categoryId", e.target.value);
+                      }}
+                    >
+                      <option value="none">None</option>
+                      {categories?.map((category) => (
+                        <option key={category.id} value={category.id}>
+                          {category.name}
+                        </option>
+                      ))}
+                    </Select>
+                  </div>
                   <InputField
                     placeholder="Description"
                     name="description"

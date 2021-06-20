@@ -22,3 +22,5 @@ export const InputField: React.FC<InputProps> = React.forwardRef(
     );
   }
 );
+
+InputField.displayName = "InputField";
