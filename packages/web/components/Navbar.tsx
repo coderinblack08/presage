@@ -36,11 +36,15 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
       {me ? (
         <div className="flex items-center gap-x-6">
           <UploadModal />
-          <img
-            className="w-12 h-12 rounded-full"
-            src={me.profilePicture}
-            alt={me.displayName}
-          />
+          <Link href="/u/[username]" as={`/u/${me.username}`} passHref>
+            <a>
+              <img
+                className="w-12 h-12 rounded-full"
+                src={me.profilePicture}
+                alt={me.displayName}
+              />
+            </a>
+          </Link>
         </div>
       ) : (
         <a href="http://localhost:4000/auth/google">

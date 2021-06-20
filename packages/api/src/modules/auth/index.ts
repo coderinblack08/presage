@@ -13,6 +13,16 @@ import { createToken } from "./createToken";
 import { isAuth } from "./isAuth";
 
 const router = Router();
+const userFields: (keyof User)[] = [
+  "id",
+  "email",
+  "username",
+  "bio",
+  "profilePicture",
+  "displayName",
+  "createdAt",
+  "updatedAt",
+];
 
 const strategy = new Strategy(
   {
@@ -78,19 +88,18 @@ router.get("/me", isAuth(), async (req, res) => {
   res.json(
     req.userId
       ? await User.findOne(req.userId, {
-          select: [
-            "id",
-            "email",
-            "username",
-            "bio",
-            "profilePicture",
-            "displayName",
-            "createdAt",
-            "updatedAt",
-          ],
+          select: userFields,
         })
       : null
   );
+});
+
+router.get("/:username", async (req, res) => {
+  const user = await User.findOne({
+    where: { username: req.params.username },
+    select: userFields,
+  });
+  res.json(user);
 });
 
 export default router;

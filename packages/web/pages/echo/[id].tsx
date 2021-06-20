@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+import Link from "next/link";
 import formatDuration from "format-duration";
 import { GetServerSideProps } from "next";
 import React from "react";
@@ -35,9 +36,15 @@ const EchoPage: React.FC<{ id: string }> = ({ id }) => {
                         ? formatDuration(echo?.duration * 1000) + " — "
                         : ""}
                       Published by{" "}
-                      <span className="text-primary">
-                        {echo?.user.displayName}
-                      </span>
+                      <Link
+                        href="/u/[username]"
+                        as={`/u/${echo?.user.username}`}
+                        passHref
+                      >
+                        <a className="text-primary hover:underline">
+                          {echo?.user.displayName}
+                        </a>
+                      </Link>
                     </p>
                   </div>
                   <div className="flex items-end gap-x-4 mt-6">

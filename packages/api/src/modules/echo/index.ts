@@ -42,8 +42,11 @@ router.get("/", isAuth(), async (req, res) => {
   res.json(echos);
 });
 
-router.get("/categories", async (_, res) => {
-  const categories = await Category.find({});
+router.get("/categories", async (req, res) => {
+  const categories = await Category.find({
+    take: parseInt((req.query as any).limit),
+    order: { echoCount: "ASC" },
+  });
   res.json(categories);
 });
 

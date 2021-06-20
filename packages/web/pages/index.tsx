@@ -2,11 +2,12 @@ import React from "react";
 import { MdChevronRight } from "react-icons/md";
 import { useQuery } from "react-query";
 import { Layout } from "../components/Layout";
-import { Echo } from "../lib/types";
+import { Category, Echo } from "../lib/types";
 import { EchoCard } from "../modules/feed/EchoCard";
 
 const Home: React.FC = () => {
   const { data: echos, isFetching } = useQuery<Echo[]>("/echo");
+  const { data: categories } = useQuery<Category[]>("/echo/categories?limit=4");
 
   return (
     <Layout>
@@ -24,8 +25,8 @@ const Home: React.FC = () => {
               <div>
                 <p className="font-bold text-lg">Kevin LooHoo</p>
                 <div>
-                  <span className="text-gray-200 font-bold">12k</span>{" "}
-                  <span className="text-gray-300">Followers · </span>
+                  <span className="text-gray-200 font-semibold">12k</span>{" "}
+                  <span className="text-gray-300 mr-2">Followers</span>
                   <span className="text-primary">@coderinblack</span>
                 </div>
               </div>
@@ -41,18 +42,19 @@ const Home: React.FC = () => {
             </a>
           </div>
           <ul className="space-y-3">
-            <li className="flex bg-primary text-gray-700 font-bold items-center justify-between w-full py-3 px-5 rounded-lg">
-              Politics & Government
-              <MdChevronRight className="w-6 h-6" />
-            </li>
-            <li className="flex bg-gray-500 font-bold items-center justify-between w-full py-3 px-5 rounded-lg">
-              Comedy
-              <MdChevronRight className="w-6 h-6 text-gray-300" />
-            </li>
-            <li className="flex bg-gray-500 font-bold items-center justify-between w-full py-3 px-5 rounded-lg">
-              Sports
-              <MdChevronRight className="w-6 h-6 text-gray-300" />
-            </li>
+            {categories?.map((category, index) => (
+              <li
+                key={category.id}
+                className={`flex ${
+                  index === 0 ? "bg-primary text-gray-700" : "bg-gray-500"
+                } font-bold items-center justify-between w-full py-3 px-5 rounded-lg`}
+              >
+                {category.name}
+                <MdChevronRight
+                  className={`w-6 h-6 ${index === 0 ? "" : "text-gray-300"}`}
+                />
+              </li>
+            ))}
           </ul>
         </aside>
         <main className="w-full">
