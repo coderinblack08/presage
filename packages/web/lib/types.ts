@@ -29,3 +29,18 @@ export interface Category {
   name: string;
   echoCount: number;
 }
+
+export interface Radio {
+  id: string;
+  prompt: string;
+  description?: string;
+  closed: boolean;
+  responses: number;
+  userId: string;
+  user: User;
+  echos?: Echo[];
+  categoryId?: string;
+  category?: Category;
+  createdAt: Date;
+  updatedAt: Date;
+}

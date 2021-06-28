@@ -16,25 +16,25 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
   return (
     <nav className="max-w-8xl mx-auto flex items-center justify-between py-6 px-8">
       <Link href="/">
-        <a className="flex items-center gap-x-4">
+        <a className="flex items-center space-x-4">
           <Image src={logo} alt="Logo" />
           <h4 className="text-white">Presage</h4>
         </a>
       </Link>
-      <ul className="hidden md:flex items-center gap-x-12">
+      <ul className="hidden md:flex items-center space-x-12">
         <li>
           <a href="#">Feed</a>
         </li>
         <li>
           <a href="#">Library</a>
         </li>
-        <li className="flex items-center gap-x-2">
+        <li className="flex items-center space-x-2">
           <MdSearch className="w-5 h-5" />
           <a href="#">Search</a>
         </li>
       </ul>
       {me ? (
-        <div className="flex items-center gap-x-6">
+        <div className="flex items-center space-x-6">
           <UploadModal />
           <Link href="/u/[username]" as={`/u/${me.username}`} passHref>
             <a>

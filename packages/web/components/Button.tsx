@@ -7,6 +7,7 @@ import React, {
 const sizes = {
   big: "py-2 px-6 rounded-lg",
   small: "px-5 py-1.5 rounded-lg",
+  regular: "px-5 py-2 rounded-lg",
 };
 
 const colors = {
@@ -45,7 +46,11 @@ export const Button: React.FC<ButtonProps> = ({
     >
       <span className={`flex items-center ${loading ? "opacity-0" : ""}`}>
         {icon && <span className={children ? "mr-2" : ""}>{icon}</span>}
-        <p className={`font-bold ${size === "small" ? "small" : ""}`}>
+        <p
+          className={`font-bold ${
+            ["small", "regular"].includes(size) ? "small" : ""
+          }`}
+        >
           {children}
         </p>
       </span>
