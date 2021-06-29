@@ -42,7 +42,7 @@ export const DraftEditor: React.FC<DraftEditorProps> = ({}) => {
         <p className="text-gray-400">
           <span className="text-gray-300">0/100</span> characters used
         </p>
-        <div className="border-b border-gray-600 py-2" />
+        <div className="border-b border-gray-600 pt-4" />
         <TipTapEditor />
       </div>
     </div>

@@ -75,8 +75,8 @@ module.exports = {
               color: theme("colors.gray.200"),
               lineHeight: 0.8,
               '[class~="lead"]': { color: theme("colors.gray.300") },
-              a: { color: theme("colors.gray-100") },
-              strong: { color: theme("colors.gray-100") },
+              a: { color: theme("colors.gray.100") },
+              strong: { color: theme("colors.gray.100") },
               "ol > li::before": {
                 color: theme("colors.gray.300"),
               },

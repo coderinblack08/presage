@@ -6,6 +6,7 @@ import { Paper, TicketStar, Upload, Wallet } from "react-iconly";
 import { useQuery } from "react-query";
 import { User } from "../lib/types";
 import logo from "../public/static/logo.png";
+import { Avatar } from "./Avatar";
 import { Button } from "./Button";
 import { Dropdown, MenuItem } from "./Dropdown";
 
@@ -22,7 +23,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
           <h4 className="text-white">Presage</h4>
         </a>
       </Link>
-      <div className="block md:hidden">
+      <div className="flex items-center space-x-6 md:hidden">
         <Dropdown
           opener={
             <Menu.Button className="focus:outline-none w-8 h-8 flex items-center justify-center">
@@ -65,6 +66,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
             Publish
           </MenuItem>
         </Dropdown>
+        {me ? <Avatar user={me} /> : null}
       </div>
       <div className="hidden md:flex items-center space-x-10 lg:space-x-12">
         <a className="flex items-center">
@@ -105,11 +107,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
                 </span>
               </Button>
             </div>
-            <img
-              src={me.profilePicture}
-              alt={me.displayName}
-              className="w-12 h-12 rounded-full object-cover"
-            />
+            <Avatar user={me} />
           </div>
         ) : (
           <a href="http://localhost:4000/auth/google">

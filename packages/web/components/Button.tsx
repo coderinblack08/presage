@@ -12,6 +12,14 @@ const sizes = {
   none: "rounded-md",
 };
 
+const iconSizes = {
+  large: "p-3 rounded-md",
+  medium: "p-2.5 rounded-md",
+  regular: "p-2 rounded-md",
+  small: "p-1.5 rounded-md",
+  none: "rounded-md",
+};
+
 const colors = {
   transparent: "bg-transparent",
   primary:
@@ -44,7 +52,9 @@ export const Button: React.FC<ButtonProps> = ({
   return (
     <button
       disabled={disabled || loading}
-      className={`${sizes[size]} ${colors[color]} focus:outline-none focus-visible:ring flex items-center justify-center transition ${className}`}
+      className={`${icon && !children ? iconSizes[size] : sizes[size]} ${
+        colors[color]
+      } focus:outline-none focus-visible:ring flex items-center justify-center transition ${className}`}
       {...props}
     >
       <span className={`flex items-center ${loading ? "opacity-0" : ""}`}>
