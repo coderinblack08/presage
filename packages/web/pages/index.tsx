@@ -1,6 +1,7 @@
 import Image from "next/image";
 import React from "react";
 import { Button } from "../components/Button";
+import { Input } from "../components/Input";
 import { Layout } from "../components/Layout";
 import illustration from "../public/landing-page-illustration.png";
 
@@ -22,7 +23,12 @@ const Index: React.FC = () => {
             write, record, publish about anything. Grow your audience
             exponentially with Presage&apos;s referral system.
           </p>
-          <Button size="large">Start Growing</Button>
+          <form className="flex items-center space-x-3 max-w-lg">
+            <Input placeholder="Email Address" type="email" required />
+            <Button type="submit" size="large" className="flex-shrink-0">
+              Join Waitlist
+            </Button>
+          </form>
         </div>
         <div className="hidden md:block">
           <Image
