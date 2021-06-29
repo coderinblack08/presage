@@ -6,4 +6,4 @@ node_modules/
 # !.yarn/plugins
 # !.yarn/sdks
 # !.yarn/versions
-# .pnp.js
+# .pnp.js.DS_Store
