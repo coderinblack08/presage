@@ -46,7 +46,7 @@ module.exports = {
         speed: "500ms",
       },
       dark: {
-        color: theme("colors.gray.700"),
+        color: theme("colors.gray.600"),
         size: "1em",
         border: "2px",
         speed: "500ms",
@@ -65,6 +65,48 @@ module.exports = {
       screens: {
         sxl: "1224px",
       },
+      scale: {
+        80: "0.8",
+      },
+      typography(theme) {
+        return {
+          DEFAULT: {
+            css: {
+              color: theme("colors.gray.200"),
+              lineHeight: 0.8,
+              '[class~="lead"]': { color: theme("colors.gray.300") },
+              a: { color: theme("colors.gray-100") },
+              strong: { color: theme("colors.gray-100") },
+              "ol > li::before": {
+                color: theme("colors.gray.300"),
+              },
+              "ul > li::before": {
+                backgroundColor: theme("colors.gray.300"),
+              },
+              hr: { borderColor: theme("colors.gray.500") },
+              blockquote: {
+                color: theme("colors.gray.100"),
+                borderLeftColor: theme("colors.gray.500"),
+              },
+              h1: { color: theme("colors.gray.100") },
+              h2: { color: theme("colors.gray.100") },
+              h3: { color: theme("colors.gray.100") },
+              h4: { color: theme("colors.gray.100") },
+              code: { color: theme("colors.gray.100") },
+              "a code": { color: theme("colors.gray.100") },
+              pre: {
+                color: theme("colors.gray.200"),
+                backgroundColor: theme("colors.gray.600"),
+              },
+              thead: {
+                color: theme("colors.gray.100"),
+                borderBottomColor: theme("colors.gray.600"),
+              },
+              "tbody tr": { borderBottomColor: theme("colors.gray.600") },
+            },
+          },
+        };
+      },
     },
   },
   variants: {
@@ -78,5 +120,6 @@ module.exports = {
     require("@tailwindcss/forms")({
       strategy: "class",
     }),
+    require("@tailwindcss/typography"),
   ],
 };

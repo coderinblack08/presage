@@ -9,9 +9,11 @@ const sizes = {
   medium: "py-2 px-6 rounded-lg",
   regular: "px-5 py-2 rounded-lg",
   small: "px-5 py-1.5 rounded-lg",
+  none: "rounded-md",
 };
 
 const colors = {
+  transparent: "bg-transparent",
   primary:
     "text-gray-700 bg-primary hover:bg-primary-light disabled:opacity-50",
   gray:

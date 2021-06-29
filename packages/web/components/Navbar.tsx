@@ -20,22 +20,22 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
           <h4 className="text-white">Presage</h4>
         </a>
       </Link>
-      <div className="hidden md:flex items-center space-x-10 lg:space-x-14">
+      <div className="hidden md:flex items-center space-x-10 lg:space-x-12">
         <a className="flex items-center">
-          <div className="mr-3">
+          <div className="mr-2 scale-80">
             <Paper set="bulk" />
           </div>
           Browse
         </a>
         <a className="flex items-center">
-          <div className="mr-3">
+          <div className="mr-2 scale-80">
             <Wallet set="bulk" />
           </div>
           Pricing
         </a>
         <Link href="/publish">
           <a className="flex items-center">
-            <div className="mr-3">
+            <div className="mr-2 scale-80">
               <Upload set="bulk" />
             </div>
             Publish
@@ -46,10 +46,17 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
             <div className="flex items-center flex-grow-0">
               <Button
                 color="gray"
-                icon={<TicketStar set="bulk" />}
+                size="small"
+                icon={
+                  <div className="scale-80">
+                    <TicketStar set="bulk" />
+                  </div>
+                }
                 className="bg-gray-600 border border-gray-500 hover:bg-gray-500"
               >
-                12 <span className="text-gray-200">Referrals</span>
+                <span className="text-base font-bold">
+                  12 <span className="text-gray-200">Referrals</span>
+                </span>
               </Button>
             </div>
             <img
