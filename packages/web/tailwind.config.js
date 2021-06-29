@@ -25,13 +25,13 @@ module.exports = {
       black: "#000000",
       transparent: "transparent",
       gray: {
-        100: "#EEF1F4",
-        200: "#ACB8CA",
-        300: "#798CA5",
-        400: "#3E4861",
-        500: "#283046",
-        600: "#181D2D",
-        700: "#0E1421",
+        100: "#EEF0F2",
+        200: "#BCC3CD",
+        300: "#8E9AAA",
+        400: "#4D5568",
+        500: "#323848",
+        600: "#202430",
+        700: "#13151D",
       },
       primary: {
         DEFAULT: "#F3BE52",
@@ -60,7 +60,7 @@ module.exports = {
     }),
     extend: {
       maxWidth: {
-        "8xl": "98rem",
+        "8xl": "88rem",
       },
       screens: {
         sxl: "1224px",

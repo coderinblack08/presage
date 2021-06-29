@@ -5,9 +5,10 @@ import React, {
 } from "react";
 
 const sizes = {
-  big: "py-2 px-6 rounded-lg",
-  small: "px-5 py-1.5 rounded-lg",
+  large: "py-2.5 px-7 rounded-lg",
+  medium: "py-2 px-6 rounded-lg",
   regular: "px-5 py-2 rounded-lg",
+  small: "px-5 py-1.5 rounded-lg",
 };
 
 const colors = {
@@ -29,7 +30,7 @@ export type ButtonProps = DetailedHTMLProps<
 };
 
 export const Button: React.FC<ButtonProps> = ({
-  size = "big",
+  size = "medium",
   color = "primary",
   icon,
   loading,

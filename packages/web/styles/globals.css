@@ -18,18 +18,25 @@
     @apply antialiased bg-gray-700 text-gray-100;
   }
 
+  .h2,
+  h2 {
+    font-weight: 700;
+    font-size: 2.6rem;
+    line-height: 1.5;
+  }
+
   .h3,
   h3 {
     font-weight: 700;
     font-size: 2rem;
-    line-height: 1.6;
+    line-height: 1.5;
   }
 
   .h4,
   h4 {
     font-weight: 700;
-    font-size: 1.42rem;
-    line-height: 1.6;
+    font-size: 1.4rem;
+    line-height: 1.5;
   }
 
   p,
@@ -43,6 +50,6 @@
   }
 
   .small {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
   }
 }

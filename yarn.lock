@@ -12359,6 +12359,11 @@ react-helmet-async@^1.0.7:
     react-fast-compare "^3.2.0"
     shallowequal "^1.1.0"
 
+react-iconly@^2.2.2:
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/react-iconly/-/react-iconly-2.2.2.tgz#a1b1b6df089e98673dd1ed995e0ae55f3df0fbee"
+  integrity sha512-BdjMsW5VbepHxpyjNzKED1amIrNyJj1SG/t22IQNtb25euqbk0FAz1x05ZQfN+az73nrqYPJ/LEH6mYhaCopZw==
+
 react-icons@^4.2.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-4.2.0.tgz#6dda80c8a8f338ff96a1851424d63083282630d0"
