@@ -1,2 +1,4 @@
+node_modules/
+dist/
+uploads/
 .env
-tmp/
