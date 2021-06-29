@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@headlessui/react": "^1.2.0",
+    "@mailchimp/mailchimp_marketing": "^3.0.51",
     "@svgr/webpack": "^5.5.0",
     "@tiptap/extension-heading": "^2.0.0-beta.14",
     "@tiptap/extension-placeholder": "^2.0.0-beta.25",

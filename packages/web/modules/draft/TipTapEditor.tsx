@@ -27,7 +27,7 @@ export const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
     <div>
       {editor && (
         <BubbleMenu
-          className="flex items-center bg-gray-600/75 divide-x divide-gray-500 border border-gray-500 px-1.5 rounded-lg"
+          className="flex items-center bg-gray-600/75 backdrop-blur divide-x divide-gray-500 border border-gray-500 px-1.5 rounded-lg"
           tippyOptions={{ duration: 100 }}
           editor={editor}
         >
@@ -48,7 +48,8 @@ export const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
                   .toggleHeading({ level: parseInt(e.target.value) as any })
                   .run();
               }}
-              className="border-none bg-gray-600/75 py-1.5"
+              color="transparent"
+              className="border-none py-1.5"
             >
               <option value={1}>Heading 1</option>
               <option value={2}>Heading 2</option>

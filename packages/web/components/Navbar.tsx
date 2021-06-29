@@ -100,7 +100,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
                     <TicketStar set="bulk" />
                   </div>
                 }
-                className="bg-gray-600 border border-gray-500 hover:bg-gray-500"
+                className="bg-gray-600 hover:bg-gray-500"
               >
                 <span className="text-base font-bold">
                   12 <span className="text-gray-200">Referrals</span>

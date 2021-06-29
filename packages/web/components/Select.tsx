@@ -1,15 +1,19 @@
 import React from "react";
 import { HiOutlineSelector } from "react-icons/hi";
 
-interface SelectProps {}
+interface SelectProps {
+  color?: "gray" | "transparent";
+}
 
 export const Select: React.FC<
   SelectProps & React.ComponentPropsWithoutRef<"select">
-> = ({ children, className, ...props }) => {
+> = ({ children, className, color = "gray", ...props }) => {
   return (
     <div className="relative">
       <select
-        className={`appearance-none font-semibold pl-4 pr-10 py-2 bg-gray-600 border border-gray-500 focus:border-gray-500 rounded-lg focus:outline-none focus:ring-2 ${className}`}
+        className={`appearance-none font-semibold pl-4 pr-10 py-2 ${
+          color === "gray" ? "bg-gray-600" : "bg-transparent"
+        } border border-gray-500 focus:border-gray-500 rounded-lg focus:outline-none focus:ring-2 ${className}`}
         {...props}
       >
         {children}
