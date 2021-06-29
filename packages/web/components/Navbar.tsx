@@ -1,3 +1,4 @@
+import { Menu } from "@headlessui/react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -6,6 +7,7 @@ import { useQuery } from "react-query";
 import { User } from "../lib/types";
 import logo from "../public/static/logo.png";
 import { Button } from "./Button";
+import { Dropdown, MenuItem } from "./Dropdown";
 
 interface NavbarProps {}
 
@@ -20,6 +22,50 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
           <h4 className="text-white">Presage</h4>
         </a>
       </Link>
+      <div className="block md:hidden">
+        <Dropdown
+          opener={
+            <Menu.Button className="focus:outline-none w-8 h-8 flex items-center justify-center">
+              <svg
+                className="w-6 h-auto fill-current text-white"
+                viewBox="0 0 24 12"
+              >
+                <rect width="24" height="2"></rect>
+                <rect y="5" width="24" height="2"></rect>
+                <rect y="10" width="24" height="2"></rect>
+              </svg>
+            </Menu.Button>
+          }
+        >
+          <MenuItem
+            icon={
+              <div className="scale-80">
+                <Paper set="bulk" />
+              </div>
+            }
+          >
+            Browse
+          </MenuItem>
+          <MenuItem
+            icon={
+              <div className="scale-80">
+                <Wallet set="bulk" />
+              </div>
+            }
+          >
+            Pricing
+          </MenuItem>
+          <MenuItem
+            icon={
+              <div className="scale-80">
+                <Upload set="bulk" />
+              </div>
+            }
+          >
+            Publish
+          </MenuItem>
+        </Dropdown>
+      </div>
       <div className="hidden md:flex items-center space-x-10 lg:space-x-12">
         <a className="flex items-center">
           <div className="mr-2 scale-80">
