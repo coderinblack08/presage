@@ -3,9 +3,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { Article } from "./Article";
 
 @Entity()
 export class User extends BaseEntity {
@@ -29,6 +31,9 @@ export class User extends BaseEntity {
 
   @Column()
   googleId: string;
+
+  @OneToMany(() => Article, (article) => article.user)
+  articles: Article[];
 
   @CreateDateColumn()
   createdAt: Date;
