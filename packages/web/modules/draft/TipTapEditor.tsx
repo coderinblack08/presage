@@ -12,8 +12,10 @@ import {
   AiOutlineStrikethrough,
   AiOutlineUnderline,
 } from "react-icons/ai";
+import { useQuery } from "react-query";
 import { Button } from "../../components/Button";
 import { Select } from "../../components/Select";
+import { Article } from "../../lib/types";
 
 interface TipTapEditorProps {}
 
@@ -27,12 +29,13 @@ export const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
   const {
     query: { id },
   } = useRouter();
+  const { data: draft, isFetching } = useQuery<Article>(`/articles/${id}`);
   const editor = useEditor({
     extensions,
     onUpdate: ({ editor }) => {
       setFieldValue("body", editor.getJSON(), false);
     },
-    content: generateHTML(values.body, extensions),
+    content: generateHTML(draft?.body, extensions),
     editorProps: {
       attributes: {
         class: "prose focus:outline-none py-8 max-w-3xl",
@@ -41,7 +44,7 @@ export const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
   });
 
   useEffect(() => {
-    editor?.commands.setContent(generateHTML(values.body, extensions));
+    editor?.commands.setContent(generateHTML(draft?.body, extensions));
   }, [id]);
 
   return (
