@@ -29,7 +29,7 @@ export const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
   const {
     query: { id },
   } = useRouter();
-  const { data: draft, isFetching } = useQuery<Article>(`/articles/${id}`);
+  const { data: draft } = useQuery<Article>(`/articles/${id}`);
   const editor = useEditor({
     extensions,
     onUpdate: ({ editor }) => {
