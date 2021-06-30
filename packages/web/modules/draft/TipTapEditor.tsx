@@ -1,35 +1,48 @@
 import Placeholder from "@tiptap/extension-placeholder";
+import Underline from "@tiptap/extension-underline";
 import { generateHTML } from "@tiptap/html";
 import { BubbleMenu, EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { Field, useFormikContext } from "formik";
-import React from "react";
+import { useRouter } from "next/router";
+import React, { useEffect, useMemo } from "react";
 import {
   AiOutlineBold,
   AiOutlineItalic,
   AiOutlineStrikethrough,
+  AiOutlineUnderline,
 } from "react-icons/ai";
 import { Button } from "../../components/Button";
 import { Select } from "../../components/Select";
 
 interface TipTapEditorProps {}
 
-const extensions = [StarterKit, Placeholder];
+const extensions = [StarterKit, Placeholder, Underline];
 
 export const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
-  const { values, setFieldValue } = useFormikContext();
+  const { values, setFieldValue } = useFormikContext<{
+    title: string;
+    body: any;
+  }>();
+  const {
+    query: { id },
+  } = useRouter();
   const editor = useEditor({
     extensions,
     onUpdate: ({ editor }) => {
       setFieldValue("body", editor.getJSON(), false);
     },
-    content: generateHTML((values as any).body, extensions),
+    content: generateHTML(values.body, extensions),
     editorProps: {
       attributes: {
         class: "prose focus:outline-none py-8 max-w-3xl",
       },
     },
   });
+
+  useEffect(() => {
+    editor?.commands.setContent(generateHTML(values.body, extensions));
+  }, [id]);
 
   return (
     <div>
@@ -41,7 +54,10 @@ export const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
           placeholder="Untitled"
         />
         <p className="text-gray-400">
-          <span className="text-gray-300">0/100</span> characters used
+          <span className="text-gray-300">
+            {values.title.trim().length}/100
+          </span>{" "}
+          characters used
         </p>
         <div className="border-b border-gray-600 pt-4" />
         {editor && (
@@ -79,19 +95,25 @@ export const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
             <div className="flex items-center space-x-2 px-4 py-1.5">
               <Button
                 onClick={() => editor.chain().focus().toggleBold().run()}
-                color={editor.isActive("bold") ? "primary" : "transparent"}
+                color={editor.isActive("bold") ? "gray" : "transparent"}
                 size="small"
                 icon={<AiOutlineBold className="w-4 h-4" />}
               />
               <Button
                 onClick={() => editor.chain().focus().toggleItalic().run()}
-                color={editor.isActive("italic") ? "primary" : "transparent"}
+                color={editor.isActive("italic") ? "gray" : "transparent"}
                 size="small"
                 icon={<AiOutlineItalic className="w-4 h-4" />}
               />
               <Button
+                onClick={() => editor.chain().focus().toggleUnderline().run()}
+                color={editor.isActive("underline") ? "gray" : "transparent"}
+                size="small"
+                icon={<AiOutlineUnderline className="w-4 h-4" />}
+              />
+              <Button
                 onClick={() => editor.chain().focus().toggleStrike().run()}
-                color={editor.isActive("strike") ? "primary" : "transparent"}
+                color={editor.isActive("strike") ? "gray" : "transparent"}
                 size="small"
                 icon={<AiOutlineStrikethrough className="w-4 h-4" />}
               />

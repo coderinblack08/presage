@@ -7,7 +7,7 @@ interface DropdownProps {
 
 export const Dropdown: React.FC<DropdownProps> = ({ opener, children }) => {
   return (
-    <Menu as="div" className="relative inline-block text-left">
+    <Menu as="div" className="relative z-50 inline-block text-left">
       <div>{opener}</div>
       <Transition
         as={Fragment}

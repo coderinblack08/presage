@@ -3,20 +3,21 @@ import { Form, Formik } from "formik";
 import React from "react";
 import { Bookmark, Image } from "react-iconly";
 import { MdPublish } from "react-icons/md";
-import { useMutation, useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { Button } from "../../components/Button";
 import { mutator } from "../../lib/mutator";
 import { Article } from "../../lib/types";
 import { AutoSave } from "./AutoSave";
 import { TipTapEditor } from "./TipTapEditor";
-import { useEditorStore } from "./useEditorStore";
 
-interface DraftEditorProps {}
+interface DraftEditorProps {
+  id: string;
+}
 
-export const DraftEditor: React.FC<DraftEditorProps> = ({}) => {
-  const draftId = useEditorStore((x) => x.draftId);
-  const { data: draft, isFetching } = useQuery<Article>(`/articles/${draftId}`);
+export const DraftEditor: React.FC<DraftEditorProps> = ({ id }) => {
+  const { data: draft, isFetching } = useQuery<Article>(`/articles/${id}`);
   const { mutateAsync } = useMutation(mutator);
+  const queryClient = useQueryClient();
 
   if (isFetching || !draft) {
     return <div className="spinner w-auto" />;
@@ -30,7 +31,25 @@ export const DraftEditor: React.FC<DraftEditorProps> = ({}) => {
       }}
       enableReinitialize
       onSubmit={async (values, { setSubmitting }) => {
-        await mutateAsync([`/articles/${draftId}`, values, "patch"]);
+        await mutateAsync([`/articles/${id}`, values, "patch"], {
+          onSuccess: () => {
+            queryClient.setQueryData<Article>(`/articles/${id}`, (old) => {
+              return {
+                ...old,
+                ...values,
+              } as Article;
+            });
+            queryClient.setQueryData<Article[]>(`/articles/drafts`, (old) => {
+              if (old) {
+                const idx = old?.findIndex((v) => v.id === id);
+                old[idx] = { ...old[idx], title: values.title };
+                return old;
+              }
+              return [];
+            });
+          },
+        });
+        console.log("Draft auto-saved");
         setSubmitting(false);
       }}
     >

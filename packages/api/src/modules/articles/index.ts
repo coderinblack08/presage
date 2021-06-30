@@ -1,4 +1,5 @@
 import { Router, Request } from "express";
+import createHttpError from "http-errors";
 import { Article } from "../../entities/Article";
 import { isAuth } from "../auth/isAuth";
 
@@ -19,7 +20,6 @@ const router = Router();
 router.post("/", isAuth(true), async (req, res) => {
   const article = await Article.create({
     title: "",
-    body: {},
     userId: req.userId,
   }).save();
   res.json(article);
@@ -38,13 +38,18 @@ router.get("/drafts", isAuth(true), async (req, res) => {
   const articles = await Article.find({
     where: { userId: req.userId },
     order: { updatedAt: "DESC" },
+    select: ["id", "title", "published", "createdAt", "updatedAt"],
   });
   res.json(articles);
 });
 
-router.get("/:id", async (req, res) => {
-  const article = await Article.findOne({ where: { id: req.params.id } });
-  res.json(article);
+router.get("/:id", async (req, res, next) => {
+  try {
+    const article = await Article.findOne({ where: { id: req.params.id } });
+    res.json(article);
+  } catch (error) {
+    next(createHttpError(401, error));
+  }
 });
 
 export default router;
