@@ -17,17 +17,14 @@ export class Article extends BaseEntity {
   @Column("varchar", { length: 100 })
   title: string;
 
-  @Column()
-  description: string;
-
   @Column("json", { nullable: true })
-  body?: any;
+  body: any | null;
 
   @Column("bool", { default: false })
   published: boolean;
 
-  @Column()
-  readingTime: number;
+  @Column("int", { nullable: true })
+  readingTime: number | null;
 
   @Column("int", { default: 0 })
   likes: number;

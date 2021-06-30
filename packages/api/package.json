@@ -21,6 +21,7 @@
     "passport-google-oauth20": "^2.0.0",
     "pg": "^8.6.0",
     "reflect-metadata": "^0.1.13",
+    "socket.io": "^4.1.2",
     "typeorm": "^0.2.34",
     "unique-names-generator": "^4.5.0",
     "yup": "^0.32.9"

@@ -8,3 +8,16 @@ export interface User {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface Article {
+  id: string;
+  title: string;
+  body: any | null;
+  published: boolean;
+  readingTime: number | null;
+  likes: number;
+  userId: string;
+  user: User;
+  createdAt: Date;
+  updatedAt: Date;
+}
