@@ -1,17 +1,16 @@
 /* eslint-disable jsx-a11y/alt-text */
-import * as yup from "yup";
 import { Form, Formik } from "formik";
 import React from "react";
-import { Bookmark, Delete, Image } from "react-iconly";
 import { MdPublish } from "react-icons/md";
 import { useMutation, useQuery, useQueryClient } from "react-query";
+import * as yup from "yup";
 import { Button } from "../../components/Button";
 import { mutator } from "../../lib/mutator";
 import { Article } from "../../lib/types";
 import { AutoSave } from "./AutoSave";
-import { PublishModal } from "./PublishModal";
-import { TipTapEditor } from "./TipTapEditor";
 import { DeleteDraftModal } from "./DeleteDraftModal";
+import { EditTagModal } from "./EditTagModal";
+import { TipTapEditor } from "./TipTapEditor";
 
 interface DraftEditorProps {
   id: string;
@@ -60,7 +59,7 @@ export const DraftEditor: React.FC<DraftEditorProps> = ({ id }) => {
         setSubmitting(false);
       }}
     >
-      {({ values }) => (
+      {({ values, isValid }) => (
         <Form>
           <header className="flex items-center justify-between">
             <div className="flex items-center space-x-8">
@@ -78,27 +77,34 @@ export const DraftEditor: React.FC<DraftEditorProps> = ({ id }) => {
                   Upload Cover
                 </span>
               </Button> */}
-              {draft.published ? (
-                <Button
-                  icon={
-                    <div className="scale-80">
-                      <Bookmark set="bulk" />
-                    </div>
-                  }
-                  type="button"
-                  color="transparent"
-                  size="none"
-                >
-                  <span className="text-gray-300 font-semibold">Add Tags</span>
-                </Button>
-              ) : null}
+              <EditTagModal id={id} />
               <DeleteDraftModal id={id} />
             </div>
             <div className="flex items-center space-x-4">
               {draft.published ? (
                 <Button>Unpublish</Button>
               ) : (
-                <PublishModal id={id} />
+                <Button
+                  type="button"
+                  onClick={async () => {
+                    if (isValid) {
+                      await mutateAsync(
+                        [`/articles/publish/${id}`, null, "post"],
+                        {
+                          onSuccess: () => {
+                            queryClient.setQueryData<Article>(
+                              `/articles/${id}`,
+                              (old) => ({ ...old, published: true } as any)
+                            );
+                          },
+                        }
+                      );
+                    }
+                  }}
+                  icon={<MdPublish className="w-5 h-5" />}
+                >
+                  Publish
+                </Button>
               )}
             </div>
           </header>

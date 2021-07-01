@@ -2,6 +2,7 @@ import { Request, Router } from "express";
 import createHttpError from "http-errors";
 import { getConnection } from "typeorm";
 import { Article } from "../../entities/Article";
+import { Tag } from "../../entities/Tag";
 import { isAuth } from "../auth/isAuth";
 
 // export const createPublishSocket = (
@@ -38,8 +39,8 @@ router.patch(
   }
 );
 
-router.post(
-  "/publish/:id",
+router.patch(
+  "/tags/:id",
   isAuth(true),
   async (req: Request<{ id: string }>, res, next) => {
     if (!Array.isArray(req.body.tags)) {
@@ -50,32 +51,49 @@ router.post(
     }
     const connection = getConnection();
     await connection.transaction(async (em) => {
-      const tags = [];
-      for (const tag of req.body.tags) {
-        const newTag = await em.query(
-          `
-            insert into tag("name", "usedBy") 
-            values($1, 1) 
-            on conflict ("name") 
-            do update set "usedBy" = tag."usedBy" + 1
-            returning *;
-          `,
-          [tag]
+      em.query(
+        `
+        update tag t
+        set "usedBy" = t."usedBy" - 1
+        where exists (
+          select 1 from article_tags_tag a
+          where a."articleId" = $1 and a."tagId" = t.id
         );
-        await em.query(
-          `
-            insert into article_tags_tag("articleId", "tagId")
-            values($1, $2);
-          `,
-          [req.params.id, newTag[0].id]
-        );
-        tags.push(newTag[0]);
-      }
-      await em.update(Article, req.params.id, {
-        published: true,
-      });
-      res.json(tags);
+      `,
+        [req.params.id]
+      );
+      const tags: Tag[] =
+        req.body.tags.length === 0
+          ? null
+          : await em.query(
+              `
+              insert into tag("name", "usedBy") 
+              values${req.body.tags
+                .map((_: string, index: number) => `($${index + 1}, 1)`)
+                .join(", ")}
+              on conflict ("name")
+              do update set "usedBy" = tag."usedBy" + 1
+              returning *;
+              `,
+              req.body.tags
+            );
+      connection.getRepository(Article).save({ id: req.params.id, tags });
+      res.json(tags || []);
     });
+  }
+);
+
+router.post(
+  "/publish/:id",
+  isAuth(true),
+  async (req: Request<{ id: string }>, res, next) => {
+    await Article.update(
+      { id: req.params.id, userId: req.userId },
+      {
+        published: true,
+      }
+    );
+    res.send(true);
   }
 );
 
