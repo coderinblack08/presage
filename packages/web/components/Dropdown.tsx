@@ -26,13 +26,14 @@ export const Dropdown: React.FC<DropdownProps> = ({ opener, children }) => {
   );
 };
 
-export const MenuItem: React.FC<{ icon?: ReactNode }> = ({
+export const MenuItem: React.FC<{ icon?: ReactNode; onClick?: () => void }> = ({
   children,
   icon,
+  onClick,
 }) => {
   return (
     <div className="p-1">
-      <Menu.Item>
+      <Menu.Item onClick={onClick}>
         {({ active }) => (
           <button
             className={`${

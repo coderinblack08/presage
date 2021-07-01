@@ -1,6 +1,7 @@
 import { Menu } from "@headlessui/react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React from "react";
 import { Paper, TicketStar, Upload, Wallet } from "react-iconly";
 import { useQuery } from "react-query";
@@ -14,6 +15,7 @@ interface NavbarProps {}
 
 export const Navbar: React.FC<NavbarProps> = ({}) => {
   const { data: me } = useQuery<User>("/me");
+  const router = useRouter();
 
   return (
     <nav className="max-w-8xl mx-auto flex items-center justify-between py-6 px-8">
@@ -57,6 +59,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
             Pricing
           </MenuItem>
           <MenuItem
+            onClick={() => router.push("/publish")}
             icon={
               <div className="scale-80">
                 <Upload set="bulk" />
