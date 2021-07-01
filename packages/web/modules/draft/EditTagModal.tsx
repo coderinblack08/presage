@@ -1,6 +1,6 @@
 import { Dialog } from "@headlessui/react";
 import { useFormikContext } from "formik";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Bookmark } from "react-iconly";
 import { MdSave } from "react-icons/md";
 import { useMutation, useQuery, useQueryClient } from "react-query";
@@ -23,6 +23,10 @@ export const EditTagModal: React.FC<EditTagModalProps> = ({ id }) => {
     draft ? draft?.tags.map((x) => x.name).join(", ") : ""
   );
   const { mutateAsync } = useMutation(mutator);
+
+  useEffect(() => {
+    setTags(draft ? draft?.tags.map((x) => x.name).join(", ") : "");
+  }, [id, draft]);
 
   const handleSubmit = async () => {
     const s = tags.trim();

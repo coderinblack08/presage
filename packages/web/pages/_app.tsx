@@ -1,4 +1,5 @@
 import React from "react";
+import { ReactQueryDevtools } from "react-query/devtools";
 import type { AppProps } from "next/app";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Hydrate } from "react-query/hydration";
@@ -24,6 +25,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <AudioPlayerProvider>
           <AuthProvider>
             <Component {...pageProps} />
+            <ReactQueryDevtools />
           </AuthProvider>
         </AudioPlayerProvider>
       </Hydrate>

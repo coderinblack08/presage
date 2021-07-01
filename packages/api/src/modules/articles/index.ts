@@ -50,6 +50,8 @@ router.patch(
       next(createHttpError(400, "tags are capped at 5 elements"));
     }
     const connection = getConnection();
+    const article = await Article.findOne(req.params.id);
+    if (!article) next(createHttpError(500, "no article found"));
     await connection.transaction(async (em) => {
       em.query(
         `
@@ -60,6 +62,13 @@ router.patch(
           where a."articleId" = $1 and a."tagId" = t.id
         );
       `,
+        [req.params.id]
+      );
+      em.query(
+        `
+          delete from article_tags_tag
+          where "articleId" = $1;
+        `,
         [req.params.id]
       );
       const tags: Tag[] =
@@ -77,7 +86,20 @@ router.patch(
               `,
               req.body.tags
             );
-      connection.getRepository(Article).save({ id: req.params.id, tags });
+      console.log(tags);
+      if (req.body.tags.length > 0) {
+        em.query(
+          `
+            insert into article_tags_tag("articleId", "tagId")
+            values${req.body.tags
+              .map((_: string, index: number) => `($1, $${index + 2})`)
+              .join(", ")};
+          `,
+          [req.params.id, ...tags.map((x) => x.id)]
+        );
+      }
+
+      // connection.getRepository(Article).save({ id: req.params.id, tags });
       res.json(tags || []);
     });
   }
