@@ -11,6 +11,7 @@ import { Article } from "../../lib/types";
 import { AutoSave } from "./AutoSave";
 import { PublishModal } from "./PublishModal";
 import { TipTapEditor } from "./TipTapEditor";
+import { DeleteDraftModal } from "./DeleteDraftModal";
 
 interface DraftEditorProps {
   id: string;
@@ -91,20 +92,7 @@ export const DraftEditor: React.FC<DraftEditorProps> = ({ id }) => {
                   <span className="text-gray-300 font-semibold">Add Tags</span>
                 </Button>
               ) : null}
-              <Button
-                icon={
-                  <div className="scale-80">
-                    <Delete set="bulk" />
-                  </div>
-                }
-                color="transparent"
-                size="none"
-                type="button"
-              >
-                <span className="text-gray-300 font-semibold">
-                  Delete Draft
-                </span>
-              </Button>
+              <DeleteDraftModal id={id} />
             </div>
             <div className="flex items-center space-x-4">
               {draft.published ? (

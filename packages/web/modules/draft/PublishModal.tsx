@@ -53,6 +53,7 @@ export const PublishModal: React.FC<PublishModalProps> = ({ id }) => {
                     },
                   }
                 );
+                setIsOpen(false);
               }}
             >
               Publish

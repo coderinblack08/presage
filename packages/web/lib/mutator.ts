@@ -3,7 +3,7 @@ import axios from "axios";
 export const mutator = async ([path, body, method = "post"]: [
   string,
   any,
-  "post" | "put" | "patch"
+  "post" | "put" | "patch" | "delete"
 ]) => {
   const isMultipart = body instanceof FormData;
 
@@ -14,11 +14,13 @@ export const mutator = async ([path, body, method = "post"]: [
     },
   };
 
-  const request = await axios[method](
-    "http://localhost:4000" + path,
-    body,
-    config
-  );
+  let request: any;
+
+  if (method === "delete") {
+    request = await axios.delete("http://localhost:4000" + path, config);
+  } else {
+    request = await axios[method]("http://localhost:4000" + path, body, config);
+  }
 
   if (request.status !== 200) {
     throw new Error(request.data);

@@ -93,8 +93,21 @@ router.get("/:id", async (req, res, next) => {
     const article = await Article.findOne({ where: { id: req.params.id } });
     res.json(article);
   } catch (error) {
-    next(createHttpError(401, error));
+    next(createHttpError(500, error));
   }
 });
+
+router.delete(
+  "/:id",
+  isAuth(true),
+  async (req: Request<{ id: string }>, res, next) => {
+    try {
+      await Article.delete({ id: req.params.id, userId: req.userId });
+      res.send(true);
+    } catch (error) {
+      next(createHttpError(500, error));
+    }
+  }
+);
 
 export default router;

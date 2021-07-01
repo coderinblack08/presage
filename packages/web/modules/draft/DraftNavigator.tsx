@@ -1,12 +1,12 @@
-import React from "react";
 import { format } from "date-fns";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import React from "react";
 import { Paper, PaperPlus } from "react-iconly";
 import { AiFillRightCircle } from "react-icons/ai";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { mutator } from "../../lib/mutator";
 import { Article } from "../../lib/types";
-import Link from "next/link";
-import { MdClose } from "react-icons/md";
 
 interface DraftNavigatorProps {}
 
@@ -14,6 +14,7 @@ export const DraftNavigator: React.FC<DraftNavigatorProps> = ({}) => {
   const { mutateAsync } = useMutation(mutator);
   const { data: articles } = useQuery<Article[]>("/articles/drafts");
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   return (
     <nav className="w-80 flex-shrink-0">
@@ -49,11 +50,12 @@ export const DraftNavigator: React.FC<DraftNavigatorProps> = ({}) => {
       <button
         onClick={async () => {
           await mutateAsync(["/articles", null, "post"], {
-            onSuccess: (data) => {
+            onSuccess: (data: Article) => {
               queryClient.setQueryData<Article[]>("/articles/drafts", (old) => [
                 data,
                 ...(old || []),
               ]);
+              router.push("/draft/[id]", `/draft/${data.id}`);
             },
           });
         }}
