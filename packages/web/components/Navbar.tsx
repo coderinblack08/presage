@@ -93,14 +93,13 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
           <div className="flex item-center space-x-6">
             <div className="flex items-center flex-grow-0">
               <Button
-                color="gray"
+                color="darkGray"
                 size="small"
                 icon={
                   <div className="scale-80">
                     <TicketStar set="bulk" />
                   </div>
                 }
-                className="bg-gray-600 hover:bg-gray-500"
               >
                 <span className="text-base font-bold">
                   12 <span className="text-gray-200">Referrals</span>

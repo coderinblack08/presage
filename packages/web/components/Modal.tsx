@@ -31,7 +31,7 @@ export const Modal: React.FC<ModalProps> = ({
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <Dialog.Overlay className="fixed inset-0 bg-black/70 backdrop-blur-lg transition-opacity" />
+            <Dialog.Overlay className="fixed inset-0 bg-black/75 backdrop-blur-lg transition-opacity" />
           </Transition.Child>
           <Transition.Child
             as={Fragment}

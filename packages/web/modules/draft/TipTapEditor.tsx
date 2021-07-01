@@ -22,7 +22,7 @@ interface TipTapEditorProps {}
 const extensions = [StarterKit, Placeholder, Underline];
 
 export const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
-  const { values, setFieldValue } = useFormikContext<{
+  const { values, setFieldValue, errors } = useFormikContext<{
     title: string;
     body: any;
   }>();
@@ -35,7 +35,7 @@ export const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
     onUpdate: ({ editor }) => {
       setFieldValue("body", editor.getJSON(), false);
     },
-    content: generateHTML(draft?.body, extensions),
+    content: draft?.body ? generateHTML(draft?.body, extensions) : null,
     editorProps: {
       attributes: {
         class: "prose focus:outline-none py-8 max-w-3xl",
@@ -44,7 +44,9 @@ export const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
   });
 
   useEffect(() => {
-    editor?.commands.setContent(generateHTML(draft?.body, extensions));
+    editor?.commands.setContent(
+      draft?.body ? generateHTML(draft?.body, extensions) : null
+    );
   }, [id]);
 
   return (
@@ -56,12 +58,26 @@ export const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
           className="bg-gray-700 placeholder-gray-400 h2 w-full focus:outline-none leading-tight"
           placeholder="Untitled"
         />
-        <p className="text-gray-400">
-          <span className="text-gray-300">
-            {values.title.trim().length}/100
-          </span>{" "}
-          characters used
-        </p>
+        {errors.title ? (
+          <p className="text-primary">{errors.title}</p>
+        ) : (
+          <p className="text-gray-400">
+            <span className="text-gray-300">
+              {values.title.trim().length}/100
+            </span>{" "}
+            characters used
+          </p>
+        )}
+        {draft?.tags.length ? (
+          <div className="flex space-x-3">
+            {draft?.tags.map((tag) => (
+              <p key={tag.id} className="text-gray-300">
+                <span className="text-gray-200">#</span>
+                {tag.name}
+              </p>
+            ))}
+          </div>
+        ) : null}
         <div className="border-b border-gray-600 pt-4" />
         {editor && (
           <BubbleMenu

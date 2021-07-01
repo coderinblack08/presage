@@ -3,10 +3,13 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { Tag } from "./Tag";
 import { User } from "./User";
 
 @Entity()
@@ -34,6 +37,10 @@ export class Article extends BaseEntity {
 
   @ManyToOne(() => User, (user) => user.articles)
   user: User;
+
+  @JoinTable()
+  @ManyToMany(() => Tag, (tag) => tag.articles, { cascade: true, eager: true })
+  tags: Tag[];
 
   @CreateDateColumn()
   createdAt: Date;

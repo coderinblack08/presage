@@ -18,6 +18,14 @@ export interface Article {
   likes: number;
   userId: string;
   user: User;
+  tags: Tag[];
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface Tag {
+  id: string;
+  name: string;
+  usedBy: number;
+  articles?: Article[];
 }

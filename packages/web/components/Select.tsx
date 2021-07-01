@@ -9,7 +9,7 @@ export const Select: React.FC<
   SelectProps & React.ComponentPropsWithoutRef<"select">
 > = ({ children, className, color = "gray", ...props }) => {
   return (
-    <div className="relative">
+    <div className="relative h-full">
       <select
         className={`appearance-none font-semibold pl-4 pr-10 py-2 ${
           color === "gray" ? "bg-gray-600" : "bg-transparent"

@@ -6,6 +6,7 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import { mutator } from "../../lib/mutator";
 import { Article } from "../../lib/types";
 import Link from "next/link";
+import { MdClose } from "react-icons/md";
 
 interface DraftNavigatorProps {}
 
@@ -30,7 +31,7 @@ export const DraftNavigator: React.FC<DraftNavigatorProps> = ({}) => {
             as={`/draft/${article.id}`}
             passHref
           >
-            <a className="focus:outline-none focus-visible:ring rounded-md w-full flex items-center justify-between space-x-4">
+            <a className="group focus:outline-none focus-visible:ring rounded-md w-full flex items-center justify-between space-x-4">
               <div className="flex items-center min-w-0">
                 <Paper set="bulk" />
                 <span className="ml-2 font-bold truncate">

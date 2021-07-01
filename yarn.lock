@@ -3907,6 +3907,13 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-tag-autocomplete@^6.1.0":
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/@types/react-tag-autocomplete/-/react-tag-autocomplete-6.1.0.tgz#02def01a2dd4e17756a3bd69002d43d8f4ccd6d8"
+  integrity sha512-6qJQS81ZMaqV/ZSADwiU91TXnR6ZJINPqoV3z2SMMSlUcO6CV8Vc5QnqcqcVTj2CHnU3UQ2Q5QfSj3NyXomcDg==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react@*", "@types/react@17.0.11":
   version "17.0.11"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.11.tgz#67fcd0ddbf5a0b083a0f94e926c7d63f3b836451"
@@ -13202,6 +13209,11 @@ react-syntax-highlighter@^13.5.3:
     lowlight "^1.14.0"
     prismjs "^1.21.0"
     refractor "^3.1.0"
+
+react-tag-autocomplete@^6.1.0:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/react-tag-autocomplete/-/react-tag-autocomplete-6.1.0.tgz#9fb70149a69b33379013e5255bcd7ad97d8ec06b"
+  integrity sha512-AMhVqxEEIrOfzH0A9XrpsTaLZCVYgjjxp3DSTuSvx91LBSFI6uYcKe38ltR/H/TQw4aytofVghQ1hR9sKpXRQA==
 
 react-textarea-autosize@^8.3.0:
   version "8.3.3"
