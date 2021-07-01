@@ -87,7 +87,7 @@ export const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
           >
             <div className="mr-4">
               <Select
-                defaultValue={(() => {
+                value={(() => {
                   for (let i of [1, 2, 3, 6]) {
                     if (editor.isActive("heading", { level: i })) {
                       return i;
