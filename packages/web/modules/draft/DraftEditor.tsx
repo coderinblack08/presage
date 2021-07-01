@@ -17,7 +17,9 @@ interface DraftEditorProps {
 }
 
 export const DraftEditor: React.FC<DraftEditorProps> = ({ id }) => {
-  const { data: draft, isFetching } = useQuery<Article>(`/articles/${id}`);
+  const { data: draft, isFetching } = useQuery<Article>(
+    `/articles/draft/${id}`
+  );
   const { mutateAsync } = useMutation(mutator);
   const queryClient = useQueryClient();
 
@@ -39,12 +41,15 @@ export const DraftEditor: React.FC<DraftEditorProps> = ({ id }) => {
       onSubmit={async (values, { setSubmitting }) => {
         await mutateAsync([`/articles/${id}`, values, "patch"], {
           onSuccess: () => {
-            queryClient.setQueryData<Article>(`/articles/${id}`, (old) => {
-              return {
-                ...old,
-                ...values,
-              } as Article;
-            });
+            queryClient.setQueryData<Article>(
+              `/articles/draft/${id}`,
+              (old) => {
+                return {
+                  ...old,
+                  ...values,
+                } as Article;
+              }
+            );
             queryClient.setQueryData<Article[]>(`/articles/drafts`, (old) => {
               if (old) {
                 const idx = old?.findIndex((v) => v.id === id);
@@ -82,7 +87,26 @@ export const DraftEditor: React.FC<DraftEditorProps> = ({ id }) => {
             </div>
             <div className="flex items-center space-x-4">
               {draft.published ? (
-                <Button>Unpublish</Button>
+                <Button
+                  type="button"
+                  onClick={async () => {
+                    if (isValid) {
+                      await mutateAsync(
+                        [`/articles/unpublish/${id}`, null, "post"],
+                        {
+                          onSuccess: () => {
+                            queryClient.setQueryData<Article>(
+                              `/articles/draft/${id}`,
+                              (old) => ({ ...old, published: false } as any)
+                            );
+                          },
+                        }
+                      );
+                    }
+                  }}
+                >
+                  Unpublish
+                </Button>
               ) : (
                 <Button
                   type="button"
@@ -93,7 +117,7 @@ export const DraftEditor: React.FC<DraftEditorProps> = ({ id }) => {
                         {
                           onSuccess: () => {
                             queryClient.setQueryData<Article>(
-                              `/articles/${id}`,
+                              `/articles/draft/${id}`,
                               (old) => ({ ...old, published: true } as any)
                             );
                           },

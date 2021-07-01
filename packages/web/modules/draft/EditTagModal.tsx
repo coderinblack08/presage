@@ -18,7 +18,7 @@ interface EditTagModalProps {
 export const EditTagModal: React.FC<EditTagModalProps> = ({ id }) => {
   const [isOpen, setIsOpen] = useState(false);
   const queryClient = useQueryClient();
-  const { data: draft } = useQuery<Article>(`/articles/${id}`);
+  const { data: draft } = useQuery<Article>(`/articles/draft/${id}`);
   const [tags, setTags] = useState(
     draft ? draft?.tags.map((x) => x.name).join(", ") : ""
   );
@@ -42,7 +42,7 @@ export const EditTagModal: React.FC<EditTagModalProps> = ({ id }) => {
     await mutateAsync([`/articles/tags/${id}`, { tags: tagsArray }, "patch"], {
       onSuccess: (data) => {
         queryClient.setQueryData<Article>(
-          `/articles/${id}`,
+          `/articles/draft/${id}`,
           (old) => ({ ...old, tags: data } as any)
         );
         setIsOpen(false);

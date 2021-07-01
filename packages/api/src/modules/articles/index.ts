@@ -108,11 +108,25 @@ router.patch(
 router.post(
   "/publish/:id",
   isAuth(true),
-  async (req: Request<{ id: string }>, res, next) => {
+  async (req: Request<{ id: string }>, res) => {
     await Article.update(
       { id: req.params.id, userId: req.userId },
       {
         published: true,
+      }
+    );
+    res.send(true);
+  }
+);
+
+router.post(
+  "/unpublish/:id",
+  isAuth(true),
+  async (req: Request<{ id: string }>, res) => {
+    await Article.update(
+      { id: req.params.id, userId: req.userId },
+      {
+        published: false,
       }
     );
     res.send(true);
@@ -128,14 +142,20 @@ router.get("/drafts", isAuth(true), async (req, res) => {
   res.json(articles);
 });
 
-router.get("/:id", async (req, res, next) => {
-  try {
-    const article = await Article.findOne({ where: { id: req.params.id } });
-    res.json(article);
-  } catch (error) {
-    next(createHttpError(500, error));
+router.get(
+  "/draft/:id",
+  isAuth(true),
+  async (req: Request<{ id: string }>, res, next) => {
+    try {
+      const article = await Article.findOne({
+        where: { id: req.params.id, userId: req.userId },
+      });
+      res.json(article);
+    } catch (error) {
+      next(createHttpError(500, error));
+    }
   }
-});
+);
 
 router.delete(
   "/:id",
