@@ -1,15 +1,17 @@
 import { Menu } from "@headlessui/react";
+import { Search as SearchIcon } from "react-iconly";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
-import { Paper, TicketStar, Upload, Wallet } from "react-iconly";
+import { TicketStar, Upload, Wallet } from "react-iconly";
 import { useQuery } from "react-query";
 import { User } from "../lib/types";
 import logo from "../public/static/logo.png";
 import { Avatar } from "./Avatar";
 import { Button } from "./Button";
 import { Dropdown, MenuItem } from "./Dropdown";
+import { SearchBar } from "../modules/navbar/Search";
 
 interface NavbarProps {}
 
@@ -43,7 +45,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
           <MenuItem
             icon={
               <div className="scale-80">
-                <Paper set="bulk" />
+                <SearchIcon set="bulk" />
               </div>
             }
           >
@@ -72,12 +74,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
         {me ? <Avatar user={me} /> : null}
       </div>
       <div className="hidden md:flex items-center space-x-10 lg:space-x-12">
-        <a className="flex items-center">
-          <div className="mr-2 scale-80">
-            <Paper set="bulk" />
-          </div>
-          Browse
-        </a>
+        <SearchBar />
         <a className="flex items-center">
           <div className="mr-2 scale-80">
             <Wallet set="bulk" />

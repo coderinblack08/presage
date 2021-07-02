@@ -5,6 +5,8 @@ interface ModalProps {
   isOpen: boolean;
   closeModal: () => void;
   initialFocus?: React.MutableRefObject<HTMLElement | null> | undefined;
+  className?: string;
+  centered?: boolean;
 }
 
 export const Modal: React.FC<ModalProps> = ({
@@ -12,6 +14,8 @@ export const Modal: React.FC<ModalProps> = ({
   isOpen,
   closeModal,
   initialFocus,
+  className,
+  centered = true,
 }) => {
   return (
     <Transition appear show={isOpen} as={Fragment}>
@@ -44,12 +48,14 @@ export const Modal: React.FC<ModalProps> = ({
           >
             <Dialog.Overlay className="fixed inset-0" />
           </Transition.Child>
-          <span
-            className="inline-block h-screen align-middle"
-            aria-hidden="true"
-          >
-            &#8203;
-          </span>
+          {centered ? (
+            <span
+              className="inline-block h-screen align-middle"
+              aria-hidden="true"
+            >
+              &#8203;
+            </span>
+          ) : null}
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -59,7 +65,9 @@ export const Modal: React.FC<ModalProps> = ({
             leaveFrom="opacity-100 scale-100"
             leaveTo="opacity-0 scale-95"
           >
-            <div className="relative z-50 inline-block w-full max-w-lg overflow-hidden text-left align-middle transition-all transform bg-gray-700 border border-gray-600 rounded-xl">
+            <div
+              className={`relative z-50 inline-block w-full max-w-lg overflow-hidden text-left align-middle transition-all transform bg-gray-700 border border-gray-600 rounded-xl ${className}`}
+            >
               {children}
             </div>
           </Transition.Child>
