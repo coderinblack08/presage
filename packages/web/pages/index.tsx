@@ -2,7 +2,7 @@ import Image from "next/image";
 import React from "react";
 import { Button } from "../components/Button";
 import { Layout } from "../components/Layout";
-import illustration from "../public/landing-page-illustration.png";
+import illustration from "../public/static/landing-page-illustration.png";
 
 const Index: React.FC = () => {
   return (

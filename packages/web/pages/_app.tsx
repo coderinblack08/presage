@@ -1,4 +1,5 @@
 import React from "react";
+import { DefaultSeo } from "next-seo";
 import { ReactQueryDevtools } from "react-query/devtools";
 import type { AppProps } from "next/app";
 import { QueryClient, QueryClientProvider } from "react-query";
@@ -24,6 +25,29 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Hydrate state={pageProps.dehydratedState}>
         <AudioPlayerProvider>
           <AuthProvider>
+            <DefaultSeo
+              title="Presage"
+              description="An open-source Medium alternative built for referral podcasts and blogs"
+              canonical="https://joinpresage.com"
+              openGraph={{
+                type: "website",
+                url: "https://joinpresage.com",
+                locale: "en_IE",
+                site_name: "Presage",
+                description:
+                  "An open-source Medium alternative built for referral podcasts and blogs",
+                images: [
+                  {
+                    url: "/static/thumbnail.png",
+                    width: 1440,
+                    height: 900,
+                    alt:
+                      "Presage is an open-source Medium alternative built for referral podcasts and blogs",
+                  },
+                ],
+                title: "Presage",
+              }}
+            />
             <Component {...pageProps} />
             <ReactQueryDevtools />
           </AuthProvider>
