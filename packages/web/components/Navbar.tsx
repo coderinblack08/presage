@@ -1,23 +1,52 @@
 import { Menu } from "@headlessui/react";
-import { Search as SearchIcon } from "react-iconly";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
-import { TicketStar, Upload, Wallet } from "react-iconly";
-import { useQuery } from "react-query";
+import { Logout, TicketStar, Upload, Wallet } from "react-iconly";
+import { QueryClient, useQuery, useQueryClient } from "react-query";
 import { User } from "../lib/types";
+import { SearchBar } from "../modules/navbar/Search";
 import logo from "../public/static/logo.png";
 import { Avatar } from "./Avatar";
 import { Button } from "./Button";
 import { Dropdown, MenuItem } from "./Dropdown";
-import { SearchBar } from "../modules/navbar/Search";
 
 interface NavbarProps {}
 
 export const Navbar: React.FC<NavbarProps> = ({}) => {
   const { data: me } = useQuery<User>("/me");
   const router = useRouter();
+  const queryClient = useQueryClient();
+
+  const userDropdown = (
+    <>
+      {me ? (
+        <Dropdown
+          opener={
+            <Menu.Button>
+              <Avatar user={me} />
+            </Menu.Button>
+          }
+        >
+          <MenuItem
+            onClick={() => {
+              localStorage.removeItem("access-token");
+              queryClient.clear();
+              router.push("/");
+            }}
+            icon={
+              <div className="scale-80">
+                <Logout set="bulk" />
+              </div>
+            }
+          >
+            Logout
+          </MenuItem>
+        </Dropdown>
+      ) : null}
+    </>
+  );
 
   return (
     <nav className="max-w-8xl mx-auto flex items-center justify-between py-6 px-8">
@@ -28,6 +57,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
         </a>
       </Link>
       <div className="flex items-center space-x-6 md:hidden">
+        <SearchBar />
         <Dropdown
           opener={
             <Menu.Button className="focus:outline-none w-8 h-8 flex items-center justify-center">
@@ -42,15 +72,6 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
             </Menu.Button>
           }
         >
-          <MenuItem
-            icon={
-              <div className="scale-80">
-                <SearchIcon set="bulk" />
-              </div>
-            }
-          >
-            Browse
-          </MenuItem>
           <MenuItem
             icon={
               <div className="scale-80">
@@ -71,7 +92,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
             Publish
           </MenuItem>
         </Dropdown>
-        {me ? <Avatar user={me} /> : null}
+        {userDropdown}
       </div>
       <div className="hidden md:flex items-center space-x-10 lg:space-x-12">
         <SearchBar />
@@ -106,7 +127,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
                 </span>
               </Button>
             </div>
-            <Avatar user={me} />
+            {userDropdown}
           </div>
         ) : (
           <a href="http://localhost:4000/auth/google">

@@ -15,7 +15,13 @@ export const SearchBar: React.FC<SearchProps> = ({}) => {
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="flex items-center focus:outline-none"
+        className="block md:hidden focus:outline-none scale-80"
+      >
+        <SearchIcon set="light" stroke="bold" />
+      </button>
+      <button
+        onClick={() => setIsOpen(true)}
+        className="hidden md:flex items-center focus:outline-none"
       >
         <div className="mr-2 scale-80">
           <SearchIcon set="bulk" />
