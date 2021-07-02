@@ -1,12 +1,11 @@
-import { format } from "date-fns";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
-import { Paper, PaperPlus } from "react-iconly";
+import { PaperPlus } from "react-iconly";
 import { AiFillRightCircle } from "react-icons/ai";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { mutator } from "../../lib/mutator";
 import { Article } from "../../lib/types";
+import { DraftItem } from "./DraftItem";
 
 interface DraftNavigatorProps {}
 
@@ -26,24 +25,7 @@ export const DraftNavigator: React.FC<DraftNavigatorProps> = ({}) => {
       </div>
       <div className="space-y-5">
         {articles?.map((article) => (
-          <Link
-            key={article.id}
-            href="/draft/[id]"
-            as={`/draft/${article.id}`}
-            passHref
-          >
-            <a className="group focus:outline-none focus-visible:ring rounded-md w-full flex items-center justify-between space-x-4">
-              <div className="flex items-center min-w-0">
-                <Paper set="bulk" />
-                <span className="ml-2 font-bold truncate">
-                  {article.title || "Untitled"}
-                </span>
-              </div>
-              <p className="text-gray-300 flex-shrink-0">
-                {format(new Date(article.updatedAt), "MMM dd")}
-              </p>
-            </a>
-          </Link>
+          <DraftItem key={article.id} article={article} />
         ))}
       </div>
       <div className="border-b border-gray-600 w-full mt-5 mb-4" />

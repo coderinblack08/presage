@@ -133,6 +133,8 @@ router.post(
   }
 );
 
+router.get("/", isAuth(), async (req, res) => {});
+
 router.get("/drafts", isAuth(true), async (req, res) => {
   const articles = await Article.find({
     where: { userId: req.userId },

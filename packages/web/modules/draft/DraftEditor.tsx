@@ -27,6 +27,21 @@ export const DraftEditor: React.FC<DraftEditorProps> = ({ id }) => {
     return <div className="spinner w-auto" />;
   }
 
+  async function updatePublishedCache(published: boolean) {
+    queryClient.setQueryData<Article>(
+      `/articles/draft/${id}`,
+      (old) => ({ ...old, published } as any)
+    );
+    queryClient.setQueryData<Article[]>(`/articles/drafts`, (old) => {
+      if (old) {
+        const idx = old?.findIndex((v) => v.id === id);
+        old[idx] = { ...old[idx], published };
+        return old;
+      }
+      return [];
+    });
+  }
+
   return (
     <Formik
       initialValues={{
@@ -94,12 +109,7 @@ export const DraftEditor: React.FC<DraftEditorProps> = ({ id }) => {
                       await mutateAsync(
                         [`/articles/unpublish/${id}`, null, "post"],
                         {
-                          onSuccess: () => {
-                            queryClient.setQueryData<Article>(
-                              `/articles/draft/${id}`,
-                              (old) => ({ ...old, published: false } as any)
-                            );
-                          },
+                          onSuccess: () => updatePublishedCache(false),
                         }
                       );
                     }
@@ -115,12 +125,7 @@ export const DraftEditor: React.FC<DraftEditorProps> = ({ id }) => {
                       await mutateAsync(
                         [`/articles/publish/${id}`, null, "post"],
                         {
-                          onSuccess: () => {
-                            queryClient.setQueryData<Article>(
-                              `/articles/draft/${id}`,
-                              (old) => ({ ...old, published: true } as any)
-                            );
-                          },
+                          onSuccess: () => updatePublishedCache(true),
                         }
                       );
                     }
