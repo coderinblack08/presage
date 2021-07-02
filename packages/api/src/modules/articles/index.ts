@@ -133,7 +133,18 @@ router.post(
   }
 );
 
-router.get("/", isAuth(), async (req, res) => {});
+router.get("/", isAuth(), async (req, res) => {
+  const query: string = (req.query as any).query;
+  const data = await getConnection()
+    .createQueryBuilder(Article, "a")
+    .select()
+    .where("document @@ plainto_tsquery(:query)", {
+      query: query,
+    })
+    .orderBy("ts_rank(document, plainto_tsquery(:query))", "DESC")
+    .getMany();
+  res.json(data);
+});
 
 router.get("/drafts", isAuth(true), async (req, res) => {
   const articles = await Article.find({

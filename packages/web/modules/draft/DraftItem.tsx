@@ -1,5 +1,4 @@
 import Tippy from "@tippyjs/react";
-import "tippy.js/dist/tippy.css";
 import { format } from "date-fns";
 import Link from "next/link";
 import React from "react";
@@ -26,7 +25,13 @@ export const DraftItem: React.FC<DraftItemProps> = ({ article }) => {
             {format(new Date(article.updatedAt), "MMM dd")}
           </p>
           {article.published ? (
-            <Tippy content={<span>Tooltip</span>}>
+            <Tippy
+              content={
+                <div className="py-1 px-4 rounded-md bg-gray-500">
+                  Published
+                </div>
+              }
+            >
               <button className="focus:outline-none">
                 <MdPublic className="text-gray-300 w-5 h-5" />
               </button>

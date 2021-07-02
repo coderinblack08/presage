@@ -6,7 +6,6 @@ import http from "http";
 import passport from "passport";
 import { join } from "path";
 import "reflect-metadata";
-import { Server } from "socket.io";
 import { createConnection } from "typeorm";
 import { isDev } from "./lib/constants";
 import articlesRouter from "./modules/articles";

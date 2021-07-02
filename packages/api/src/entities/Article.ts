@@ -43,6 +43,9 @@ export class Article extends BaseEntity {
   @ManyToMany(() => Tag, (tag) => tag.articles, { cascade: true, eager: true })
   tags: Tag[];
 
+  @Column("tsvector", { select: false, nullable: true })
+  document: any;
+
   @CreateDateColumn()
   createdAt: Date;
 

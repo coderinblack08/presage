@@ -51,7 +51,7 @@ export const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
 
   return (
     <div>
-      <div className="space-y-3 mt-5 w-full">
+      <div className="space-y-3 mt-2 w-full">
         <Field
           name="title"
           type="text"

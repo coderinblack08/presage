@@ -49,7 +49,7 @@ export const DraftEditor: React.FC<DraftEditorProps> = ({ id }) => {
         body: draft?.body || null,
       }}
       validationSchema={yup.object().shape({
-        title: yup.string().max(100),
+        title: yup.string().max(100).required(),
         body: yup.mixed(),
       })}
       enableReinitialize
