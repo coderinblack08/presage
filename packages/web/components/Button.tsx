@@ -7,7 +7,7 @@ import React, {
 const sizes = {
   large: "py-2.5 px-7 rounded-lg",
   medium: "py-2 px-6 rounded-lg",
-  regular: "px-5 py-2 rounded-lg",
+  regular: "px-6 py-2 rounded-lg",
   small: "px-5 py-1.5 rounded-lg",
   none: "rounded-md",
 };

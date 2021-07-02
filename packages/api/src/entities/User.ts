@@ -29,7 +29,7 @@ export class User extends BaseEntity {
   @Column("text", { nullable: true })
   profilePicture: string | null;
 
-  @Column()
+  @Column({ select: false })
   googleId: string;
 
   @OneToMany(() => Article, (article) => article.user)

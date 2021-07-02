@@ -138,6 +138,7 @@ router.get("/", isAuth(), async (req, res) => {
   const data = await getConnection()
     .createQueryBuilder(Article, "a")
     .select()
+    .leftJoinAndSelect("a.user", "user")
     .where("document @@ plainto_tsquery(:query)", {
       query: query,
     })
