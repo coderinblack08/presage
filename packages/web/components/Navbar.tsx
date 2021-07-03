@@ -49,7 +49,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
   );
 
   return (
-    <nav className="max-w-8xl mx-auto flex items-center justify-between py-6 px-8">
+    <nav className="sticky z-50 top-0 bg-gray-700/80 backdrop-blur-lg max-w-8xl mx-auto flex items-center justify-between py-6 px-8">
       <Link href="/">
         <a className="flex items-center space-x-4">
           <Image src={logo} alt="Logo" />

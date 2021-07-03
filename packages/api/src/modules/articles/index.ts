@@ -1,5 +1,6 @@
 import { Request, Router } from "express";
 import createHttpError from "http-errors";
+import { nextTick } from "process";
 import { getConnection } from "typeorm";
 import { Article } from "../../entities/Article";
 import { Tag } from "../../entities/Tag";
@@ -193,5 +194,16 @@ router.delete(
     }
   }
 );
+
+router.get("/:id", async (req, res, next) => {
+  try {
+    const article = await Article.findOne(req.params.id, {
+      relations: ["user"],
+    });
+    res.json(article);
+  } catch (error) {
+    next(createHttpError(500, error));
+  }
+});
 
 export default router;

@@ -50,7 +50,7 @@ export const DraftEditor: React.FC<DraftEditorProps> = ({ id }) => {
       }}
       validationSchema={yup.object().shape({
         title: yup.string().max(100).required(),
-        body: yup.mixed(),
+        body: yup.string().nullable(),
       })}
       enableReinitialize
       onSubmit={async (values, { setSubmitting }) => {

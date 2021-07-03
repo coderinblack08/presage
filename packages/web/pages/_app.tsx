@@ -1,13 +1,12 @@
-import React from "react";
 import { DefaultSeo } from "next-seo";
-import { ReactQueryDevtools } from "react-query/devtools";
 import type { AppProps } from "next/app";
+import React from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Hydrate } from "react-query/hydration";
+import { AudioPlayerProvider } from "react-use-audio-player";
+import { AuthProvider } from "../components/AuthProvider";
 import { fetcher } from "../lib/fetcher";
 import "../styles/globals.css";
-import { AuthProvider } from "../components/AuthProvider";
-import { AudioPlayerProvider } from "react-use-audio-player";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -49,7 +48,7 @@ function MyApp({ Component, pageProps }: AppProps) {
               }}
             />
             <Component {...pageProps} />
-            <ReactQueryDevtools />
+            {/* <ReactQueryDevtools /> */}
           </AuthProvider>
         </AudioPlayerProvider>
       </Hydrate>

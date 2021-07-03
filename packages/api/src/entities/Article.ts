@@ -21,8 +21,8 @@ export class Article extends BaseEntity {
   @Column("varchar", { length: 100 })
   title: string;
 
-  @Column("json", { nullable: true })
-  body: any | null;
+  @Column("text", { nullable: true })
+  body: string | null;
 
   @Column("bool", { default: false })
   published: boolean;

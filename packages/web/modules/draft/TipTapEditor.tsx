@@ -1,11 +1,11 @@
 import Placeholder from "@tiptap/extension-placeholder";
+import sanitizeHtml from "sanitize-html";
 import Underline from "@tiptap/extension-underline";
-import { generateHTML } from "@tiptap/html";
 import { BubbleMenu, EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { Field, useFormikContext } from "formik";
 import { useRouter } from "next/router";
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect } from "react";
 import {
   AiOutlineBold,
   AiOutlineItalic,
@@ -33,9 +33,9 @@ export const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
   const editor = useEditor({
     extensions,
     onUpdate: ({ editor }) => {
-      setFieldValue("body", editor.getJSON(), false);
+      setFieldValue("body", editor.getHTML(), false);
     },
-    content: draft?.body ? generateHTML(draft?.body, extensions) : null,
+    content: sanitizeHtml(draft?.body || null),
     editorProps: {
       attributes: {
         class: "prose focus:outline-none py-8 max-w-3xl",
@@ -44,9 +44,7 @@ export const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
   });
 
   useEffect(() => {
-    editor?.commands.setContent(
-      draft?.body ? generateHTML(draft?.body, extensions) : null
-    );
+    editor?.commands.setContent(sanitizeHtml(draft?.body || null));
   }, [id]);
 
   return (
