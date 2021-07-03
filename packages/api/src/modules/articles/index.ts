@@ -139,11 +139,21 @@ router.get("/", isAuth(), async (req, res) => {
     .createQueryBuilder(Article, "a")
     .select()
     .leftJoinAndSelect("a.user", "user")
-    .where("document @@ plainto_tsquery(:query)", {
+    .where("document @@ plainto_tsquery(:query) and a.published = true", {
       query: query,
     })
     .orderBy("ts_rank(document, plainto_tsquery(:query))", "DESC")
     .getMany();
+  res.json(data);
+});
+
+router.get("/trending", async (_, res) => {
+  const data = await Article.find({
+    take: 6,
+    order: { createdAt: "DESC" },
+    where: { published: true },
+    relations: ["user"],
+  });
   res.json(data);
 });
 

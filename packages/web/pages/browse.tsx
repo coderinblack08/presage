@@ -1,12 +1,12 @@
 import { format } from "date-fns";
+import { NextSeo } from "next-seo";
 import { useRouter } from "next/router";
 import React from "react";
 import { Bookmark, Paper, Search, User, Voice } from "react-iconly";
-import { MdSearch } from "react-icons/md";
 import { useQuery } from "react-query";
-import { Button } from "../components/Button";
 import { Layout } from "../components/Layout";
 import { Article } from "../lib/types";
+import { ArticleCard } from "../modules/article/ArticleCard";
 
 const Browse: React.FC = () => {
   const {
@@ -18,6 +18,7 @@ const Browse: React.FC = () => {
 
   return (
     <Layout>
+      <NextSeo title="Browse" />
       <div className="max-w-4xl mx-auto">
         <header>
           <p className="text-gray-300">Showing results for</p>
@@ -49,23 +50,7 @@ const Browse: React.FC = () => {
             <div className="spinner" />
           ) : results?.length ? (
             results?.map((article) => (
-              <article key={article.id} className="space-y-2">
-                <div className="flex items-center space-x-3">
-                  <img
-                    src={article.user.profilePicture}
-                    className="w-6 h-6 rounded-full"
-                    alt={article.user.displayName}
-                  />
-                  <p className="font-bold">{article.user.displayName}</p>
-                </div>
-                <h4>{article.title}</h4>
-                <p className="text-gray-300">
-                  {format(new Date(article.createdAt), "MMMM dd")}
-                  {article.readingTime
-                    ? ` · ${article.readingTime} min read`
-                    : ""}
-                </p>
-              </article>
+              <ArticleCard key={article.id} article={article} />
             ))
           ) : (
             <p className="text-gray-400 text-lg">

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 import { Logout, TicketStar, Upload, Wallet } from "react-iconly";
-import { QueryClient, useQuery, useQueryClient } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import { User } from "../lib/types";
 import { SearchBar } from "../modules/navbar/Search";
 import logo from "../public/static/logo.png";
