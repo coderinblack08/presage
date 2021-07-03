@@ -28,7 +28,14 @@ const Index: React.FC = () => {
             write, record, publish about anything. Grow your audience
             exponentially with Presage&apos;s referral system.
           </p>
-          <Button size="large">Start Growing</Button>
+          <div className="flex items-center space-x-3">
+            <a href="https://localhost:4000/auth/google">
+              <Button size="large">Start Growing</Button>
+            </a>
+            <Button size="large" color="gray">
+              Refer Friend
+            </Button>
+          </div>
         </div>
         <div className="hidden md:block">
           <Image
@@ -39,12 +46,12 @@ const Index: React.FC = () => {
         </div>
       </header>
       <main className="mt-12">
-        <div className="w-12 h-12 p-2.5 mb-4 rounded-xl flex items-center justify-center bg-purple/25">
+        <div className="w-12 h-12 p-2.5 mb-5 rounded-xl flex items-center justify-center bg-purple/25">
           <Image src={paper} alt="Paper Icon" />
         </div>
         <h4>Today’s Trending</h4>
         <p className="text-purple">Podcasts and Articles</p>
-        <div className="grid grid-cols-3 gap-12 mt-10">
+        <div className="grid grid-cols-3 gap-12 mt-12">
           {trending?.map((article) => (
             <ArticleCard key={article.id} article={article} />
           ))}

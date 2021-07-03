@@ -13,10 +13,10 @@ interface DraftItemProps {
 export const DraftItem: React.FC<DraftItemProps> = ({ article }) => {
   return (
     <Link href="/draft/[id]" as={`/draft/${article.id}`} passHref>
-      <a className="group focus:outline-none focus-visible:ring rounded-md w-full flex items-center justify-between space-x-4">
+      <a className="focus:outline-none focus-visible:ring rounded-md w-full flex items-center justify-between space-x-4">
         <div className="flex items-center min-w-0">
           <Paper set="bulk" />
-          <span className="ml-2 font-bold truncate">
+          <span className="ml-2 font-bold truncate w-48">
             {article.title || "Untitled"}
           </span>
         </div>

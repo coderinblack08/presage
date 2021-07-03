@@ -18,7 +18,7 @@ export const DraftNavigator: React.FC<DraftNavigatorProps> = ({}) => {
   return (
     <nav className="w-80 flex-shrink-0">
       <div className="flex items-center justify-between mb-4">
-        <h5 className="uppercase font-bold text-gray-300 small">Drafts</h5>
+        <h5 className="uppercase font-bold text-gray-300 small w-48">Drafts</h5>
         <button className="rotate-180">
           <AiFillRightCircle className="w-5 h-5" />
         </button>
