@@ -1,6 +1,6 @@
 import { Request, Router } from "express";
 import createHttpError from "http-errors";
-import { nextTick } from "process";
+import readingTime from "reading-time";
 import { getConnection } from "typeorm";
 import { Article } from "../../entities/Article";
 import { Tag } from "../../entities/Tag";
@@ -34,7 +34,10 @@ router.patch(
   async (req: Request<{ id: string }>, res) => {
     const article = await Article.update(
       { id: req.params.id, userId: req.userId },
-      req.body
+      {
+        ...req.body,
+        readingTime: req.body.body ? readingTime(req.body.body).text : null,
+      }
     );
     res.json(article.raw);
   }

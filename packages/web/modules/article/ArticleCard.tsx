@@ -31,7 +31,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
         </h4>
         <p className="text-gray-300">
           {format(new Date(article.createdAt), "MMMM dd")}
-          {article.readingTime ? ` · ${article.readingTime} min read` : ""}
+          {article.readingTime ? ` · ${article.readingTime}` : ""}
         </p>
       </a>
     </Link>

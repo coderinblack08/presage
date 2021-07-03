@@ -1,10 +1,10 @@
 import { format } from "date-fns";
-import sanitizeHtml from "sanitize-html";
 import { useRouter } from "next/router";
 import React from "react";
 import { useQuery } from "react-query";
 import { Layout } from "../../components/Layout";
 import { Article } from "../../lib/types";
+import { sanitizeBody } from "../../modules/article/sanitizeBody";
 
 const ArticlePage: React.FC = () => {
   const {
@@ -41,12 +41,14 @@ const ArticlePage: React.FC = () => {
             </div>
             {article.tags.length === 0 ? "" : " · "}
             {format(new Date(article.createdAt), "MMMM dd")}
-            {article.readingTime ? ` · ${article.readingTime} min read` : ""}
+            {article.readingTime ? ` · ${article.readingTime}` : ""}
           </p>
         </header>
         <main
           className="prose py-12"
-          dangerouslySetInnerHTML={{ __html: sanitizeHtml(article.body) }}
+          dangerouslySetInnerHTML={{
+            __html: sanitizeBody(article.body),
+          }}
         />
       </div>
     </Layout>

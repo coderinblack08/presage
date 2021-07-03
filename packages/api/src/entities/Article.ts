@@ -27,8 +27,8 @@ export class Article extends BaseEntity {
   @Column("bool", { default: false })
   published: boolean;
 
-  @Column("int", { nullable: true })
-  readingTime: number | null;
+  @Column("text", { nullable: true })
+  readingTime: string | null;
 
   @Column("int", { default: 0 })
   likes: number;

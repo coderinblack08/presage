@@ -14,7 +14,7 @@ export interface Article {
   title: string;
   body: any | null;
   published: boolean;
-  readingTime: number | null;
+  readingTime: string | null;
   likes: number;
   userId: string;
   user: User;

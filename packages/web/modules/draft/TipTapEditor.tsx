@@ -1,5 +1,4 @@
 import Placeholder from "@tiptap/extension-placeholder";
-import sanitizeHtml from "sanitize-html";
 import Underline from "@tiptap/extension-underline";
 import { BubbleMenu, EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -16,6 +15,7 @@ import { useQuery } from "react-query";
 import { Button } from "../../components/Button";
 import { Select } from "../../components/Select";
 import { Article } from "../../lib/types";
+import { sanitizeBody } from "../article/sanitizeBody";
 
 interface TipTapEditorProps {}
 
@@ -35,7 +35,7 @@ export const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
     onUpdate: ({ editor }) => {
       setFieldValue("body", editor.getHTML(), false);
     },
-    content: sanitizeHtml(draft?.body || null),
+    content: sanitizeBody(draft?.body || null),
     editorProps: {
       attributes: {
         class: "prose focus:outline-none py-8 max-w-3xl",
@@ -44,7 +44,7 @@ export const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
   });
 
   useEffect(() => {
-    editor?.commands.setContent(sanitizeHtml(draft?.body || null));
+    editor?.commands.setContent(sanitizeBody(draft?.body || null));
   }, [id]);
 
   return (
