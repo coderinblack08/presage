@@ -51,7 +51,7 @@ const Index: React.FC = () => {
         </div>
         <h4>Today’s Trending</h4>
         <p className="text-purple">Podcasts and Articles</p>
-        <div className="grid grid-cols-3 gap-12 mt-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 mt-12">
           {trending?.map((article, rank) => (
             <ArticleCard
               ranking={rank + 1}
