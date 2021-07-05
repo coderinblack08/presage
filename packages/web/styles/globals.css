@@ -61,3 +61,11 @@
   pointer-events: none;
   height: 0;
 }
+
+.ProseMirror img {
+  @apply rounded-lg;
+}
+
+.ProseMirror img.ProseMirror-selectednode {
+  @apply ring;
+}

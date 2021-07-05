@@ -22,8 +22,10 @@ const Browse: React.FC = () => {
       <div className="max-w-4xl mx-auto">
         <header>
           <p className="text-gray-300">Showing results for</p>
-          <div className="flex items-center space-x-4 mt-0.5">
-            <Search set="light" stroke="bold" />
+          <div className="flex space-x-4 mt-0.5">
+            <div className="mt-3">
+              <Search set="light" stroke="bold" />
+            </div>
             <h3>{q}</h3>
           </div>
           <nav className="flex items-center mt-8 mb-12">

@@ -1,18 +1,21 @@
 import { format } from "date-fns";
 import { GetServerSideProps } from "next";
+import { NextSeo } from "next-seo";
 import React from "react";
 import { Bookmark, Chat, Heart, TicketStar } from "react-iconly";
-import { useQuery } from "react-query";
+import { QueryClient, useQuery } from "react-query";
+import { dehydrate } from "react-query/hydration";
 import { Button } from "../../components/Button";
 import { Layout } from "../../components/Layout";
+import { fetcher } from "../../lib/fetcher";
 import { Article } from "../../lib/types";
-import { sanitizeBody } from "../../modules/article/sanitizeBody";
 
 const ArticlePage: React.FC<{ id: string }> = ({ id }) => {
   const { data: article, isFetching } = useQuery<Article>(`/articles/${id}`);
 
   return (
     <Layout>
+      <NextSeo title={article?.title} />
       {!article || isFetching ? (
         <div className="spinner" />
       ) : (
@@ -49,12 +52,11 @@ const ArticlePage: React.FC<{ id: string }> = ({ id }) => {
           <main
             className="prose pb-12"
             dangerouslySetInnerHTML={{
-              __html: sanitizeBody(article.body),
+              __html: article.body,
             }}
           />
           <div className="fixed w-full max-w-4xl bottom-0 bg-gray-700 border-t border-gray-600 py-6 flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <Button color="gray">Tip Cash</Button>
               <div className="flex items-center space-x-6">
                 <Button>Refer to Friend</Button>
                 <div className="flex items-center space-x-2">
@@ -84,9 +86,14 @@ const ArticlePage: React.FC<{ id: string }> = ({ id }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async ({
+  query: { id },
+}) => {
+  const queryClient = new QueryClient();
+  await queryClient.prefetchQuery(`/articles/${id}`, fetcher);
+
   return {
-    props: { id: context.query.id },
+    props: { id, dehydratedState: dehydrate(queryClient) },
   };
 };
 

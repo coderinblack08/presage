@@ -8,6 +8,7 @@
     "watch": "tsc -w"
   },
   "dependencies": {
+    "@tiptap/extension-image": "^2.0.0-beta.14",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "dotenv-safe": "^8.2.0",
@@ -22,6 +23,7 @@
     "pg": "^8.6.0",
     "reading-time": "^1.3.0",
     "reflect-metadata": "^0.1.13",
+    "sanitize-html": "^2.4.0",
     "socket.io": "^4.1.2",
     "typeorm": "^0.2.34",
     "unique-names-generator": "^4.5.0",
@@ -38,6 +40,7 @@
     "@types/node": "^15.12.2",
     "@types/passport": "^1.0.6",
     "@types/passport-google-oauth20": "^2.0.8",
+    "@types/sanitize-html": "^2.3.1",
     "nodemon": "^2.0.7",
     "typescript": "^4.3.2"
   }

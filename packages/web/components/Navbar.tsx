@@ -123,7 +123,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
                 }
               >
                 <span className="text-base font-bold">
-                  12 <span className="text-gray-200">Referrals</span>
+                  0 <span className="text-gray-200">Referrals</span>
                 </span>
               </Button>
             </div>

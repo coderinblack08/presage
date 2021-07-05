@@ -1,6 +1,13 @@
+import Dropcursor from "@tiptap/extension-dropcursor";
+import Image from "@tiptap/extension-image";
 import Placeholder from "@tiptap/extension-placeholder";
 import Underline from "@tiptap/extension-underline";
-import { BubbleMenu, EditorContent, useEditor } from "@tiptap/react";
+import {
+  BubbleMenu,
+  EditorContent,
+  FloatingMenu,
+  useEditor,
+} from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { Field, useFormikContext } from "formik";
 import { useRouter } from "next/router";
@@ -11,15 +18,15 @@ import {
   AiOutlineStrikethrough,
   AiOutlineUnderline,
 } from "react-icons/ai";
+import { MdCode, MdImage } from "react-icons/md";
 import { useQuery } from "react-query";
 import { Button } from "../../components/Button";
 import { Select } from "../../components/Select";
 import { Article } from "../../lib/types";
-import { sanitizeBody } from "../article/sanitizeBody";
 
 interface TipTapEditorProps {}
 
-const extensions = [StarterKit, Placeholder, Underline];
+const extensions = [StarterKit, Placeholder, Underline, Image, Dropcursor];
 
 export const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
   const { values, setFieldValue, errors } = useFormikContext<{
@@ -35,7 +42,7 @@ export const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
     onUpdate: ({ editor }) => {
       setFieldValue("body", editor.getHTML(), false);
     },
-    content: sanitizeBody(draft?.body || null),
+    content: draft?.body || null,
     editorProps: {
       attributes: {
         class: "prose focus:outline-none py-8 max-w-3xl",
@@ -44,7 +51,7 @@ export const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
   });
 
   useEffect(() => {
-    editor?.commands.setContent(sanitizeBody(draft?.body || null));
+    editor?.commands.setContent(draft?.body || null);
   }, [id]);
 
   return (
@@ -154,6 +161,29 @@ export const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
               />
             </div>
           </BubbleMenu>
+        )}
+        {editor && (
+          <FloatingMenu
+            className="flex items-center px-4 rounded-lg divide-x divide-gray-500 bg-gray-600 border border-gray-500"
+            tippyOptions={{ duration: 100 }}
+            editor={editor}
+          >
+            <button className="pr-4 py-1.5">
+              <MdCode className="w-5 h-5" />
+            </button>
+            <button
+              className="pl-4 py-1.5"
+              onClick={() => {
+                const url = window.prompt("URL");
+
+                if (url) {
+                  editor.chain().focus().setImage({ src: url }).run();
+                }
+              }}
+            >
+              <MdImage className="w-5 h-5" />
+            </button>
+          </FloatingMenu>
         )}
         <EditorContent editor={editor} />
         <div className="flex items-center space-x-2">

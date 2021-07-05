@@ -1,4 +1,5 @@
 import { Request, Router } from "express";
+import sanitizeHtml from "sanitize-html";
 import createHttpError from "http-errors";
 import readingTime from "reading-time";
 import { getConnection } from "typeorm";
@@ -32,6 +33,18 @@ router.patch(
   "/:id",
   isAuth(true),
   async (req: Request<{ id: string }>, res) => {
+    req.body.body = sanitizeHtml(req.body.body, {
+      ...sanitizeHtml.defaults,
+      allowedTags: ["img", ...sanitizeHtml.defaults.allowedTags],
+      allowedAttributes: {
+        img: ["src", "align"],
+        ...sanitizeHtml.defaults.allowedAttributes,
+      },
+      allowedSchemesByTag: {
+        img: ["http", "https"],
+        ...sanitizeHtml.defaults.allowedSchemesByTag,
+      },
+    });
     const article = await Article.update(
       { id: req.params.id, userId: req.userId },
       {
