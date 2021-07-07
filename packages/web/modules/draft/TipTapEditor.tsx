@@ -1,3 +1,4 @@
+import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import Dropcursor from "@tiptap/extension-dropcursor";
 import Image from "@tiptap/extension-image";
 import Placeholder from "@tiptap/extension-placeholder";
@@ -6,10 +7,12 @@ import {
   BubbleMenu,
   EditorContent,
   FloatingMenu,
+  ReactNodeViewRenderer,
   useEditor,
 } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { Field, useFormikContext } from "formik";
+import lowlight from "lowlight";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import {
@@ -23,12 +26,11 @@ import { useQuery } from "react-query";
 import { Button } from "../../components/Button";
 import { Select } from "../../components/Select";
 import { Article } from "../../lib/types";
+import { CodeBlockComponent } from "./CodeBlockComponent";
 
 interface TipTapEditorProps {}
 
-const extensions = [StarterKit, Placeholder, Underline, Image, Dropcursor];
-
-export const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
+const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
   const { values, setFieldValue, errors } = useFormikContext<{
     title: string;
     body: any;
@@ -38,7 +40,18 @@ export const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
   } = useRouter();
   const { data: draft } = useQuery<Article>(`/articles/draft/${id}`);
   const editor = useEditor({
-    extensions,
+    extensions: [
+      StarterKit,
+      Placeholder,
+      Underline,
+      Image,
+      Dropcursor,
+      CodeBlockLowlight.extend({
+        addNodeView() {
+          return ReactNodeViewRenderer(CodeBlockComponent);
+        },
+      }).configure({ lowlight }),
+    ],
     onUpdate: ({ editor }) => {
       setFieldValue("body", editor.getHTML(), false);
     },
@@ -52,6 +65,9 @@ export const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
 
   useEffect(() => {
     editor?.commands.setContent(draft?.body || null);
+    return () => {
+      editor?.destroy();
+    };
   }, [id]);
 
   return (
@@ -168,7 +184,12 @@ export const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
             tippyOptions={{ duration: 100 }}
             editor={editor}
           >
-            <button className="pr-4 py-1.5">
+            <button
+              className="pr-4 py-1.5"
+              onClick={() => {
+                editor.chain().focus().toggleCodeBlock().run();
+              }}
+            >
               <MdCode className="w-5 h-5" />
             </button>
             <button
@@ -209,3 +230,5 @@ export const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
     </div>
   );
 };
+
+export default TipTapEditor;

@@ -1,4 +1,5 @@
 /* eslint-disable jsx-a11y/alt-text */
+import dynamic from "next/dynamic";
 import { Form, Formik } from "formik";
 import React from "react";
 import { MdPublish } from "react-icons/md";
@@ -10,7 +11,7 @@ import { Article } from "../../lib/types";
 import { AutoSave } from "./AutoSave";
 import { DeleteDraftModal } from "./DeleteDraftModal";
 import { EditTagModal } from "./EditTagModal";
-import { TipTapEditor } from "./TipTapEditor";
+const TipTapEditor = dynamic(() => import("./TipTapEditor"), { ssr: false });
 
 interface DraftEditorProps {
   id: string;

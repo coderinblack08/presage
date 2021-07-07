@@ -92,7 +92,7 @@ module.exports = {
               h2: { color: theme("colors.gray.100") },
               h3: { color: theme("colors.gray.100") },
               h4: { color: theme("colors.gray.100") },
-              code: { color: theme("colors.gray.100") },
+              code: { color: theme("colors.gray.100"), fontWeight: 500 },
               "a code": { color: theme("colors.gray.100") },
               pre: {
                 color: theme("colors.gray.200"),
