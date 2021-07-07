@@ -48,7 +48,7 @@ export const SearchBar: React.FC<SearchProps> = ({}) => {
             }}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search Presage"
-            className="py-3 pl-14 pr-5"
+            className="!py-3 pl-14 pr-5"
           />
         </div>
       </Modal>

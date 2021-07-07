@@ -50,12 +50,12 @@ const ArticlePage: React.FC<{ id: string }> = ({ id }) => {
           </header>
           <div className="border-b border-gray-600 w-full" />
           <main
-            className="prose pb-12"
+            className="prose pb-12 w-full max-w-full"
             dangerouslySetInnerHTML={{
               __html: article.body,
             }}
           />
-          <div className="fixed w-full max-w-4xl bottom-0 bg-gray-700 border-t border-gray-600 py-6 flex items-center justify-between">
+          <div className="fixed w-full max-w-4xl bottom-0 bg-gray-700/50 backdrop-blur-lg border-t border-gray-600 py-6 flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <div className="flex items-center space-x-6">
                 <Button>Refer to Friend</Button>

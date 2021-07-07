@@ -5,6 +5,7 @@ export interface User {
   bio?: string;
   profilePicture: string;
   displayName: string;
+  articles?: Article[];
   createdAt: Date;
   updatedAt: Date;
 }

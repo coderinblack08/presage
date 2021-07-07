@@ -1,6 +1,7 @@
 import { Router } from "express";
 import passport from "passport";
 import { Strategy } from "passport-google-oauth20";
+import { getConnection } from "typeorm";
 import {
   adjectives,
   animals,
@@ -8,6 +9,7 @@ import {
   NumberDictionary,
   uniqueNamesGenerator,
 } from "unique-names-generator";
+import { Article } from "../../entities/Article";
 import { User } from "../../entities/User";
 import { createToken } from "./createToken";
 import { isAuth } from "./isAuth";
@@ -95,11 +97,10 @@ router.get("/me", isAuth(), async (req, res) => {
 });
 
 router.get("/user/:username", async (req, res) => {
-  const user = await User.findOne({
-    where: { username: req.params.username },
-    select: userFields,
-  });
-  res.json(user);
+  const user = await User.findOne({ where: { username: req.params.username } });
+  if (!user) return res.json({});
+  const articles = await Article.find({ where: { userId: user.id } });
+  return res.json({ ...user, articles });
 });
 
 export default router;

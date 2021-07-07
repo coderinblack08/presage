@@ -61,7 +61,7 @@ module.exports = {
     }),
     extend: {
       maxWidth: {
-        "8xl": "88rem",
+        "8xl": "92rem",
       },
       screens: {
         sxl: "1224px",

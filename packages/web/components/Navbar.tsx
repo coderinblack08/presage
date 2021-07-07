@@ -3,7 +3,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
-import { Logout, TicketStar, Upload, Wallet } from "react-iconly";
+import {
+  Logout,
+  TicketStar,
+  Upload,
+  User as UserIcon,
+  Wallet,
+} from "react-iconly";
 import { useQuery, useQueryClient } from "react-query";
 import { User } from "../lib/types";
 import { SearchBar } from "../modules/navbar/Search";
@@ -24,11 +30,21 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
       {me ? (
         <Dropdown
           opener={
-            <Menu.Button>
+            <Menu.Button className="focus:outline-none">
               <Avatar user={me} />
             </Menu.Button>
           }
         >
+          <MenuItem
+            onClick={() => router.push("/u/[username]", `/u/${me.username}`)}
+            icon={
+              <div className="scale-80">
+                <UserIcon set="bulk" />
+              </div>
+            }
+          >
+            Profile
+          </MenuItem>
           <MenuItem
             onClick={() => {
               localStorage.removeItem("access-token");

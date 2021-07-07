@@ -18,7 +18,7 @@ export const Dropdown: React.FC<DropdownProps> = ({ opener, children }) => {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="origin-top-right absolute right-0 mt-4 w-56 rounded-lg bg-gray-600/75 backdrop-blur-lg border border-gray-500/50 focus:outline-none">
+        <Menu.Items className="origin-top-right absolute right-0 mt-4 w-56 rounded-lg bg-gray-600 border border-gray-500 focus:outline-none">
           {children}
         </Menu.Items>
       </Transition>
@@ -37,10 +37,8 @@ export const MenuItem: React.FC<{ icon?: ReactNode; onClick?: () => void }> = ({
         {({ active }) => (
           <button
             className={`${
-              active
-                ? "bg-gray-500/75 backdrop-blur-lg text-white"
-                : "text-gray-100"
-            } group flex items-center rounded-lg w-full px-4 py-2.5`}
+              active ? "bg-gray-500 text-white" : "text-gray-100"
+            } group flex items-center rounded-lg w-full px-4 py-2.5 focus:outline-none`}
           >
             {icon && <span className={children ? "mr-2" : ""}>{icon}</span>}
             {children}
