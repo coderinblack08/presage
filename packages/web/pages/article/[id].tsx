@@ -2,7 +2,7 @@ import { EditorContent, useEditor } from "@tiptap/react";
 import { format } from "date-fns";
 import { GetServerSideProps } from "next";
 import { NextSeo } from "next-seo";
-import React from "react";
+import React, { useEffect } from "react";
 import { Bookmark, Chat, Heart, TicketStar } from "react-iconly";
 import { QueryClient, useQuery } from "react-query";
 import { dehydrate } from "react-query/hydration";
@@ -23,6 +23,10 @@ const RenderArticle: React.FC<{ article: Article }> = ({ article }) => {
       },
     },
   });
+
+  useEffect(() => {
+    return () => editor?.destroy();
+  }, []);
 
   return <EditorContent editor={editor} />;
 };
@@ -51,16 +55,18 @@ const ArticlePage: React.FC<{ id: string }> = ({ id }) => {
             <h2 className="break-words mb-2">{article.title}</h2>
             <div className="text-gray-300">
               <div className="inline-flex items-center space-x-2 mr-1">
-                {article.tags.map((x) => (
-                  <p key={x.id} className="text-gray-300 font-semibold">
-                    #
-                    <span className="text-gray-200 font-semibold">
-                      {x.name}
-                    </span>
-                  </p>
-                ))}
+                {article.tags
+                  ? article.tags.map((x) => (
+                      <p key={x.id} className="text-gray-300 font-semibold">
+                        #
+                        <span className="text-gray-200 font-semibold">
+                          {x.name}
+                        </span>
+                      </p>
+                    ))
+                  : null}
               </div>
-              {article.tags.length === 0 ? "" : " · "}
+              {article.tags ? (article.tags.length === 0 ? "" : " · ") : null}
               {format(new Date(article.createdAt), "MMMM dd")}
               {article.readingTime ? ` · ${article.readingTime}` : ""}
             </div>
