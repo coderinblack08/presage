@@ -1,68 +1,61 @@
-import Image from "next/image";
 import React from "react";
+import { MdChevronRight } from "react-icons/md";
 import { useQuery } from "react-query";
-import { Button } from "../components/Button";
 import { Layout } from "../components/Layout";
-import { Article } from "../lib/types";
-import illustration from "../public/static/landing-page-illustration.png";
-import paper from "../public/icons/paper.png";
-import { ArticleCard } from "../modules/article/ArticleCard";
+import { Article, User } from "../lib/types";
+import { FilledArticleCard } from "../modules/article/FilledArticleCard";
+import { LandingPage } from "../modules/home/LandingPage";
 
-const Index: React.FC = () => {
-  const { data: trending } = useQuery<Article[]>("/articles/trending");
+const HomePage: React.FC = () => {
+  const { data: me } = useQuery<User>("/me");
+  const { data: posts } = useQuery<Article[]>("/articles/explore");
 
   return (
     <Layout>
-      <header className="flex justify-between items-center space-x-8">
-        <div>
-          <h1 className="h3 lg:h2">
-            A Medium alternative built for <br />
-            <span className="text-primary h3 lg:h2">
-              referral podcasts and blogs
-            </span>
-          </h1>
-          <p className="text-gray-300 mt-3 lg:mt-5 mb-6 lg:mb-8 text-base lg:text-lg max-w-2xl !leading-8">
-            <span className="text-gray-100 text-base lg:text-lg">
-              Tree steps —
-            </span>{" "}
-            write, record, publish about anything. Grow your audience
-            exponentially with Presage&apos;s referral system.
-          </p>
-          <div className="flex items-center space-x-3">
-            <a href="https://localhost:4000/auth/google">
-              <Button size="large">Start Growing</Button>
-            </a>
-            <Button size="large" color="gray">
-              Refer Friend
-            </Button>
-          </div>
-        </div>
-        <div className="hidden md:block">
-          <Image
-            src={illustration}
-            alt="Person with microphone"
-            placeholder="blur"
-          />
-        </div>
-      </header>
-      <main className="mt-12">
-        <div className="w-12 h-12 p-2.5 mb-5 rounded-xl flex items-center justify-center bg-purple/25">
-          <Image src={paper} alt="Paper Icon" />
-        </div>
-        <h4>Today’s Trending</h4>
-        <p className="text-purple">Podcasts and Articles</p>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 mt-12">
-          {trending?.map((article, rank) => (
-            <ArticleCard
-              ranking={rank + 1}
-              key={article.id}
-              article={article}
-            />
-          ))}
-        </div>
-      </main>
+      {!me ? (
+        <LandingPage />
+      ) : (
+        <>
+          <header>
+            <h4>Explore Posts</h4>
+            <h5 className="text-gray-300 mb-8 mt-1 font-semibold">
+              <span className="text-primary font-semibold">Did you know?</span>{" "}
+              — Select your favorite tags to add them as filters
+            </h5>
+            <nav className="flex items-center justify-between border-b border-gray-600 pb-5">
+              <div className="flex items-center space-x-12">
+                <button className="font-bold">Recommended</button>
+                <button className="font-bold text-gray-300">Recent</button>
+                <button className="font-bold text-gray-300">Popular</button>
+              </div>
+              <div className="flex items-center space-x-3">
+                <button className="py-1 px-4 rounded-lg bg-gray-100 text-gray-700 font-bold">
+                  #react
+                </button>
+                <button className="py-1 px-4 rounded-lg bg-gray-100 text-gray-700 font-bold">
+                  #tiktok
+                </button>
+                <button className="py-1 px-4 rounded-lg bg-gray-100 text-gray-700 font-bold">
+                  #politics
+                </button>
+                <button className="py-1 px-4 rounded-lg bg-gray-100 text-gray-700 font-bold">
+                  #nodejs
+                </button>
+                <button className="text-gray-300 font-semibold">
+                  <MdChevronRight className="w-6 h-6" />
+                </button>
+              </div>
+            </nav>
+          </header>
+          <main className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+            {posts?.map((article) => (
+              <FilledArticleCard article={article} key={article.id} />
+            ))}
+          </main>
+        </>
+      )}
     </Layout>
   );
 };
 
-export default Index;
+export default HomePage;
