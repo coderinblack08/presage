@@ -19,6 +19,7 @@ export interface Article {
   likes: number;
   userId: string;
   user: User;
+  bodyJson: any;
   tags: Tag[];
   createdAt: Date;
   updatedAt: Date;

@@ -1,3 +1,4 @@
+import { EditorContent, useEditor } from "@tiptap/react";
 import { format } from "date-fns";
 import { GetServerSideProps } from "next";
 import { NextSeo } from "next-seo";
@@ -9,6 +10,22 @@ import { Button } from "../../components/Button";
 import { Layout } from "../../components/Layout";
 import { fetcher } from "../../lib/fetcher";
 import { Article } from "../../lib/types";
+import { extensions } from "../../modules/draft/TipTapEditor";
+
+const RenderArticle: React.FC<{ article: Article }> = ({ article }) => {
+  const editor = useEditor({
+    extensions,
+    content: article.bodyJson,
+    editorProps: {
+      editable: (_) => false,
+      attributes: {
+        class: "prose focus:outline-none w-full max-w-full",
+      },
+    },
+  });
+
+  return <EditorContent editor={editor} />;
+};
 
 const ArticlePage: React.FC<{ id: string }> = ({ id }) => {
   const { data: article, isFetching } = useQuery<Article>(`/articles/${id}`);
@@ -49,12 +66,11 @@ const ArticlePage: React.FC<{ id: string }> = ({ id }) => {
             </div>
           </header>
           <div className="border-b border-gray-600 w-full" />
-          <main
-            className="prose pb-12 w-full max-w-full"
-            dangerouslySetInnerHTML={{
-              __html: article.body,
-            }}
-          />
+          {article ? (
+            <RenderArticle article={article} />
+          ) : (
+            <div className="spinner" />
+          )}
           <div className="fixed w-full max-w-4xl bottom-0 bg-gray-700/50 backdrop-blur-lg border-t border-gray-600 py-6 flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <div className="flex items-center space-x-6">

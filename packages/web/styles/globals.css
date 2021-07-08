@@ -75,11 +75,11 @@
 }
 
 .ProseMirror pre {
-  background: theme("colors.black");
+  background: #0c0d13;
   color: #fff;
   font-family: "JetBrainsMono", monospace;
-  padding: 0.75rem 1rem;
-  border-radius: 0.5rem;
+  padding: 1.5rem 1.75rem;
+  border-radius: 0.75rem;
 }
 
 .ProseMirror pre code {

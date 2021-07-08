@@ -11,6 +11,7 @@ import { Article } from "../../lib/types";
 import { AutoSave } from "./AutoSave";
 import { DeleteDraftModal } from "./DeleteDraftModal";
 import { EditTagModal } from "./EditTagModal";
+import { useEditorStore } from "./TipTapEditor";
 const TipTapEditor = dynamic(() => import("./TipTapEditor"), { ssr: false });
 
 interface DraftEditorProps {
@@ -55,27 +56,34 @@ export const DraftEditor: React.FC<DraftEditorProps> = ({ id }) => {
       })}
       enableReinitialize
       onSubmit={async (values, { setSubmitting }) => {
-        await mutateAsync([`/articles/${id}`, values, "patch"], {
-          onSuccess: () => {
-            queryClient.setQueryData<Article>(
-              `/articles/draft/${id}`,
-              (old) => {
-                return {
-                  ...old,
-                  ...values,
-                } as Article;
-              }
-            );
-            queryClient.setQueryData<Article[]>(`/articles/drafts`, (old) => {
-              if (old) {
-                const idx = old?.findIndex((v) => v.id === id);
-                old[idx] = { ...old[idx], title: values.title };
-                return old;
-              }
-              return [];
-            });
-          },
-        });
+        await mutateAsync(
+          [
+            `/articles/${id}`,
+            { ...values, bodyJson: useEditorStore.getState().bodyJson },
+            "patch",
+          ],
+          {
+            onSuccess: () => {
+              queryClient.setQueryData<Article>(
+                `/articles/draft/${id}`,
+                (old) => {
+                  return {
+                    ...old,
+                    ...values,
+                  } as Article;
+                }
+              );
+              queryClient.setQueryData<Article[]>(`/articles/drafts`, (old) => {
+                if (old) {
+                  const idx = old?.findIndex((v) => v.id === id);
+                  old[idx] = { ...old[idx], title: values.title };
+                  return old;
+                }
+                return [];
+              });
+            },
+          }
+        );
         console.log("Draft auto-saved");
         setSubmitting(false);
       }}

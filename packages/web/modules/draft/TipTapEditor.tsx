@@ -1,4 +1,5 @@
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
+import create from "zustand";
 import Dropcursor from "@tiptap/extension-dropcursor";
 import Image from "@tiptap/extension-image";
 import Placeholder from "@tiptap/extension-placeholder";
@@ -30,6 +31,27 @@ import { CodeBlockComponent } from "./CodeBlockComponent";
 
 interface TipTapEditorProps {}
 
+export const extensions = [
+  StarterKit,
+  Placeholder,
+  Underline,
+  Image,
+  Dropcursor,
+  CodeBlockLowlight.extend({
+    addNodeView() {
+      return ReactNodeViewRenderer(CodeBlockComponent);
+    },
+  }).configure({ lowlight }),
+];
+
+export const useEditorStore = create<{
+  bodyJson: any;
+  setBody: (body: any) => void;
+}>((set) => ({
+  bodyJson: null,
+  setBody: (body: any) => set({ bodyJson: body }),
+}));
+
 const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
   const { values, setFieldValue, errors } = useFormikContext<{
     title: string;
@@ -40,25 +62,15 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
   } = useRouter();
   const { data: draft } = useQuery<Article>(`/articles/draft/${id}`);
   const editor = useEditor({
-    extensions: [
-      StarterKit,
-      Placeholder,
-      Underline,
-      Image,
-      Dropcursor,
-      CodeBlockLowlight.extend({
-        addNodeView() {
-          return ReactNodeViewRenderer(CodeBlockComponent);
-        },
-      }).configure({ lowlight }),
-    ],
+    extensions,
     onUpdate: ({ editor }) => {
       setFieldValue("body", editor.getHTML(), false);
+      useEditorStore.getState().setBody(editor.getJSON());
     },
-    content: draft?.body || null,
+    content: draft?.bodyJson || null,
     editorProps: {
       attributes: {
-        class: "prose focus:outline-none py-8 max-w-3xl",
+        class: "prose focus:outline-none py-8 max-w-full",
       },
     },
   });
@@ -184,12 +196,7 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
             tippyOptions={{ duration: 100 }}
             editor={editor}
           >
-            <button
-              className="pr-4 py-1.5"
-              onClick={() => {
-                editor.chain().focus().toggleCodeBlock().run();
-              }}
-            >
+            <button className="pr-4 py-1.5" onClick={() => {}}>
               <MdCode className="w-5 h-5" />
             </button>
             <button

@@ -24,6 +24,9 @@ export class Article extends BaseEntity {
   @Column("text", { nullable: true })
   body: string | null;
 
+  @Column("json", { nullable: true })
+  bodyJson: any | null;
+
   @Column("bool", { default: false })
   published: boolean;
 
