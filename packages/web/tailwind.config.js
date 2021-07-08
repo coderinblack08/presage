@@ -9,6 +9,7 @@ module.exports = {
   darkMode: false,
   theme: {
     fontFamily: {
+      mono: require("tailwindcss/defaultConfig").theme.fontFamily.mono,
       sans: [
         "Inter",
         "-apple-system",
