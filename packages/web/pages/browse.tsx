@@ -1,4 +1,3 @@
-import { format } from "date-fns";
 import { NextSeo } from "next-seo";
 import { useRouter } from "next/router";
 import React from "react";
@@ -6,7 +5,7 @@ import { Bookmark, Paper, Search, User, Voice } from "react-iconly";
 import { useQuery } from "react-query";
 import { Layout } from "../components/Layout";
 import { Article } from "../lib/types";
-import { ArticleCard } from "../modules/article/ArticleCard";
+import { FilledArticleCard } from "../modules/article/FilledArticleCard";
 
 const Browse: React.FC = () => {
   const {
@@ -52,7 +51,7 @@ const Browse: React.FC = () => {
             <div className="spinner" />
           ) : results?.length ? (
             results?.map((article) => (
-              <ArticleCard key={article.id} article={article} />
+              <FilledArticleCard key={article.id} article={article} />
             ))
           ) : (
             <p className="text-gray-400 text-lg">

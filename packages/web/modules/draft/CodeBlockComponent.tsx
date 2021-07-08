@@ -11,7 +11,7 @@ export const CodeBlockComponent: React.FC<NodeViewProps> = ({
     <NodeViewWrapper className="code-block relative">
       {editor.isEditable ? (
         <select
-          className="absolute top-4 right-4 appearance-none bg-transparent cursor-pointer"
+          className="absolute px-2 top-4 left-4 bg-[#0c0d13] cursor-pointer"
           contentEditable="false"
           value={node.attrs.language}
           onChange={(e) => {
