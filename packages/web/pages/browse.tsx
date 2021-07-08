@@ -27,7 +27,7 @@ const Browse: React.FC = () => {
             </div>
             <h3>{q}</h3>
           </div>
-          <nav className="flex items-center mt-8 mb-12">
+          <nav className="flex items-center my-8">
             <button className="flex items-center justify-center focus:outline-none w-full border-b-2 border-primary text-primary pb-4">
               <Paper set="bulk" />
               <span className="ml-2.5 font-bold">Articles</span>

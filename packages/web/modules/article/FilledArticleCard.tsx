@@ -1,7 +1,7 @@
 import { format } from "date-fns";
 import Link from "next/link";
 import React from "react";
-import { MdChatBubble, MdThumbUp } from "react-icons/md";
+import { MdBookmark, MdChatBubble, MdThumbUp } from "react-icons/md";
 import { Button } from "../../components/Button";
 import { Article } from "../../lib/types";
 
@@ -16,38 +16,59 @@ export const FilledArticleCard: React.FC<FilledArticleCardProps> = ({
 }) => {
   return (
     <Link href="/article/[id]" as={`/article/${article.id}`}>
-      <a className="block bg-gray-600/50 p-5 w-full rounded-lg">
-        <div className="flex items-center space-x-3 mb-3">
-          <img
-            src={article.user.profilePicture}
-            className="w-6 h-6 rounded-full"
-            alt={article.user.displayName}
-          />
-          <p className="font-bold">{article.user.displayName}</p>
+      <a className="flex flex-col justify-between h-full bg-gray-600/50 border border-gray-600 p-5 pb-4 w-full rounded-lg">
+        <div>
+          <div className="flex items-center space-x-3 mb-3">
+            <img
+              src={article.user.profilePicture}
+              className="w-6 h-6 rounded-full"
+              alt={article.user.displayName}
+            />
+            <p className="font-bold">{article.user.displayName}</p>
+          </div>
+          <h4 className="text-xl break-words mb-1">
+            <span className="text-xl font-bold text-primary">
+              {ranking ? `0${ranking}. ` : ""}
+            </span>
+            {article.title}
+          </h4>
+          <p className="text-gray-300">
+            <div className="inline-flex items-center space-x-2 mr-1">
+              {article.tags.map((x) => (
+                <p key={x.id} className="text-gray-300 font-semibold">
+                  #<span className="text-gray-200 font-semibold">{x.name}</span>
+                </p>
+              ))}
+            </div>
+            {article.tags.length === 0 ? "" : " · "}
+            {format(new Date(article.createdAt), "MMMM dd")}
+            {article.readingTime ? ` · ${article.readingTime}` : ""}
+          </p>
         </div>
-        <h4 className="text-xl break-words mb-1">
-          <span className="text-xl font-bold text-primary">
-            {ranking ? `0${ranking}. ` : ""}
-          </span>
-          {article.title}
-        </h4>
-        <p className="text-gray-300">
-          {format(new Date(article.createdAt), "MMMM dd")}
-          {article.readingTime ? ` · ${article.readingTime}` : ""}
-        </p>
-        <div className="flex items-center space-x-4 mt-6">
+        <div className="flex items-center justify-between border-t border-gray-500/50 pt-4 space-x-4 mt-8">
           <Button
             color="transparent"
-            className="bg-opacity-10 !bg-gray-500/50 text-gray-200"
+            size="none"
+            className="text-gray-200"
             icon={<MdThumbUp className="w-5 h-5" />}
           >
-            0 · Like
+            0 Likes
           </Button>
           <Button
+            size="none"
             color="transparent"
+            className="text-gray-200"
             icon={<MdChatBubble className="w-5 h-5" />}
           >
-            Comment
+            0 Comments
+          </Button>
+          <Button
+            size="none"
+            color="transparent"
+            className="text-gray-200"
+            icon={<MdBookmark className="w-5 h-5" />}
+          >
+            Save
           </Button>
         </div>
       </a>
