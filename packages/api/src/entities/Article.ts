@@ -11,6 +11,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { Comment } from "./Comment";
 import { Like } from "./Like";
 import { Tag } from "./Tag";
 import { User } from "./User";
@@ -50,6 +51,9 @@ export class Article extends BaseEntity {
 
   @OneToMany(() => Like, (like) => like.article)
   likes: Like[];
+
+  @OneToMany(() => Comment, (comment) => comment.article)
+  comments: Comment[];
 
   @Column("tsvector", { select: false, nullable: true })
   document: any;

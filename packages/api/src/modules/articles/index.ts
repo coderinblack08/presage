@@ -7,6 +7,7 @@ import { Article } from "../../entities/Article";
 import { Tag } from "../../entities/Tag";
 import { isAuth } from "../auth/isAuth";
 import { Like } from "../../entities/Like";
+import { Comment } from "../../entities/Comment";
 
 // export const createPublishSocket = (
 //   io: Server<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap>
@@ -262,17 +263,47 @@ router.get(
       const article = await Article.findOne(req.params.id, {
         relations: ["user"],
       });
+      let comments = await getConnection()
+        .getRepository(Comment)
+        .createQueryBuilder("comment")
+        .leftJoinAndSelect("comment.user", "user")
+        .where('comment."articleId" = :id', { id: req.params.id })
+        .getMany();
+
+      comments = comments.sort(
+        (a: any, b: any) => a.path.length - b.path.length
+      );
+      const tree = [];
+      let i = 0;
+      while (true) {
+        if (comments[i].path.length > 1) break;
+        tree.push({ ...comments[i], children: [] });
+        i++;
+      }
+      for (let j = i; j < comments.length; j++) {
+        const node = comments[j];
+        const depth = node.path.length - 2;
+        let treeNode: any = tree.find((x) => x.id === node.path[0]);
+        for (let k = 0; k < depth; k++) {
+          treeNode = treeNode.children.find(
+            (x: any) => x.id === node.path[k + 1]
+          );
+        }
+        treeNode.children.push({ ...node, children: [] });
+      }
+
+      const body = { ...article, comments: tree };
       if (req.userId) {
         const like = await Like.findOne({
           where: { userId: req.userId, articleId: req.params.id },
         });
 
         return res.json({
-          ...article,
+          ...body,
           liked: like !== undefined,
         });
       }
-      return res.json(article);
+      return res.json(body);
     } catch (error) {
       return next(createHttpError(500, error));
     }
