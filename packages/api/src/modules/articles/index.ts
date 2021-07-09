@@ -2,10 +2,11 @@ import { Request, Router } from "express";
 import sanitizeHtml from "sanitize-html";
 import createHttpError from "http-errors";
 import readingTime from "reading-time";
-import { getConnection } from "typeorm";
+import { getConnection, UsingJoinColumnIsNotAllowedError } from "typeorm";
 import { Article } from "../../entities/Article";
 import { Tag } from "../../entities/Tag";
 import { isAuth } from "../auth/isAuth";
+import { Like } from "../../entities/Like";
 
 // export const createPublishSocket = (
 //   io: Server<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap>
@@ -21,6 +22,33 @@ import { isAuth } from "../auth/isAuth";
 // };
 
 const router = Router();
+
+router.post("/like", isAuth(true), async (req, res) => {
+  await getConnection().transaction(async (em) => {
+    const body = { userId: req.userId, articleId: req.body.articleId };
+    const existingLike = await em.findOne(Like, { where: body });
+
+    if (existingLike) {
+      await em.delete(Like, body);
+      await em
+        .createQueryBuilder()
+        .update(Article)
+        .where({ id: req.body.articleId })
+        .set({ points: () => "points - 1" })
+        .execute();
+    } else {
+      await em.create(Like, body).save();
+      await em
+        .createQueryBuilder()
+        .update(Article)
+        .where({ id: req.body.articleId })
+        .set({ points: () => "points + 1" })
+        .execute();
+    }
+    res.json(true);
+  });
+});
+
 router.post("/", isAuth(true), async (req, res) => {
   const article = await Article.create({
     title: "Untitled",
@@ -202,14 +230,26 @@ router.delete(
   }
 );
 
-router.get("/explore", async (_, res) => {
-  const data = await Article.find({
-    take: 6,
-    order: { createdAt: "DESC" },
-    where: { published: true },
-    relations: ["user"],
-  });
-  res.json(data);
+router.get("/explore", isAuth(), async (req, res) => {
+  const data = await getConnection()
+    .getRepository(Article)
+    .createQueryBuilder("article")
+    .leftJoinAndSelect("article.tags", "tags")
+    .leftJoinAndSelect("article.user", "user")
+    .leftJoinAndSelect("article.likes", "likes", 'likes."userId" = :user', {
+      user: req.userId,
+    })
+    .orderBy('article."createdAt"', "DESC")
+    .where("article.published = true")
+    .limit(6)
+    .getMany();
+  res.json(
+    data.map((x) => {
+      const y: any = { ...x, liked: x.likes.length === 0 };
+      delete y.likes;
+      return y;
+    })
+  );
 });
 
 router.get("/:id", async (req, res, next) => {

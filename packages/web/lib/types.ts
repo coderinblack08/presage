@@ -16,10 +16,10 @@ export interface Article {
   body: any | null;
   published: boolean;
   readingTime: string | null;
-  likes: number;
   userId: string;
   user: User;
   bodyJson: any;
+  points: number;
   tags: Tag[];
   createdAt: Date;
   updatedAt: Date;

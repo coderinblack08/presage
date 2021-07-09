@@ -1,7 +1,7 @@
 import { format } from "date-fns";
 import Link from "next/link";
 import React from "react";
-import { MdBookmark, MdChatBubble, MdThumbUp } from "react-icons/md";
+import { MdBookmark, MdChat, MdThumbUp } from "react-icons/md";
 import { Button } from "../../components/Button";
 import { Article } from "../../lib/types";
 
@@ -52,15 +52,17 @@ export const FilledArticleCard: React.FC<FilledArticleCardProps> = ({
             className="text-gray-200"
             icon={<MdThumbUp className="w-5 h-5" />}
           >
-            0 Likes
+            <span className="font-semibold">
+              {article.points} Like{article.points !== 1 ? "s" : ""}
+            </span>
           </Button>
           <Button
             size="none"
             color="transparent"
             className="text-gray-200"
-            icon={<MdChatBubble className="w-5 h-5" />}
+            icon={<MdChat className="w-5 h-5" />}
           >
-            0 Comments
+            <span className="font-semibold">0 Replies</span>
           </Button>
           <Button
             size="none"
@@ -68,7 +70,7 @@ export const FilledArticleCard: React.FC<FilledArticleCardProps> = ({
             className="text-gray-200"
             icon={<MdBookmark className="w-5 h-5" />}
           >
-            Save
+            <span className="font-semibold">Save</span>
           </Button>
         </div>
       </a>

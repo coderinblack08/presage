@@ -7,9 +7,11 @@ import {
   JoinTable,
   ManyToMany,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { Like } from "./Like";
 import { Tag } from "./Tag";
 import { User } from "./User";
 
@@ -34,7 +36,7 @@ export class Article extends BaseEntity {
   readingTime: string | null;
 
   @Column("int", { default: 0 })
-  likes: number;
+  points: number;
 
   @Column()
   userId: string;
@@ -45,6 +47,9 @@ export class Article extends BaseEntity {
   @JoinTable()
   @ManyToMany(() => Tag, (tag) => tag.articles, { cascade: true, eager: true })
   tags: Tag[];
+
+  @OneToMany(() => Like, (like) => like.article)
+  likes: Like[];
 
   @Column("tsvector", { select: false, nullable: true })
   document: any;
