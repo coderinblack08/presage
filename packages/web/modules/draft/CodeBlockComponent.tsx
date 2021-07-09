@@ -32,7 +32,9 @@ export const CodeBlockComponent: React.FC<NodeViewProps> = ({
         </select>
       ) : null}
       <pre>
-        <NodeViewContent as="code" />
+        <div className={editor.isEditable ? "pt-8" : ""}>
+          <NodeViewContent as="code" />
+        </div>
       </pre>
     </NodeViewWrapper>
   );

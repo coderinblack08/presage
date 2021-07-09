@@ -196,7 +196,12 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
             tippyOptions={{ duration: 100 }}
             editor={editor}
           >
-            <button className="pr-4 py-1.5" onClick={() => {}}>
+            <button
+              className="pr-4 py-1.5"
+              onClick={() => {
+                editor.chain().focus().toggleCodeBlock().run();
+              }}
+            >
               <MdCode className="w-5 h-5" />
             </button>
             <button
