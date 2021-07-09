@@ -21,6 +21,7 @@ export interface Article {
   bodyJson: any;
   points: number;
   tags: Tag[];
+  liked: boolean | null;
   createdAt: Date;
   updatedAt: Date;
 }

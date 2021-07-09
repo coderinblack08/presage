@@ -49,7 +49,7 @@ export const FilledArticleCard: React.FC<FilledArticleCardProps> = ({
           <Button
             color="transparent"
             size="none"
-            className="text-gray-200"
+            className={article.liked ? "text-primary" : "text-gray-200"}
             icon={<MdThumbUp className="w-5 h-5" />}
           >
             <span className="font-semibold">

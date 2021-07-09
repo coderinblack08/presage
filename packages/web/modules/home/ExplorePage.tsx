@@ -18,7 +18,7 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({}) => {
           Select your favorite tags to add them as filters
         </h5>
         <nav className="flex items-center justify-between border-b border-gray-600 pb-5">
-          <div className="flex items-center space-x-12">
+          <div className="flex items-center space-x-10">
             <button className="font-bold">Recommended</button>
             <button className="font-bold text-gray-300">Recent</button>
             <button className="font-bold text-gray-300">Popular</button>

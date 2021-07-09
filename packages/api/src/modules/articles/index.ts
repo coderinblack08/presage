@@ -243,24 +243,40 @@ router.get("/explore", isAuth(), async (req, res) => {
     .where("article.published = true")
     .limit(6)
     .getMany();
+
   res.json(
     data.map((x) => {
-      const y: any = { ...x, liked: x.likes.length === 0 };
+      const y: any = { ...x, liked: x.likes.length === 1 };
       delete y.likes;
+
       return y;
     })
   );
 });
 
-router.get("/:id", async (req, res, next) => {
-  try {
-    const article = await Article.findOne(req.params.id, {
-      relations: ["user"],
-    });
-    res.json(article);
-  } catch (error) {
-    next(createHttpError(500, error));
+router.get(
+  "/:id",
+  isAuth(),
+  async (req: Request<{ id: string }>, res, next) => {
+    try {
+      const article = await Article.findOne(req.params.id, {
+        relations: ["user"],
+      });
+      if (req.userId) {
+        const like = await Like.findOne({
+          where: { userId: req.userId, articleId: req.params.id },
+        });
+
+        return res.json({
+          ...article,
+          liked: like !== undefined,
+        });
+      }
+      return res.json(article);
+    } catch (error) {
+      return next(createHttpError(500, error));
+    }
   }
-});
+);
 
 export default router;

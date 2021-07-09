@@ -1,5 +1,4 @@
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
-import create from "zustand";
 import Dropcursor from "@tiptap/extension-dropcursor";
 import Image from "@tiptap/extension-image";
 import Placeholder from "@tiptap/extension-placeholder";
@@ -24,6 +23,7 @@ import {
 } from "react-icons/ai";
 import { MdCode, MdImage } from "react-icons/md";
 import { useQuery } from "react-query";
+import create from "zustand";
 import { Button } from "../../components/Button";
 import { Select } from "../../components/Select";
 import { Article } from "../../lib/types";
@@ -32,7 +32,7 @@ import { CodeBlockComponent } from "./CodeBlockComponent";
 interface TipTapEditorProps {}
 
 export const extensions = [
-  StarterKit,
+  StarterKit.configure({ codeBlock: false }),
   Placeholder,
   Underline,
   Image,

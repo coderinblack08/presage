@@ -31,12 +31,37 @@ export const BottomBar: React.FC<BottomBarProps> = ({ article }) => {
         <Button
           color="transparent"
           size="none"
+          className={article.liked ? "text-primary" : "text-gray-100"}
           icon={<MdThumbUp className="w-6 h-6" />}
           onClick={async () => {
             await mutateAsync(
               ["/articles/like", { articleId: article.id }, "post"],
               {
-                onSuccess: () => {},
+                onSuccess: () => {
+                  const newData = {
+                    liked: !article.liked,
+                    points: article.points - (article.liked ? 1 : -1),
+                  };
+                  queryClient.setQueryData<Article>(
+                    `/articles/${article.id}`,
+                    (old) =>
+                      ({
+                        ...old,
+                        ...newData,
+                      } as any)
+                  );
+                  queryClient.setQueryData<Article[]>(
+                    `/articles/explore`,
+                    (old) => {
+                      if (old) {
+                        const idx = old?.findIndex((v) => v.id === article.id);
+                        old[idx] = { ...old[idx], ...newData };
+                        return old;
+                      }
+                      return [];
+                    }
+                  );
+                },
               }
             );
           }}
