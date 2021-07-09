@@ -74,7 +74,7 @@ const UserPage: React.FC<
           </main>
           <aside>
             <h4 className="text-base">Recent Activity</h4>
-            <p className="text-gray-300 mt-2">No Activity Found</p>
+            <p className="text-gray-400 mt-2">Strangely, No Activity Found</p>
           </aside>
         </div>
       )}
