@@ -10,7 +10,9 @@ export const Footer: React.FC<FooterProps> = ({}) => {
         <div className="font-display font-bold text-3xl sm:pr-3 leading-none">
           presage
         </div>
-        <p className="text-gray-600 sm:pl-3 mt-2 sm:mt-0">©2021 Presage Inc.</p>
+        <p className="text-gray-600 sm:pl-3 small sm:text-base mt-3 sm:mt-0">
+          ©2021 Presage Inc.
+        </p>
       </div>
       <div className="flex items-center space-x-3">
         <Button color="white" size="small">
