@@ -5,7 +5,7 @@ interface FooterProps {}
 
 export const Footer: React.FC<FooterProps> = ({}) => {
   return (
-    <footer className="flex items-center justify-between py-2 mt-24">
+    <footer className="flex items-center justify-between py-2 mt-32">
       <div className="flex items-center divide-x divide-gray-200">
         <div className="font-display font-bold text-3xl pr-4">presage</div>
         <p className="text-gray-600 pl-4">©2021 Presage — @joinpresage</p>
