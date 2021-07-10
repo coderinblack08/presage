@@ -135,7 +135,7 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
                     .toggleHeading({ level: parseInt(e.target.value) as any })
                     .run();
                 }}
-                color="transparent"
+                // color="transparent"
                 className="border-none py-1.5"
               >
                 <option value={1}>Heading 1</option>
@@ -147,32 +147,32 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
             <div className="flex items-center space-x-2 px-4 py-1.5">
               <Button
                 onClick={() => editor.chain().focus().toggleBold().run()}
-                color={editor.isActive("bold") ? "gray" : "transparent"}
+                // color={editor.isActive("bold") ? "gray" : "transparent"}
                 size="small"
                 icon={<AiOutlineBold className="w-4 h-4" />}
               />
               <Button
                 onClick={() => editor.chain().focus().toggleItalic().run()}
-                color={editor.isActive("italic") ? "gray" : "transparent"}
+                // color={editor.isActive("italic") ? "gray" : "transparent"}
                 size="small"
                 icon={<AiOutlineItalic className="w-4 h-4" />}
               />
               <Button
                 onClick={() => editor.chain().focus().toggleUnderline().run()}
-                color={editor.isActive("underline") ? "gray" : "transparent"}
+                // color={editor.isActive("underline") ? "gray" : "transparent"}
                 size="small"
                 icon={<AiOutlineUnderline className="w-4 h-4" />}
               />
               <Button
                 onClick={() => editor.chain().focus().toggleStrike().run()}
-                color={editor.isActive("strike") ? "gray" : "transparent"}
+                // color={editor.isActive("strike") ? "gray" : "transparent"}
                 size="small"
                 icon={<AiOutlineStrikethrough className="w-4 h-4" />}
               />
               <Button
                 onClick={() => editor.commands.clearNodes()}
                 size="small"
-                color="transparent"
+                // color="transparent"
                 icon={
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -181,7 +181,7 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
                   >
                     <path fill="none" d="M0 0h24v24H0z" />
                     <path
-                      fill="currentColor"
+                      // fill="currentColor"
                       d="M12.651 14.065L11.605 20H9.574l1.35-7.661-7.41-7.41L4.93 3.515 20.485 19.07l-1.414 1.414-6.42-6.42zm-.878-6.535l.27-1.53h-1.8l-2-2H20v2h-4.927L13.5 9.257 11.773 7.53z"
                     />
                   </svg>
@@ -230,7 +230,7 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
           >
             <path
               fillRule="evenodd"
-              fill="currentColor"
+              // fill="currentColor"
               d="M14.85 3H1.15C.52 3 0 3.52 0 4.15v7.69C0 12.48.52 13 1.15 13h13.69c.64 0 1.15-.52 1.15-1.15v-7.7C16 3.52 15.48 3 14.85 3zM9 11H7V8L5.5 9.92 4 8v3H2V5h2l1.5 2L7 5h2v6zm2.99.5L9.5 8H11V5h2v3h1.5l-2.51 3.5z"
             ></path>
           </svg>

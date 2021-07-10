@@ -17,7 +17,6 @@ const Template: Story<ButtonProps> = (args) => (
 export const Primary = Template.bind({});
 export const Gray = Template.bind({});
 
-Gray.args = { color: "gray" };
 Primary.args = { icon: <MdPlayArrow className="w-5 h-5" /> };
 Primary.argTypes = Gray.argTypes = {
   size: toEnum(["big", "small"]),
