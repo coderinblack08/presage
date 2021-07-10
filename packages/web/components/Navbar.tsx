@@ -59,7 +59,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
             Publish
           </MenuItem>
         </Dropdown>
-        <UserDropdown />
+        {me ? <UserDropdown /> : null}
       </div>
       <div className="hidden md:flex items-center space-x-10 lg:space-x-12">
         <a className="flex items-center text-gray-800">
@@ -74,23 +74,25 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
           </div>
           Pricing
         </a>
-        <Link href="/publish">
-          {me ? (
+        {me ? (
+          <Link href="/publish">
             <a className="flex items-center text-gray-800">
               <div className="mr-2 scale-80">
                 <Upload set="bulk" />
               </div>
               Publish
             </a>
-          ) : (
+          </Link>
+        ) : (
+          <Link href="/contact">
             <a className="flex items-center text-gray-800">
               <div className="mr-2 scale-80">
                 <Call set="bulk" />
               </div>
               Contact
             </a>
-          )}
-        </Link>
+          </Link>
+        )}
         {me ? (
           <div className="flex item-center space-x-6">
             <div className="flex items-center flex-grow-0">

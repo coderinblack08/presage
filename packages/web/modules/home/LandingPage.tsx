@@ -12,15 +12,15 @@ interface LandingPageProps {}
 export const LandingPage: React.FC<LandingPageProps> = ({}) => {
   return (
     <div>
-      <header className="flex justify-between items-center">
+      <header className="mt-6 md:mt-0 flex justify-between items-center">
         <div className="max-w-lg lg:max-w-2xl w-full">
-          <h1 className="h3 lg:h2 font-display font-extrabold">
+          <h1 className="text-2xl sm:h3 lg:h2 font-display font-extrabold">
             A Medium alternative built for <br />
-            <span className="h3 lg:h2 text-gray-500 font-extrabold font-display">
+            <span className="text-2xl sm:h3 lg:h2 text-gray-500 font-extrabold font-display">
               referral podcasts and blogs
             </span>
           </h1>
-          <p className="text-gray-600 font-display mt-4 leading-[1.8]">
+          <p className="text-gray-600 font-display mt-4 !leading-[1.8] text-[13px] sm:text-base">
             <strong className="text-gray-900">Tree steps</strong> — write,
             record, publish about anything. Grow your audience exponentially
             with Presage&apos;s referral system.
@@ -44,7 +44,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
         <section className="mt-20 md:mt-36">
           <EmojiIcon emoji="🔌" />
           <p className="font-display font-bold">Our Features</p>
-          <h3 className="font-display">Comes Battery Packed</h3>
+          <h3 className="h4 md:h3 font-display">Comes Battery Packed</h3>
           <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-5 mt-5 max-w-5xl">
             <FeatureCard
               title="Feature Rich editor"
@@ -82,7 +82,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
         <p className="text-gray-600 mt-2">
           With these stats, think about how much bigger you can be!
         </p>
-        <div className="flex items-center space-x-12 mt-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 md:gap-12 mt-8">
           <article>
             <h4>200%</h4>
             <p className="text-gray-600">More Retention</p>

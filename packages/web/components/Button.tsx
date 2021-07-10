@@ -57,7 +57,7 @@ export const Button: React.FC<ButtonProps> = ({
         colors[color]
       } focus:outline-none focus-visible:ring flex items-center justify-center transition ${
         rounded ? "!rounded-full" : ""
-      } ${className}`}
+      } hover:-translate-y-0.5 hover:shadow-md ${className}`}
       {...props}
     >
       <span className={`flex items-center ${loading ? "opacity-0" : ""}`}>

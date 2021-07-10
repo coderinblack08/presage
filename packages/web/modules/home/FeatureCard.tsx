@@ -10,8 +10,8 @@ export const FeatureCard: React.FC<FeatureCardProps> = ({
   title,
 }) => {
   return (
-    <article className="p-7 col-span-1 bg-white shadow rounded-lg">
-      <h4 className="text-gray-800">{title}</h4>
+    <article className="p-5 md:p-7 col-span-1 bg-white shadow rounded-lg">
+      <h4 className="font-bold text-lg md:h4 text-gray-800">{title}</h4>
       <p className="text-gray-600 mt-1.5">{description}</p>
     </article>
   );
