@@ -1,7 +1,6 @@
 {
-  "conventionalCommits.scopes": [
-    "api",
-    "web",
-    "api, web"
-  ]
+  "conventionalCommits.scopes": ["api", "web", "api, web"],
+  "files.watcherExclude": {
+    "**/target": true
+  }
 }

@@ -1,6 +1,5 @@
 /* @import "tailwindcss/base";
 @import "tailwindcss/utilities"; */
-@import url("https://rsms.me/inter/inter.css");
 
 @tailwind base;
 @tailwind components;
@@ -15,7 +14,7 @@
   body,
   html,
   #__next {
-    @apply antialiased bg-gray-700 text-gray-100;
+    @apply antialiased bg-gray-100 text-gray-900;
   }
 
   .h2,

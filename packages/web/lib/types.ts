@@ -21,7 +21,19 @@ export interface Article {
   bodyJson: any;
   points: number;
   tags: Tag[];
+  comments: Comment[];
   liked: boolean | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface Comment {
+  id: string;
+  message: string;
+  user: User;
+  articleId: string;
+  userId: string;
+  path: string[];
   createdAt: Date;
   updatedAt: Date;
 }

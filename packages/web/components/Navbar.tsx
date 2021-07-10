@@ -1,84 +1,35 @@
 import { Menu } from "@headlessui/react";
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
-import {
-  Logout,
-  TicketStar,
-  Upload,
-  User as UserIcon,
-  Wallet,
-} from "react-iconly";
-import { useQuery, useQueryClient } from "react-query";
+import { Call, Discovery, TicketStar, Upload, Wallet } from "react-iconly";
+import { useQuery } from "react-query";
 import { User } from "../lib/types";
-import { SearchBar } from "../modules/navbar/Search";
-import logo from "../public/static/logo.png";
-import { Avatar } from "./Avatar";
 import { Button } from "./Button";
 import { Dropdown, MenuItem } from "./Dropdown";
+import { UserDropdown } from "./UserDropdown";
 
 interface NavbarProps {}
 
 export const Navbar: React.FC<NavbarProps> = ({}) => {
   const { data: me } = useQuery<User>("/me");
   const router = useRouter();
-  const queryClient = useQueryClient();
-
-  const userDropdown = (
-    <>
-      {me ? (
-        <Dropdown
-          opener={
-            <Menu.Button className="focus:outline-none">
-              <Avatar user={me} />
-            </Menu.Button>
-          }
-        >
-          <MenuItem
-            onClick={() => router.push("/u/[username]", `/u/${me.username}`)}
-            icon={
-              <div className="scale-80">
-                <UserIcon set="bulk" />
-              </div>
-            }
-          >
-            Profile
-          </MenuItem>
-          <MenuItem
-            onClick={() => {
-              localStorage.removeItem("access-token");
-              queryClient.clear();
-              router.push("/");
-            }}
-            icon={
-              <div className="scale-80">
-                <Logout set="bulk" />
-              </div>
-            }
-          >
-            Logout
-          </MenuItem>
-        </Dropdown>
-      ) : null}
-    </>
-  );
 
   return (
-    <nav className="sticky z-50 top-0 bg-gray-700/80 backdrop-blur-lg max-w-8xl mx-auto flex items-center justify-between py-6 px-8">
+    <nav className="sticky z-50 bg-gray-100/75 backdrop-blur-lg top-0 max-w-8xl mx-auto flex items-center justify-between p-5 md:px-8 md:py-6">
       <Link href="/">
         <a className="flex items-center space-x-4">
-          <Image src={logo} alt="Logo" />
-          <h4 className="text-white">Presage</h4>
+          <div className="font-display text-black text-2xl font-bold">
+            presage
+          </div>
         </a>
       </Link>
       <div className="flex items-center space-x-6 md:hidden">
-        <SearchBar />
         <Dropdown
           opener={
             <Menu.Button className="focus:outline-none w-8 h-8 flex items-center justify-center">
               <svg
-                className="w-6 h-auto fill-current text-white"
+                className="w-6 h-auto fill-current text-gray-800"
                 viewBox="0 0 24 12"
               >
                 <rect width="24" height="2"></rect>
@@ -108,29 +59,42 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
             Publish
           </MenuItem>
         </Dropdown>
-        {userDropdown}
+        <UserDropdown />
       </div>
       <div className="hidden md:flex items-center space-x-10 lg:space-x-12">
-        <SearchBar />
-        <a className="flex items-center">
+        <a className="flex items-center text-gray-800">
+          <div className="mr-2 scale-80">
+            <Discovery set="bulk" />
+          </div>
+          Explore
+        </a>
+        <a className="flex items-center text-gray-800">
           <div className="mr-2 scale-80">
             <Wallet set="bulk" />
           </div>
           Pricing
         </a>
         <Link href="/publish">
-          <a className="flex items-center">
-            <div className="mr-2 scale-80">
-              <Upload set="bulk" />
-            </div>
-            Publish
-          </a>
+          {me ? (
+            <a className="flex items-center text-gray-800">
+              <div className="mr-2 scale-80">
+                <Upload set="bulk" />
+              </div>
+              Publish
+            </a>
+          ) : (
+            <a className="flex items-center text-gray-800">
+              <div className="mr-2 scale-80">
+                <Call set="bulk" />
+              </div>
+              Contact
+            </a>
+          )}
         </Link>
         {me ? (
           <div className="flex item-center space-x-6">
             <div className="flex items-center flex-grow-0">
               <Button
-                color="darkGray"
                 size="small"
                 icon={
                   <div className="scale-80">
@@ -143,11 +107,11 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
                 </span>
               </Button>
             </div>
-            {userDropdown}
+            <UserDropdown />
           </div>
         ) : (
           <a href="http://localhost:4000/auth/google">
-            <Button>Login</Button>
+            <Button rounded>Login</Button>
           </a>
         )}
       </div>

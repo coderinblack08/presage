@@ -3,10 +3,8 @@ import { format } from "date-fns";
 import { GetServerSideProps } from "next";
 import { NextSeo } from "next-seo";
 import React, { useEffect } from "react";
-import { Bookmark, Chat, Heart, TicketStar } from "react-iconly";
 import { QueryClient, useQuery } from "react-query";
 import { dehydrate } from "react-query/hydration";
-import { Button } from "../../components/Button";
 import { Layout } from "../../components/Layout";
 import { fetcher } from "../../lib/fetcher";
 import { Article } from "../../lib/types";
@@ -74,7 +72,15 @@ const ArticlePage: React.FC<{ id: string }> = ({ id }) => {
           </header>
           <div className="border-b border-gray-600 w-full" />
           {article ? (
-            <RenderArticle article={article} />
+            <div>
+              <RenderArticle article={article} />
+              <h4 className="border-b border-gray-600 pb-2">Comments</h4>
+              <div className="pt-4">
+                {article.comments.map((comment) => (
+                  <article key={comment.id}>{comment.message}</article>
+                ))}
+              </div>
+            </div>
           ) : (
             <div className="spinner" />
           )}
