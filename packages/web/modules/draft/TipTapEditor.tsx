@@ -11,12 +11,12 @@ import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { MdError } from "react-icons/md";
 import { useQuery } from "react-query";
-import create from "zustand";
 import { Article } from "../../lib/types";
 import { Tags } from "../article/Tags";
 import { CodeBlockComponent } from "./CodeBlockComponent";
 import { EditorFloatingMenu } from "./EditorFloatingMenu";
 import { FormattingBubbleMenu } from "./FormattingBubbleMenu";
+import { useEditorStore } from "./useEditorStore";
 
 interface TipTapEditorProps {}
 
@@ -33,16 +33,8 @@ export const extensions = [
   }).configure({ lowlight }),
 ];
 
-export const useEditorStore = create<{
-  bodyJson: any;
-  setBody: (body: any) => void;
-}>((set) => ({
-  bodyJson: null,
-  setBody: (body: any) => set({ bodyJson: body }),
-}));
-
 const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
-  const { setFieldValue, errors } = useFormikContext<{
+  const { setFieldValue, errors, isValid } = useFormikContext<{
     title: string;
     body: any;
   }>();
@@ -63,6 +55,10 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
       },
     },
   });
+
+  useEffect(() => {
+    useEditorStore.getState().setIsValid(isValid);
+  }, [isValid]);
 
   useEffect(() => {
     editor?.commands.setContent(draft?.body || null);

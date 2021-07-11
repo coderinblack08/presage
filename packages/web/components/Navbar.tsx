@@ -6,24 +6,35 @@ import { Call, Discovery, TicketStar, Upload, Wallet } from "react-iconly";
 import { useQuery } from "react-query";
 import { User } from "../lib/types";
 import { Button } from "./Button";
+import { DraftNavbar } from "./DraftNavbar";
 import { Dropdown, MenuItem } from "./Dropdown";
 import { UserDropdown } from "./UserDropdown";
 
-interface NavbarProps {}
+interface NavbarProps {
+  isDraft?: boolean;
+}
 
-export const Navbar: React.FC<NavbarProps> = ({}) => {
+export const NavLink: React.FC<{ icon: React.ReactNode; href: string }> = ({
+  href,
+  children,
+  icon,
+}) => {
+  return (
+    <Link href={href} passHref>
+      <a className="flex items-center text-gray-800">
+        <div className="mr-2 scale-80">{icon}</div>
+        {children}
+      </a>
+    </Link>
+  );
+};
+
+export const Navbar: React.FC<NavbarProps> = ({ isDraft = false }) => {
   const { data: me } = useQuery<User>("/me");
   const router = useRouter();
 
-  return (
-    <nav className="sticky z-50 bg-gray-100/75 backdrop-blur-lg top-0 max-w-8xl mx-auto flex items-center justify-between p-5 md:px-8 md:py-6">
-      <Link href="/">
-        <a className="flex items-center space-x-4">
-          <div className="font-display text-black text-2xl font-bold">
-            presage
-          </div>
-        </a>
-      </Link>
+  const normalNavbar = (
+    <>
       <div className="flex items-center space-x-6 md:hidden">
         <Dropdown
           opener={
@@ -74,27 +85,16 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
         {me ? <UserDropdown /> : null}
       </div>
       <div className="hidden md:flex items-center space-x-10 lg:space-x-12">
-        <a className="flex items-center text-gray-800">
-          <div className="mr-2 scale-80">
-            <Discovery set="bulk" />
-          </div>
+        <NavLink icon={<Discovery set="bulk" />} href="/">
           Explore
-        </a>
-        <a className="flex items-center text-gray-800">
-          <div className="mr-2 scale-80">
-            <Wallet set="bulk" />
-          </div>
+        </NavLink>
+        <NavLink icon={<Wallet set="bulk" />} href="/pricing">
           Pricing
-        </a>
+        </NavLink>
         {me ? (
-          <Link href="/publish">
-            <a className="flex items-center text-gray-800">
-              <div className="mr-2 scale-80">
-                <Upload set="bulk" />
-              </div>
-              Publish
-            </a>
-          </Link>
+          <NavLink icon={<Upload set="bulk" />} href="/publish">
+            Publish
+          </NavLink>
         ) : (
           <a
             href="mailto:kevin@affordance.app"
@@ -131,6 +131,19 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
           </a>
         )}
       </div>
+    </>
+  );
+
+  return (
+    <nav className="sticky z-50 bg-gray-100/75 backdrop-blur-lg top-0 max-w-8xl mx-auto flex items-center justify-between p-5 md:px-8 md:py-5">
+      <Link href="/">
+        <a className="flex items-center space-x-4">
+          <div className="font-display text-black text-2xl font-bold">
+            presage
+          </div>
+        </a>
+      </Link>
+      {isDraft ? <DraftNavbar id={router.query.id as string} /> : normalNavbar}
     </nav>
   );
 };

@@ -6,7 +6,7 @@ import * as yup from "yup";
 import { mutator } from "../../lib/mutator";
 import { Article } from "../../lib/types";
 import { AutoSave } from "./AutoSave";
-import { useEditorStore } from "./TipTapEditor";
+import { useEditorStore } from "./useEditorStore";
 const TipTapEditor = dynamic(() => import("./TipTapEditor"), { ssr: false });
 
 interface DraftEditorProps {

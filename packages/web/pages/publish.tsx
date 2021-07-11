@@ -34,10 +34,10 @@ const Publish: React.FC = () => {
         <div className="flex items-center justify-between mt-4">
           <nav className="flex items-center">
             <Button size="small" color="white">
-              <span className="font-bold">Drafts (0)</span>
+              <span className="font-bold">Drafts ({drafts?.length})</span>
             </Button>
             <Button size="small" color="transparent">
-              <span className="text-gray-600">Published (0)</span>
+              <span className="text-gray-600">Published</span>
             </Button>
           </nav>
           <div className="flex items-center space-x-2">
