@@ -62,8 +62,9 @@ export const EditTagModal: React.FC<EditTagModalProps> = ({ id }) => {
         type="button"
         color="transparent"
         size="none"
+        noAnimate
       >
-        <span className="text-gray-300 font-semibold">Edit Tags</span>
+        <span className="text-gray-800">Edit Tags</span>
       </Button>
       <Modal isOpen={isOpen} closeModal={() => setIsOpen(false)}>
         <ModalHeader

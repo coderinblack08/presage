@@ -111,6 +111,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
             <div className="flex items-center flex-grow-0">
               <Button
                 size="small"
+                color="white"
                 icon={
                   <div className="scale-80">
                     <TicketStar set="bulk" />
@@ -118,7 +119,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
                 }
               >
                 <span className="text-base font-bold">
-                  0 <span className="text-gray-200">Referrals</span>
+                  0 <span className="text-gray-600">Referrals</span>
                 </span>
               </Button>
             </div>

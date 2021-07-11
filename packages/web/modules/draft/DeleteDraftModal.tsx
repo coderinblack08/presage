@@ -31,8 +31,9 @@ export const DeleteDraftModal: React.FC<DeleteDraftModalProps> = ({ id }) => {
         color="transparent"
         size="none"
         type="button"
+        noAnimate
       >
-        <span className="text-gray-300 font-semibold">Delete Draft</span>
+        <span className="text-gray-800">Delete Draft</span>
       </Button>
       <Modal isOpen={isOpen} closeModal={() => setIsOpen(false)}>
         <ModalHeader

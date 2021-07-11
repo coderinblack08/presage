@@ -35,6 +35,7 @@ module.exports = {
       white: "#FFFFFF",
       black: "#000000",
       purple: "#9F66FF",
+      red: "#EF4444",
       transparent: "transparent",
       gray: require("tailwindcss/colors").gray,
       primary: {
@@ -71,44 +72,6 @@ module.exports = {
       },
       scale: {
         80: "0.8",
-      },
-      typography(theme) {
-        return {
-          DEFAULT: {
-            css: {
-              color: theme("colors.gray.200"),
-              '[class~="lead"]': { color: theme("colors.gray.300") },
-              a: { color: theme("colors.gray.100") },
-              strong: { color: theme("colors.gray.100") },
-              "ol > li::before": {
-                color: theme("colors.gray.300"),
-              },
-              "ul > li::before": {
-                backgroundColor: theme("colors.gray.300"),
-              },
-              hr: { borderColor: theme("colors.gray.500") },
-              blockquote: {
-                color: theme("colors.gray.100"),
-                borderLeftColor: theme("colors.gray.500"),
-              },
-              h1: { color: theme("colors.gray.100") },
-              h2: { color: theme("colors.gray.100") },
-              h3: { color: theme("colors.gray.100") },
-              h4: { color: theme("colors.gray.100") },
-              code: { color: theme("colors.gray.100"), fontWeight: 500 },
-              "a code": { color: theme("colors.gray.100") },
-              pre: {
-                color: theme("colors.gray.200"),
-                backgroundColor: theme("colors.gray.600"),
-              },
-              thead: {
-                color: theme("colors.gray.100"),
-                borderBottomColor: theme("colors.gray.600"),
-              },
-              "tbody tr": { borderBottomColor: theme("colors.gray.600") },
-            },
-          },
-        };
       },
     },
   },

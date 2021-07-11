@@ -37,6 +37,7 @@ export type ButtonProps = DetailedHTMLProps<
   transition?: boolean;
   rounded?: boolean;
   loading?: boolean;
+  noAnimate?: boolean;
 };
 
 export const Button: React.FC<ButtonProps> = ({
@@ -48,6 +49,7 @@ export const Button: React.FC<ButtonProps> = ({
   className,
   children,
   disabled,
+  noAnimate,
   ...props
 }) => {
   return (
@@ -57,7 +59,9 @@ export const Button: React.FC<ButtonProps> = ({
         colors[color]
       } focus:outline-none focus-visible:ring flex items-center justify-center transition ${
         rounded ? "!rounded-full" : ""
-      } hover:-translate-y-0.5 hover:shadow-md ${className}`}
+      } ${!noAnimate ? "hover:-translate-y-0.5" : ""} ${
+        color === "transparent" ? "" : "hover:shadow-md"
+      } ${className}`}
       {...props}
     >
       <span className={`flex items-center ${loading ? "opacity-0" : ""}`}>
