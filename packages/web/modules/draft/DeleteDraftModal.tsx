@@ -11,9 +11,13 @@ import { Article } from "../../lib/types";
 
 interface DeleteDraftModalProps {
   id: string;
+  noText?: boolean;
 }
 
-export const DeleteDraftModal: React.FC<DeleteDraftModalProps> = ({ id }) => {
+export const DeleteDraftModal: React.FC<DeleteDraftModalProps> = ({
+  id,
+  noText,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const { mutateAsync } = useMutation(mutator);
   const queryClient = useQueryClient();
@@ -32,9 +36,11 @@ export const DeleteDraftModal: React.FC<DeleteDraftModalProps> = ({ id }) => {
         size="none"
         type="button"
         noAnimate
-      >
-        <span className="text-gray-800">Delete Draft</span>
-      </Button>
+        // eslint-disable-next-line react/no-children-prop
+        children={
+          noText ? null : <span className="text-gray-800">Delete Draft</span>
+        }
+      />
       <Modal isOpen={isOpen} closeModal={() => setIsOpen(false)}>
         <ModalHeader
           handleClose={() => setIsOpen(false)}

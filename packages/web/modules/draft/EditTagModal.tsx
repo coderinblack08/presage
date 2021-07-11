@@ -1,5 +1,4 @@
 import { Dialog } from "@headlessui/react";
-import { useFormikContext } from "formik";
 import React, { useEffect, useState } from "react";
 import { Bookmark } from "react-iconly";
 import { MdSave } from "react-icons/md";
@@ -9,13 +8,14 @@ import { Input } from "../../components/Input";
 import { Modal } from "../../components/Modal";
 import { ModalHeader } from "../../components/ModalHeader";
 import { mutator } from "../../lib/mutator";
-import { Article, Tag } from "../../lib/types";
+import { Article } from "../../lib/types";
 
 interface EditTagModalProps {
   id: string;
+  noText?: boolean;
 }
 
-export const EditTagModal: React.FC<EditTagModalProps> = ({ id }) => {
+export const EditTagModal: React.FC<EditTagModalProps> = ({ id, noText }) => {
   const [isOpen, setIsOpen] = useState(false);
   const queryClient = useQueryClient();
   const { data: draft } = useQuery<Article>(`/articles/draft/${id}`);
@@ -63,9 +63,11 @@ export const EditTagModal: React.FC<EditTagModalProps> = ({ id }) => {
         color="transparent"
         size="none"
         noAnimate
-      >
-        <span className="text-gray-800">Edit Tags</span>
-      </Button>
+        // eslint-disable-next-line react/no-children-prop
+        children={
+          noText ? null : <span className="text-gray-800">Edit Tags</span>
+        }
+      />
       <Modal isOpen={isOpen} closeModal={() => setIsOpen(false)}>
         <ModalHeader
           handleClose={() => setIsOpen(false)}

@@ -1,10 +1,6 @@
-import { Menu } from "@headlessui/react";
-import { useFormikContext } from "formik";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
-import { ArrowLeftSquare, Call, Upload, Wallet } from "react-iconly";
-import { MdPublish } from "react-icons/md";
+import { ArrowLeftSquare } from "react-iconly";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { mutator } from "../lib/mutator";
 import { Article, User } from "../lib/types";
@@ -12,7 +8,6 @@ import { DeleteDraftModal } from "../modules/draft/DeleteDraftModal";
 import { EditTagModal } from "../modules/draft/EditTagModal";
 import { useEditorStore } from "../modules/draft/useEditorStore";
 import { Button } from "./Button";
-import { Dropdown, MenuItem } from "./Dropdown";
 import { NavLink } from "./Navbar";
 import { UserDropdown } from "./UserDropdown";
 
@@ -47,20 +42,18 @@ export const DraftNavbar: React.FC<DraftNavbarProps> = ({ id }) => {
   return (
     <>
       <div className="flex items-center space-x-6 md:hidden">
-        <Dropdown
-          opener={
-            <Menu.Button className="focus:outline-none w-8 h-8 flex items-center justify-center">
-              <svg
-                className="w-6 h-auto fill-current text-gray-800"
-                viewBox="0 0 24 12"
-              >
-                <rect width="24" height="2"></rect>
-                <rect y="5" width="24" height="2"></rect>
-                <rect y="10" width="24" height="2"></rect>
-              </svg>
-            </Menu.Button>
+        <Button
+          size="none"
+          color="transparent"
+          onClick={() => router.push("/publish")}
+          icon={
+            <div className="scale-80">
+              <ArrowLeftSquare set="bulk" />
+            </div>
           }
-        ></Dropdown>
+        />
+        <DeleteDraftModal id={router.query.id as string} noText />
+        <EditTagModal id={router.query.id as string} noText />
         {me ? <UserDropdown /> : null}
       </div>
       <div className="hidden md:flex items-center space-x-10">

@@ -73,7 +73,7 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
         <Field
           name="title"
           type="text"
-          className="bg-gray-100 placeholder-gray-400 h2 w-full focus:outline-none leading-none"
+          className="bg-gray-100 placeholder-gray-400 h3 md:h2 w-full focus:outline-none leading-none"
           placeholder="Untitled"
         />
         {!!errors.title ? (
