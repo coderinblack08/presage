@@ -84,11 +84,11 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
         ) : (
           <div />
         )}
-        {draft && draft.tags.length !== 0 ? (
-          <div className="mt-3">
+        <div className={draft?.tags ? "mt-3" : ""}>
+          {draft?.tags && draft.tags.length !== 0 ? (
             <Tags article={draft} />
-          </div>
-        ) : null}
+          ) : null}
+        </div>
         {editor && <FormattingBubbleMenu editor={editor} />}
         {editor && <EditorFloatingMenu editor={editor} />}
         <EditorContent editor={editor} />

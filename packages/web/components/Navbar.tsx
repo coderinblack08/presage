@@ -97,7 +97,7 @@ export const Navbar: React.FC<NavbarProps> = ({ isDraft = false }) => {
           </NavLink>
         ) : (
           <a
-            href="mailto:kevin@affordance.app"
+            href="mailto:help@joinpresage.com"
             className="flex items-center text-gray-800"
           >
             <div className="mr-2 scale-80">

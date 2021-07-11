@@ -1,38 +1,80 @@
-import { format } from "date-fns";
+import { formatDistanceToNow } from "date-fns";
 import Link from "next/link";
 import React from "react";
+import { Bookmark, Chat, Heart } from "react-iconly";
+import { Button } from "../../components/Button";
 import { Article } from "../../lib/types";
+import { Tags } from "./Tags";
 
 interface ArticleCardProps {
   article: Article;
-  ranking?: number;
 }
 
-export const ArticleCard: React.FC<ArticleCardProps> = ({
-  article,
-  ranking,
-}) => {
+export const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
   return (
     <Link href="/article/[id]" as={`/article/${article.id}`}>
-      <a className="block">
-        <div className="flex items-center space-x-3 mb-3">
-          <img
-            src={article.user.profilePicture}
-            className="w-6 h-6 rounded-full"
-            alt={article.user.displayName}
-          />
-          <p className="font-bold">{article.user.displayName}</p>
+      <a className="flex flex-col justify-between bg-white rounded-lg shadow p-6">
+        <div>
+          <div className="flex items-start space-x-3">
+            <img
+              src={article.user.profilePicture}
+              alt={article.user.displayName}
+              className="w-6 h-6 rounded-full"
+            />
+            <div>
+              <p className="font-semibold text-gray-800 leading-none">
+                {article.user.displayName}
+              </p>
+              <p className="small text-gray-500 leading-none mt-2">
+                {formatDistanceToNow(new Date(article.createdAt), {
+                  addSuffix: true,
+                }).replace("about ", "")}
+              </p>
+            </div>
+          </div>
+          <h4 className="mt-3">{article.title}</h4>
+          <div className="text-gray-600 mt-1">
+            {article.readingTime}
+            {article.tags.length > 0 ? " · " : null}
+            <Tags article={article} />
+          </div>
         </div>
-        <h4 className="text-xl break-words mb-2">
-          <span className="text-xl font-bold text-primary">
-            {ranking ? `0${ranking}. ` : ""}
-          </span>
-          {article.title}
-        </h4>
-        <p className="text-gray-300">
-          {format(new Date(article.createdAt), "MMMM dd")}
-          {article.readingTime ? ` · ${article.readingTime}` : ""}
-        </p>
+        <div className="mt-6 flex items-center justify-between">
+          <div className="flex items-center space-x-2">
+            <Button
+              color="gray"
+              size="small"
+              icon={
+                <div className="text-gray-600">
+                  <Heart set="light" stroke="bold" size="small" />
+                </div>
+              }
+              noAnimate
+            >
+              <span className="text-gray-600 font-semibold">
+                {article.points} likes
+              </span>
+            </Button>
+            <Button
+              color="transparent"
+              size="small"
+              icon={
+                <div className="text-gray-600">
+                  <Chat set="light" stroke="bold" size="small" />
+                </div>
+              }
+              noAnimate
+            >
+              <span className="text-gray-600 font-semibold">0 comments</span>
+            </Button>
+          </div>
+          <Button
+            icon={<Bookmark set="light" stroke="bold" size="small" />}
+            rounded
+          >
+            Save
+          </Button>
+        </div>
       </a>
     </Link>
   );

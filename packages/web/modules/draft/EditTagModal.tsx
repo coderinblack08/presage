@@ -48,6 +48,8 @@ export const EditTagModal: React.FC<EditTagModalProps> = ({ id, noText }) => {
         setIsOpen(false);
       },
     });
+    queryClient.refetchQueries("/articles/drafts");
+    queryClient.refetchQueries("/articles/published");
   };
 
   return (

@@ -13,7 +13,8 @@ export const DraftItem: React.FC<DraftItemProps> = ({ draft }) => {
       <a className="block p-6 rounded-lg bg-white shadow focus-visible:ring focus:outline-none">
         <h4>{draft.title}</h4>
         <div className="text-gray-600">
-          Edited 3 days ago{draft.tags.length ? " · " : ""}
+          Edited 3 days ago
+          {draft.tags ? (draft.tags.length ? " · " : "") : ""}
           <Tags article={draft} />
         </div>
       </a>

@@ -8,7 +8,7 @@ interface TagsProps {
 export const Tags: React.FC<TagsProps> = ({ article }) => {
   return (
     <div className="inline-block">
-      {article.tags.length ? (
+      {article.tags ? (
         <div className="inline-flex space-x-2">
           {article.tags.map((tag) => (
             <div key={tag.id} className="text-gray-600">

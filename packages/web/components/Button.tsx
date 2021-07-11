@@ -7,7 +7,7 @@ import React, {
 const sizes = {
   large: "py-2.5 px-7 rounded-lg",
   medium: "py-2 px-7 rounded-lg",
-  regular: "px-6 py-2 rounded-lg",
+  regular: "px-6 py-1.5 rounded-lg",
   small: "px-5 py-1.5 rounded-lg",
   none: "rounded-md",
 };
@@ -25,6 +25,7 @@ const colors = {
   primary:
     "text-gray-100 bg-gradient-to-b from-gray-600 to-gray-900 disabled:opacity-50",
   white: "text-gray-800 bg-white shadow disabled:opacity-50",
+  gray: "text-gray-800 bg-gray-100 disabled:opacity-50",
 };
 
 export type ButtonProps = DetailedHTMLProps<
@@ -59,18 +60,18 @@ export const Button: React.FC<ButtonProps> = ({
         colors[color]
       } focus:outline-none focus-visible:ring flex items-center justify-center transition ${
         rounded ? "!rounded-full" : ""
-      } ${!noAnimate ? "hover:-translate-y-0.5" : ""} ${
-        color === "transparent" ? "" : "hover:shadow-md"
+      } ${
+        !noAnimate
+          ? `hover:-translate-y-0.5  ${
+              color === "transparent" ? "" : "hover:shadow-md"
+            }`
+          : ""
       } ${className}`}
       {...props}
     >
       <span className={`flex items-center ${loading ? "opacity-0" : ""}`}>
         {icon && <span className={children ? "mr-2" : ""}>{icon}</span>}
-        <p
-          className={`font-bold ${
-            ["small", "regular"].includes(size) ? "small" : ""
-          }`}
-        >
+        <p className={`font-bold ${["small"].includes(size) ? "small" : ""}`}>
           {children}
         </p>
       </span>
