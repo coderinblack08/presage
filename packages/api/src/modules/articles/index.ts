@@ -204,6 +204,16 @@ router.get("/drafts", isAuth(true), async (req, res) => {
   res.json(articles);
 });
 
+router.get("/published", isAuth(true), async (req, res) => {
+  const articles = await Article.find({
+    where: { userId: req.userId, published: true },
+    order: { updatedAt: "DESC" },
+    relations: ["tags"],
+    select: ["id", "title", "published", "createdAt", "updatedAt"],
+  });
+  res.json(articles);
+});
+
 router.get(
   "/draft/:id",
   isAuth(true),

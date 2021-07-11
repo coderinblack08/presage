@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { Button } from "../components/Button";
 import { Layout } from "../components/Layout";
@@ -10,8 +10,14 @@ import { EmojiIcon } from "../modules/home/EmojiIcon";
 
 const Publish: React.FC = () => {
   const { mutateAsync } = useMutation(mutator);
-  const { data: drafts, isFetching } = useQuery<Article[]>("/articles/drafts");
+  const { data: drafts, isFetching: isFetchingDrafts } = useQuery<Article[]>(
+    "/articles/drafts"
+  );
+  const { data: published, isFetching: isFetchingPublished } = useQuery<
+    Article[]
+  >("/articles/published");
   const queryClient = useQueryClient();
+  const [tab, setTab] = useState<"drafts" | "published">("drafts");
   const router = useRouter();
 
   const newDraft = async () => {
@@ -25,6 +31,7 @@ const Publish: React.FC = () => {
       },
     });
   };
+  const data = tab === "drafts" ? drafts : published;
 
   return (
     <Layout>
@@ -33,11 +40,27 @@ const Publish: React.FC = () => {
         <h3>Your Drafts</h3>
         <div className="flex items-center justify-between mt-4">
           <nav className="flex items-center">
-            <Button size="small" color="white">
-              <span className="font-bold">Drafts ({drafts?.length})</span>
+            <Button
+              size="small"
+              onClick={() => setTab("drafts")}
+              color={tab === "drafts" ? "white" : "transparent"}
+            >
+              <span
+                className={tab === "drafts" ? "font-bold" : "text-gray-600"}
+              >
+                Drafts ({drafts?.length})
+              </span>
             </Button>
-            <Button size="small" color="transparent">
-              <span className="text-gray-600">Published</span>
+            <Button
+              size="small"
+              onClick={() => setTab("published")}
+              color={tab === "published" ? "white" : "transparent"}
+            >
+              <span
+                className={tab === "published" ? "font-bold" : "text-gray-600"}
+              >
+                Published ({published?.length})
+              </span>
             </Button>
           </nav>
           <div className="flex items-center space-x-2">
@@ -46,9 +69,10 @@ const Publish: React.FC = () => {
           </div>
         </div>
         <main className="mt-3">
-          {isFetching || !drafts ? (
+          {(tab === "drafts" ? isFetchingDrafts : isFetchingPublished) ||
+          !data ? (
             <div className="spinner" />
-          ) : drafts.length === 0 ? (
+          ) : data?.length === 0 ? (
             <div className="text-gray-400 mt-5">
               You have no drafts. Start by{" "}
               <button onClick={newDraft} className="underline text-gray-600">
@@ -58,7 +82,7 @@ const Publish: React.FC = () => {
             </div>
           ) : (
             <div className="grid gap-3">
-              {drafts.map((draft) => (
+              {data?.map((draft) => (
                 <DraftItem draft={draft} key={draft.id} />
               ))}
             </div>

@@ -45,19 +45,13 @@ module.exports = {
     },
     spinner: (theme) => ({
       default: {
+        color: theme("colors.gray.900"),
+        size: "1em",
+        border: "2px",
+        speed: "500ms",
+      },
+      light: {
         color: theme("colors.gray.100"),
-        size: "1em",
-        border: "2px",
-        speed: "500ms",
-      },
-      dark: {
-        color: theme("colors.gray.600"),
-        size: "1em",
-        border: "2px",
-        speed: "500ms",
-      },
-      primary: {
-        color: theme("colors.primary.DEFAULT"),
         size: "1em",
         border: "2px",
         speed: "500ms",
