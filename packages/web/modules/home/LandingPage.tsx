@@ -82,7 +82,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
         <p className="text-gray-600 mt-2">
           With these stats, think about how much bigger you can be!
         </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 md:gap-12 mt-8">
+        <div className="grid max-w-3xl grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 md:gap-12 mt-10">
           <article>
             <h4>200%</h4>
             <p className="text-gray-600">More Retention</p>
