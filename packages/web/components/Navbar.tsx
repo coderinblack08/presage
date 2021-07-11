@@ -48,16 +48,28 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
           >
             Pricing
           </MenuItem>
-          <MenuItem
-            onClick={() => router.push("/publish")}
-            icon={
-              <div className="scale-80">
-                <Upload set="bulk" />
-              </div>
-            }
-          >
-            Publish
-          </MenuItem>
+          {me ? (
+            <MenuItem
+              onClick={() => router.push("/publish")}
+              icon={
+                <div className="scale-80">
+                  <Upload set="bulk" />
+                </div>
+              }
+            >
+              Publish
+            </MenuItem>
+          ) : (
+            <MenuItem
+              icon={
+                <div className="scale-80">
+                  <Call set="bulk" />
+                </div>
+              }
+            >
+              Contact
+            </MenuItem>
+          )}
         </Dropdown>
         {me ? <UserDropdown /> : null}
       </div>
@@ -84,14 +96,15 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
             </a>
           </Link>
         ) : (
-          <Link href="/contact">
-            <a className="flex items-center text-gray-800">
-              <div className="mr-2 scale-80">
-                <Call set="bulk" />
-              </div>
-              Contact
-            </a>
-          </Link>
+          <a
+            href="mailto:kevin@affordance.app"
+            className="flex items-center text-gray-800"
+          >
+            <div className="mr-2 scale-80">
+              <Call set="bulk" />
+            </div>
+            Contact
+          </a>
         )}
         {me ? (
           <div className="flex item-center space-x-6">
