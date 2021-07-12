@@ -1,6 +1,5 @@
 import { DefaultSeo } from "next-seo";
 import type { AppProps } from "next/app";
-import { Head } from "next/document";
 import React from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Hydrate } from "react-query/hydration";
