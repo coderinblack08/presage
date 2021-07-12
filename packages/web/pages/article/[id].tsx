@@ -39,7 +39,7 @@ const ArticlePage: React.FC<{ id: string }> = ({ id }) => {
       {!article || isFetching ? (
         <div className="spinner" />
       ) : (
-        <div className="flex items-start space-x-5">
+        <div className="flex flex-col-reverse lg:flex-row items-start space-x-0 lg:space-x-5">
           <main className="p-10 rounded-lg bg-white shadow w-full">
             <div className="flex items-center space-x-5 mb-6">
               <LikeButton article={article} />
@@ -88,7 +88,7 @@ const ArticlePage: React.FC<{ id: string }> = ({ id }) => {
               <RenderArticle article={article} />
             </div>
           </main>
-          <div className="max-w-sm w-full space-y-5">
+          <div className="max-w-sm w-full space-y-5 mb-5 lg:mb-0">
             <aside className="bg-white rounded-lg p-4 shadow">
               <div className="flex items-center space-x-4">
                 <img

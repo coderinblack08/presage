@@ -85,7 +85,7 @@ export const Navbar: React.FC<NavbarProps> = ({ isDraft = false }) => {
         {me ? <UserDropdown /> : null}
       </div>
       <div className="hidden md:flex items-center space-x-10 lg:space-x-12">
-        <NavLink icon={<Discovery set="bulk" />} href="/">
+        <NavLink icon={<Discovery set="bulk" />} href="/explore">
           Explore
         </NavLink>
         <NavLink icon={<Wallet set="bulk" />} href="/pricing">

@@ -34,7 +34,7 @@ const Publish: React.FC = () => {
   const data = tab === "drafts" ? drafts : published;
 
   return (
-    <Layout>
+    <Layout className="py-5 md:py-8">
       <div className="max-w-3xl mx-auto">
         <EmojiIcon emoji="✍🏻" />
         <h3>Your Drafts</h3>

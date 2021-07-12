@@ -9,7 +9,7 @@ const Publish: React.FC = () => {
   } = useRouter();
 
   return (
-    <Layout>
+    <Layout className="py-5 md:py-8">
       <div className="flex items-start space-x-20">
         <div className="w-full">
           {id ? <DraftEditor id={id?.toString()} /> : null}

@@ -55,9 +55,12 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
               }
               noAnimate
             >
-              <span className="text-gray-600 font-semibold">
-                {article.points} like{article.points !== 1 ? "s" : ""}
-              </span>
+              <p className="text-gray-600 font-semibold">
+                {article.points}{" "}
+                <span className="hidden lg:inline font-semibold">
+                  like{article.points !== 1 ? "s" : ""}
+                </span>
+              </p>
             </Button>
             <Button
               color="transparent"
@@ -69,7 +72,10 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
               }
               noAnimate
             >
-              <span className="text-gray-600 font-semibold">0 comments</span>
+              <p className="text-gray-600 font-semibold">
+                0{" "}
+                <span className="hidden lg:inline font-semibold">comments</span>
+              </p>
             </Button>
           </div>
           <Button

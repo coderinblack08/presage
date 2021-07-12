@@ -71,9 +71,13 @@ export const Button: React.FC<ButtonProps> = ({
     >
       <span className={`flex items-center ${loading ? "opacity-0" : ""}`}>
         {icon && <span className={children ? "mr-2" : ""}>{icon}</span>}
-        <p className={`font-bold ${["small"].includes(size) ? "small" : ""}`}>
+        <div
+          className={`inline font-bold ${
+            ["small"].includes(size) ? "small" : ""
+          }`}
+        >
           {children}
-        </p>
+        </div>
       </span>
       {loading ? (
         <span className="absolute">

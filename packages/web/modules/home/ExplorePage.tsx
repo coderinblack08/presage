@@ -1,11 +1,9 @@
-import { format, formatDistanceToNow } from "date-fns";
 import React from "react";
-import { Bookmark, Chat, Heart, Search } from "react-iconly";
+import { Search } from "react-iconly";
 import { useQuery } from "react-query";
 import { Button } from "../../components/Button";
 import { Article } from "../../lib/types";
 import { ArticleCard } from "../article/ArticleCard";
-import { Tags } from "../article/Tags";
 
 interface ExplorePageProps {}
 
@@ -13,7 +11,7 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({}) => {
   const { data: articles } = useQuery<Article[]>("/articles/explore");
 
   return (
-    <>
+    <div className="py-5 md:py-8">
       <h4>Your Curated Feed</h4>
       <p className="text-gray-600 mt-1">
         Did you know? — Select your favorite tags to add them as filters
@@ -38,11 +36,11 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({}) => {
           </Button>
         </nav>
       </div>
-      <main className="grid grid-cols-2 gap-3 mt-6">
+      <main className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-6">
         {articles?.map((article) => (
           <ArticleCard key={article.id} article={article} />
         ))}
       </main>
-    </>
+    </div>
   );
 };

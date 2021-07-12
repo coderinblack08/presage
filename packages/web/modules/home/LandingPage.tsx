@@ -11,7 +11,7 @@ interface LandingPageProps {}
 
 export const LandingPage: React.FC<LandingPageProps> = ({}) => {
   return (
-    <div>
+    <div className="py-5 md:py-8">
       <header className="mt-6 md:mt-0 flex justify-between items-center md:py-4">
         <div className="max-w-lg lg:max-w-2xl w-full">
           <h1 className="text-2xl sm:h3 lg:h2 font-display font-extrabold">

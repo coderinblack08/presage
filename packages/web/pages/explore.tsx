@@ -1,11 +1,11 @@
 import React from "react";
 import { Layout } from "../components/Layout";
-import { LandingPage } from "../modules/home/LandingPage";
+import { ExplorePage } from "../modules/home/ExplorePage";
 
 const HomePage: React.FC = () => {
   return (
     <Layout>
-      <LandingPage />
+      <ExplorePage />
     </Layout>
   );
 };
