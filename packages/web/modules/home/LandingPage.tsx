@@ -1,17 +1,20 @@
 import React from "react";
-import illustration from "../../public/static/reading-under-tree.png";
+import illustration from "../../public/static/phone-illustration.png";
 import philosophy from "../../public/static/philosophy.svg";
 import Image from "next/image";
 import { Button } from "../../components/Button";
 import { FeatureCard } from "./FeatureCard";
 import { EmojiIcon } from "./EmojiIcon";
 import { Footer } from "../../components/Footer";
+import { useMediaQuery } from "react-responsive";
 
 interface LandingPageProps {}
 
 export const LandingPage: React.FC<LandingPageProps> = ({}) => {
+  const isTabletOrDesktop = useMediaQuery({ query: "(max-width: 1024px)" });
+
   return (
-    <div className="py-5 md:py-8">
+    <div className="py-4">
       <header className="mt-6 md:mt-0 flex justify-between items-center md:py-4">
         <div className="max-w-lg lg:max-w-2xl w-full">
           <h1 className="text-2xl sm:h3 lg:h2 font-display font-extrabold">
@@ -25,7 +28,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
             record, publish about anything. Grow your audience exponentially
             with Presage&apos;s referral system.
           </p>
-          <div className="flex items-center space-x-3 mt-8">
+          <div className="flex items-center space-x-3 mt-5 sm:mt-8">
             <Button>Get Started</Button>
             <Button color="white">Contact Sales</Button>
           </div>
@@ -33,10 +36,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
         <div className="hidden md:block">
           <Image
             src={illustration}
-            alt="Man reading under tree"
-            width={1971 / 5.8}
-            height={1984 / 5.8}
+            alt="Phone in hand"
+            quality={100}
+            width={317 * (isTabletOrDesktop ? 0.75 : 1)}
+            height={393 * (isTabletOrDesktop ? 0.75 : 1)}
             placeholder="blur"
+            priority
           />
         </div>
       </header>
@@ -64,10 +69,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
             />
           </div>
         </section>
-        <div className="hidden md:block absolute right-0 top-0 mr-12 z-0">
+        <div className="hidden md:block absolute right-0 top-0 mr-8 z-0">
           <Image
-            width={184 / 1.1}
-            height={573 / 1.1}
+            width={285}
+            height={603}
             src={philosophy}
             alt="Philosophy Text Scroll"
           />

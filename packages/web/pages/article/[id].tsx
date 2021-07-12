@@ -41,7 +41,7 @@ const ArticlePage: React.FC<{ id: string }> = ({ id }) => {
       ) : (
         <div className="flex flex-col-reverse lg:flex-row items-start space-x-0 lg:space-x-5">
           <main className="p-10 rounded-lg bg-white shadow w-full">
-            <div className="flex items-center space-x-5 mb-6">
+            <div className="flex items-center space-x-4 mb-6">
               <LikeButton article={article} />
               <Button
                 color="gray"
