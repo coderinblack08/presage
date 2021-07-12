@@ -46,13 +46,17 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
               size="small"
               icon={
                 <div className="text-gray-600">
-                  <Heart set="light" stroke="bold" size="small" />
+                  <Heart
+                    set={article.liked ? "bold" : "light"}
+                    stroke="bold"
+                    size="small"
+                  />
                 </div>
               }
               noAnimate
             >
               <span className="text-gray-600 font-semibold">
-                {article.points} likes
+                {article.points} like{article.points !== 1 ? "s" : ""}
               </span>
             </Button>
             <Button

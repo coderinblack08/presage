@@ -1,13 +1,13 @@
 import { Request, Router } from "express";
-import sanitizeHtml from "sanitize-html";
 import createHttpError from "http-errors";
 import readingTime from "reading-time";
-import { getConnection, UsingJoinColumnIsNotAllowedError } from "typeorm";
+import sanitizeHtml from "sanitize-html";
+import { getConnection } from "typeorm";
 import { Article } from "../../entities/Article";
+import { Comment } from "../../entities/Comment";
+import { Like } from "../../entities/Like";
 import { Tag } from "../../entities/Tag";
 import { isAuth } from "../auth/isAuth";
-import { Like } from "../../entities/Like";
-import { Comment } from "../../entities/Comment";
 
 // export const createPublishSocket = (
 //   io: Server<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap>
@@ -270,6 +270,7 @@ router.get(
   "/:id",
   isAuth(),
   async (req: Request<{ id: string }>, res, next) => {
+    if (!req.params.id) res.sendStatus(500);
     try {
       const article = await Article.findOne(req.params.id, {
         relations: ["user"],
@@ -280,13 +281,12 @@ router.get(
         .leftJoinAndSelect("comment.user", "user")
         .where('comment."articleId" = :id', { id: req.params.id })
         .getMany();
-
       comments = comments.sort(
         (a: any, b: any) => a.path.length - b.path.length
       );
       const tree = [];
       let i = 0;
-      while (true) {
+      while (comments.length < i) {
         if (comments[i].path.length > 1) break;
         tree.push({ ...comments[i], children: [] });
         i++;
@@ -302,21 +302,20 @@ router.get(
         }
         treeNode.children.push({ ...node, children: [] });
       }
-
       const body = { ...article, comments: tree };
       if (req.userId) {
         const like = await Like.findOne({
           where: { userId: req.userId, articleId: req.params.id },
         });
-
         return res.json({
           ...body,
           liked: like !== undefined,
         });
       }
+
       return res.json(body);
-    } catch (error) {
-      return next(createHttpError(500, error));
+    } catch (e) {
+      return next(createHttpError(500, e));
     }
   }
 );

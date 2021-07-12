@@ -1,5 +1,6 @@
 import { DefaultSeo } from "next-seo";
 import type { AppProps } from "next/app";
+import { Head } from "next/document";
 import React from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Hydrate } from "react-query/hydration";
@@ -28,6 +29,12 @@ function MyApp({ Component, pageProps }: AppProps) {
               title="Presage"
               description="An open-source Medium alternative built for referral podcasts and blogs"
               canonical="https://joinpresage.com"
+              additionalMetaTags={[
+                {
+                  content: "width=device-width, initial-scale=1",
+                  name: "viewport",
+                },
+              ]}
               openGraph={{
                 type: "website",
                 url: "https://joinpresage.com",

@@ -10,6 +10,7 @@ import { createConnection } from "typeorm";
 import { isDev } from "./lib/constants";
 import articlesRouter from "./modules/articles";
 import authRouter from "./modules/auth";
+import { isAuth } from "./modules/auth/isAuth";
 import commentRouter from "./modules/comment";
 
 async function main() {
