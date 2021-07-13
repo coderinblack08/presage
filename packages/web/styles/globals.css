@@ -15,6 +15,7 @@
   html,
   #__next {
     @apply antialiased bg-gray-100 text-gray-900;
+    scroll-behavior: smooth;
   }
 
   .h2,

@@ -1,7 +1,6 @@
 import { Router } from "express";
 import passport from "passport";
 import { Strategy } from "passport-google-oauth20";
-import { getConnection } from "typeorm";
 import {
   adjectives,
   animals,

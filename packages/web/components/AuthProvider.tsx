@@ -12,7 +12,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = (props) => {
     if (typeof query.accessToken === "string" && query.accessToken) {
       const { accessToken } = query;
       localStorage.setItem("access-token", accessToken?.toString());
-      replace("/", undefined, { shallow: true });
+      replace("/explore", undefined, { shallow: true });
       queryClient.clear();
     }
   }, [query]);

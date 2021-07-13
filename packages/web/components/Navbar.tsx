@@ -135,15 +135,21 @@ export const Navbar: React.FC<NavbarProps> = ({ isDraft = false }) => {
   );
 
   return (
-    <nav className="sticky z-50 bg-gray-100/75 backdrop-blur-lg top-0 max-w-8xl mx-auto flex items-center justify-between p-5 md:px-8 md:py-5">
-      <Link href="/">
-        <a className="flex items-center space-x-4">
-          <div className="font-display text-black text-2xl font-bold">
-            presage
-          </div>
-        </a>
-      </Link>
-      {isDraft ? <DraftNavbar id={router.query.id as string} /> : normalNavbar}
+    <nav className="sticky z-50 bg-gray-100/75 backdrop-blur-lg top-0 py-3 px-5 md:px-8 md:py-5">
+      <div className="max-w-8xl mx-auto flex items-center justify-between">
+        <Link href="/">
+          <a className="flex items-center space-x-4">
+            <div className="font-display text-black text-2xl font-bold">
+              presage
+            </div>
+          </a>
+        </Link>
+        {isDraft ? (
+          <DraftNavbar id={router.query.id as string} />
+        ) : (
+          normalNavbar
+        )}
+      </div>
     </nav>
   );
 };
