@@ -10,8 +10,8 @@ import { createConnection } from "typeorm";
 import { isDev } from "./lib/constants";
 import articlesRouter from "./modules/articles";
 import authRouter from "./modules/auth";
-import { isAuth } from "./modules/auth/isAuth";
 import commentRouter from "./modules/comment";
+import followRouter from "./modules/follow";
 
 async function main() {
   const conn = await createConnection({
@@ -43,6 +43,7 @@ async function main() {
   app.use(passport.initialize());
   passport.serializeUser((user: any, done) => done(null, user.accessToken));
   app.use("/", authRouter);
+  app.use("/", followRouter);
   app.use("/articles", articlesRouter);
   app.use("/comments", commentRouter);
 

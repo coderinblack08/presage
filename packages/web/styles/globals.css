@@ -52,6 +52,13 @@
   .small {
     font-size: 0.8rem;
   }
+
+  ::-moz-selection {
+    @apply bg-gray-200;
+  }
+  ::selection {
+    @apply bg-gray-200;
+  }
 }
 
 .ProseMirror p.is-editor-empty:first-child::before {

@@ -3,6 +3,8 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinTable,
+  ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -38,6 +40,19 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Like, (like) => like.user)
   likes: Like[];
+
+  @ManyToMany(() => User, (user) => user.following)
+  @JoinTable()
+  followers: User[];
+
+  @ManyToMany(() => User, (user) => user.followers)
+  following: User[];
+
+  @Column("int", { default: 0 })
+  followersCount: number;
+
+  @Column("int", { default: 0 })
+  followingCount: number;
 
   @CreateDateColumn()
   createdAt: Date;

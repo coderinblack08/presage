@@ -38,7 +38,7 @@ export const UserDropdown: React.FC<UserDropdownProps> = ({}) => {
             onClick={() => {
               localStorage.removeItem("access-token");
               queryClient.clear();
-              router.push("/");
+              router.reload();
             }}
             icon={
               <div className="scale-80">

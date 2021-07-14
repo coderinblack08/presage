@@ -10,7 +10,7 @@ export const Avatar: React.FC<AvatarProps> = ({ user }) => {
     <img
       src={user.profilePicture}
       alt={user.displayName}
-      className="w-12 h-12 rounded-full object-cover"
+      className="w-10 h-10 rounded-full object-cover"
     />
   );
 };

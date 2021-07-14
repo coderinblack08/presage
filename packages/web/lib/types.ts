@@ -5,6 +5,9 @@ export interface User {
   bio?: string;
   profilePicture: string;
   displayName: string;
+  followersCount: number;
+  followingCount: number;
+  isFollowing?: boolean;
   articles?: Article[];
   createdAt: Date;
   updatedAt: Date;

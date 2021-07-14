@@ -1,6 +1,7 @@
-import { Router } from "express";
+import { Request, Router } from "express";
 import passport from "passport";
 import { Strategy } from "passport-google-oauth20";
+import { getConnection } from "typeorm";
 import {
   adjectives,
   animals,
@@ -95,11 +96,45 @@ router.get("/me", isAuth(), async (req, res) => {
   );
 });
 
-router.get("/user/:username", async (req, res) => {
-  const user = await User.findOne({ where: { username: req.params.username } });
-  if (!user) return res.json({});
-  const articles = await Article.find({ where: { userId: user.id } });
-  return res.json({ ...user, articles });
-});
+router.get(
+  "/user/:username",
+  isAuth(),
+  async (req: Request<{ username: string }>, res) => {
+    const user = await User.findOne({
+      where: { username: req.params.username },
+    });
+    if (!user) return res.json({});
+    const data = await getConnection()
+      .getRepository(Article)
+      .createQueryBuilder("article")
+      .leftJoinAndSelect("article.tags", "tags")
+      .leftJoinAndSelect("article.user", "user")
+      .leftJoinAndSelect("article.likes", "likes", 'likes."userId" = :user', {
+        user: req.userId,
+      })
+      .orderBy('article."createdAt"', "DESC")
+      .where('article.published = true and article."userId" = :user', {
+        user: user.id,
+      })
+      .limit(6)
+      .getMany();
+
+    const articles = data.map((x) => {
+      const y: any = { ...x, liked: x.likes.length === 1 };
+      delete y.likes;
+
+      return y;
+    });
+    if (req.userId) {
+      const following = await getConnection().query(
+        `select * from user_followers_user where "userId_1" = $1 and "userId_2" = $2`,
+        [user.id, req.userId]
+      );
+      return res.json({ ...user, articles, isFollowing: following.length > 0 });
+    } else {
+      return res.json({ ...user, articles });
+    }
+  }
+);
 
 export default router;
