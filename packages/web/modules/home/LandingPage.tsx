@@ -76,11 +76,11 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
               description="Presage was designed to be a place to document and share your stories, studies, and more."
             />
             <FeatureCard
-              title="Talk to your Community"
+              title="Talk To Your Community"
               description="We put community first, allowing for discussions, referrals, and upvotes."
             />
             <FeatureCard
-              title="Grow Exponentially with Referrals"
+              title="Grow Exponentially With Referrals"
               description="Referrals have proven to be an effective way for startups to grow. Why don't we do the same for publishers?"
             />
           </div>
