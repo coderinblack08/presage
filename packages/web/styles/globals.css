@@ -79,6 +79,7 @@
 
 .prose pre code {
   @apply font-bold;
+  font-size: 14px !important;
 }
 
 .ProseMirror pre {

@@ -2,6 +2,7 @@ import { EditorContent, useEditor } from "@tiptap/react";
 import { format } from "date-fns";
 import { GetServerSideProps } from "next";
 import { NextSeo } from "next-seo";
+import Link from "next/link";
 import React, { useEffect } from "react";
 import { AddUser, Bookmark, Heart } from "react-iconly";
 import { useQuery } from "react-query";
@@ -90,17 +91,19 @@ const ArticlePage: React.FC<{ id: string }> = ({ id }) => {
           </main>
           <div className="max-w-sm w-full space-y-5 mb-5 lg:mb-0">
             <aside className="bg-white rounded-lg p-4 shadow">
-              <div className="flex items-center space-x-4">
-                <img
-                  src={article.user.profilePicture}
-                  alt={article.user.displayName}
-                  className="w-14 h-14 rounded-full"
-                />
-                <div>
-                  <p className="font-bold">{article.user.displayName}</p>
-                  <p className="text-gray-500">@{article.user.username}</p>
-                </div>
-              </div>
+              <Link href="/u/[username]" as={`/u/${article.user.username}`}>
+                <a className="flex items-center space-x-4">
+                  <img
+                    src={article.user.profilePicture}
+                    alt={article.user.displayName}
+                    className="w-14 h-14 rounded-full"
+                  />
+                  <div>
+                    <p className="font-bold">{article.user.displayName}</p>
+                    <p className="text-gray-500">@{article.user.username}</p>
+                  </div>
+                </a>
+              </Link>
               <p className="mt-5">{article.user.bio}</p>
               <Button className="mt-5 w-full">Follow</Button>
             </aside>

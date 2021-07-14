@@ -37,9 +37,7 @@ export const DeleteDraftModal: React.FC<DeleteDraftModalProps> = ({
         type="button"
         noAnimate
         // eslint-disable-next-line react/no-children-prop
-        children={
-          noText ? null : <span className="text-gray-800">Delete Draft</span>
-        }
+        children={noText ? null : <span>Delete Draft</span>}
       />
       <Modal isOpen={isOpen} closeModal={() => setIsOpen(false)}>
         <ModalHeader
@@ -74,7 +72,7 @@ export const DeleteDraftModal: React.FC<DeleteDraftModalProps> = ({
         />
         <div className="p-6">
           <Dialog.Title as="h4">Delete Draft</Dialog.Title>
-          <p className="text-gray-300">
+          <p className="text-gray-500">
             Are you sure you want to delete this draft?
           </p>
         </div>

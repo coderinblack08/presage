@@ -86,7 +86,7 @@ export const EditTagModal: React.FC<EditTagModalProps> = ({ id, noText }) => {
         />
         <div className="p-6">
           <Dialog.Title as="h4">Edit Tags</Dialog.Title>
-          <p className="mt-1 text-gray-300">
+          <p className="mt-1 text-gray-500">
             Enter a list of comma separated tags (up to 5)
           </p>
           <div className="mt-6">

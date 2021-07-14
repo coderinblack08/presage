@@ -1,19 +1,16 @@
-import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import Dropcursor from "@tiptap/extension-dropcursor";
 import Image from "@tiptap/extension-image";
 import Placeholder from "@tiptap/extension-placeholder";
 import Underline from "@tiptap/extension-underline";
-import { EditorContent, ReactNodeViewRenderer, useEditor } from "@tiptap/react";
+import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { Field, useFormikContext } from "formik";
-import lowlight from "lowlight";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { MdError } from "react-icons/md";
 import { useQuery } from "react-query";
 import { Article } from "../../lib/types";
 import { Tags } from "../article/Tags";
-import { CodeBlockComponent } from "./CodeBlockComponent";
 import { EditorFloatingMenu } from "./EditorFloatingMenu";
 import { FormattingBubbleMenu } from "./FormattingBubbleMenu";
 import { useEditorStore } from "./useEditorStore";
@@ -21,16 +18,17 @@ import { useEditorStore } from "./useEditorStore";
 interface TipTapEditorProps {}
 
 export const extensions = [
-  StarterKit.configure({ codeBlock: false }),
+  StarterKit,
   Placeholder,
   Underline,
   Image,
   Dropcursor,
-  CodeBlockLowlight.extend({
-    addNodeView() {
-      return ReactNodeViewRenderer(CodeBlockComponent);
-    },
-  }).configure({ lowlight }),
+  // StarterKit.configure({ codeBlock: false }),
+  // CodeBlockLowlight.extend({
+  //   addNodeView() {
+  //     return ReactNodeViewRenderer(CodeBlockComponent);
+  //   },
+  // }).configure({ lowlight }),
 ];
 
 const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {

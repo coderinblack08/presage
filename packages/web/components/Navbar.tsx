@@ -51,6 +51,16 @@ export const Navbar: React.FC<NavbarProps> = ({ isDraft = false }) => {
           }
         >
           <MenuItem
+            onClick={() => router.push("/explore")}
+            icon={
+              <div className="scale-80">
+                <Discovery set="bulk" />
+              </div>
+            }
+          >
+            Explore
+          </MenuItem>
+          <MenuItem
             icon={
               <div className="scale-80">
                 <Wallet set="bulk" />

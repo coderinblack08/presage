@@ -11,12 +11,12 @@ export const EditorFloatingMenu: React.FC<EditorFloatingMenuProps> = ({
 }) => {
   return (
     <FloatingMenu
-      className="flex items-center px-4 rounded-lg divide-x divide-gray-200 bg-white shadow"
+      className="flex items-center overflow-hidden rounded-lg divide-x divide-gray-200 bg-white shadow"
       tippyOptions={{ duration: 100 }}
       editor={editor}
     >
       <button
-        className="pr-4 py-1.5"
+        className="px-4 py-1.5 focus:outline-none"
         onClick={() => {
           editor.chain().focus().toggleCodeBlock().run();
         }}
@@ -24,7 +24,7 @@ export const EditorFloatingMenu: React.FC<EditorFloatingMenuProps> = ({
         <MdCode className="w-5 h-5" />
       </button>
       <button
-        className="pl-4 py-1.5"
+        className="px-4 py-1.5 focus:outline-none"
         onClick={() => {
           const url = window.prompt("URL");
 
