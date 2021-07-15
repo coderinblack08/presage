@@ -10,6 +10,7 @@ import {
   uniqueNamesGenerator,
 } from "unique-names-generator";
 import { Article } from "../../entities/Article";
+import { Journal } from "../../entities/Journal";
 import { User } from "../../entities/User";
 import { createToken } from "./createToken";
 import { isAuth } from "./isAuth";
@@ -53,11 +54,25 @@ const strategy = new Strategy(
         email: email,
         profilePicture: photo,
       };
-
       if (!user) {
         user = await User.create(data).save();
+        const pictures = [
+          "magenta-purple",
+          "orange",
+          "plum-fuchsia",
+          "purple-orange-sky",
+          "rosy-pink",
+          "yellow-lime",
+        ];
+        await Journal.create({
+          user: { id: user.id },
+          name: "Blog",
+          description: `${user.displayName}’s personal journal dedicated to blogging`,
+          picture: `http://localhost:3000/profile-picture/${
+            pictures[Math.floor(Math.random() * pictures.length)]
+          }.jpeg`,
+        }).save();
       }
-
       return done(null, { accessToken: createToken(user) });
     } catch (error) {
       return done(error, undefined);

@@ -75,18 +75,33 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
           placeholder="Untitled"
         />
         {!!errors.title ? (
-          <div className="flex items-center space-x-2 mt-2">
+          <div className="flex items-center space-x-2 mt-1">
             <MdError className="w-5 h-5 text-red" />
             <p className="text-red">{errors.title}</p>
           </div>
         ) : (
-          <div />
+          <div className="mt-1">
+            <div className="flex items-center divide-x divide-gray-300">
+              <div className="inline-flex items-center space-x-2.5 pr-4">
+                <img
+                  className="w-5 h-5 rounded-full"
+                  src={draft?.journal.picture}
+                  alt={draft?.journal.name}
+                />
+                <span className="text-gray-800 font-semibold">
+                  {draft?.journal.name}
+                </span>
+              </div>
+              <div className="pl-4">
+                {draft?.tags && draft.tags.length !== 0 ? (
+                  <Tags article={draft} />
+                ) : (
+                  <div className="text-gray-500">No tags</div>
+                )}
+              </div>
+            </div>
+          </div>
         )}
-        <div className={draft?.tags ? "mt-3" : ""}>
-          {draft?.tags && draft.tags.length !== 0 ? (
-            <Tags article={draft} />
-          ) : null}
-        </div>
         {editor && <FormattingBubbleMenu editor={editor} />}
         {editor && <EditorFloatingMenu editor={editor} />}
         <EditorContent editor={editor} />

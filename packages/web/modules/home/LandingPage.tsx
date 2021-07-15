@@ -37,7 +37,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
               </span>
             </h1>
             <p className="text-gray-600 font-display mt-4 !leading-[1.8] text-[13px] sm:text-base">
-              <strong className="text-gray-900">Tree steps</strong> — write,
+              <strong className="text-gray-900">Three steps</strong> — write,
               record, publish about anything. Grow your audience exponentially
               with Presage&apos;s referral system.
             </p>

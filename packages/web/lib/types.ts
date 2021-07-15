@@ -24,6 +24,7 @@ export interface Article {
   bodyJson: any;
   points: number;
   tags: Tag[];
+  journal: Journal;
   comments: Comment[];
   liked: boolean | null;
   createdAt: Date;
@@ -46,4 +47,15 @@ export interface Tag {
   name: string;
   usedBy: number;
   articles?: Article[];
+}
+
+export interface Journal {
+  id: string;
+  name: string;
+  description: string;
+  picture: string;
+  userId: string;
+  entries: number;
+  user: User;
+  createdAt: String;
 }

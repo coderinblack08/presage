@@ -11,14 +11,14 @@ export const Select: React.FC<
   return (
     <div className="relative h-full">
       <select
-        className={`appearance-none font-medium pl-4 pr-10 py-2 ${
+        className={`appearance-none font-medium pl-5 pr-12 py-1.5 ${
           color === "white" ? "bg-white shadow" : "bg-transparent"
         } rounded-lg focus:outline-none focus:ring-2 ${className}`}
         {...props}
       >
         {children}
       </select>
-      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2">
+      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4">
         <HiOutlineSelector className="w-4 h-4" />
       </div>
     </div>

@@ -7,8 +7,10 @@ import React, { useEffect } from "react";
 import { AddUser, Bookmark, Heart } from "react-iconly";
 import { useQuery } from "react-query";
 import { Button } from "../../components/Button";
+import { Input } from "../../components/Input";
 import { Layout } from "../../components/Layout";
 import { Article } from "../../lib/types";
+import { CommentSection } from "../../modules/article/CommentSection";
 import { LikeButton } from "../../modules/article/LikeButton";
 import { extensions } from "../../modules/draft/TipTapEditor";
 
@@ -40,7 +42,7 @@ const ArticlePage: React.FC<{ id: string }> = ({ id }) => {
       {!article || isFetching ? (
         <div className="spinner" />
       ) : (
-        <div className="flex flex-col-reverse lg:flex-row items-start space-x-0 lg:space-x-5">
+        <div className="flex flex-col lg:flex-row items-start space-x-0 lg:space-x-5">
           <main className="p-10 rounded-lg bg-white shadow w-full">
             <div className="flex items-center space-x-4 mb-6">
               <LikeButton article={article} />
@@ -89,7 +91,7 @@ const ArticlePage: React.FC<{ id: string }> = ({ id }) => {
               <RenderArticle article={article} />
             </div>
           </main>
-          <div className="max-w-sm w-full space-y-5 mb-5 lg:mb-0">
+          <div className="lg:max-w-sm xl:max-w-md w-full space-y-5 my-5 lg:my-0">
             <aside className="bg-white rounded-lg p-4 shadow">
               <Link href="/u/[username]" as={`/u/${article.user.username}`}>
                 <a className="flex items-center space-x-4">
@@ -105,8 +107,11 @@ const ArticlePage: React.FC<{ id: string }> = ({ id }) => {
                 </a>
               </Link>
               <p className="mt-5">{article.user.bio}</p>
-              <Button className="mt-5 w-full">Follow</Button>
+              <Button size="large" className="mt-5 w-full">
+                Follow
+              </Button>
             </aside>
+            <CommentSection article={article} />
           </div>
         </div>
       )}

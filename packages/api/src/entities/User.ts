@@ -10,6 +10,7 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 import { Article } from "./Article";
+import { Journal } from "./Journal";
 import { Like } from "./Like";
 
 @Entity()
@@ -40,6 +41,9 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Like, (like) => like.user)
   likes: Like[];
+
+  @OneToMany(() => Journal, (like) => like.user)
+  journals: Journal[];
 
   @ManyToMany(() => User, (user) => user.following)
   @JoinTable()

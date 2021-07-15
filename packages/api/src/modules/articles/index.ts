@@ -2,9 +2,9 @@ import { Request, Router } from "express";
 import createHttpError from "http-errors";
 import readingTime from "reading-time";
 import sanitizeHtml from "sanitize-html";
-import { getConnection } from "typeorm";
+import { FindConditions, getConnection } from "typeorm";
 import { Article } from "../../entities/Article";
-import { Comment } from "../../entities/Comment";
+import { Journal } from "../../entities/Journal";
 import { Like } from "../../entities/Like";
 import { Tag } from "../../entities/Tag";
 import { isAuth } from "../auth/isAuth";
@@ -50,10 +50,36 @@ router.post("/like", isAuth(true), async (req, res) => {
   });
 });
 
+router.get("/my-journals", isAuth(true), async (req, res) => {
+  const journals = await Journal.find({ where: { userId: req.userId } });
+  res.json(journals);
+});
+
+router.post("/journal", isAuth(true), async (req, res) => {
+  const pictures = [
+    "magenta-purple",
+    "orange",
+    "plum-fuchsia",
+    "purple-orange-sky",
+    "rosy-pink",
+    "yellow-lime",
+  ];
+  const journal = await Journal.create({
+    user: { id: req.userId },
+    name: req.body.name,
+    description: req.body.description,
+    picture: `http://localhost:3000/profile-picture/${
+      pictures[Math.floor(Math.random() * pictures.length)]
+    }.jpeg`,
+  }).save();
+  console.log(journal);
+});
+
 router.post("/", isAuth(true), async (req, res) => {
   const article = await Article.create({
     title: "Untitled",
     userId: req.userId,
+    journalId: req.body.journalId,
   }).save();
   res.json(article);
 });
@@ -195,18 +221,15 @@ router.get("/", isAuth(), async (req, res) => {
 });
 
 router.get("/drafts", isAuth(true), async (req, res) => {
-  const articles = await Article.find({
-    where: { userId: req.userId, published: false },
-    order: { updatedAt: "DESC" },
-    relations: ["tags"],
-    select: ["id", "title", "published", "createdAt", "updatedAt"],
-  });
-  res.json(articles);
-});
+  const where: FindConditions<Article> = {
+    userId: req.userId,
+  };
+  const journalId = (req.query as any).journalId;
+  if (journalId && journalId !== "null") where.journalId = journalId;
+  console.log(where);
 
-router.get("/published", isAuth(true), async (req, res) => {
   const articles = await Article.find({
-    where: { userId: req.userId, published: true },
+    where,
     order: { updatedAt: "DESC" },
     relations: ["tags"],
     select: ["id", "title", "published", "createdAt", "updatedAt"],
@@ -221,6 +244,7 @@ router.get(
     try {
       const article = await Article.findOne({
         where: { id: req.params.id, userId: req.userId },
+        relations: ["journal"],
       });
       res.json(article);
     } catch (error) {
@@ -275,34 +299,34 @@ router.get(
       const article = await Article.findOne(req.params.id, {
         relations: ["user"],
       });
-      let comments = await getConnection()
-        .getRepository(Comment)
-        .createQueryBuilder("comment")
-        .leftJoinAndSelect("comment.user", "user")
-        .where('comment."articleId" = :id', { id: req.params.id })
-        .getMany();
-      comments = comments.sort(
-        (a: any, b: any) => a.path.length - b.path.length
-      );
-      const tree = [];
-      let i = 0;
-      while (comments.length < i) {
-        if (comments[i].path.length > 1) break;
-        tree.push({ ...comments[i], children: [] });
-        i++;
-      }
-      for (let j = i; j < comments.length; j++) {
-        const node = comments[j];
-        const depth = node.path.length - 2;
-        let treeNode: any = tree.find((x) => x.id === node.path[0]);
-        for (let k = 0; k < depth; k++) {
-          treeNode = treeNode.children.find(
-            (x: any) => x.id === node.path[k + 1]
-          );
-        }
-        treeNode.children.push({ ...node, children: [] });
-      }
-      const body = { ...article, comments: tree };
+      // let comments = await getConnection()
+      //   .getRepository(Comment)
+      //   .createQueryBuilder("comment")
+      //   .leftJoinAndSelect("comment.user", "user")
+      //   .where('comment."articleId" = :id', { id: req.params.id })
+      //   .getMany();
+      // comments = comments.sort(
+      //   (a: any, b: any) => a.path.length - b.path.length
+      // );
+      // const tree = [];
+      // let i = 0;
+      // while (comments.length < i) {
+      //   if (comments[i].path.length > 1) break;
+      //   tree.push({ ...comments[i], children: [] });
+      //   i++;
+      // }
+      // for (let j = i; j < comments.length; j++) {
+      //   const node = comments[j];
+      //   const depth = node.path.length - 2;
+      //   let treeNode: any = tree.find((x) => x.id === node.path[0]);
+      //   for (let k = 0; k < depth; k++) {
+      //     treeNode = treeNode.children.find(
+      //       (x: any) => x.id === node.path[k + 1]
+      //     );
+      //   }
+      //   treeNode.children.push({ ...node, children: [] });
+      // }
+      const body = { ...article };
       if (req.userId) {
         const like = await Like.findOne({
           where: { userId: req.userId, articleId: req.params.id },

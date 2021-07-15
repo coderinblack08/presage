@@ -3,7 +3,6 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  Index,
   JoinTable,
   ManyToMany,
   ManyToOne,
@@ -12,6 +11,7 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 import { Comment } from "./Comment";
+import { Journal } from "./Journal";
 import { Like } from "./Like";
 import { Tag } from "./Tag";
 import { User } from "./User";
@@ -54,6 +54,12 @@ export class Article extends BaseEntity {
 
   @OneToMany(() => Comment, (comment) => comment.article)
   comments: Comment[];
+
+  @Column()
+  journalId: string;
+
+  @ManyToOne(() => Journal, (journal) => journal.articles)
+  journal: Journal;
 
   @Column("tsvector", { select: false, nullable: true })
   document: any;
