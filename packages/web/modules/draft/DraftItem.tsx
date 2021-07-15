@@ -12,7 +12,7 @@ export const DraftItem: React.FC<DraftItemProps> = ({ draft }) => {
     <Link href="/draft/[id]" as={`/draft/${draft.id}`} passHref>
       <a className="block p-6 rounded-lg bg-white shadow focus-visible:ring focus:outline-none">
         <h4>{draft.title}</h4>
-        <div className="text-gray-600">
+        <div className="text-gray-500">
           Edited 3 days ago
           {draft.tags ? (draft.tags.length ? " · " : "") : ""}
           <Tags article={draft} />

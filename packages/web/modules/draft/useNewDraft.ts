@@ -11,10 +11,10 @@ export const useNewDraft = () => {
   const newDraft = async (journalId: string | null) => {
     await mutateAsync(["/articles", { journalId }, "post"], {
       onSuccess: (data: Article) => {
-        queryClient.setQueryData<Article[]>("/articles/drafts", (old) => [
-          data,
-          ...(old || []),
-        ]);
+        queryClient.setQueryData<Article[]>(
+          `/articles/drafts?journalId=${journalId}&published=false`,
+          (old) => [data, ...(old || [])]
+        );
         router.push("/draft/[id]", `/draft/${data.id}`);
       },
     });

@@ -24,6 +24,7 @@ export interface Article {
   bodyJson: any;
   points: number;
   tags: Tag[];
+  journalId: string;
   journal: Journal;
   comments: Comment[];
   liked: boolean | null;

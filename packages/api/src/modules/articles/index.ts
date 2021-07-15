@@ -224,8 +224,9 @@ router.get("/drafts", isAuth(true), async (req, res) => {
   const where: FindConditions<Article> = {
     userId: req.userId,
   };
-  const journalId = (req.query as any).journalId;
+  const { journalId, published } = req.query as any;
   if (journalId && journalId !== "null") where.journalId = journalId;
+  if (published) where.published = published;
   console.log(where);
 
   const articles = await Article.find({

@@ -1,18 +1,20 @@
-import { useRouter } from "next/router";
 import React from "react";
-import { useQueryClient, useMutation, useQuery } from "react-query";
-import { mutator } from "../../lib/mutator";
+import { useQuery } from "react-query";
 import { Article } from "../../lib/types";
 import { DraftItem } from "./DraftItem";
 import { useNewDraft } from "./useNewDraft";
 
 interface DraftListProps {
   journalId: string | null;
+  published: boolean;
 }
 
-export const DraftList: React.FC<DraftListProps> = ({ journalId }) => {
+export const DraftList: React.FC<DraftListProps> = ({
+  journalId,
+  published,
+}) => {
   const { data: drafts } = useQuery<Article[]>(
-    `/articles/drafts?journalId=${journalId}`
+    `/articles/drafts?journalId=${journalId}&published=${published}`
   );
   const newDraft = useNewDraft();
 

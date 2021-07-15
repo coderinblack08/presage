@@ -47,8 +47,11 @@ export const DeleteDraftModal: React.FC<DeleteDraftModalProps> = ({
               onClick={async () => {
                 await mutateAsync([`/articles/${id}`, null, "delete"], {
                   onSuccess: () => {
+                    const article = queryClient.getQueryData<Article>(
+                      `/articles/draft/${id}`
+                    );
                     queryClient.setQueryData<Article[]>(
-                      "/articles/drafts",
+                      `/articles/drafts?journalId=${article?.journalId}&published=${article?.published}`,
                       (old) => {
                         if (old) {
                           const index = old.findIndex((x) => x.id === id);

@@ -49,7 +49,7 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
     content: draft?.bodyJson || null,
     editorProps: {
       attributes: {
-        class: "prose focus:outline-none py-6 max-w-full",
+        class: "prose focus:outline-none py-8 max-w-full",
       },
     },
   });

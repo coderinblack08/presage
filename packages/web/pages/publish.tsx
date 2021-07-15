@@ -10,8 +10,9 @@ import { useNewDraft } from "../modules/draft/useNewDraft";
 
 const Publish: React.FC = () => {
   const [currentJournal, setCurrentJournal] = useState<string | null>(null);
+  const [published, setPublished] = useState(false);
   const { data: journals, isFetching } = useQuery<Journal[]>(
-    "/articles/my-journals"
+    `/articles/my-journals`
   );
   const newDraft = useNewDraft();
 
@@ -45,7 +46,18 @@ const Publish: React.FC = () => {
             </button>
           </nav>
           <div className="flex items-center space-x-2">
-            <Select>
+            <Select
+              onChange={(e) => {
+                switch (e.target.value) {
+                  case "drafts":
+                    setPublished(false);
+                    break;
+                  default:
+                    setPublished(true);
+                    break;
+                }
+              }}
+            >
               <option value="drafts">Drafts</option>
               <option value="published">Published</option>
             </Select>
@@ -54,7 +66,7 @@ const Publish: React.FC = () => {
             </Button>
           </div>
         </div>
-        <DraftList journalId={currentJournal} />
+        <DraftList published={published} journalId={currentJournal} />
       </div>
     </Layout>
   );
