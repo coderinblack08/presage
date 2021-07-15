@@ -44,9 +44,6 @@ export const Waitlist: React.FC<WaitlistProps> = ({}) => {
         </Button>
       </form>
       <Toaster position="top-center" gutter={8} />
-      <button type="button" onClick={notify}>
-        popup
-      </button>
     </>
   );
 };
