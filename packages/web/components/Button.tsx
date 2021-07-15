@@ -83,7 +83,7 @@ export const Button: React.FC<ButtonProps> = ({
         <span className="absolute">
           <div
             className={`${
-              color === "primary" ? "spinner-dark" : "spinner"
+              color === "primary" ? "spinner-light" : "spinner"
             } absolute inset-x-auto`}
           />
         </span>

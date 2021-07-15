@@ -10,6 +10,8 @@ import { Footer } from "../../components/Footer";
 import { useMediaQuery } from "react-responsive";
 import { Navbar } from "../../components/Navbar";
 import { MdCheck } from "react-icons/md";
+import { Input } from "../../components/Input";
+import { Waitlist } from "./Waitlist";
 
 interface LandingPageProps {}
 
@@ -27,12 +29,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
   return (
     <div>
       <Navbar />
-      <div className="px-5 md:px-8 max-w-8xl mx-auto">
+      <div className="py-4 md:py-0 px-5 md:px-8 max-w-8xl mx-auto">
         <header className="mt-10 md:mt-0 flex justify-between items-center md:py-8">
           <div className="max-w-lg lg:max-w-2xl w-full">
-            <h1 className="text-2xl sm:h3 lg:h2 font-display font-extrabold">
+            <h1 className="text-3xl leading-normal sm:h3 lg:h2 font-display font-bold">
               A Medium alternative built for <br />
-              <span className="text-2xl sm:h3 lg:h2 text-gray-500 font-extrabold font-display">
+              <span className="text-3xl leading-normal sm:h3 lg:h2 text-gray-500 font-bold font-display">
                 referral podcasts and blogs
               </span>
             </h1>
@@ -41,12 +43,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
               record, publish about anything. Grow your audience exponentially
               with Presage&apos;s referral system.
             </p>
-            <div className="flex items-center space-x-3 mt-5 sm:mt-8">
-              <Button>Coming Soon!</Button>
-              <a href="#main">
-                <Button color="white">Learn More</Button>
-              </a>
-            </div>
+            <Waitlist />
           </div>
           <div className="hidden md:block">
             <Image

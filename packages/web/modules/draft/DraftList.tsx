@@ -19,7 +19,7 @@ export const DraftList: React.FC<DraftListProps> = ({
   const newDraft = useNewDraft();
 
   return (
-    <main className="mt-4">
+    <main className="mt-3">
       {!drafts ? (
         <div className="spinner" />
       ) : drafts?.length === 0 ? (
