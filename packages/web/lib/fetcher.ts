@@ -1,13 +1,22 @@
 import { QueryFunctionContext } from "react-query";
 
 export const fetcher = async <T = any>(
-  context: QueryFunctionContext<any>
+  context: QueryFunctionContext<any>,
+  jid: string | null = null
 ): Promise<T> => {
-  const request = await fetch("http://localhost:4000" + context.queryKey, {
-    headers: {
-      authorization: "Bearer " + localStorage.getItem("access-token"),
-    },
-  });
+  let request: Response;
+  if (typeof window === "undefined") {
+    request = await fetch("http://localhost:4000" + context.queryKey, {
+      headers: {
+        cookie: `jid=${jid}`,
+      },
+      credentials: "include",
+    });
+  } else {
+    request = await fetch("http://localhost:4000" + context.queryKey, {
+      credentials: "include",
+    });
+  }
 
   if (request.status !== 200) {
     throw new Error(await request.text());
@@ -15,3 +24,7 @@ export const fetcher = async <T = any>(
 
   return await request.json();
 };
+
+export const ssrFetcher = (jid: string) => (
+  context: QueryFunctionContext<any>
+) => fetcher(context, jid);

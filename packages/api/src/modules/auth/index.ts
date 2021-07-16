@@ -12,6 +12,7 @@ import {
 import { Article } from "../../entities/Article";
 import { Journal } from "../../entities/Journal";
 import { User } from "../../entities/User";
+import { isDev } from "../../lib/constants";
 import { createToken } from "./createToken";
 import { isAuth } from "./isAuth";
 
@@ -97,18 +98,21 @@ router.get(
   "/auth/google/callback",
   passport.authenticate("google", { session: false }),
   (req: any, res) => {
-    res.redirect(`http://localhost:3000/?accessToken=${req.user.accessToken}`);
+    res.cookie("jid", req.user.accessToken, {
+      httpOnly: true,
+      domain: isDev() ? undefined : ".joinpresage.com",
+    });
+    res.redirect("http://localhost:3000/?authRedirect=true");
   }
 );
 
 router.get("/me", isAuth(), async (req, res) => {
-  res.json(
-    req.userId
-      ? await User.findOne(req.userId, {
-          select: userFields,
-        })
-      : null
-  );
+  const user = req.userId
+    ? await User.findOne(req.userId, {
+        select: userFields,
+      })
+    : null;
+  res.json(user);
 });
 
 router.get(

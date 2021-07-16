@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
 import { useQuery } from "react-query";
 import { Button } from "../components/Button";
 import { Layout } from "../components/Layout";
@@ -10,7 +11,6 @@ import { JournalNavbar } from "../modules/draft/JournalNavbar";
 import { useNewDraft } from "../modules/draft/useNewDraft";
 
 const Publish: React.FC = () => {
-  const [published, setPublished] = useState(false);
   const { data: journals, isFetching } = useQuery<Journal[]>(
     `/articles/my-journals`
   );
@@ -26,6 +26,7 @@ const Publish: React.FC = () => {
 
   return (
     <Layout className="py-5 md:py-8">
+      <Toaster />
       <div className="max-w-3xl mx-auto">
         <h4>My Drafts</h4>
         <div className="flex items-center justify-between mt-4 space-x-4">
@@ -38,27 +39,24 @@ const Publish: React.FC = () => {
             />
           )}
           <div className="flex items-center space-x-2">
-            <Select
-              onChange={(e) => {
-                switch (e.target.value) {
-                  case "drafts":
-                    setPublished(false);
-                    break;
-                  default:
-                    setPublished(true);
-                    break;
-                }
-              }}
+            <Button
+              color="white"
+              size="regular"
+              onClick={() =>
+                toast(
+                  "Imports are coming soon! Join our waitlist to get updates on the release.",
+                  { icon: "🦄", duration: 4000 }
+                )
+              }
             >
-              <option value="drafts">Drafts</option>
-              <option value="published">Published</option>
-            </Select>
+              Import
+            </Button>
             <Button size="regular" onClick={() => newDraft(journalId)}>
               Create
             </Button>
           </div>
         </div>
-        {journalId && <DraftList published={published} journalId={journalId} />}
+        {journalId && <DraftList journalId={journalId} />}
       </div>
     </Layout>
   );

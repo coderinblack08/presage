@@ -7,13 +7,9 @@ export const isAuth: (
 ) => RequestHandler<{}, any, any, {}> =
   (shouldThrow = false) =>
   (req, _, next) => {
-    const authHeader = req.headers.authorization;
-    const code = new createError.Unauthorized();
-    if (!authHeader) {
-      return next(shouldThrow && createError(code, "not authenticated"));
-    }
+    const token = req.cookies.jid;
 
-    const token = authHeader.split(" ")[1];
+    const code = new createError.Unauthorized();
     if (!token) {
       return next(shouldThrow && createError(code, "not authenticated"));
     }

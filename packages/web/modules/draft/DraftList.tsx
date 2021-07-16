@@ -6,15 +6,11 @@ import { useNewDraft } from "./useNewDraft";
 
 interface DraftListProps {
   journalId: string | null;
-  published: boolean;
 }
 
-export const DraftList: React.FC<DraftListProps> = ({
-  journalId,
-  published,
-}) => {
+export const DraftList: React.FC<DraftListProps> = ({ journalId }) => {
   const { data: drafts } = useQuery<Article[]>(
-    `/articles/drafts?journalId=${journalId}&published=${published}`
+    `/articles/drafts?journalId=${journalId}`
   );
   const newDraft = useNewDraft();
 

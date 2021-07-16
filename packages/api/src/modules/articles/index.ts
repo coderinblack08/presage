@@ -89,21 +89,21 @@ router.patch(
   "/:id",
   isAuth(true),
   async (req: Request<{ id: string }>, res) => {
-    req.body.body = req.body.body
-      ? sanitizeHtml(req.body.body, {
-          ...sanitizeHtml.defaults,
-          allowedTags: ["img", ...sanitizeHtml.defaults.allowedTags],
-          allowedAttributes: {
-            img: ["src", "align"],
-            ...sanitizeHtml.defaults.allowedAttributes,
-          },
-          allowedSchemesByTag: {
-            img: ["http", "https"],
-            ...sanitizeHtml.defaults.allowedSchemesByTag,
-          },
-        })
-      : null;
     const updateData = { ...req.body };
+    if ("body" in updateData) {
+      updateData.body = sanitizeHtml(req.body.body, {
+        ...sanitizeHtml.defaults,
+        allowedTags: ["img", ...sanitizeHtml.defaults.allowedTags],
+        allowedAttributes: {
+          img: ["src", "align"],
+          ...sanitizeHtml.defaults.allowedAttributes,
+        },
+        allowedSchemesByTag: {
+          img: ["http", "https"],
+          ...sanitizeHtml.defaults.allowedSchemesByTag,
+        },
+      });
+    }
     if (req.body.body) {
       updateData.readingTime = readingTime(req.body.body).text;
     }

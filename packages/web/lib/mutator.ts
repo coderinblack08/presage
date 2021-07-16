@@ -10,8 +10,8 @@ export const mutator = async ([path, body, method = "post"]: [
   const config = {
     headers: {
       "content-type": isMultipart ? "multipart/form-data" : "application/json",
-      authorization: "Bearer " + localStorage.getItem("access-token"),
     },
+    withCredentials: true,
   };
 
   let request: any;

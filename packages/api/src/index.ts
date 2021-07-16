@@ -1,4 +1,5 @@
 require("dotenv-safe").config();
+import cookieParser from "cookie-parser";
 import cors from "cors";
 import express from "express";
 import helmet from "helmet";
@@ -26,18 +27,14 @@ async function main() {
 
   const app = express();
   app.use(helmet());
+  app.use(cookieParser());
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
   app.use(
     cors({
-      origin: "*",
+      origin: isDev() ? "http://localhost:3000" : "https://joinpresage.com",
       maxAge: !isDev() ? 86400 : undefined,
-      exposedHeaders: [
-        "access-token",
-        "refresh-token",
-        "content-type",
-        "content-length",
-      ],
+      credentials: true,
     })
   );
   app.use(passport.initialize());
