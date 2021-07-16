@@ -210,21 +210,6 @@ router.post(
   }
 );
 
-router.get("/", isAuth(), async (req, res) => {
-  const query: string = (req.query as any).query;
-  const data = await getConnection()
-    .createQueryBuilder(Article, "a")
-    .select()
-    .leftJoinAndSelect("a.user", "user")
-    .leftJoinAndSelect("a.tags", "tags")
-    .where("document @@ plainto_tsquery(:query) and a.published = true", {
-      query: query,
-    })
-    .orderBy("ts_rank(document, plainto_tsquery(:query))", "DESC")
-    .getMany();
-  res.json(data);
-});
-
 router.get("/drafts", isAuth(true), async (req, res) => {
   const where: FindConditions<Article> = {
     userId: req.userId,
@@ -272,8 +257,9 @@ router.delete(
   }
 );
 
-router.get("/explore", isAuth(), async (req, res) => {
-  const data = await getConnection()
+router.get("/", isAuth(), async (req, res) => {
+  const query: string = (req.query as any).query;
+  const qb = getConnection()
     .getRepository(Article)
     .createQueryBuilder("article")
     .leftJoinAndSelect("article.tags", "tags")
@@ -281,11 +267,28 @@ router.get("/explore", isAuth(), async (req, res) => {
     .leftJoinAndSelect("article.journal", "journal")
     .leftJoinAndSelect("article.likes", "likes", 'likes."userId" = :user', {
       user: req.userId,
-    })
-    .orderBy('article."createdAt"', "DESC")
-    .where("article.published = true")
-    .limit(6)
-    .getMany();
+    });
+
+  let data: Article[];
+
+  if (query) {
+    data = await qb
+      .where(
+        "article.document @@ plainto_tsquery(:query) and article.published = true",
+        {
+          query: query,
+        }
+      )
+      .orderBy("ts_rank(article.document, plainto_tsquery(:query))", "DESC")
+      .limit(10)
+      .getMany();
+  } else {
+    data = await qb
+      .where("article.published = true")
+      .orderBy('article."createdAt"', "DESC")
+      .limit(10)
+      .getMany();
+  }
 
   res.json(
     data.map((x) => {

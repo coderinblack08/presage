@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Search } from "react-iconly";
 import { useQuery } from "react-query";
 import { Button } from "../../components/Button";
@@ -9,7 +9,12 @@ import { ArticleCard } from "../article/ArticleCard";
 interface ExplorePageProps {}
 
 export const ExplorePage: React.FC<ExplorePageProps> = ({}) => {
-  const { data: articles } = useQuery<Article[]>("/articles/explore");
+  const [query, setQuery] = useState("");
+  const [actualQuery, setActualQuery] = useState("");
+  const [oldArticles, setOldArticles] = useState<Article[] | undefined>([]);
+  const { data: articles, isFetching } = useQuery<Article[]>(
+    `/articles?${actualQuery ? `query=${actualQuery}` : ""}`
+  );
 
   return (
     <div className="py-5 md:py-8">
@@ -19,7 +24,23 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({}) => {
       </p>
       <div className="flex items-center mt-8">
         <div className="items-center relative mr-5">
-          <Input placeholder="Search" className="w-64 pl-12" />
+          <Input
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                setOldArticles(articles);
+                setActualQuery(query);
+              }
+            }}
+            onChange={(e) => {
+              if (e.target.value === "") {
+                setActualQuery("");
+              }
+              setQuery(e.target.value);
+            }}
+            value={query}
+            placeholder="Search"
+            className="w-72 pl-12"
+          />
           <div className="h-full mx-4 flex items-center pointer-events-none absolute top-0 left-0 text-gray-500">
             <Search size="small" stroke="bold" />
           </div>
@@ -37,10 +58,12 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({}) => {
           </Button>
         </nav>
       </div>
-      <main className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-6">
-        {articles?.map((article) => (
-          <ArticleCard key={article.id} article={article} />
-        ))}
+      <main className="mt-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {(isFetching ? oldArticles : articles)?.map((article) => (
+            <ArticleCard key={article.id} article={article} />
+          ))}
+        </div>
       </main>
     </div>
   );

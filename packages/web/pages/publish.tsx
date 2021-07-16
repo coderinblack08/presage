@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
@@ -44,7 +45,17 @@ const Publish: React.FC = () => {
               size="regular"
               onClick={() =>
                 toast(
-                  "Imports are coming soon! Join our waitlist to get updates on the release.",
+                  () => (
+                    <p>
+                      Imports are coming soon!{" "}
+                      <Link href="/" passHref>
+                        <a className="font-bold hover:underline">
+                          Join our waitlist
+                        </a>
+                      </Link>{" "}
+                      to get updates on the release.
+                    </p>
+                  ),
                   { icon: "🦄", duration: 4000 }
                 )
               }
