@@ -73,6 +73,7 @@ router.post("/journal", isAuth(true), async (req, res) => {
     }.jpeg`,
   }).save();
   console.log(journal);
+  res.json(journal);
 });
 
 router.post("/", isAuth(true), async (req, res) => {

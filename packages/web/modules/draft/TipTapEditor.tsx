@@ -75,12 +75,12 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
           placeholder="Untitled"
         />
         {!!errors.title ? (
-          <div className="flex items-center space-x-2 mt-1">
+          <div className="flex items-center space-x-2 mt-2">
             <MdError className="w-5 h-5 text-red" />
             <p className="text-red">{errors.title}</p>
           </div>
         ) : (
-          <div className="mt-1">
+          <div className="mt-2">
             <div className="flex items-center divide-x divide-gray-300">
               <div className="inline-flex items-center space-x-2.5 pr-4">
                 <img

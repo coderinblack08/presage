@@ -13,7 +13,7 @@ export const Input: React.FC<InputProps> = React.forwardRef(
       className: `rounded-lg text-gray-800 placeholder-gray-600 ${
         gray ? "bg-gray-100" : "bg-white shadow"
       } focus:outline-none w-full ${
-        error ? "ring-1 ring-opacity-75 ring-primary" : ""
+        error ? "ring-1 ring-opacity-75 ring-red" : ""
       } ${className} ${textarea ? "resize-none py-3 px-5" : "py-2 px-4"}`,
       ...props,
     });

@@ -16,7 +16,7 @@ export const InputField: React.FC<InputProps> = React.forwardRef(
           {...props}
         />
         {meta.touched && !!meta.error ? (
-          <p className="mt-1 small text-primary">{meta.error}</p>
+          <p className="mt-1 small text-red">{meta.error}</p>
         ) : null}
       </div>
     );
