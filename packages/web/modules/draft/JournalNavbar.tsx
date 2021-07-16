@@ -25,13 +25,15 @@ export const JournalNavbar: React.FC<JournalNavbarProps> = ({
   const { mutateAsync } = useMutation(mutator);
 
   return (
-    <nav className="flex items-stretch h-9 rounded-lg overflow-hidden bg-white divide-x divide-gray-200 border border-gray-200 shadow-sm">
+    <nav className="overflow-x-auto flex items-stretch h-9 rounded-lg overflow-hidden bg-white divide-x divide-gray-200 border border-gray-200 shadow-sm">
       {journals?.map((journal) => (
         <button
           key={journal.id}
           onClick={() => updateJournal(journal.id)}
-          className={`h-full flex items-center space-x-2.5 px-3.5 focus:outline-none  ${
-            currentJournal === journal.id ? "bg-white" : "bg-gray-50"
+          className={`h-full flex-shrink-0 flex items-center space-x-2.5 px-3.5 focus:outline-none  ${
+            currentJournal === journal.id
+              ? "bg-white"
+              : "bg-gradient-to-b from-gray-50 to-gray-100"
           }`}
         >
           <img
@@ -44,7 +46,7 @@ export const JournalNavbar: React.FC<JournalNavbarProps> = ({
       ))}
       <button
         onClick={() => setIsOpen(true)}
-        className="h-full bg-gray-50 flex items-center space-x-2 px-3.5 focus:outline-none"
+        className="h-full bg-gradient-to-b from-gray-50 to-gray-100 flex items-center space-x-2 px-3.5 focus:outline-none"
       >
         <MdAdd />
       </button>

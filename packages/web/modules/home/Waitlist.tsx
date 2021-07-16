@@ -14,7 +14,7 @@ export const Waitlist: React.FC<WaitlistProps> = ({}) => {
   return (
     <>
       <form
-        className="relative flex items-center space-x-2 mt-5 sm:mt-8 max-w-md"
+        className="relative flex items-center space-x-2 mt-5 sm:mt-8 max-w-md lg:max-w-[30rem]"
         onSubmit={async (e) => {
           e.preventDefault();
           setLoading(true);
@@ -30,14 +30,14 @@ export const Waitlist: React.FC<WaitlistProps> = ({}) => {
         <Input
           placeholder="Email Address"
           type="email"
-          className="!py-3 pr-44"
+          className="!py-3.5 pl-5 pr-44"
           onChange={(e) => setEmail(e.target.value)}
           value={email}
           required
         />
         <Button
           type="submit"
-          className="absolute right-1 flex-shrink-0"
+          className="absolute right-1.5 flex-shrink-0"
           loading={loading}
         >
           Join Waitlist

@@ -61,7 +61,7 @@ export const Button: React.FC<ButtonProps> = ({
       } focus:outline-none focus-visible:ring flex items-center justify-center transition ${
         rounded ? "!rounded-full" : ""
       } ${
-        !noAnimate
+        !noAnimate && !disabled
           ? `hover:-translate-y-0.5  ${
               color === "transparent" ? "" : "hover:shadow-md"
             }`

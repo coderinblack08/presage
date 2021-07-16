@@ -24,7 +24,6 @@ const PublishButtons: React.FC<{ id: string }> = ({ id }) => {
       (old) => ({ ...old, published } as any)
     );
     queryClient.refetchQueries("/articles/drafts");
-    queryClient.refetchQueries("/articles/published");
   }
 
   return (
@@ -70,6 +69,7 @@ interface DraftNavbarProps {
 
 export const DraftNavbar: React.FC<DraftNavbarProps> = ({ id }) => {
   const { data: me } = useQuery<User>("/me");
+  const { data: draft } = useQuery<Article>(`/articles/draft/${id}`);
   const router = useRouter();
 
   return (
@@ -79,7 +79,7 @@ export const DraftNavbar: React.FC<DraftNavbarProps> = ({ id }) => {
           size="none"
           color="transparent"
           noAnimate
-          onClick={() => router.push("/publish")}
+          onClick={() => router.push(`/publish?journalId=${draft?.journalId}`)}
           icon={
             <div className="scale-80">
               <ArrowLeftSquare set="bulk" />
@@ -92,7 +92,10 @@ export const DraftNavbar: React.FC<DraftNavbarProps> = ({ id }) => {
         {me ? <UserDropdown /> : null}
       </div>
       <div className="hidden md:flex items-center space-x-10">
-        <NavLink href="/publish" icon={<ArrowLeftSquare set="bulk" />}>
+        <NavLink
+          href={`/publish?journalId=${draft?.journalId}`}
+          icon={<ArrowLeftSquare set="bulk" />}
+        >
           Go Back
         </NavLink>
         <DeleteDraftModal id={router.query.id as string} />

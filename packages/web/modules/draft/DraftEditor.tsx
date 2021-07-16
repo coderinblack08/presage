@@ -1,5 +1,5 @@
 import { Form, Formik } from "formik";
-import dynamic from "next/dynamic";
+import { isEqual } from "lodash";
 import React from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import * as yup from "yup";
@@ -51,39 +51,40 @@ export const DraftEditor: React.FC<DraftEditorProps> = ({ id }) => {
         body: yup.string().nullable(),
       })}
       enableReinitialize
-      onSubmit={async (values, { setSubmitting }) => {
-        await mutateAsync(
-          [
-            `/articles/${id}`,
-            { ...values, bodyJson: useEditorStore.getState().bodyJson },
-            "patch",
-          ],
-          {
-            onSuccess: () => {
-              queryClient.setQueryData<Article>(
-                `/articles/draft/${id}`,
-                (old) => {
-                  return {
-                    ...old,
-                    ...values,
-                    bodyJson: useEditorStore.getState().bodyJson,
-                  } as Article;
-                }
-              );
-              queryClient.setQueryData<Article[]>(`/articles/drafts`, (old) => {
+      onSubmit={async ({ title, body }, { setSubmitting }) => {
+        const { bodyJson } = useEditorStore.getState();
+        const requestBody: Partial<Article> = {};
+        if (title !== draft.title) requestBody.title = title;
+        if (!isEqual(body, draft.body)) requestBody.body = body;
+        if (!isEqual(bodyJson, draft.bodyJson)) requestBody.bodyJson = bodyJson;
+
+        await mutateAsync([`/articles/${id}`, requestBody, "patch"], {
+          onSuccess: () => {
+            queryClient.setQueryData<Article>(
+              `/articles/draft/${id}`,
+              (old) => {
+                return {
+                  ...old,
+                  ...requestBody,
+                } as Article;
+              }
+            );
+            queryClient.setQueryData<Article[]>(
+              `/articles/drafts?journalId=${draft.journalId}&published=${draft.published}`,
+              (old) => {
                 if (old) {
                   const idx = old?.findIndex((v) => v.id === id);
                   old[idx] = {
                     ...old[idx],
-                    title: values.title,
+                    title,
                   };
                   return old;
                 }
                 return [];
-              });
-            },
-          }
-        );
+              }
+            );
+          },
+        });
         console.log("Draft auto-saved");
         setSubmitting(false);
       }}

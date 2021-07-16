@@ -1,5 +1,6 @@
 import React from "react";
 import { Heart } from "react-iconly";
+import { MdFavorite, MdFavoriteBorder } from "react-icons/md";
 import { useMutation, useQueryClient } from "react-query";
 import { Button } from "../../components/Button";
 import { mutator } from "../../lib/mutator";
@@ -34,20 +35,20 @@ export const LikeButton: React.FC<LikeButtonProps> = ({ article }) => {
 
   return (
     <Button
-      color={article.liked ? "primary" : "gray"}
-      size="small"
+      color="transparent"
+      size="none"
       onClick={updateCache}
       icon={
-        <div className={`${article.liked ? "text-white" : ""} scale-80`}>
-          <Heart set="bold" size="small" />
-        </div>
+        article.liked ? (
+          <MdFavorite className="w-6 h-6 text-gray-600" />
+        ) : (
+          <MdFavoriteBorder className="w-6 h-6 text-gray-600" />
+        )
       }
       noAnimate
     >
-      <span
-        className={`${article.liked ? "text-white" : ""} font-semibold small`}
-      >
-        {article.points} like{article.points !== 1 ? "s" : ""}
+      <span className={`${article.liked ? "font-semibold" : ""} text-gray-600`}>
+        {article.points}
       </span>
     </Button>
   );

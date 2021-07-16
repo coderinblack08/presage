@@ -2,12 +2,10 @@ import { EditorContent, useEditor } from "@tiptap/react";
 import { format } from "date-fns";
 import { GetServerSideProps } from "next";
 import { NextSeo } from "next-seo";
-import Link from "next/link";
 import React, { useEffect } from "react";
-import { AddUser, Bookmark, Heart } from "react-iconly";
+import { MdBookmarkBorder, MdShare } from "react-icons/md";
 import { useQuery } from "react-query";
 import { Button } from "../../components/Button";
-import { Input } from "../../components/Input";
 import { Layout } from "../../components/Layout";
 import { Article } from "../../lib/types";
 import { CommentSection } from "../../modules/article/CommentSection";
@@ -37,45 +35,39 @@ const ArticlePage: React.FC<{ id: string }> = ({ id }) => {
   const { data: article, isFetching } = useQuery<Article>(`/articles/${id}`);
 
   return (
-    <Layout>
+    <Layout className="py-4 md:py-6 lg:py-8">
       <NextSeo title={article?.title} />
       {!article || isFetching ? (
         <div className="spinner" />
       ) : (
-        <div className="flex flex-col lg:flex-row items-start space-x-0 lg:space-x-5">
-          <main className="p-10 rounded-lg bg-white shadow w-full">
-            <div className="flex items-center space-x-4 mb-6">
+        <div className="flex items-start space-y-8">
+          <main className="max-w-4xl mx-auto">
+            <div className="flex items-center space-x-9 mb-5">
               <LikeButton article={article} />
               <Button
-                color="gray"
-                size="small"
-                icon={
-                  <div className="scale-80">
-                    <AddUser set="bold" size="small" />
-                  </div>
-                }
+                color="transparent"
+                size="none"
+                icon={<MdShare className="w-6 h-6 text-gray-600" />}
                 noAnimate
               >
-                <span className="font-semibold small">Refer (+1 reward)</span>
+                <span className="text-gray-600">0</span>
               </Button>
               <Button
-                color="gray"
-                size="small"
-                icon={
-                  <div className="scale-80">
-                    <Bookmark set="bold" size="small" />
-                  </div>
-                }
+                color="transparent"
+                size="none"
+                icon={<MdBookmarkBorder className="w-6 h-6 text-gray-600" />}
                 noAnimate
-              />
+              >
+                <span className="text-gray-600">0</span>
+              </Button>
             </div>
             <h3>{article.title}</h3>
-            <div className="flex items-center mt-4">
+            <div className="flex items-center mt-2">
               <div className="flex items-center space-x-3 pr-4">
                 <img
                   src={article.user.profilePicture}
                   alt={article.user.displayName}
-                  className="w-8 h-8 rounded-full"
+                  className="w-7 h-7 rounded-full"
                 />
                 <p className="font-bold text-gray-800">
                   {article.user.displayName}
@@ -88,31 +80,16 @@ const ArticlePage: React.FC<{ id: string }> = ({ id }) => {
               </p>
             </div>
             <div className="mt-8">
-              <RenderArticle article={article} />
+              <article
+                className="prose w-full max-w-full"
+                dangerouslySetInnerHTML={{ __html: article.body }}
+              />
+              {/* <RenderArticle article={article} /> */}
+            </div>
+            <div className="mt-10">
+              <CommentSection article={article} />
             </div>
           </main>
-          <div className="lg:max-w-sm xl:max-w-md w-full space-y-5 my-5 lg:my-0">
-            <aside className="bg-white rounded-lg p-4 shadow">
-              <Link href="/u/[username]" as={`/u/${article.user.username}`}>
-                <a className="flex items-center space-x-4">
-                  <img
-                    src={article.user.profilePicture}
-                    alt={article.user.displayName}
-                    className="w-14 h-14 rounded-full"
-                  />
-                  <div>
-                    <p className="font-bold">{article.user.displayName}</p>
-                    <p className="text-gray-500">@{article.user.username}</p>
-                  </div>
-                </a>
-              </Link>
-              <p className="mt-5">{article.user.bio}</p>
-              <Button size="large" className="mt-5 w-full">
-                Follow
-              </Button>
-            </aside>
-            <CommentSection article={article} />
-          </div>
         </div>
       )}
     </Layout>

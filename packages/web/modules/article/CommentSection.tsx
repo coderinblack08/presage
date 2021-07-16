@@ -13,24 +13,17 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ article }) => {
   const { data: comments } = useQuery<Comment[]>(`/comments/${article.id}`);
 
   return (
-    <aside className="bg-white rounded-lg p-4 shadow">
+    <aside>
       <h6 className="font-bold">All Comments</h6>
-      <div className="relative mt-3">
-        <Input
-          className="pb-14"
-          placeholder="Join the discussion"
-          textarea
-          gray
-        />
+      <div className="relative mt-2.5">
+        <Input className="pb-14" placeholder="Join the discussion" textarea />
         <div className="absolute bottom-0 right-0 mb-4 mx-2">
-          <Button color="white" disabled>
-            Send
-          </Button>
+          <Button disabled>Send</Button>
         </div>
       </div>
-      <ul className="divide-y divide-gray-200">
+      <ul>
         {comments?.map((comment) => (
-          <li className="py-6 px-2" key={comment.id}>
+          <li className="py-6" key={comment.id}>
             <div className="flex items-center space-x-3">
               <img
                 src={comment.user.profilePicture}

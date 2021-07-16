@@ -89,24 +89,28 @@ router.patch(
   "/:id",
   isAuth(true),
   async (req: Request<{ id: string }>, res) => {
-    req.body.body = sanitizeHtml(req.body.body, {
-      ...sanitizeHtml.defaults,
-      allowedTags: ["img", ...sanitizeHtml.defaults.allowedTags],
-      allowedAttributes: {
-        img: ["src", "align"],
-        ...sanitizeHtml.defaults.allowedAttributes,
-      },
-      allowedSchemesByTag: {
-        img: ["http", "https"],
-        ...sanitizeHtml.defaults.allowedSchemesByTag,
-      },
-    });
+    req.body.body = req.body.body
+      ? sanitizeHtml(req.body.body, {
+          ...sanitizeHtml.defaults,
+          allowedTags: ["img", ...sanitizeHtml.defaults.allowedTags],
+          allowedAttributes: {
+            img: ["src", "align"],
+            ...sanitizeHtml.defaults.allowedAttributes,
+          },
+          allowedSchemesByTag: {
+            img: ["http", "https"],
+            ...sanitizeHtml.defaults.allowedSchemesByTag,
+          },
+        })
+      : null;
+    const updateData = { ...req.body };
+    if (req.body.body) {
+      updateData.readingTime = readingTime(req.body.body).text;
+    }
+
     const article = await Article.update(
       { id: req.params.id, userId: req.userId },
-      {
-        ...req.body,
-        readingTime: req.body.body ? readingTime(req.body.body).text : null,
-      }
+      updateData
     );
     res.json(article.raw);
   }
@@ -274,6 +278,7 @@ router.get("/explore", isAuth(), async (req, res) => {
     .createQueryBuilder("article")
     .leftJoinAndSelect("article.tags", "tags")
     .leftJoinAndSelect("article.user", "user")
+    .leftJoinAndSelect("article.journal", "journal")
     .leftJoinAndSelect("article.likes", "likes", 'likes."userId" = :user', {
       user: req.userId,
     })
@@ -299,7 +304,7 @@ router.get(
     if (!req.params.id) res.sendStatus(500);
     try {
       const article = await Article.findOne(req.params.id, {
-        relations: ["user"],
+        relations: ["user", "journal"],
       });
       // let comments = await getConnection()
       //   .getRepository(Comment)

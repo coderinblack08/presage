@@ -124,6 +124,7 @@ router.get(
       .createQueryBuilder("article")
       .leftJoinAndSelect("article.tags", "tags")
       .leftJoinAndSelect("article.user", "user")
+      .leftJoinAndSelect("article.journal", "journal")
       .leftJoinAndSelect("article.likes", "likes", 'likes."userId" = :user', {
         user: req.userId,
       })

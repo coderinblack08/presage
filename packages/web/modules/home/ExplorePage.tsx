@@ -23,16 +23,13 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({}) => {
         <div className="h-5 border-r border-gray-300" />
         <nav className="flex space-x-1.5 items-center ml-5">
           <Button color="white" size="small">
-            <span className="font-bold">Recommended</span>
+            <span className="font-bold">Articles</span>
           </Button>
           <Button color="transparent" size="small">
-            <span className="text-gray-600">Recent</span>
+            <span className="text-gray-600">Journals</span>
           </Button>
           <Button color="transparent" size="small">
-            <span className="text-gray-600">Liked</span>
-          </Button>
-          <Button color="transparent" size="small">
-            <span className="text-gray-600">Replied</span>
+            <span className="text-gray-600">Users</span>
           </Button>
         </nav>
       </div>
