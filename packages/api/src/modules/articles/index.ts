@@ -50,32 +50,6 @@ router.post("/like", isAuth(true), async (req, res) => {
   });
 });
 
-router.get("/my-journals", isAuth(true), async (req, res) => {
-  const journals = await Journal.find({ where: { userId: req.userId } });
-  res.json(journals);
-});
-
-router.post("/journal", isAuth(true), async (req, res) => {
-  const pictures = [
-    "magenta-purple",
-    "orange",
-    "plum-fuchsia",
-    "purple-orange-sky",
-    "rosy-pink",
-    "yellow-lime",
-  ];
-  const journal = await Journal.create({
-    user: { id: req.userId },
-    name: req.body.name,
-    description: req.body.description,
-    picture: `http://localhost:3000/profile-picture/${
-      pictures[Math.floor(Math.random() * pictures.length)]
-    }.jpeg`,
-  }).save();
-  console.log(journal);
-  res.json(journal);
-});
-
 router.post("/", isAuth(true), async (req, res) => {
   const article = await Article.create({
     title: "Untitled",
@@ -259,7 +233,8 @@ router.delete(
 
 router.get("/", isAuth(), async (req, res) => {
   const query: string = (req.query as any).query;
-  const qb = getConnection()
+  const journalId: string = (req.query as any).journalId;
+  let qb = getConnection()
     .getRepository(Article)
     .createQueryBuilder("article")
     .leftJoinAndSelect("article.tags", "tags")
@@ -272,24 +247,33 @@ router.get("/", isAuth(), async (req, res) => {
   let data: Article[];
 
   if (query) {
-    data = await qb
+    qb = qb
       .where(
         "article.document @@ plainto_tsquery(:query) and article.published = true",
         {
           query: query,
         }
       )
-      .orderBy("ts_rank(article.document, plainto_tsquery(:query))", "DESC")
-      .limit(10)
-      .getMany();
-  } else {
+      .orderBy("ts_rank(article.document, plainto_tsquery(:query))", "DESC");
+  }
+
+  if (journalId) {
     data = await qb
-      .where("article.published = true")
+      .where('article.published = true and article."journalId" = :journal', {
+        journal: journalId,
+      })
       .orderBy('article."createdAt"', "DESC")
       .limit(10)
       .getMany();
   }
 
+  if (!query || !journalId) {
+    qb = qb
+      .where("article.published = true")
+      .orderBy('article."createdAt"', "DESC");
+  }
+
+  data = await qb.limit(10).getMany();
   res.json(
     data.map((x) => {
       const y: any = { ...x, liked: x.likes.length === 1 };

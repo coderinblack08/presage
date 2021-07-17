@@ -11,6 +11,7 @@ import { createConnection } from "typeorm";
 import { isDev } from "./lib/constants";
 import articlesRouter from "./modules/articles";
 import authRouter from "./modules/auth";
+import journalRouter from "./modules/journals";
 import commentRouter from "./modules/comment";
 import followRouter from "./modules/follow";
 
@@ -42,6 +43,7 @@ async function main() {
   app.use("/", authRouter);
   app.use("/", followRouter);
   app.use("/articles", articlesRouter);
+  app.use("/journals", journalRouter);
   app.use("/comments", commentRouter);
 
   const server = http.createServer(app);

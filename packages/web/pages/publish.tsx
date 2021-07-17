@@ -14,9 +14,7 @@ import { JournalNavbar } from "../modules/draft/JournalNavbar";
 import { useNewDraft } from "../modules/draft/useNewDraft";
 
 const Publish: React.FC = () => {
-  const { data: journals, isFetching } = useQuery<Journal[]>(
-    `/articles/my-journals`
-  );
+  const { data: journals, isFetching } = useQuery<Journal[]>(`/journals/me`);
   const router = useRouter();
   const journalId = router.query.journalId as string;
   const newDraft = useNewDraft();
@@ -78,11 +76,7 @@ const Publish: React.FC = () => {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery(
-    `/articles/my-journals`,
-    ssrFetcher(context.req.cookies.jid)
-  );
-  await queryClient.prefetchQuery(
-    `/articles/my-journals`,
+    `/journals/me`,
     ssrFetcher(context.req.cookies.jid)
   );
 

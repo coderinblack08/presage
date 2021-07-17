@@ -58,7 +58,7 @@ const ArticlePage: React.FC<{ id: string }> = ({ id }) => {
   };
 
   return (
-    <Layout article={article} className="py-6 sm:py-8 md:py-12">
+    <Layout article={article} className="py-6">
       <NextSeo
         title={article.title}
         description=""
@@ -87,7 +87,7 @@ const ArticlePage: React.FC<{ id: string }> = ({ id }) => {
       />
       <div className="flex items-start space-y-8">
         <main className="max-w-4xl mx-auto">
-          <h3 className="h4 sm:h3">{article.title}</h3>
+          <h3 className="h4 md:h3">{article.title}</h3>
           <p className="text-gray-600 mt-1">
             {format(new Date(article.createdAt), "MMMM dd, yyyy")} ·{" "}
             {article.readingTime}

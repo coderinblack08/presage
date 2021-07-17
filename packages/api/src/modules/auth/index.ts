@@ -94,14 +94,16 @@ router.get(
   })
 );
 
+const options = {
+  httpOnly: true,
+  domain: isDev() ? undefined : ".joinpresage.com",
+};
+
 router.get(
   "/auth/google/callback",
   passport.authenticate("google", { session: false }),
   (req: any, res) => {
-    res.cookie("jid", req.user.accessToken, {
-      httpOnly: true,
-      domain: isDev() ? undefined : ".joinpresage.com",
-    });
+    res.cookie("jid", req.user.accessToken, options);
     res.redirect("http://localhost:3000/?authRedirect=true");
   }
 );
@@ -156,5 +158,10 @@ router.get(
     }
   }
 );
+
+router.post("/logout", isAuth(true), (_, res) => {
+  res.clearCookie("jid", options);
+  res.send("Logged out successfully");
+});
 
 export default router;
