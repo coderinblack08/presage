@@ -1,11 +1,13 @@
+import { GetServerSideProps } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import { useQuery } from "react-query";
+import { QueryClient, useQuery } from "react-query";
+import { dehydrate } from "react-query/hydration";
 import { Button } from "../components/Button";
 import { Layout } from "../components/Layout";
-import { Select } from "../components/Select";
+import { ssrFetcher } from "../lib/fetcher";
 import { Journal } from "../lib/types";
 import { DraftList } from "../modules/draft/DraftList";
 import { JournalNavbar } from "../modules/draft/JournalNavbar";
@@ -71,6 +73,24 @@ const Publish: React.FC = () => {
       </div>
     </Layout>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const queryClient = new QueryClient();
+  await queryClient.prefetchQuery(
+    `/articles/my-journals`,
+    ssrFetcher(context.req.cookies.jid)
+  );
+  await queryClient.prefetchQuery(
+    `/articles/my-journals`,
+    ssrFetcher(context.req.cookies.jid)
+  );
+
+  return {
+    props: {
+      dehydratedState: dehydrate(queryClient),
+    },
+  };
 };
 
 export default Publish;

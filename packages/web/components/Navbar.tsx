@@ -117,24 +117,7 @@ export const Navbar: React.FC<NavbarProps> = ({ isDraft = false }) => {
           </a>
         )}
         {me ? (
-          <div className="flex item-center space-x-6">
-            <div className="flex items-center flex-grow-0">
-              <Button
-                size="small"
-                color="white"
-                icon={
-                  <div className="scale-80">
-                    <TicketStar set="bulk" />
-                  </div>
-                }
-              >
-                <span className="text-base font-bold">
-                  0 <span className="text-gray-600">Referrals</span>
-                </span>
-              </Button>
-            </div>
-            <UserDropdown />
-          </div>
+          <UserDropdown />
         ) : (
           <a href="http://localhost:4000/auth/google">
             <Button rounded>Login</Button>

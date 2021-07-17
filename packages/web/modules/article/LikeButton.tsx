@@ -1,5 +1,4 @@
 import React from "react";
-import { Heart } from "react-iconly";
 import { MdFavorite, MdFavoriteBorder } from "react-icons/md";
 import { useMutation, useQueryClient } from "react-query";
 import { Button } from "../../components/Button";
