@@ -9,8 +9,8 @@ export interface User {
   followingCount: number;
   isFollowing?: boolean;
   articles?: Article[];
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Article {
@@ -28,8 +28,8 @@ export interface Article {
   journal: Journal;
   comments: Comment[];
   liked: boolean | null;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Comment {
@@ -39,8 +39,8 @@ export interface Comment {
   articleId: string;
   userId: string;
   path: string[];
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Tag {
