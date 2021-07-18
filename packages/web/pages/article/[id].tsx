@@ -87,7 +87,7 @@ const ArticlePage: React.FC<{ id: string }> = ({ id }) => {
       />
       <div className="flex items-start space-y-8">
         <main className="max-w-4xl mx-auto">
-          <h3 className="h4 md:h3">{article.title}</h3>
+          <h3 className="h4 sm:h3">{article.title}</h3>
           <p className="text-gray-600 mt-1">
             {format(new Date(article.createdAt), "MMMM dd, yyyy")} ·{" "}
             {article.readingTime}
@@ -102,7 +102,7 @@ const ArticlePage: React.FC<{ id: string }> = ({ id }) => {
           <div className="mt-10 md:mt-12">
             <CommentSection article={article} />
           </div>
-          <div className="flex items-end justify-between w-full max-w-4xl fixed bottom-0 py-10 bg-gray-100">
+          <div className="px-5 md:px-8 flex items-end justify-between w-full max-w-4xl fixed bottom-0 mx-auto inset-x-0 py-10 bg-gray-100">
             <Link href="/">
               <a className="block">
                 <p className="text-gray-500 small">Published on</p>
