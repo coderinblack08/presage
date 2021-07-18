@@ -38,9 +38,12 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
                 {article.user.displayName}
               </p>
               <p className="small text-gray-500 leading-none mt-2">
-                {formatDistanceToNow(new Date(article.createdAt), {
-                  addSuffix: true,
-                }).replace("about ", "")}
+                {formatDistanceToNow(
+                  new Date(article.publishedDate || article.createdAt),
+                  {
+                    addSuffix: true,
+                  }
+                ).replace("about ", "")}
               </p>
             </div>
           </div>

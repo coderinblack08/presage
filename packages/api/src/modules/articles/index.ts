@@ -4,7 +4,6 @@ import readingTime from "reading-time";
 import sanitizeHtml from "sanitize-html";
 import { FindConditions, getConnection } from "typeorm";
 import { Article } from "../../entities/Article";
-import { Journal } from "../../entities/Journal";
 import { Like } from "../../entities/Like";
 import { Tag } from "../../entities/Tag";
 import { isAuth } from "../auth/isAuth";
@@ -164,6 +163,7 @@ router.post(
       { id: req.params.id, userId: req.userId },
       {
         published: true,
+        publishedDate: new Date(),
       }
     );
     res.send(true);

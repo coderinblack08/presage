@@ -58,7 +58,7 @@ const ArticlePage: React.FC<{ id: string }> = ({ id }) => {
   };
 
   return (
-    <Layout article={article} className="py-6">
+    <Layout article={article} className="py-6 lg:py-8">
       <NextSeo
         title={article.title}
         description=""
@@ -68,7 +68,7 @@ const ArticlePage: React.FC<{ id: string }> = ({ id }) => {
           url: seo.url,
           type: "article",
           article: {
-            publishedTime: article.createdAt,
+            publishedTime: article.publishedDate || article.createdAt,
             modifiedTime: article.updatedAt,
             authors: [`https://joinpresage.com/u/${article.user.username}`],
             tags: article.tags.map((tag) => tag.name),
@@ -80,7 +80,7 @@ const ArticlePage: React.FC<{ id: string }> = ({ id }) => {
         url={seo.url}
         title={article.title}
         images={seo.articles.map((x) => x.url)}
-        datePublished={article.createdAt}
+        datePublished={article.publishedDate || article.createdAt}
         dateModified={article.updatedAt}
         authorName={article.user.displayName}
         description=""
@@ -89,8 +89,11 @@ const ArticlePage: React.FC<{ id: string }> = ({ id }) => {
         <main className="max-w-4xl mx-auto">
           <h3 className="h4 sm:h3">{article.title}</h3>
           <p className="text-gray-600 mt-1">
-            {format(new Date(article.createdAt), "MMMM dd, yyyy")} ·{" "}
-            {article.readingTime}
+            {format(
+              new Date(article.publishedDate || article.createdAt),
+              "MMMM dd, yyyy"
+            )}{" "}
+            · {article.readingTime}
           </p>
           <div className="mt-5">
             <article

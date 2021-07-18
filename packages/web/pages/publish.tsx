@@ -75,10 +75,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const journals = queryClient.getQueryData<Journal[]>("/journals/me");
 
   if (!context.query.journalId && journals) {
-    context.res.setHeader("location", `/publish?journalId=${journals[0].id}`);
-    context.res.statusCode = 302;
-    context.res.end();
-    return { props: {} };
+    return {
+      redirect: {
+        destination: `/publish?journalId=${journals[0].id}`,
+        permanent: false,
+      },
+    };
   }
 
   return {
