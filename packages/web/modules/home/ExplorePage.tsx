@@ -13,12 +13,13 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({}) => {
   const [actualQuery, setActualQuery] = useState("");
   const [oldArticles, setOldArticles] = useState<Article[] | undefined>([]);
   const { data: articles, isFetching } = useQuery<Article[]>(
-    `/articles?${actualQuery ? `query=${actualQuery}` : ""}`
+    `/articles${actualQuery ? `?query=${actualQuery}` : ""}`
   );
 
   return (
     <div className="py-5 md:py-8">
       <h4>Your Curated Feed</h4>
+      {`/articles?${actualQuery ? `query=${actualQuery}` : ""}`}
       <p className="text-gray-600 mt-1">
         Did you know? — Select your favorite tags to add them as filters
       </p>
@@ -59,7 +60,7 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({}) => {
         </nav>
       </div>
       <main className="mt-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {(isFetching ? oldArticles : articles)?.map((article) => (
             <ArticleCard key={article.id} article={article} />
           ))}

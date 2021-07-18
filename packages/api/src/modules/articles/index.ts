@@ -267,7 +267,7 @@ router.get("/", isAuth(), async (req, res) => {
       .getMany();
   }
 
-  if (!query || !journalId) {
+  if (!query && !journalId) {
     qb = qb
       .where("article.published = true")
       .orderBy('article."createdAt"', "DESC");

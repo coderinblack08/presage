@@ -1,9 +1,9 @@
 import { GetServerSideProps } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useEffect } from "react";
+import React from "react";
 import toast, { Toaster } from "react-hot-toast";
-import { QueryClient, useQuery } from "react-query";
+import { QueryClient } from "react-query";
 import { dehydrate } from "react-query/hydration";
 import { Button } from "../components/Button";
 import { Layout } from "../components/Layout";
@@ -14,16 +14,9 @@ import { JournalNavbar } from "../modules/draft/JournalNavbar";
 import { useNewDraft } from "../modules/draft/useNewDraft";
 
 const Publish: React.FC = () => {
-  const { data: journals, isFetching } = useQuery<Journal[]>(`/journals/me`);
   const router = useRouter();
   const journalId = router.query.journalId as string;
   const newDraft = useNewDraft();
-
-  useEffect(() => {
-    if (!isFetching && journals?.length && !journalId) {
-      router.push(`/publish?journalId=${journals[0].id}`);
-    }
-  }, [journals, isFetching, journalId, router]);
 
   return (
     <Layout className="py-5 md:py-8">
@@ -76,9 +69,17 @@ const Publish: React.FC = () => {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery(
-    `/journals/me`,
+    "/journals/me",
     ssrFetcher(context.req.cookies.jid)
   );
+  const journals = queryClient.getQueryData<Journal[]>("/journals/me");
+
+  if (!context.query.journalId && journals) {
+    context.res.setHeader("location", `/publish?journalId=${journals[0].id}`);
+    context.res.statusCode = 302;
+    context.res.end();
+    return { props: {} };
+  }
 
   return {
     props: {
