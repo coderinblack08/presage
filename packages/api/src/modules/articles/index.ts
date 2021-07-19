@@ -96,7 +96,7 @@ router.patch(
       {
         body: body,
         bodyJson: req.body.body,
-        readingTime: readingTime(req.body.body).text,
+        readingTime: readingTime(body).text,
       }
     );
     res.json(article.raw);
@@ -177,7 +177,7 @@ router.post(
       { id: req.params.id, userId: req.userId },
       {
         published: true,
-        publishedDate: new Date(),
+        publishedDate: new Date().toUTCString(),
       }
     );
     res.send(true);

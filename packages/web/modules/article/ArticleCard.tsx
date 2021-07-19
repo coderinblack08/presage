@@ -1,4 +1,4 @@
-import { formatDistanceToNow } from "date-fns";
+import { addMinutes, format, formatDistanceToNow } from "date-fns";
 import Link from "next/link";
 import React from "react";
 import {
@@ -16,6 +16,8 @@ interface ArticleCardProps {
 }
 
 export const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
+  const date = new Date(article.publishedDate || article.createdAt);
+
   return (
     <Link href="/article/[id]" as={`/article/${article.id}`}>
       <a className="flex flex-col justify-between bg-white rounded-xl shadow hover:shadow-md p-6 hover:-translate-y-1 transition">
@@ -38,12 +40,9 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
                 {article.user.displayName}
               </p>
               <p className="small text-gray-500 leading-none mt-2">
-                {formatDistanceToNow(
-                  new Date(article.publishedDate || article.createdAt),
-                  {
-                    addSuffix: true,
-                  }
-                ).replace("about ", "")}
+                {formatDistanceToNow(date, {
+                  addSuffix: true,
+                }).replace("about ", "")}
               </p>
             </div>
           </div>

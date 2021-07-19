@@ -1,4 +1,5 @@
 import { formatDistanceToNow } from "date-fns";
+import { addMinutes } from "date-fns";
 import React from "react";
 import { useQuery } from "react-query";
 import { Button } from "../../components/Button";
@@ -35,9 +36,15 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ article }) => {
             <p className="text-gray-600 mt-2">{comment.message}</p>
             <div className="flex items-center mt-2">
               <p className="text-gray-500 pr-4">
-                {formatDistanceToNow(new Date(comment.createdAt), {
-                  addSuffix: true,
-                }).replace("about ", "")}
+                {formatDistanceToNow(
+                  addMinutes(
+                    new Date(comment.createdAt),
+                    new Date(comment.createdAt).getTimezoneOffset()
+                  ),
+                  {
+                    addSuffix: true,
+                  }
+                ).replace("about ", "")}
               </p>
               <div className="border-r border-gray-200 h-4" />
               <a href="#" className="font-bold text-gray-500 pl-4">

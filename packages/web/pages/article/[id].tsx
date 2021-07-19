@@ -5,7 +5,7 @@ import { BlogJsonLd, NextSeo } from "next-seo";
 import Link from "next/link";
 import React, { useEffect } from "react";
 import { MdBookmarkBorder, MdShare } from "react-icons/md";
-import { QueryClient, useQuery, UseQueryResult } from "react-query";
+import { QueryClient } from "react-query";
 import { dehydrate } from "react-query/hydration";
 import { Button } from "../../components/Button";
 import { Layout } from "../../components/Layout";
