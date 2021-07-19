@@ -58,7 +58,7 @@ const ArticlePage: React.FC<{ id: string }> = ({ id }) => {
   };
 
   return (
-    <Layout article={article} className="py-6 lg:py-8">
+    <Layout article={article} className="py-6 lg:py-8 !pb-40">
       <NextSeo
         title={article.title}
         description=""
@@ -105,7 +105,7 @@ const ArticlePage: React.FC<{ id: string }> = ({ id }) => {
           <div className="mt-10 md:mt-12 lg:mt-18">
             <CommentSection article={article} />
           </div>
-          <div className="px-5 md:px-8 flex items-end justify-between w-full max-w-4xl fixed bottom-0 mx-auto inset-x-0 py-10 bg-gray-100">
+          <div className="px-5 md:px-8 flex items-end justify-between w-full max-w-4xl fixed bottom-0 mx-auto inset-x-0 py-10 bg-gray-100/75 backdrop-blur-lg">
             <Link href="/">
               <a className="block">
                 <p className="text-gray-500 small">Published on</p>
