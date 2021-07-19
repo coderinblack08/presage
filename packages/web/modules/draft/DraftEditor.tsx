@@ -25,38 +25,21 @@ export const DraftEditor: React.FC<DraftEditorProps> = ({ id }) => {
     return <div className="spinner w-auto" />;
   }
 
-  async function updatePublishedCache(published: boolean) {
-    queryClient.setQueryData<Article>(
-      `/articles/draft/${id}`,
-      (old) => ({ ...old, published } as any)
-    );
-    queryClient.setQueryData<Article[]>(`/articles/drafts`, (old) => {
-      if (old) {
-        const idx = old?.findIndex((v) => v.id === id);
-        old[idx] = { ...old[idx], published };
-        return old;
-      }
-      return [];
-    });
-  }
-
   return (
     <Formik
       initialValues={{
         title: draft?.title || "",
-        body: draft?.body || null,
+        body: draft?.bodyJson || null,
       }}
       validationSchema={yup.object().shape({
         title: yup.string().max(100).required(),
-        body: yup.string().nullable(),
+        body: yup.object().nullable(),
       })}
       enableReinitialize
       onSubmit={async ({ title, body }, { setSubmitting }) => {
-        const { bodyJson } = useEditorStore.getState();
         const requestBody: Partial<Article> = {};
         if (title !== draft.title) requestBody.title = title;
-        if (!isEqual(body, draft.body)) requestBody.body = body;
-        if (!isEqual(bodyJson, draft.bodyJson)) requestBody.bodyJson = bodyJson;
+        if (!isEqual(body, draft.bodyJson)) requestBody.body = body;
 
         await mutateAsync([`/articles/${id}`, requestBody, "patch"], {
           onSuccess: () => {

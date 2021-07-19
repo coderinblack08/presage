@@ -1,4 +1,10 @@
 import { Request, Router } from "express";
+import Dropcursor from "@tiptap/extension-dropcursor";
+import Image from "@tiptap/extension-image";
+import Placeholder from "@tiptap/extension-placeholder";
+import Underline from "@tiptap/extension-underline";
+import StarterKit from "@tiptap/starter-kit";
+import { generateHTML } from "@tiptap/html";
 import createHttpError from "http-errors";
 import readingTime from "reading-time";
 import sanitizeHtml from "sanitize-html";
@@ -62,9 +68,16 @@ router.patch(
   "/:id",
   isAuth(true),
   async (req: Request<{ id: string }>, res) => {
-    const updateData = { ...req.body };
-    if ("body" in updateData) {
-      updateData.body = sanitizeHtml(req.body.body, {
+    const bodyJson = req.body.body;
+    const body = sanitizeHtml(
+      generateHTML(bodyJson, [
+        StarterKit,
+        Placeholder,
+        Underline,
+        Image,
+        Dropcursor,
+      ]),
+      {
         ...sanitizeHtml.defaults,
         allowedTags: ["img", ...sanitizeHtml.defaults.allowedTags],
         allowedAttributes: {
@@ -75,15 +88,16 @@ router.patch(
           img: ["http", "https"],
           ...sanitizeHtml.defaults.allowedSchemesByTag,
         },
-      });
-    }
-    if (req.body.body) {
-      updateData.readingTime = readingTime(req.body.body).text;
-    }
+      }
+    );
 
     const article = await Article.update(
       { id: req.params.id, userId: req.userId },
-      updateData
+      {
+        body: body,
+        bodyJson: req.body.body,
+        readingTime: readingTime(req.body.body).text,
+      }
     );
     res.json(article.raw);
   }

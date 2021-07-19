@@ -102,7 +102,7 @@ const ArticlePage: React.FC<{ id: string }> = ({ id }) => {
             />
             {/* <RenderArticle article={article} /> */}
           </div>
-          <div className="mt-10 md:mt-12">
+          <div className="mt-10 md:mt-12 lg:mt-18">
             <CommentSection article={article} />
           </div>
           <div className="px-5 md:px-8 flex items-end justify-between w-full max-w-4xl fixed bottom-0 mx-auto inset-x-0 py-10 bg-gray-100">

@@ -19,7 +19,6 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({}) => {
   return (
     <div className="py-5 md:py-8">
       <h4>Your Curated Feed</h4>
-      {`/articles?${actualQuery ? `query=${actualQuery}` : ""}`}
       <p className="text-gray-600 mt-1">
         Did you know? — Select your favorite tags to add them as filters
       </p>

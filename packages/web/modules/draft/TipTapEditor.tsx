@@ -2,8 +2,8 @@ import Dropcursor from "@tiptap/extension-dropcursor";
 import Image from "@tiptap/extension-image";
 import Placeholder from "@tiptap/extension-placeholder";
 import Underline from "@tiptap/extension-underline";
-import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import { EditorContent, useEditor } from "@tiptap/react";
 import { Field, useFormikContext } from "formik";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
@@ -43,8 +43,8 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
   const editor = useEditor({
     extensions,
     onUpdate: ({ editor }) => {
-      setFieldValue("body", editor.getHTML(), false);
-      useEditorStore.getState().setBody(editor.getJSON());
+      console.log(editor.getJSON());
+      setFieldValue("body", editor.getJSON(), false);
     },
     content: draft?.bodyJson || null,
     editorProps: {
