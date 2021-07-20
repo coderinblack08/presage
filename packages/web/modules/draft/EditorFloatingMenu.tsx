@@ -1,9 +1,9 @@
-import { Editor, FloatingMenu } from "@tiptap/react";
+import { FloatingMenu } from "@tiptap/react";
 import React from "react";
 import { MdCode, MdImage } from "react-icons/md";
 
 interface EditorFloatingMenuProps {
-  editor: Editor;
+  editor: any;
 }
 
 export const EditorFloatingMenu: React.FC<EditorFloatingMenuProps> = ({
@@ -18,7 +18,7 @@ export const EditorFloatingMenu: React.FC<EditorFloatingMenuProps> = ({
       <button
         className="px-4 py-1.5 focus:outline-none"
         onClick={() => {
-          (editor.chain().focus() as any).toggleCodeBlock().run();
+          editor.chain().focus().toggleCodeBlock().run();
         }}
       >
         <MdCode className="w-5 h-5" />

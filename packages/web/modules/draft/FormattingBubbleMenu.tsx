@@ -1,16 +1,16 @@
-import { BubbleMenu, Editor } from "@tiptap/react";
+import { BubbleMenu } from "@tiptap/react";
 import React from "react";
 import {
   AiOutlineBold,
   AiOutlineItalic,
-  AiOutlineUnderline,
   AiOutlineStrikethrough,
+  AiOutlineUnderline,
 } from "react-icons/ai";
 import { Button } from "../../components/Button";
 import { Select } from "../../components/Select";
 
 interface BubbleMenuProps {
-  editor: Editor;
+  editor: any;
 }
 
 export const FormattingBubbleMenu: React.FC<BubbleMenuProps> = ({ editor }) => {
