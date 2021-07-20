@@ -43,7 +43,6 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
   const editor = useEditor({
     extensions,
     onUpdate: ({ editor }) => {
-      console.log(editor.getJSON());
       setFieldValue("body", editor.getJSON(), false);
     },
     content: draft?.bodyJson || null,

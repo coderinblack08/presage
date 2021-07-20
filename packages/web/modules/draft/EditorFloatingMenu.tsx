@@ -18,7 +18,7 @@ export const EditorFloatingMenu: React.FC<EditorFloatingMenuProps> = ({
       <button
         className="px-4 py-1.5 focus:outline-none"
         onClick={() => {
-          editor.chain().focus().toggleCodeBlock().run();
+          (editor.chain().focus() as any).toggleCodeBlock().run();
         }}
       >
         <MdCode className="w-5 h-5" />
