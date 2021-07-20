@@ -87,7 +87,7 @@ const ArticlePage: React.FC<{ id: string }> = ({ id }) => {
         authorName={article.user.displayName}
         description=""
       />
-      <Layout article={article} className="py-5 md:py-6 lg:py-8">
+      <Layout article={article} className="py-5 md:py-6 lg:py-8 !pb-32">
         <div className="flex items-start space-y-8">
           <main className="max-w-4xl w-full mx-auto">
             <div>

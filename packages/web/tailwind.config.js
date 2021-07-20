@@ -67,6 +67,24 @@ module.exports = {
       scale: {
         80: "0.8",
       },
+      typography: (theme) => ({
+        DEFAULT: {
+          css: {
+            pre: {
+              backgroundColor: theme("colors.gray.800"),
+              padding: "1.5rem",
+              borderRadius: 8,
+              code: {
+                fontWeight: "700 !important",
+              },
+              "::selection": {
+                backgroundColor: theme("colors.gray.200"),
+                color: theme("colors.gray.800"),
+              },
+            },
+          },
+        },
+      }),
     },
   },
   variants: {

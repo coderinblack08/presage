@@ -72,6 +72,7 @@
   ::-moz-selection {
     @apply bg-gray-200;
   }
+
   ::selection {
     @apply bg-gray-200;
   }
@@ -91,26 +92,6 @@
 
 .ProseMirror img.ProseMirror-selectednode {
   @apply ring;
-}
-
-.prose pre code {
-  @apply font-bold;
-  font-size: 14px !important;
-}
-
-.ProseMirror pre {
-  background: #0c0d13;
-  color: #fff;
-  @apply font-mono;
-  padding: 1.5rem 1.75rem;
-  border-radius: 0.75rem;
-}
-
-.ProseMirror pre code {
-  color: inherit;
-  padding: 0;
-  background: none;
-  font-size: 0.8rem;
 }
 
 .hljs-comment,
