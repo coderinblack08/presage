@@ -31,6 +31,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ article }) => {
                 `/comments/${article.id}`,
                 (old) => (old ? [comment, ...old] : [comment])
               );
+              setMessage("");
             },
           });
         }}
@@ -48,35 +49,29 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ article }) => {
           </Button>
         </div>
       </form>
-      <ul>
+      <ul className="mt-8 space-y-10">
         {comments?.map((comment) => (
-          <li className="py-6" key={comment.id}>
+          <li key={comment.id}>
             <div className="flex items-center space-x-3">
               <img
                 src={comment.user.profilePicture}
                 alt={comment.user.displayName}
                 className="w-6 h-6 rounded-full object-cover object-center"
               />
-              <p className="font-bold">{comment.user.displayName}</p>
+              <div>
+                <span className="font-bold">{comment.user.displayName}</span> ·{" "}
+                <span className="text-gray-500 pr-4">
+                  {formatDistanceToNow(new Date(comment.createdAt), {
+                    addSuffix: true,
+                  }).replace("about ", "")}
+                </span>
+              </div>
             </div>
             <p className="text-gray-600 mt-2">{comment.message}</p>
-            <div className="flex items-center mt-2">
-              <p className="text-gray-500 pr-4">
-                {formatDistanceToNow(new Date(comment.createdAt), {
-                  addSuffix: true,
-                }).replace("about ", "")}
-              </p>
-              <div className="border-r border-gray-300 h-4" />
-              <a href="#" className="font-bold text-gray-500 pl-4">
-                Show Replies
-              </a>
-            </div>
+            <div className="flex items-center mt-2"></div>
           </li>
         ))}
       </ul>
-      {/* <a href="#" className="inline-block font-bold px-2 pb-1f">
-        Show More ↓
-      </a> */}
     </aside>
   );
 };

@@ -27,28 +27,28 @@ export const ArticleNavbar: React.FC<ArticleNavbarProps> = ({
     <nav className={lightGray ? "bg-gray-50" : "bg-gray-100"}>
       <div
         className={`flex items-center justify-between max-w-4xl ${
-          user ? "py-3 px-5 md:px-8 md:py-5" : ""
-        } ${article ? "p-5 md:p-8" : ""} mx-auto`}
+          article ? "py-6 md:py-8" : "py-4 md:py-5"
+        } px-5 md:px-8 mx-auto`}
       >
         {article ? (
           <Link href={`/u/${article.user.username}`}>
-            <a className="flex items-center space-x-5">
+            <a className="flex items-center space-x-4 sm:space-x-5">
               <div className="relative">
                 <img
                   src={article.journal.picture}
                   alt={article.journal.name}
-                  className="w-[3.125rem] h-[3.125rem] rounded-2xl"
+                  className="w-10 h-10 sm:w-12 sm:h-12 rounded-full"
                 />
                 <img
                   src={article.user.profilePicture}
                   alt={article.user.displayName}
-                  className="absolute -bottom-1.5 -right-1.5 ring-2 ring-gray-100 w-7 h-7 rounded-full"
+                  className="absolute -bottom-1 -right-1 sm:-bottom-1.5 sm:-right-1.5 ring-2 ring-gray-100 w-5 h-5 sm:w-6 sm:h-6 rounded-full"
                 />
               </div>
               <div className="-mb-2">
-                <h4 className="text-lg md:text-xl leading-normal">
+                <h6 className="text-base md:text-lg lg:text-xl leading-normal font-bold">
                   {article.user.displayName}&apos;s {article.journal.name}
-                </h4>
+                </h6>
                 <p className="text-gray-500 small md:text-sm mt-0.5">
                   @{article.user.username}
                 </p>

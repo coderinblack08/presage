@@ -17,7 +17,7 @@ export const Layout: React.FC<LayoutProps> = ({
   const { pathname } = useRouter();
 
   return (
-    <div>
+    <div className="min-h-screen">
       {article ? (
         <ArticleNavbar article={article} />
       ) : (
