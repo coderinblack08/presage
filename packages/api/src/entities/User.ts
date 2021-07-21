@@ -12,6 +12,7 @@ import {
 import { Article } from "./Article";
 import { Journal } from "./Journal";
 import { Like } from "./Like";
+import { Reward } from "./Reward";
 
 @Entity()
 export class User extends BaseEntity {
@@ -44,6 +45,9 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Journal, (like) => like.user)
   journals: Journal[];
+
+  @OneToMany(() => Reward, (reward) => reward.user)
+  rewards: Reward[];
 
   @ManyToMany(() => User, (user) => user.following)
   @JoinTable()

@@ -1,4 +1,5 @@
 require("dotenv-safe").config();
+import "reflect-metadata";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import express from "express";
@@ -6,7 +7,6 @@ import helmet from "helmet";
 import http from "http";
 import passport from "passport";
 import { join } from "path";
-import "reflect-metadata";
 import { createConnection } from "typeorm";
 import { isDev } from "./lib/constants";
 import articlesRouter from "./modules/articles";
@@ -27,6 +27,7 @@ async function main() {
   await conn.runMigrations();
 
   const app = express();
+  app.set("trust proxy", 1);
   app.use(helmet());
   app.use(cookieParser());
   app.use(express.json());
