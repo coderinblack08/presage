@@ -26,22 +26,31 @@ const UserPage: React.FC<
 
   return (
     <div>
-      <ArticleNavbar user={user} lightGray />
-      <header className="bg-gray-50 pt-4 md:pt-6 pb-12 md:pb-16 border-b">
+      <ArticleNavbar lightGray />
+      <header className="bg-white pt-4 md:pt-6 pb-12 md:pb-16">
         <div className="flex items-start space-x-6 md:space-x-8 max-w-4xl mx-auto px-5 md:px-8">
           <img
             src={user.profilePicture}
             alt={user.displayName}
             className="w-16 h-16 rounded-full"
           />
-          <div className="flex-shrink-0 w-full">
-            <h4>{user.displayName}</h4>
-            <p className="text-gray-600">@{user.username}</p>
-            <p className="text-gray-500 mt-2">
-              {user.followersCount} followers · {user.followingCount} following
+          <div className="w-full">
+            <div className="flex items-center">
+              <h4>{user.displayName}</h4>
+              <span className="text-gray-600 ml-2">@{user.username}</span>
+            </div>
+            <p className="text-gray-600 mt-0.5">
+              <span className="font-semibold">{user.followersCount}</span>{" "}
+              followers ·{" "}
+              <span className="font-semibold">{user.followingCount}</span>{" "}
+              following
             </p>
-            {user.bio && <p className="mt-4 text-gray-500">{user.bio}</p>}
-            <div className="mt-5">
+            {user.bio && (
+              <p className="mt-4 text-gray-600 font-normal leading-7">
+                {user.bio}
+              </p>
+            )}
+            <div className="mt-6">
               {me?.id === user.id ? (
                 <Button
                   size="small"
