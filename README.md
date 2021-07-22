@@ -8,6 +8,8 @@ A Medium alternative built for referral podcasts and blogs
 
 All packages (web, api, etc.) are under `packages/`. When starting the api, run `yarn watch` and `yarn dev`.
 
+If you get time out on `yarn`, you can resolve by using `yarn config set network-timeout 600000 -g`
+
 When contributing code, please checkout our [figma file](https://www.figma.com/file/CKMCjIqJq0Inwn6uFeSnor/Presage).
 
 ## Contact & Other Details
