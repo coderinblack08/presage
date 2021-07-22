@@ -32,8 +32,17 @@ router.patch(
   "/:id",
   isAuth(true),
   async (req: Request<{ id: string }>, res, next) => {
+    const reward = await Reward.findOne(req.params.id);
+    if (!reward) {
+      return next(createHttpError(404, "Reward not found"));
+    }
+    reward.name = req.body.name;
+    reward.description = req.body.description;
+    reward.points = req.body.points;
+    reward.link = req.body.link;
+    reward.type = req.body.type;
     try {
-      await validate(req.body, { skipMissingProperties: true });
+      await validate(reward, { skipMissingProperties: true });
     } catch (error) {
       return next(createHttpError(422, error));
     }
