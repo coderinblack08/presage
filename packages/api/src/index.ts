@@ -13,6 +13,7 @@ import articlesRouter from "./modules/articles";
 import authRouter from "./modules/auth";
 import journalRouter from "./modules/journals";
 import commentRouter from "./modules/comment";
+import rewardRouter from "./modules/reward";
 import followRouter from "./modules/follow";
 
 async function main() {
@@ -45,6 +46,7 @@ async function main() {
   app.use("/", followRouter);
   app.use("/articles", articlesRouter);
   app.use("/journals", journalRouter);
+  app.use("/rewards", rewardRouter);
   app.use("/comments", commentRouter);
 
   const server = http.createServer(app);

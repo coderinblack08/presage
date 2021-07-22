@@ -28,11 +28,28 @@ router.post("/", isAuth(true), async (req, res, next) => {
   }
 });
 
-router.get("/:userId", async (req, res, next) => {
+router.get("/", isAuth(true), async (req, res, next) => {
   try {
-    const rewards = await Reward.find({ where: { userId: req.params.userId } });
+    const rewards = await Reward.find({
+      where: { user: { id: req.userId } },
+      order: { points: "ASC" },
+    });
     res.json(rewards);
   } catch (error) {
     next(createHttpError(500, error));
   }
 });
+
+router.get("/:userId", async (req, res, next) => {
+  try {
+    const rewards = await Reward.find({
+      where: { user: { id: req.params.userId } },
+      order: { points: "ASC" },
+    });
+    res.json(rewards);
+  } catch (error) {
+    next(createHttpError(500, error));
+  }
+});
+
+export default router;

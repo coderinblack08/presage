@@ -51,7 +51,7 @@ export const DeleteDraftModal: React.FC<DeleteDraftModalProps> = ({
                       `/articles/draft/${id}`
                     );
                     queryClient.setQueryData<Article[]>(
-                      `/articles/drafts?journalId=${article?.journalId}&published=${article?.published}`,
+                      `/articles/drafts?journalId=${article?.journalId}`,
                       (old) => {
                         if (old) {
                           const index = old.findIndex((x) => x.id === id);

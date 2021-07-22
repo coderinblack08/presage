@@ -38,7 +38,7 @@ export const FormattingBubbleMenu: React.FC<BubbleMenuProps> = ({ editor }) => {
               .run();
           }}
           color="transparent"
-          className="border-none py-1.5"
+          className="border-none flex-shrink-0 w-36"
         >
           <option value={1}>Heading 1</option>
           <option value={2}>Heading 2</option>

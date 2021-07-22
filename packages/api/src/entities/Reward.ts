@@ -48,6 +48,9 @@ export class Reward extends BaseEntity {
   @Column("int")
   points: number;
 
+  @Column("int", { default: 0 })
+  claimed: number;
+
   @ManyToOne(() => User, (user) => user.rewards)
   user: User;
 

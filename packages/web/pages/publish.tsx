@@ -23,7 +23,16 @@ const Publish: React.FC = () => {
       <Toaster />
       <div className="max-w-3xl mx-auto">
         <h4>My Drafts</h4>
-        <div className="flex items-center justify-between mt-4 space-x-4">
+        <p className="text-gray-600 mt-1">
+          Are you looking to{" "}
+          <Link href="/rewards">
+            <a className="font-bold text-gray-900 hover:underline">
+              edit your rewards
+            </a>
+          </Link>
+          ?
+        </p>
+        <div className="flex items-center justify-between mt-6 space-x-4">
           {journalId && (
             <JournalNavbar
               currentJournal={journalId}
