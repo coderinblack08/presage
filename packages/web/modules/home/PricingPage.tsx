@@ -1,36 +1,70 @@
 import React, { useState } from "react";
-import { Search } from "react-iconly";
-import { useQuery } from "react-query";
-import { Button } from "../../components/Button";
-import { Input } from "../../components/Input";
-import { Article } from "../../lib/types";
-import { ArticleCard } from "../article/ArticleCard";
+
+import { PriceCard } from "./PriceCard";
 
 export const PricingPage = ({}) => {
+  const [price, setPrice] = useState("monthly");
+  const togglePrice = () => {
+    setPrice(price === "monthly" ? "yearly" : "monthly");
+  };
+
   return (
     <div className="py-5 md:py-8">
-      <h4>Your Curated Feed</h4>
-      <p className="text-gray-600 mt-1">
-        Did you know? — Select your favorite tags to add them as filters
+      <h3>Ready to start with Presage?</h3>
+      <p className="text-gray-600 my-2">
+        Presage is free for individuals. Level up by going pro!
       </p>
-      <div className="flex items-center mt-8">
-        <div className="items-center relative mr-5">
-          <div className="h-full mx-4 flex items-center pointer-events-none absolute top-0 left-0 text-gray-500">
-            <Search size="small" stroke="bold" />
+
+      <div className="flex">
+        <p className={`pr-2 ${price === "monthly" ? "" : "font-bold"}`}>
+          Monthly
+        </p>
+        <label className="flex items-center cursor-pointer">
+          <div onClick={togglePrice} className="relative">
+            <div className="block bg-gray-600 w-10 h-6 rounded-full"></div>
+            <div
+              className={
+                " absolute left-1 top-1 bg-white w-4 h-4 rounded-full " +
+                (price === "monthly"
+                  ? "translate-x-full transition bg-gray-400"
+                  : "translate-x-0 transition bg-white")
+              }
+            ></div>
           </div>
-        </div>
-        <div className="h-8 border-r border-gray-300" />
-        <nav className="flex space-x-1.5 items-center ml-5">
-          <Button color="white" size="small">
-            <span className="font-bold">Articles</span>
-          </Button>
-          <Button color="transparent" size="small">
-            <span className="text-gray-600">Journals</span>
-          </Button>
-          <Button color="transparent" size="small">
-            <span className="text-gray-600">Users</span>
-          </Button>
-        </nav>
+        </label>
+        <p className={`pl-2 ${price === "yearly" ? "" : "font-bold"}`}>
+          Annually
+        </p>
+      </div>
+
+      <div className="flex gap-5">
+        <PriceCard
+          features={[
+            "3 free journals",
+            "Publish unlimited articles",
+            "Read unlimited articles",
+            "Saved drafts for articles",
+            "Access to public API",
+          ]}
+          description="A platform for everyone of any skillset."
+          title="Free Forever"
+          priceYearly={0}
+          price={"monthly"}
+        />
+        <PriceCard
+          features={[
+            "Unlimited articles and journals",
+            "Access to sponsor market",
+            "Publish unlimited articles",
+            "Read unlimited articles",
+            "Saved drafts for articles",
+            "Access to public API",
+          ]}
+          description="For power users trying to get the most out of Presage."
+          title="Professionals"
+          priceYearly={price === "monthly" ? 5 : 50}
+          price={price}
+        />
       </div>
     </div>
   );
