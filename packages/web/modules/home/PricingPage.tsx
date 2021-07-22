@@ -1,12 +1,9 @@
 import React, { useState } from "react";
-
+import { Switch } from "@headlessui/react";
 import { PriceCard } from "./PriceCard";
 
 export const PricingPage = ({}) => {
-  const [price, setPrice] = useState("monthly");
-  const togglePrice = () => {
-    setPrice(price === "monthly" ? "yearly" : "monthly");
-  };
+  const [price, setPrice] = useState(false);
 
   return (
     <div className="py-5 md:py-8">
@@ -16,25 +13,22 @@ export const PricingPage = ({}) => {
       </p>
 
       <div className="flex">
-        <p className={`pr-2 ${price === "monthly" ? "" : "font-bold"}`}>
-          Monthly
-        </p>
-        <label className="flex items-center cursor-pointer">
-          <div onClick={togglePrice} className="relative">
-            <div className="block bg-gray-600 w-10 h-6 rounded-full"></div>
-            <div
-              className={
-                " absolute left-1 top-1 bg-white w-4 h-4 rounded-full " +
-                (price === "monthly"
-                  ? "translate-x-full transition bg-gray-400"
-                  : "translate-x-0 transition bg-white")
-              }
-            ></div>
-          </div>
-        </label>
-        <p className={`pl-2 ${price === "yearly" ? "" : "font-bold"}`}>
-          Annually
-        </p>
+        <p className={`pr-2 ${price ? "" : "font-bold"}`}>Monthly</p>
+        <Switch
+          checked={price}
+          onChange={setPrice}
+          className={
+            "relative focus:outline-none inline-flex items-center h-6 bg-gray-800 rounded-full w-11"
+          }
+        >
+          <span
+            className={`${
+              price ? "translate-x-6 " : "translate-x-1"
+            } inline-block w-4 h-4 transform transition bg-white rounded-full`}
+          />
+        </Switch>
+
+        <p className={`pl-2 ${!price ? "" : "font-bold"}`}>Annually</p>
       </div>
 
       <div className="flex gap-5">
@@ -62,8 +56,8 @@ export const PricingPage = ({}) => {
           ]}
           description="For power users trying to get the most out of Presage."
           title="Professionals"
-          priceYearly={price === "monthly" ? 5 : 50}
-          price={price}
+          priceYearly={price ? 5 : 50}
+          price={price ? "yearly" : "monthly"}
         />
       </div>
     </div>

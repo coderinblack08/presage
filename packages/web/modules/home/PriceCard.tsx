@@ -19,25 +19,31 @@ export const PriceCard: React.FC<FeatureCardProps> = ({
   priceYearly,
 }) => {
   return (
-    <article className="p-5 my-4 md:p-7 max-w-lg col-span-1 bg-white shadow rounded-lg">
-      <h6>{title}</h6>
-      <h3>
+    <article className="relative w-80 h-full p-5 my-4 md:p-7 max-w-lg col-span-1 bg-white shadow rounded-lg">
+      <h6 className="font-bold text-gray-600">{title}</h6>
+      <h4>
         ${priceYearly}/{price}
-      </h3>
+      </h4>
       <p className="text-gray-600 mt-1.5 font-normal">{description}</p>
-      <ul className="list-reset my-2">
+
+      <ul className=" inline-block mt-1 mb-12">
         {features.map((item) => (
           <div key="index" className="flex text-gray-600 my-1">
             <MdCheck className="my-auto mr-2" />
-            {item}
+            <p>{item}</p>
           </div>
         ))}
       </ul>
-      <Link href="/">
-        <Button size="small">
-          <span>Create free account</span>
-        </Button>
-      </Link>
+      <div className="justify-center ">
+        <Link href="/" passHref>
+          <Button
+            size="large"
+            className="w-72 m-3 justify-center mx-auto inset-x-0 bottom-0 absolute"
+          >
+            <span>Create free account</span>
+          </Button>
+        </Link>
+      </div>
     </article>
   );
 };
