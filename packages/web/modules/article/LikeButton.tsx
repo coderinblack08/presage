@@ -39,9 +39,9 @@ export const LikeButton: React.FC<LikeButtonProps> = ({ article }) => {
       onClick={updateCache}
       icon={
         article.liked ? (
-          <MdFavorite className="w-6 h-6 text-gray-600" />
+          <MdFavorite className="w-5 h-5 md:w-6 md:h-6 text-gray-600" />
         ) : (
-          <MdFavoriteBorder className="w-6 h-6 text-gray-600" />
+          <MdFavoriteBorder className="w-5 h-5 md:w-6 md:h-6 text-gray-600" />
         )
       }
       noAnimate

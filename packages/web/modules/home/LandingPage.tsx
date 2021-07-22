@@ -219,7 +219,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
           </article>
         </div>
       </section>
-      <div className="px-5 md:px-8 max-w-8xl mx-auto">
+      <div className="px-5 md:px-8 max-w-8xl mx-auto mt-16 sm:mt-36">
         <Footer />
       </div>
     </div>

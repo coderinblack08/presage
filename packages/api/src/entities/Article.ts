@@ -64,6 +64,9 @@ export class Article extends BaseEntity {
   @Column("tsvector", { select: false, nullable: true })
   document: any;
 
+  @Column("timestamp", { nullable: true })
+  publishedDate: Date | null;
+
   @CreateDateColumn()
   createdAt: Date;
 

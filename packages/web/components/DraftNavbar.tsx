@@ -2,7 +2,6 @@ import { useRouter } from "next/router";
 import React from "react";
 import { ArrowLeftSquare } from "react-iconly";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { Updater } from "react-query/types/core/utils";
 import { mutator } from "../lib/mutator";
 import { Article, User } from "../lib/types";
 import { DeleteDraftModal } from "../modules/draft/DeleteDraftModal";
@@ -23,7 +22,9 @@ const PublishButtons: React.FC<{ id: string }> = ({ id }) => {
       `/articles/draft/${id}`,
       (old) => ({ ...old, published } as any)
     );
-    queryClient.refetchQueries("/articles/drafts");
+    queryClient.refetchQueries(
+      `/articles/drafts?journalId=${draft?.journalId}`
+    );
   }
 
   return (

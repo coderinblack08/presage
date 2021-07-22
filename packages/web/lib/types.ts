@@ -28,6 +28,7 @@ export interface Article {
   journal: Journal;
   comments: Comment[];
   liked: boolean | null;
+  publishedDate: string | null;
   createdAt: string;
   updatedAt: string;
 }

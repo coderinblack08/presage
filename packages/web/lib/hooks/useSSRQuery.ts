@@ -1,17 +1,10 @@
-import { QueryKey, useQuery, UseQueryResult } from "react-query";
-import { Article } from "../types";
+import { useQuery, UseQueryResult } from "react-query";
 
-export const useSSRQuery = <
-  TQueryFnData = unknown,
-  TError = unknown,
-  TData = TQueryFnData,
-  TQueryKey extends QueryKey = QueryKey
->(
-  queryKey: TQueryKey
-) => {
-  const result = useQuery<Article>(queryKey) as UseQueryResult<
-    Article,
+export const useSSRQuery = <ReturnType = any>(queryKey: string) => {
+  return useQuery<ReturnType>(queryKey) as UseQueryResult<
+    ReturnType,
     unknown
-  > & { data: Article };
-  return result;
+  > & {
+    data: ReturnType;
+  };
 };

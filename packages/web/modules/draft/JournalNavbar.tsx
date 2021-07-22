@@ -19,7 +19,7 @@ export const JournalNavbar: React.FC<JournalNavbarProps> = ({
   currentJournal,
   updateJournal,
 }) => {
-  const { data: journals } = useQuery<Journal[]>(`/articles/my-journals`);
+  const { data: journals } = useQuery<Journal[]>(`/journals/me`);
   const [isOpen, setIsOpen] = useState(false);
   const queryClient = useQueryClient();
   const { mutateAsync } = useMutation(mutator);
@@ -58,14 +58,11 @@ export const JournalNavbar: React.FC<JournalNavbarProps> = ({
             description: yup.string().max(100),
           })}
           onSubmit={async (values) => {
-            console.log(values);
-
-            await mutateAsync(["/articles/journal", values, "post"], {
+            await mutateAsync(["/journals", values, "post"], {
               onSuccess: (data: Journal) => {
                 setIsOpen(false);
-                queryClient.setQueryData<Journal[]>(
-                  "/articles/my-journals",
-                  (old) => (old ? [...old, data] : [data])
+                queryClient.setQueryData<Journal[]>("/journals/me", (old) =>
+                  old ? [...old, data] : [data]
                 );
               },
             });

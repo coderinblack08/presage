@@ -7,12 +7,18 @@ class MyDocument extends Document {
         <Head>
           <link rel="preconnect" href="https://stijndv.com" />
           <link
-            rel="stylesheet"
-            href="https://stijndv.com/fonts/Eudoxus-Sans.css"
+            rel="preload"
+            href="/fonts/eudoxus-sans-var.woff2"
+            as="font"
+            type="font/woff2"
+            crossOrigin="anonymous"
           />
           <link
-            href="https://fonts.googleapis.com/css2?family=Inter&display=optional"
-            rel="stylesheet"
+            rel="preload"
+            href="/fonts/inter-var.woff2"
+            as="font"
+            type="font/woff2"
+            crossOrigin="anonymous"
           />
         </Head>
         <body>

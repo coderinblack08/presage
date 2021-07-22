@@ -1,4 +1,5 @@
 require("dotenv-safe").config();
+import "reflect-metadata";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import express from "express";
@@ -6,11 +7,11 @@ import helmet from "helmet";
 import http from "http";
 import passport from "passport";
 import { join } from "path";
-import "reflect-metadata";
 import { createConnection } from "typeorm";
 import { isDev } from "./lib/constants";
 import articlesRouter from "./modules/articles";
 import authRouter from "./modules/auth";
+import journalRouter from "./modules/journals";
 import commentRouter from "./modules/comment";
 import followRouter from "./modules/follow";
 
@@ -26,6 +27,7 @@ async function main() {
   await conn.runMigrations();
 
   const app = express();
+  app.set("trust proxy", 1);
   app.use(helmet());
   app.use(cookieParser());
   app.use(express.json());
@@ -42,6 +44,7 @@ async function main() {
   app.use("/", authRouter);
   app.use("/", followRouter);
   app.use("/articles", articlesRouter);
+  app.use("/journals", journalRouter);
   app.use("/comments", commentRouter);
 
   const server = http.createServer(app);

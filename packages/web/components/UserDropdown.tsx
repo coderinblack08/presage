@@ -2,7 +2,8 @@ import { Menu } from "@headlessui/react";
 import { useRouter } from "next/router";
 import React from "react";
 import { Logout, User as UserIcon } from "react-iconly";
-import { useQuery, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { mutator } from "../lib/mutator";
 import { User } from "../lib/types";
 import { Avatar } from "./Avatar";
 import { Dropdown, MenuItem } from "./Dropdown";
@@ -12,6 +13,7 @@ interface UserDropdownProps {}
 export const UserDropdown: React.FC<UserDropdownProps> = ({}) => {
   const { data: me } = useQuery<User>("/me");
   const router = useRouter();
+  const { mutateAsync } = useMutation(mutator);
   const queryClient = useQueryClient();
 
   return (
@@ -35,10 +37,13 @@ export const UserDropdown: React.FC<UserDropdownProps> = ({}) => {
             Profile
           </MenuItem>
           <MenuItem
-            onClick={() => {
-              localStorage.removeItem("access-token");
-              queryClient.clear();
-              router.reload();
+            onClick={async () => {
+              await mutateAsync(["/logout", {}, "post"], {
+                onSuccess: () => {
+                  queryClient.clear();
+                  router.reload();
+                },
+              });
             }}
             icon={
               <div className="scale-80">

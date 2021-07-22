@@ -24,6 +24,7 @@ router.get("/:id", async (req, res) => {
         id: comment ? comment.id : null,
       }
     )
+    .orderBy('comment."createdAt"', "DESC")
     .getMany();
   res.json(comments);
 });
