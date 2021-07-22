@@ -20,10 +20,13 @@ export const PriceCard: React.FC<FeatureCardProps> = ({
 }) => {
   return (
     <article className="relative w-80 h-full p-5 my-4 md:p-7 max-w-lg col-span-1 bg-white shadow rounded-lg">
-      <h6 className="font-bold text-gray-600">{title}</h6>
-      <h4>
-        ${priceYearly}/{price}
-      </h4>
+      <h6 className="font-bold  text-gray-600">{title}</h6>
+
+      <div className="flex ">
+        <h3 className="text-3xl font-bold leading-8">${priceYearly}</h3>
+        <h4 className="leading-8 mb-0 pb-0">/{price} </h4>
+      </div>
+
       <p className="text-gray-600 mt-1.5 font-normal">{description}</p>
 
       <ul className=" inline-block mt-1 mb-12">

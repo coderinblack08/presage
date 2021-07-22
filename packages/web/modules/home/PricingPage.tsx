@@ -12,7 +12,7 @@ export const PricingPage = ({}) => {
         Presage is free for individuals. Level up by going pro!
       </p>
 
-      <div className="flex">
+      <div className="flex mt-4 mb-9">
         <p className={`pr-2 ${price ? "" : "font-bold"}`}>Monthly</p>
         <Switch
           checked={price}
