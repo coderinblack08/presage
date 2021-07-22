@@ -1,8 +1,8 @@
 import { validate } from "class-validator";
-import { Router } from "express";
+import { Request, Router } from "express";
 import createHttpError from "http-errors";
-import { Reward } from "../../entities/Reward";
-import { User } from "../../entities/User";
+import { Reward } from "../../../entities/Reward";
+import { User } from "../../../entities/User";
 import { isAuth } from "../auth/isAuth";
 
 const router = Router();
@@ -27,6 +27,37 @@ router.post("/", isAuth(true), async (req, res, next) => {
     return next(createHttpError(500, error));
   }
 });
+
+router.patch(
+  "/:id",
+  isAuth(true),
+  async (req: Request<{ id: string }>, res, next) => {
+    try {
+      await validate(req.body, { skipMissingProperties: true });
+    } catch (error) {
+      return next(createHttpError(422, error));
+    }
+    try {
+      const savedReward = await Reward.update(req.params.id, req.body);
+      res.json(savedReward);
+    } catch (error) {
+      return next(createHttpError(500, error));
+    }
+  }
+);
+
+router.delete(
+  "/:id",
+  isAuth(true),
+  async (req: Request<{ id: string }>, res, next) => {
+    try {
+      const result = await Reward.delete(req.params.id);
+      res.json(result.raw);
+    } catch (error) {
+      return next(createHttpError(500, error));
+    }
+  }
+);
 
 router.get("/", isAuth(true), async (req, res, next) => {
   try {

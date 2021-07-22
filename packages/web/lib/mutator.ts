@@ -17,9 +17,13 @@ export const mutator = async ([path, body, method = "post"]: [
   let request: any;
 
   if (method === "delete") {
-    request = await axios.delete("http://localhost:4000" + path, config);
+    request = await axios.delete("http://localhost:4000/v1" + path, config);
   } else {
-    request = await axios[method]("http://localhost:4000" + path, body, config);
+    request = await axios[method](
+      "http://localhost:4000/v1" + path,
+      body,
+      config
+    );
   }
 
   if (request.status !== 200) {

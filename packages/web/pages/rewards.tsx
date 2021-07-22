@@ -1,4 +1,3 @@
-import Link from "next/link";
 import React from "react";
 import { TicketStar } from "react-iconly";
 import { useQuery } from "react-query";

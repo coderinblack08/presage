@@ -1,7 +1,7 @@
 import { Request, Router } from "express";
 import createHttpError from "http-errors";
 import { getConnection } from "typeorm";
-import { User } from "../../entities/User";
+import { User } from "../../../entities/User";
 import { isAuth } from "../auth/isAuth";
 
 const router = Router();
