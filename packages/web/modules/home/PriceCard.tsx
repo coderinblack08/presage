@@ -38,7 +38,7 @@ export const PriceCard: React.FC<FeatureCardProps> = ({
         <Link href="/" passHref>
           <Button
             size="large"
-            className="w-72 m-3 justify-center mx-auto inset-x-0 bottom-0 absolute"
+            className="w-56 md:w-72 m-3 justify-center mx-auto inset-x-0 bottom-0 absolute"
           >
             <span>Create free account</span>
           </Button>

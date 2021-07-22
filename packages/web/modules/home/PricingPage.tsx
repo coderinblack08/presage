@@ -31,7 +31,7 @@ export const PricingPage = ({}) => {
         <p className={`pl-2 ${!price ? "" : "font-bold"}`}>Annually</p>
       </div>
 
-      <div className="flex gap-5">
+      <div className="md:flex block gap-5">
         <PriceCard
           features={[
             "3 free journals",
