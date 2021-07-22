@@ -9,10 +9,10 @@ import {
   NumberDictionary,
   uniqueNamesGenerator,
 } from "unique-names-generator";
-import { Article } from "../../entities/Article";
-import { Journal } from "../../entities/Journal";
-import { User } from "../../entities/User";
-import { isDev } from "../../lib/constants";
+import { Article } from "../../../entities/Article";
+import { Journal } from "../../../entities/Journal";
+import { User } from "../../../entities/User";
+import { isDev } from "../../../lib/constants";
 import { createToken } from "./createToken";
 import { isAuth } from "./isAuth";
 

@@ -60,6 +60,9 @@ export class User extends BaseEntity {
   followersCount: number;
 
   @Column("int", { default: 0 })
+  points: number;
+
+  @Column("int", { default: 0 })
   followingCount: number;
 
   @CreateDateColumn()

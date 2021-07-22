@@ -61,3 +61,18 @@ export interface Journal {
   user: User;
   createdAt: String;
 }
+
+export type RewardType = "shoutout" | "link" | "other";
+
+export interface Reward {
+  id: string;
+  name: string;
+  description: string;
+  link: string | null;
+  type: RewardType;
+  points: number;
+  user: User;
+  claimed: number;
+  createdAt: Date;
+  updatedAt: Date;
+}

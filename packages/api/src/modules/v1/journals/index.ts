@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { Journal } from "../../entities/Journal";
+import { Journal } from "../../../entities/Journal";
 import { isAuth } from "../auth/isAuth";
 
 const router = Router();

@@ -2,7 +2,7 @@ import { Request, Router } from "express";
 import createHttpError from "http-errors";
 import { getConnection } from "typeorm";
 import { v4 } from "uuid";
-import { Comment } from "../../entities/Comment";
+import { Comment } from "../../../entities/Comment";
 import { isAuth } from "../auth/isAuth";
 
 const router = Router();

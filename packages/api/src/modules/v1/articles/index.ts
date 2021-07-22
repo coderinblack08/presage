@@ -9,9 +9,9 @@ import createHttpError from "http-errors";
 import readingTime from "reading-time";
 import sanitizeHtml from "sanitize-html";
 import { FindConditions, getConnection } from "typeorm";
-import { Article } from "../../entities/Article";
-import { Like } from "../../entities/Like";
-import { Tag } from "../../entities/Tag";
+import { Article } from "../../../entities/Article";
+import { Like } from "../../../entities/Like";
+import { Tag } from "../../../entities/Tag";
 import { isAuth } from "../auth/isAuth";
 
 // export const createPublishSocket = (

@@ -1,5 +1,4 @@
 require("dotenv-safe").config();
-import "reflect-metadata";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import express from "express";
@@ -7,13 +6,10 @@ import helmet from "helmet";
 import http from "http";
 import passport from "passport";
 import { join } from "path";
+import "reflect-metadata";
 import { createConnection } from "typeorm";
 import { isDev } from "./lib/constants";
-import articlesRouter from "./modules/articles";
-import authRouter from "./modules/auth";
-import journalRouter from "./modules/journals";
-import commentRouter from "./modules/comment";
-import followRouter from "./modules/follow";
+import { v1 } from "./modules/v1";
 
 async function main() {
   const conn = await createConnection({
@@ -41,11 +37,9 @@ async function main() {
   );
   app.use(passport.initialize());
   passport.serializeUser((user: any, done) => done(null, user.accessToken));
-  app.use("/", authRouter);
-  app.use("/", followRouter);
-  app.use("/articles", articlesRouter);
-  app.use("/journals", journalRouter);
-  app.use("/comments", commentRouter);
+
+  app.use("/v1", v1);
+  app.use("/", v1);
 
   const server = http.createServer(app);
   // const io = new Server(server);

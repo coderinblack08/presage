@@ -1,7 +1,7 @@
 import { Menu } from "@headlessui/react";
 import { useRouter } from "next/router";
 import React from "react";
-import { Logout, User as UserIcon } from "react-iconly";
+import { Logout, TicketStar, User as UserIcon } from "react-iconly";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { mutator } from "../lib/mutator";
 import { User } from "../lib/types";
@@ -35,6 +35,16 @@ export const UserDropdown: React.FC<UserDropdownProps> = ({}) => {
             }
           >
             Profile
+          </MenuItem>
+          <MenuItem
+            onClick={() => router.push("/rewards")}
+            icon={
+              <div className="scale-80">
+                <TicketStar set="bulk" />
+              </div>
+            }
+          >
+            Rewards
           </MenuItem>
           <MenuItem
             onClick={async () => {
