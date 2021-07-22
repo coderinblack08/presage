@@ -6,6 +6,7 @@ import { isAuth } from "../auth/isAuth";
 import createHttpError from "http-errors";
 import { User } from "../../../entities/User";
 import { getConnection } from "typeorm";
+import { limiter } from "../../../lib/rateLimit";
 
 const router = Router();
 
@@ -13,6 +14,7 @@ type Referral = { jwt: string; articleId: string; used: boolean };
 
 router.post(
   "/:articleId",
+  limiter({ max: 10 }),
   isAuth(true),
   async (req: Request<{ articleId: string }>, res, next) => {
     const jwt = sign(
@@ -31,6 +33,7 @@ router.post(
 
 router.get(
   "/token/:token",
+  limiter({ max: 50 }),
   isAuth(),
   async (req: Request<{ token: string }>, res, next) => {
     const referrer = await redis.get(`referrer:${req.params.token}`);

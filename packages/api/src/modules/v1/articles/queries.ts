@@ -3,30 +3,37 @@ import createHttpError from "http-errors";
 import { FindConditions, getConnection } from "typeorm";
 import { Article } from "../../../entities/Article";
 import { Like } from "../../../entities/Like";
+import { limiter } from "../../../lib/rateLimit";
 import { isAuth } from "../auth/isAuth";
 
 export const articlesQueriesRouter = Router();
 
-articlesQueriesRouter.get("/drafts", isAuth(true), async (req, res) => {
-  const where: FindConditions<Article> = {
-    userId: req.userId,
-  };
-  const { journalId, published } = req.query as any;
-  if (journalId && journalId !== "null") where.journalId = journalId;
-  if (published) where.published = published;
-  console.log(where);
+articlesQueriesRouter.get(
+  "/drafts",
+  limiter({ max: 50 }),
+  isAuth(true),
+  async (req, res) => {
+    const where: FindConditions<Article> = {
+      userId: req.userId,
+    };
+    const { journalId, published } = req.query as any;
+    if (journalId && journalId !== "null") where.journalId = journalId;
+    if (published) where.published = published;
+    console.log(where);
 
-  const articles = await Article.find({
-    where,
-    order: { updatedAt: "DESC" },
-    relations: ["tags"],
-    select: ["id", "title", "published", "createdAt", "updatedAt"],
-  });
-  res.json(articles);
-});
+    const articles = await Article.find({
+      where,
+      order: { updatedAt: "DESC" },
+      relations: ["tags"],
+      select: ["id", "title", "published", "createdAt", "updatedAt"],
+    });
+    res.json(articles);
+  }
+);
 
 articlesQueriesRouter.get(
   "/draft/:id",
+  limiter({ max: 50 }),
   isAuth(true),
   async (req: Request<{ id: string }>, res, next) => {
     try {
@@ -43,6 +50,7 @@ articlesQueriesRouter.get(
 
 articlesQueriesRouter.delete(
   "/:id",
+  limiter({ max: 20 }),
   isAuth(true),
   async (req: Request<{ id: string }>, res, next) => {
     try {
@@ -54,61 +62,67 @@ articlesQueriesRouter.delete(
   }
 );
 
-articlesQueriesRouter.get("/", isAuth(), async (req, res) => {
-  const query: string = (req.query as any).query;
-  const journalId: string = (req.query as any).journalId;
-  let qb = getConnection()
-    .getRepository(Article)
-    .createQueryBuilder("article")
-    .leftJoinAndSelect("article.tags", "tags")
-    .leftJoinAndSelect("article.user", "user")
-    .leftJoinAndSelect("article.journal", "journal")
-    .leftJoinAndSelect("article.likes", "likes", 'likes."userId" = :user', {
-      user: req.userId,
-    });
+articlesQueriesRouter.get(
+  "/",
+  limiter({ max: 50 }),
+  isAuth(),
+  async (req, res) => {
+    const query: string = (req.query as any).query;
+    const journalId: string = (req.query as any).journalId;
+    let qb = getConnection()
+      .getRepository(Article)
+      .createQueryBuilder("article")
+      .leftJoinAndSelect("article.tags", "tags")
+      .leftJoinAndSelect("article.user", "user")
+      .leftJoinAndSelect("article.journal", "journal")
+      .leftJoinAndSelect("article.likes", "likes", 'likes."userId" = :user', {
+        user: req.userId,
+      });
 
-  let data: Article[];
+    let data: Article[];
 
-  if (query) {
-    qb = qb
-      .where(
-        "article.document @@ plainto_tsquery(:query) and article.published = true",
-        {
-          query: query,
-        }
-      )
-      .orderBy("ts_rank(article.document, plainto_tsquery(:query))", "DESC");
-  }
+    if (query) {
+      qb = qb
+        .where(
+          "article.document @@ plainto_tsquery(:query) and article.published = true",
+          {
+            query: query,
+          }
+        )
+        .orderBy("ts_rank(article.document, plainto_tsquery(:query))", "DESC");
+    }
 
-  if (journalId) {
-    data = await qb
-      .where('article.published = true and article."journalId" = :journal', {
-        journal: journalId,
+    if (journalId) {
+      data = await qb
+        .where('article.published = true and article."journalId" = :journal', {
+          journal: journalId,
+        })
+        .orderBy('article."createdAt"', "DESC")
+        .limit(10)
+        .getMany();
+    }
+
+    if (!query && !journalId) {
+      qb = qb
+        .where("article.published = true")
+        .orderBy('article."createdAt"', "DESC");
+    }
+
+    data = await qb.limit(10).getMany();
+    res.json(
+      data.map((x) => {
+        const y: any = { ...x, liked: x.likes.length === 1 };
+        delete y.likes;
+
+        return y;
       })
-      .orderBy('article."createdAt"', "DESC")
-      .limit(10)
-      .getMany();
+    );
   }
-
-  if (!query && !journalId) {
-    qb = qb
-      .where("article.published = true")
-      .orderBy('article."createdAt"', "DESC");
-  }
-
-  data = await qb.limit(10).getMany();
-  res.json(
-    data.map((x) => {
-      const y: any = { ...x, liked: x.likes.length === 1 };
-      delete y.likes;
-
-      return y;
-    })
-  );
-});
+);
 
 articlesQueriesRouter.get(
   "/:id",
+  limiter({ max: 50 }),
   isAuth(),
   async (req: Request<{ id: string }>, res, next) => {
     if (!req.params.id) res.sendStatus(500);

@@ -1,20 +1,21 @@
 import { Router } from "express";
 import { Journal } from "../../../entities/Journal";
+import { limiter } from "../../../lib/rateLimit";
 import { isAuth } from "../auth/isAuth";
 
 const router = Router();
 
-router.get("/me", isAuth(true), async (req, res) => {
+router.get("/me", limiter({ max: 100 }), isAuth(true), async (req, res) => {
   const journals = await Journal.find({ where: { userId: req.userId } });
   res.json(journals);
 });
 
-router.get("/:user", async (req, res) => {
+router.get("/:user", limiter({ max: 100 }), async (req, res) => {
   const journals = await Journal.find({ where: { userId: req.params.user } });
   res.json(journals);
 });
 
-router.post("/", isAuth(true), async (req, res) => {
+router.post("/", limiter({ max: 20 }), isAuth(true), async (req, res) => {
   const pictures = [
     "magenta-purple",
     "orange",

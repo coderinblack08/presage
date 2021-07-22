@@ -3,11 +3,12 @@ import { Request, Router } from "express";
 import createHttpError from "http-errors";
 import { Reward } from "../../../entities/Reward";
 import { User } from "../../../entities/User";
+import { limiter } from "../../../lib/rateLimit";
 import { isAuth } from "../auth/isAuth";
 
 const router = Router();
 
-router.post("/", isAuth(true), async (req, res, next) => {
+router.post("/", limiter({ max: 20 }), isAuth(true), async (req, res, next) => {
   const reward = new Reward();
   reward.name = req.body.name;
   reward.description = req.body.description;
@@ -30,6 +31,7 @@ router.post("/", isAuth(true), async (req, res, next) => {
 
 router.patch(
   "/:id",
+  limiter({ max: 50 }),
   isAuth(true),
   async (req: Request<{ id: string }>, res, next) => {
     const reward = await Reward.findOne(req.params.id);
@@ -57,6 +59,7 @@ router.patch(
 
 router.delete(
   "/:id",
+  limiter({ max: 50 }),
   isAuth(true),
   async (req: Request<{ id: string }>, res, next) => {
     try {
@@ -68,7 +71,7 @@ router.delete(
   }
 );
 
-router.get("/", isAuth(true), async (req, res, next) => {
+router.get("/", limiter({ max: 50 }), isAuth(true), async (req, res, next) => {
   try {
     const rewards = await Reward.find({
       where: { user: { id: req.userId } },
@@ -80,7 +83,7 @@ router.get("/", isAuth(true), async (req, res, next) => {
   }
 });
 
-router.get("/:userId", async (req, res, next) => {
+router.get("/:userId", limiter({ max: 50 }), async (req, res, next) => {
   try {
     const rewards = await Reward.find({
       where: { user: { id: req.params.userId } },

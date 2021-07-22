@@ -13,6 +13,7 @@ import { Article } from "../../../entities/Article";
 import { Journal } from "../../../entities/Journal";
 import { User } from "../../../entities/User";
 import { isDev } from "../../../lib/constants";
+import { limiter } from "../../../lib/rateLimit";
 import { createToken } from "./createToken";
 import { isAuth } from "./isAuth";
 
@@ -108,7 +109,7 @@ router.get(
   }
 );
 
-router.get("/me", isAuth(), async (req, res) => {
+router.get("/me", limiter({ max: 100 }), isAuth(), async (req, res) => {
   const user = req.userId
     ? await User.findOne(req.userId, {
         select: userFields,
@@ -119,6 +120,7 @@ router.get("/me", isAuth(), async (req, res) => {
 
 router.get(
   "/user/:username",
+  limiter({ max: 100 }),
   isAuth(),
   async (req: Request<{ username: string }>, res) => {
     const user = await User.findOne({
@@ -159,7 +161,7 @@ router.get(
   }
 );
 
-router.post("/logout", isAuth(true), (_, res) => {
+router.post("/logout", limiter({ max: 10 }), isAuth(true), (_, res) => {
   res.clearCookie("jid", options);
   res.send("Logged out successfully");
 });

@@ -7,51 +7,64 @@ import StarterKit from "@tiptap/starter-kit";
 import { Request, Router } from "express";
 import createHttpError from "http-errors";
 import readingTime from "reading-time";
-import sanitizeHtml, { Tag } from "sanitize-html";
+import sanitizeHtml from "sanitize-html";
 import { getConnection } from "typeorm";
 import { Article } from "../../../entities/Article";
 import { Like } from "../../../entities/Like";
+import { Tag } from "../../../entities/Tag";
+import { limiter } from "../../../lib/rateLimit";
 import { isAuth } from "../auth/isAuth";
 
 export const articlesMutationRouter = Router();
 
-articlesMutationRouter.post("/like", isAuth(true), async (req, res) => {
-  await getConnection().transaction(async (em) => {
-    const body = { userId: req.userId, articleId: req.body.articleId };
-    const existingLike = await em.findOne(Like, { where: body });
+articlesMutationRouter.post(
+  "/like",
+  limiter({ max: 50 }),
+  isAuth(true),
+  async (req, res) => {
+    await getConnection().transaction(async (em) => {
+      const body = { userId: req.userId, articleId: req.body.articleId };
+      const existingLike = await em.findOne(Like, { where: body });
 
-    if (existingLike) {
-      await em.delete(Like, body);
-      await em
-        .createQueryBuilder()
-        .update(Article)
-        .where({ id: req.body.articleId })
-        .set({ points: () => "points - 1" })
-        .execute();
-    } else {
-      await em.create(Like, body).save();
-      await em
-        .createQueryBuilder()
-        .update(Article)
-        .where({ id: req.body.articleId })
-        .set({ points: () => "points + 1" })
-        .execute();
-    }
-    res.json(true);
-  });
-});
+      if (existingLike) {
+        await em.delete(Like, body);
+        await em
+          .createQueryBuilder()
+          .update(Article)
+          .where({ id: req.body.articleId })
+          .set({ points: () => "points - 1" })
+          .execute();
+      } else {
+        await em.create(Like, body).save();
+        await em
+          .createQueryBuilder()
+          .update(Article)
+          .where({ id: req.body.articleId })
+          .set({ points: () => "points + 1" })
+          .execute();
+      }
+      res.json(true);
+    });
+  }
+);
 
-articlesMutationRouter.post("/", isAuth(true), async (req, res) => {
-  const article = await Article.create({
-    title: "Untitled",
-    userId: req.userId,
-    journalId: req.body.journalId,
-  }).save();
-  res.json(article);
-});
+articlesMutationRouter.post(
+  "/",
+  limiter({ max: 50 }),
+  isAuth(true),
+  async (req, res) => {
+    const article = await Article.create({
+      title: "Untitled",
+      userId: req.userId,
+      journalId: req.body.journalId,
+    }).save();
+    res.json(article);
+  }
+);
 
 articlesMutationRouter.patch(
   "/:id",
+  limiter({ max: 500 }),
   isAuth(true),
   async (req: Request<{ id: string }>, res) => {
     const bodyJson = req.body.body;
@@ -91,6 +104,7 @@ articlesMutationRouter.patch(
 
 articlesMutationRouter.patch(
   "/tags/:id",
+  limiter({ max: 50 }),
   isAuth(true),
   async (req: Request<{ id: string }>, res, next) => {
     if (!Array.isArray(req.body.tags)) {
