@@ -45,10 +45,10 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
     onUpdate: ({ editor }) => {
       setFieldValue("body", editor.getJSON(), false);
     },
-    content: draft?.bodyJson || null,
+    content: draft?.body || null,
     editorProps: {
       attributes: {
-        class: "prose focus:outline-none py-6 lg:py-8 max-w-full",
+        class: "prose focus:outline-none py-8 lg:py-10 max-w-full",
       },
     },
   });

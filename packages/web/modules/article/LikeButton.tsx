@@ -27,7 +27,7 @@ export const LikeButton: React.FC<LikeButtonProps> = ({ article }) => {
               ...newData,
             } as any)
         );
-        queryClient.refetchQueries(`/articles/explore`);
+        queryClient.refetchQueries(`/articles`);
       },
     });
   };
