@@ -24,7 +24,7 @@ export const PriceCard: React.FC<FeatureCardProps> = ({
       <h3>
         ${priceYearly}/{price}
       </h3>
-      <p className="text-gray-600 mt-1.5 font-normal">{description}</p>
+      <p className="text-gray-600 my-1.5  font-normal">{description}</p>
       <ul className="list-reset my-2">
         {features.map((item) => (
           <div key="index" className="flex text-gray-600 my-1">
@@ -34,7 +34,7 @@ export const PriceCard: React.FC<FeatureCardProps> = ({
         ))}
       </ul>
       <Link href="/" passHref>
-        <Button size="small">
+        <Button size="large" className=" my-3 w-full">
           <span>Create free account</span>
         </Button>
       </Link>
