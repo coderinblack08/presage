@@ -33,7 +33,7 @@ export const PriceCard: React.FC<FeatureCardProps> = ({
           </div>
         ))}
       </ul>
-      <Link href="/">
+      <Link href="/" passHref>
         <Button size="small">
           <span>Create free account</span>
         </Button>
