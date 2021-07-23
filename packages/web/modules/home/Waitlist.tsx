@@ -22,6 +22,7 @@ export const Waitlist: React.FC<WaitlistProps> = ({}) => {
             method: "POST",
             body: JSON.stringify({ email }),
           });
+          umami.trackEvent(`${email} joined waitlist`, "waitlist");
           setLoading(false);
           notify();
           setEmail("");

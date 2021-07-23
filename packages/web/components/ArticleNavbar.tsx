@@ -7,6 +7,7 @@ import { useQuery } from "react-query";
 import { User } from "../lib/types";
 import { Button } from "./Button";
 import { Dropdown, MenuItem } from "./Dropdown";
+import { LoginButton } from "./LoginButton";
 import { NavLink } from "./Navbar";
 import { UserDropdown } from "./UserDropdown";
 
@@ -96,9 +97,7 @@ export const ArticleNavbar: React.FC<ArticleNavbarProps> = ({ lightGray }) => {
               <UserDropdown />
             </div>
           ) : (
-            <a href="http://localhost:4000/auth/google">
-              <Button rounded>Login</Button>
-            </a>
+            <LoginButton />
           )}
         </div>
       </div>

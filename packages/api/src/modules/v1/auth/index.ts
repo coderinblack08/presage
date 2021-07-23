@@ -15,7 +15,6 @@ import { Article } from "../../../entities/Article";
 import { Journal } from "../../../entities/Journal";
 import { User } from "../../../entities/User";
 import { isDev } from "../../../lib/constants";
-import { mixpanel } from "../../../lib/mixpanel";
 import { limiter } from "../../../lib/rateLimit";
 import { createToken } from "./createToken";
 import { isAuth } from "./isAuth";
@@ -51,12 +50,6 @@ const strategy = new Strategy(
       };
       if (!user) {
         user = await User.create(data).save();
-        mixpanel.people.set(user.id, {
-          $first_name: user.displayName,
-          $created: user.createdAt.toISOString(),
-          username: user.username,
-          email: user.email,
-        });
         const pictures = [
           "magenta-purple",
           "orange",
@@ -74,10 +67,6 @@ const strategy = new Strategy(
           }.jpeg`,
         }).save();
       }
-      mixpanel.track("Login", {
-        distinct_id: user.id,
-        date: new Date().toISOString(),
-      });
       return done(null, { accessToken: createToken(user) });
     } catch (error) {
       return done(error, undefined);

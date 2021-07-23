@@ -86,6 +86,7 @@
     "@types/react-responsive": "^8.0.3",
     "@types/react-tag-autocomplete": "^6.1.0",
     "@types/sanitize-html": "^2.3.1",
+    "@types/umami": "^0.1.0",
     "autoprefixer": "^10.2.6",
     "babel-loader": "^8.2.2",
     "eslint": "7.28.0",
