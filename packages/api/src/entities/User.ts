@@ -1,4 +1,11 @@
 import {
+  IsAlphanumeric,
+  IsEmail,
+  IsOptional,
+  IsUrl,
+  Length,
+} from "class-validator";
+import {
   BaseEntity,
   Column,
   CreateDateColumn,
@@ -19,18 +26,26 @@ export class User extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
+  @IsEmail()
+  @IsOptional()
   @Column("text", { nullable: true, select: false })
   email: string | null;
 
+  @Length(1, 50)
+  @IsAlphanumeric()
   @Column({ unique: true })
   username: string;
 
+  @Length(1, 50)
   @Column()
   displayName: string;
 
+  @Length(1, 500)
+  @IsOptional()
   @Column("text", { nullable: true })
   bio: string | null;
 
+  @IsUrl()
   @Column("text", { nullable: true })
   profilePicture: string | null;
 
