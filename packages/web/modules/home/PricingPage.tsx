@@ -43,7 +43,7 @@ export const PricingPage = ({}) => {
           description="A platform for everyone of any skillset."
           title="Free Forever"
           cost={0}
-          price={price ? "yearly" : "monthly"}
+          plan={price ? "yearly" : "monthly"}
         />
         <PriceCard
           features={[
@@ -57,7 +57,7 @@ export const PricingPage = ({}) => {
           description="For power users trying to get the most out of Presage."
           title="Professionals"
           cost={price ? 5 : 50}
-          price={price ? "yearly" : "monthly"}
+          plan={price ? "yearly" : "monthly"}
         />
       </div>
     </div>

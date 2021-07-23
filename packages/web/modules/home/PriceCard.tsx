@@ -7,7 +7,7 @@ interface FeatureCardProps {
   title: string;
   description: string;
   features: string[];
-  price?: string;
+  plan?: string;
   cost?: number;
 }
 
@@ -15,7 +15,7 @@ export const PriceCard: React.FC<FeatureCardProps> = ({
   description,
   title,
   features,
-  price,
+  plan,
   cost,
 }) => {
   return (
@@ -24,7 +24,7 @@ export const PriceCard: React.FC<FeatureCardProps> = ({
 
       <div className="flex mt-1">
         <h3 className="text-3xl font-bold leading-8">${cost}</h3>
-        <h4 className="leading-8  pb-0">/{price} </h4>
+        <h4 className="leading-8  pb-0">/{plan} </h4>
       </div>
 
       <p className="text-gray-600 mt-2 font-normal">{description}</p>
