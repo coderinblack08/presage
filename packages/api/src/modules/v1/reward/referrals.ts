@@ -1,33 +1,52 @@
-import { nanoid } from "nanoid";
 import { Request, Router } from "express";
-import { sign, verify } from "jsonwebtoken";
-import { redis } from "../../../lib/redis";
-import { isAuth } from "../auth/isAuth";
 import createHttpError from "http-errors";
-import { User } from "../../../entities/User";
+import { sign, verify } from "jsonwebtoken";
+import { nanoid } from "nanoid";
 import { getConnection } from "typeorm";
+import { Article } from "../../../entities/Article";
+import { Referral } from "../../../entities/Referral";
+import { User } from "../../../entities/User";
 import { limiter } from "../../../lib/rateLimit";
+import { isAuth } from "../auth/isAuth";
 
 const router = Router();
 
-type Referral = { jwt: string; articleId: string; used: boolean };
-
 router.post(
   "/:articleId",
-  limiter({ max: 10 }),
+  limiter({ max: 20 }),
   isAuth(true),
   async (req: Request<{ articleId: string }>, res, next) => {
+    const article = await Article.findOne({
+      where: { id: req.params.articleId },
+    });
+    if (!article) {
+      return next(createHttpError(404, "Article not found"));
+    }
+    const alreadyHasReferral = await Referral.findOne({
+      where: { articleId: req.params.articleId, referrerId: req.userId },
+    });
+    if (alreadyHasReferral) {
+      return res.json(alreadyHasReferral);
+    }
     const jwt = sign(
       { referrerId: req.userId, articleId: req.params.articleId },
       process.env.REFERRAL_TOKEN_SECRET!,
       { expiresIn: "3d" }
     );
     const token = nanoid();
-    await redis.set(
-      `referrer:${token}`,
-      JSON.stringify({ jwt, articleId: req.params.articleId, used: false })
-    );
-    res.json({ token });
+    try {
+      const referral = await Referral.create({
+        token,
+        jwt,
+        article: { id: req.params.articleId },
+        referrer: { id: req.userId },
+      }).save();
+      article.referralCount = article.referralCount + 1;
+      await article.save();
+      res.json({ ...referral, new: true });
+    } catch (error) {
+      next(createHttpError(500, "Internal Server Error"));
+    }
   }
 );
 
@@ -36,22 +55,22 @@ router.get(
   limiter({ max: 50 }),
   isAuth(),
   async (req: Request<{ token: string }>, res, next) => {
-    const referrer = await redis.get(`referrer:${req.params.token}`);
-    if (!referrer) {
+    const referral = await Referral.findOne({
+      where: { token: req.params.token },
+    });
+    if (!referral) {
       return next(createHttpError(404, "Token not found"));
     }
-    const data: Referral = JSON.parse(referrer);
     try {
-      const jwtData: any = verify(data.jwt, process.env.REFERRAL_TOKEN_SECRET!);
-      if (data.used === false) {
+      const jwtData: any = verify(
+        referral.jwt,
+        process.env.REFERRAL_TOKEN_SECRET!
+      );
+      if (referral.claimed === false) {
         try {
-          await redis.set(
-            `referrer:${req.params.token}`,
-            JSON.stringify({
-              ...data,
-              used: true,
-            })
-          );
+          referral.claimed = true;
+          referral.count = referral.count + 1;
+          await referral.save();
         } catch (error) {
           return next(createHttpError(500, error));
         }
@@ -63,7 +82,7 @@ router.get(
           .execute();
       }
     } catch {}
-    res.json(data);
+    res.json(referral);
   }
 );
 
