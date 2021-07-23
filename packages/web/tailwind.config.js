@@ -22,6 +22,7 @@ module.exports = {
       ],
       display: [
         "Eudoxus Sans",
+        "Inter",
         "-apple-system",
         "BlinkMacSystemFont",
         "Segoe UI",
@@ -35,6 +36,7 @@ module.exports = {
       white: "#FFFFFF",
       black: "#000000",
       purple: "#9F66FF",
+      blue: "#3B82F6",
       red: "#EF4444",
       transparent: "transparent",
       gray: require("tailwindcss/colors").gray,

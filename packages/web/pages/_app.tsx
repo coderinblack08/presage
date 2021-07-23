@@ -1,7 +1,6 @@
-import mixpanel from "mixpanel-browser";
 import { DefaultSeo } from "next-seo";
 import type { AppProps } from "next/app";
-import React, { useEffect } from "react";
+import React from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Hydrate } from "react-query/hydration";
 import { AudioPlayerProvider } from "react-use-audio-player";
@@ -20,10 +19,6 @@ const queryClient = new QueryClient({
 });
 
 function MyApp({ Component, pageProps }: AppProps) {
-  useEffect(() => {
-    mixpanel.init(process.env.NEXT_PUBLIC_MIXPANEL!);
-  }, []);
-
   return (
     <QueryClientProvider client={queryClient}>
       <Hydrate state={pageProps.dehydratedState}>

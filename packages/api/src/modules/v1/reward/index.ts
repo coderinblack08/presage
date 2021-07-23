@@ -49,8 +49,8 @@ router.patch(
       return next(createHttpError(422, error));
     }
     try {
-      const savedReward = await Reward.update(req.params.id, req.body);
-      res.json(savedReward);
+      await reward.save();
+      res.json(reward);
     } catch (error) {
       return next(createHttpError(500, error));
     }

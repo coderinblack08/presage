@@ -1,21 +1,19 @@
+import Image from "next/image";
 import React from "react";
-import illustration from "../../public/static/phone-illustration.png";
+import { MdCheck } from "react-icons/md";
+import { useMediaQuery } from "react-responsive";
+import { Footer } from "../../components/Footer";
+import { Navbar } from "../../components/Navbar";
 import featureGraphic from "../../public/static/feature-graphic.png";
 import philosophy from "../../public/static/philosophy.svg";
-import Image from "next/image";
-import { Button } from "../../components/Button";
-import { FeatureCard } from "./FeatureCard";
+import phone from "../../public/static/phone-illustration.png";
 import { EmojiIcon } from "./EmojiIcon";
-import { Footer } from "../../components/Footer";
-import { useMediaQuery } from "react-responsive";
-import { Navbar } from "../../components/Navbar";
-import { MdCheck } from "react-icons/md";
-import { Input } from "../../components/Input";
+import { FeatureCard } from "./FeatureCard";
 import { Waitlist } from "./Waitlist";
 
 interface LandingPageProps {}
 
-function ItemCheck() {
+export function ItemCheck() {
   return (
     <div className="mt-1 flex items-center justify-center bg-gradient-to-b from-gray-100 to-gray-300 rounded-full p-1">
       <MdCheck className="w-4 h-4" />
@@ -47,7 +45,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
           </div>
           <div className="hidden md:block">
             <Image
-              src={illustration}
+              src={phone}
               alt="Phone in hand"
               quality={100}
               width={317 * (isTabletOrDesktop ? 0.75 : 1)}
