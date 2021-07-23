@@ -8,7 +8,7 @@ interface FeatureCardProps {
   description: string;
   features: string[];
   price?: string;
-  priceYearly?: number;
+  cost?: number;
 }
 
 export const PriceCard: React.FC<FeatureCardProps> = ({
@@ -16,20 +16,20 @@ export const PriceCard: React.FC<FeatureCardProps> = ({
   title,
   features,
   price,
-  priceYearly,
+  cost,
 }) => {
   return (
-    <article className="relative w-80 h-full p-5 my-4 md:p-7 max-w-lg col-span-1 bg-white shadow rounded-lg">
-      <h6 className="font-bold  text-gray-600">{title}</h6>
+    <article className="relative w-full h-full p-5 my-4 md:p-7 max-w-lg col-span-1 bg-white shadow rounded-lg">
+      <h6 className="font-bold  text-gray-500">{title}</h6>
 
-      <div className="flex ">
-        <h3 className="text-3xl font-bold leading-8">${priceYearly}</h3>
-        <h4 className="leading-8 mb-0 pb-0">/{price} </h4>
+      <div className="flex mt-1">
+        <h3 className="text-3xl font-bold leading-8">${cost}</h3>
+        <h4 className="leading-8  pb-0">/{price} </h4>
       </div>
 
-      <p className="text-gray-600 mt-1.5 font-normal">{description}</p>
+      <p className="text-gray-600 mt-2 font-normal">{description}</p>
 
-      <ul className=" inline-block mt-1 mb-12">
+      <ul className=" inline-block mt-6 mb-12">
         {features.map((item) => (
           <div key="index" className="flex text-gray-600 my-1">
             <MdCheck className="my-auto mr-2" />
@@ -37,11 +37,12 @@ export const PriceCard: React.FC<FeatureCardProps> = ({
           </div>
         ))}
       </ul>
-      <div className="justify-center ">
+      <div>
         <Link href="/" passHref>
           <Button
             size="large"
-            className="w-56 md:w-72 m-3 justify-center mx-auto inset-x-0 bottom-0 absolute"
+            color="primary"
+            className="w-11/12  m-3 mx-auto inset-x-0 bottom-0 absolute"
           >
             <span>Create free account</span>
           </Button>
