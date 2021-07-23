@@ -19,7 +19,7 @@ export const fetcher = async <T = any>(
     });
   }
 
-  if (request.status !== 200) {
+  if (!request.ok) {
     throw new Error(await request.text());
   }
 

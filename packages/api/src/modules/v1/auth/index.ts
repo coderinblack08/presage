@@ -202,7 +202,7 @@ router.patch(
   }
 );
 
-router.post("/logout", limiter({ max: 10 }), isAuth(true), (_, res) => {
+router.post("/logout", limiter({ max: 20 }), isAuth(true), (_, res) => {
   res.clearCookie("jid", options);
   res.send("Logged out successfully");
 });

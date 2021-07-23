@@ -30,7 +30,9 @@ async function main() {
   app.use(express.urlencoded({ extended: false }));
   app.use(
     cors({
-      origin: isDev() ? "http://localhost:3000" : "https://joinpresage.com",
+      origin: isDev()
+        ? ["http://localhost:3000", "http://a12470b0dfbe.ngrok.io"]
+        : "https://joinpresage.com",
       maxAge: !isDev() ? 86400 : undefined,
       credentials: true,
     })

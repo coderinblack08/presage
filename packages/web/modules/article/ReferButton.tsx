@@ -1,22 +1,18 @@
 import { Dialog } from "@headlessui/react";
-import useClipboard from "react-use-clipboard";
 import React, { useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
-import {
-  AiFillFacebook,
-  AiFillInstagram,
-  AiOutlineTwitter,
-} from "react-icons/ai";
+import { AiFillFacebook } from "react-icons/ai";
 import { MdClose, MdContentCopy, MdEmail, MdShare } from "react-icons/md";
 import { useMutation, useQueryClient } from "react-query";
+import { TwitterIcon, TwitterShareButton } from "react-share";
+import useClipboard from "react-use-clipboard";
 import { Button } from "../../components/Button";
 import { Input } from "../../components/Input";
 import { Modal } from "../../components/Modal";
+import { Tooltip } from "../../components/Tooltip";
 import { BASE_URL } from "../../lib/constants";
 import { mutator } from "../../lib/mutator";
 import { Article, Referral } from "../../lib/types";
 import { ItemCheck } from "../home/LandingPage";
-import { Tooltip } from "../../components/Tooltip";
 
 interface ReferButtonProps {
   article: Article;
@@ -116,9 +112,17 @@ export const ReferButton: React.FC<ReferButtonProps> = ({ article }) => {
             </div>
           </div>
           <div className="flex items-center space-x-2 mt-4">
-            <Button color="white" className="w-full">
-              <AiOutlineTwitter className="w-6 h-6 text-gray-500" />
-            </Button>
+            <TwitterShareButton
+              title={referral?.article.title}
+              url={`${BASE_URL}/referral?${referral?.article.id}`}
+              draggable
+            >
+              {/* <Button color="white" className="w-full"> */}
+              <TwitterIcon size={36} />
+              {/* <AiOutlineTwitter className="w-6 h-6 text-gray-500" /> */}
+              {/* </Button> */}
+            </TwitterShareButton>
+
             <Button color="white" className="w-full">
               <AiFillFacebook className="w-6 h-6 text-gray-500" />
             </Button>
