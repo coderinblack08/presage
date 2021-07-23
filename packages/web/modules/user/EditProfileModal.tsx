@@ -1,5 +1,4 @@
-import { Field, Form, Formik } from "formik";
-import { values } from "lodash";
+import { Form, Formik } from "formik";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { MdEdit } from "react-icons/md";
@@ -65,7 +64,7 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({ user }) => {
                   <div className="flex items-center space-x-5 pb-3">
                     {values.profilePicture && (
                       <img
-                        className="w-16 h-16 rounded-full object-cover object-center"
+                        className="w-14 h-14 rounded-full object-cover object-center"
                         src={values.profilePicture}
                         alt="avatar"
                       />
@@ -75,10 +74,19 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({ user }) => {
                       type="file"
                       accept="image/*"
                       multiple={false}
-                      onChange={(e) => {
+                      onChange={async (e) => {
                         if (e.target.files) {
-                          const url = URL.createObjectURL(e.target.files[0]);
-                          setFieldValue("profilePicture", url);
+                          const data = new FormData();
+                          data.append("image", e.target.files[0]);
+                          try {
+                            await mutateAsync([`/image`, data, "post"], {
+                              onSuccess: ({ url }) => {
+                                setFieldValue("profilePicture", url);
+                              },
+                            });
+                          } catch (error) {
+                            console.error(error);
+                          }
                         }
                       }}
                     />

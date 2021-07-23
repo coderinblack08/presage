@@ -3822,10 +3822,10 @@
   resolved "https://registry.yarnpkg.com/@types/mixpanel-browser/-/mixpanel-browser-2.35.7.tgz#9ff36890cf069ab557d556a945c2cd47906c13db"
   integrity sha512-cisiRR1Fky5X1g9Z7tKliR8fB6V6TJ+7oa7Xca2AcYhtpOR8Otp4/pMdd9tLFPKqOLTWiD2S4gfN2zHFv7Z7KA==
 
-"@types/multer@^1.4.5":
-  version "1.4.5"
-  resolved "https://registry.yarnpkg.com/@types/multer/-/multer-1.4.5.tgz#db0557562307e9adb6661a9500c334cd7ddd0cd9"
-  integrity sha512-9b/0a8JyrR0r2nQhL73JR86obWL7cogfX12augvlrvcpciCo/hkvEsgu80Z4S2g2DHGVXHr8pUIi1VhqFJ8Ufw==
+"@types/multer@^1.4.7":
+  version "1.4.7"
+  resolved "https://registry.yarnpkg.com/@types/multer/-/multer-1.4.7.tgz#89cf03547c28c7bbcc726f029e2a76a7232cc79e"
+  integrity sha512-/SNsDidUFCvqqcWDwxv2feww/yqhNeTRL5CVoL3jU4Goc4kKEL10T7Eye65ZqPNi4HRx8sAEX59pV1aEH7drNA==
   dependencies:
     "@types/express" "*"
 
