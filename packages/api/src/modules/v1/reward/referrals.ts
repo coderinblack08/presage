@@ -43,7 +43,7 @@ router.post(
       where: { articleId: req.params.articleId, referrerId: req.userId },
     });
     if (alreadyHasReferral) {
-      return res.json({ ...alreadyHasReferral, article });
+      return res.json(alreadyHasReferral);
     }
     const jwt = sign(
       { referrerId: req.userId, articleId: req.params.articleId },
@@ -60,7 +60,7 @@ router.post(
       }).save();
       article.referralCount = article.referralCount + 1;
       await article.save();
-      res.json({ ...referral, article, new: true });
+      res.json({ ...referral, new: true });
     } catch (error) {
       next(createHttpError(500, "Internal Server Error"));
     }

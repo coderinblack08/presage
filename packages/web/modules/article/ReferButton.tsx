@@ -1,9 +1,13 @@
 import { Dialog } from "@headlessui/react";
 import React, { useState } from "react";
-import { AiFillFacebook } from "react-icons/ai";
+import { AiFillFacebook, AiOutlineTwitter } from "react-icons/ai";
 import { MdClose, MdContentCopy, MdEmail, MdShare } from "react-icons/md";
 import { useMutation, useQueryClient } from "react-query";
-import { TwitterIcon, TwitterShareButton } from "react-share";
+import {
+  EmailShareButton,
+  FacebookShareButton,
+  TwitterShareButton,
+} from "react-share";
 import useClipboard from "react-use-clipboard";
 import { Button } from "../../components/Button";
 import { Input } from "../../components/Input";
@@ -111,24 +115,32 @@ export const ReferButton: React.FC<ReferButtonProps> = ({ article }) => {
               </p>
             </div>
           </div>
-          <div className="flex items-center space-x-2 mt-4">
+          <div className="flex items-center space-x-3 mt-4">
             <TwitterShareButton
               title={referral?.article.title}
-              url={`${BASE_URL}/referral?${referral?.article.id}`}
-              draggable
+              url={`${BASE_URL}/referral?${article.id}`}
+              className="bg-white flex items-center justify-center rounded-lg shadow py-2 px-6 w-full"
+              resetButtonStyle={false}
             >
-              {/* <Button color="white" className="w-full"> */}
-              <TwitterIcon size={36} />
-              {/* <AiOutlineTwitter className="w-6 h-6 text-gray-500" /> */}
-              {/* </Button> */}
+              <AiOutlineTwitter className="w-6 h-6 text-gray-600" />
             </TwitterShareButton>
-
-            <Button color="white" className="w-full">
-              <AiFillFacebook className="w-6 h-6 text-gray-500" />
-            </Button>
-            <Button color="white" className="w-full">
-              <MdEmail className="w-6 h-6 text-gray-500" />
-            </Button>
+            <FacebookShareButton
+              title={referral?.article.title}
+              url={`${BASE_URL}/referral?${article.id}`}
+              className="bg-white flex items-center justify-center rounded-lg shadow py-2 px-6 w-full"
+              resetButtonStyle={false}
+            >
+              <AiFillFacebook className="w-6 h-6 text-gray-600" />
+            </FacebookShareButton>
+            <EmailShareButton
+              subject={referral?.article.title}
+              body={`Checkout the article written by ${article.user.displayName} on presage`}
+              url={`${BASE_URL}/referral?${article.id}`}
+              className="bg-white flex items-center justify-center rounded-lg shadow py-2 px-6 w-full"
+              resetButtonStyle={false}
+            >
+              <MdEmail className="w-6 h-6 text-gray-600" />
+            </EmailShareButton>
           </div>
         </div>
       </Modal>
