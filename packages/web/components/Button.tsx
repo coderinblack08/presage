@@ -26,6 +26,7 @@ const colors = {
     "text-gray-100 bg-gradient-to-b from-gray-600 to-gray-900 disabled:opacity-50",
   white: "text-gray-800 bg-white shadow disabled:opacity-50",
   gray: "text-gray-800 bg-gray-100 disabled:opacity-50",
+  blue: "text-gray-100 bg-blue disabled:opacity-50",
 };
 
 export type ButtonProps = DetailedHTMLProps<

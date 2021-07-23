@@ -21,16 +21,6 @@ import { createToken } from "./createToken";
 import { isAuth } from "./isAuth";
 
 const router = Router();
-const userFields: (keyof User)[] = [
-  "id",
-  "email",
-  "username",
-  "bio",
-  "profilePicture",
-  "displayName",
-  "createdAt",
-  "updatedAt",
-];
 
 const strategy = new Strategy(
   {
@@ -125,11 +115,7 @@ router.get(
 
 router.get("/me", limiter({ max: 100 }), isAuth(), async (req, res, next) => {
   try {
-    const user = req.userId
-      ? await User.findOne(req.userId, {
-          select: userFields,
-        })
-      : null;
+    const user = req.userId ? await User.findOne(req.userId) : null;
     res.json(user);
   } catch (error) {
     next(createHttpError(500, error));

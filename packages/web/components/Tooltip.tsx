@@ -15,7 +15,7 @@ export const Tooltip: React.FC<TooltipProps> = ({ content, children }) => {
           {...attrs}
         >
           {content}
-          <div className="flex justify-center w-full absolute bottom-1.5 left-0 transform -rotate-45">
+          <div className="flex justify-center w-full absolute bottom-1.5 left-0 transform -rotate-45 -translate-x-1">
             <div
               data-popper-arrow=""
               className="h-0 w-0 border-[6px] border-gray-900 border-t-transparent border-r-transparent"

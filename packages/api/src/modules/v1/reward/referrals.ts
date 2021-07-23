@@ -11,6 +11,23 @@ import { isAuth } from "../auth/isAuth";
 
 const router = Router();
 
+router.get(
+  "/:articleId",
+  limiter({ max: 50 }),
+  isAuth(true),
+  async (req: Request<{ articleId: string }>, res, next) => {
+    try {
+      const articleId = req.params.articleId;
+      const referral = await Referral.findOne({
+        where: { referrerId: req.userId, articleId },
+      });
+      res.json(referral);
+    } catch (error) {
+      next(createHttpError(404, "Referral not found"));
+    }
+  }
+);
+
 router.post(
   "/:articleId",
   limiter({ max: 20 }),
@@ -66,7 +83,11 @@ router.get(
         referral.jwt,
         process.env.REFERRAL_TOKEN_SECRET!
       );
-      if (referral.claimed === false) {
+      if (
+        referral.claimed === false &&
+        req.userId &&
+        req.userId !== referral.referrerId
+      ) {
         try {
           referral.claimed = true;
           referral.count = referral.count + 1;

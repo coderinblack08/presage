@@ -78,7 +78,7 @@ export const ReferButton: React.FC<ReferButtonProps> = ({ article }) => {
         </button>
         <div className="p-6">
           <Dialog.Title as="h4">Refer and Earn</Dialog.Title>
-          <ul className="mt-4 space-y-5">
+          <ul className="mt-6 space-y-5">
             <li className="flex space-x-6 items-start">
               <ItemCheck />
               <p className="text-gray-700 font-normal">
@@ -94,8 +94,12 @@ export const ReferButton: React.FC<ReferButtonProps> = ({ article }) => {
               </p>
             </li>
           </ul>
-          <div className="flex items-center mt-10 space-x-2">
-            <Input color="gray" value={referralURL} />
+          <label htmlFor="url" className="block mt-10 mb-2 font-bold">
+            You have referred {referral?.count}{" "}
+            {referral?.count === 1 ? "person" : "people"}
+          </label>
+          <div className="flex items-center space-x-2">
+            <Input color="gray" name="url" value={referralURL} />
             <Button
               onClick={setCopied}
               icon={<MdContentCopy className="w-5 h-5" />}

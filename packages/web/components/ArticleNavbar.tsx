@@ -86,7 +86,10 @@ export const ArticleNavbar: React.FC<ArticleNavbarProps> = ({ lightGray }) => {
                   }
                 >
                   <div className="text-base font-bold">
-                    0 <span className="text-gray-600">Points</span>
+                    {me.points}{" "}
+                    <span className="text-gray-600">
+                      {me.points === 1 ? "Point" : "Points"}
+                    </span>
                   </div>
                 </Button>
               </div>

@@ -7,6 +7,7 @@ export interface User {
   displayName: string;
   followersCount: number;
   followingCount: number;
+  points: number;
   isFollowing?: boolean;
   articles?: Article[];
   createdAt: string;
