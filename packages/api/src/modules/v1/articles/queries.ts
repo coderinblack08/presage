@@ -70,6 +70,7 @@ articlesQueriesRouter.get(
   async (req, res) => {
     const query: string = (req.query as any).query;
     const journalId: string = (req.query as any).journalId;
+    const userId: string = (req.query as any).userId;
     let qb = getConnection()
       .getRepository(Article)
       .createQueryBuilder("article")
@@ -85,19 +86,25 @@ articlesQueriesRouter.get(
     if (query) {
       qb = qb
         .where(
-          "article.document @@ plainto_tsquery(:query) and article.published = true",
-          {
-            query: query,
-          }
+          `article.document @@ plainto_tsquery(:query) and article.published = true ${
+            userId ? 'and article."userId" = :user' : ""
+          }`,
+          { query, user: userId }
         )
         .orderBy("ts_rank(article.document, plainto_tsquery(:query))", "DESC");
     }
 
     if (journalId) {
       data = await qb
-        .where('article.published = true and article."journalId" = :journal', {
-          journal: journalId,
-        })
+        .where(
+          `article.published = true and article."journalId" = :journal ${
+            userId ? 'and article."userId" = :user' : ""
+          }`,
+          {
+            journal: journalId,
+            user: userId,
+          }
+        )
         .orderBy('article."createdAt"', "DESC")
         .limit(10)
         .getMany();
@@ -105,7 +112,12 @@ articlesQueriesRouter.get(
 
     if (!query && !journalId) {
       qb = qb
-        .where("article.published = true")
+        .where(
+          `article.published = true ${
+            userId ? 'and article."userId" = :user' : ""
+          }`,
+          { user: userId }
+        )
         .orderBy('article."createdAt"', "DESC");
     }
 
