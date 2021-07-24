@@ -20,5 +20,5 @@ export class FullTextSearch1625201112544 implements MigrationInterface {
     `);
   }
 
-  public async down(queryRunner: QueryRunner): Promise<void> {}
+  public async down(queryRunner: QueryRunner): Promise<void> {queryRunner.query("drop index document_idx on article");}
 }

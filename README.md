@@ -7,6 +7,7 @@ A Medium alternative built for referral podcasts and blogs [joinpresage.com](htt
 ## Development
 
 All packages (web, api, etc.) are under `packages/`. When starting the api, run `yarn watch` and `yarn dev`.
+If you get time out on `yarn`, you can resolve by using `yarn config set network-timeout 600000 -g`
 
 When contributing code, please checkout our [Figma file](https://www.figma.com/file/8O8nAnBDlmW5GTD7cu68QT/presage).
 
