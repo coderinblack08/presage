@@ -1,6 +1,5 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import React from "react";
-import { UMAMI_CONFIG, UMAMI_URL } from "../lib/constants";
 import { fetcher } from "../lib/fetcher";
 import { Referral } from "../lib/types";
 
