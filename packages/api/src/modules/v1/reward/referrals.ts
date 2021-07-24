@@ -73,7 +73,6 @@ router.get(
   async (req: Request<{ token: string }>, res, next) => {
     const referral = await Referral.findOne({
       where: { token: req.params.token },
-      relations: ["article"],
     });
     if (!referral) {
       return next(createHttpError(404, "Token not found"));
@@ -92,7 +91,11 @@ router.get(
         } catch (error) {
           return next(createHttpError(500, error));
         }
-        const body = { userId: req.userId, creatorId: referral.article.userId };
+        const article = await Article.findOne(referral.articleId);
+        const body = {
+          userId: referral.referrerId,
+          creatorId: article?.userId,
+        };
         const userPoints = await UserPoints.findOne({
           where: body,
         });

@@ -178,6 +178,7 @@ articlesQueriesRouter.get(
 
 articlesQueriesRouter.get(
   "/points/:creatorId",
+  limiter({ max: 50 }),
   isAuth(true),
   async (req: Request<{ creatorId: string }>, res, next) => {
     try {
