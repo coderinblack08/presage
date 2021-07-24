@@ -197,34 +197,38 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
         </div>
       </section>
       <section className="mt-20 md:mt-28 px-5 md:px-8 max-w-8xl mx-auto">
-        <EmojiIcon emoji="📈" />
-        <h3 className="font-display text-gray-600">
-          Engage Readers Like <br />{" "}
-          <span className="h3 text-gray-900">You’ve Never Done Before</span>
-        </h3>
-        <p className="text-gray-600 mt-2">
-          With these stats, think about how much bigger you can be!
-        </p>
-        <div className="grid max-w-3xl grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 md:gap-12 mt-14">
-          <article>
-            <h4>200%</h4>
-            <p className="text-gray-600">More Retention</p>
-          </article>
-          <article>
-            <h4>75%</h4>
-            <p className="text-gray-600">More Revenue</p>
-          </article>
-          <article>
-            <h4>450%</h4>
-            <p className="text-gray-600">More Growth with Referrals</p>
-          </article>
+        <div className="flex items-center justify-between space-x-10 max-w-8xl mx-auto">
+          <div>
+            <EmojiIcon emoji="📈" />
+            <h3 className="font-display text-gray-600">
+              Engage Readers Like <br />{" "}
+              <span className="h3 text-gray-900">You’ve Never Done Before</span>
+            </h3>
+            <p className="text-gray-600 mt-2">
+              With these stats, think about how much bigger you can be!
+            </p>
+            <div className="grid max-w-3xl grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 md:gap-12 mt-14">
+              <article>
+                <h4>200%</h4>
+                <p className="text-gray-600">More Retention</p>
+              </article>
+              <article>
+                <h4>75%</h4>
+                <p className="text-gray-600">More Revenue</p>
+              </article>
+              <article>
+                <h4>450%</h4>
+                <p className="text-gray-600">More Growth with Referrals</p>
+              </article>
+            </div>
+          </div>
           <div className="hidden lg:block relative z-10">
             <Image
               src={iphonePro}
               alt="Phone in hand"
               quality={100}
-              width={569 * 0.9}
-              height={506 * 0.9}
+              width={318 * 0.9}
+              height={378 * 0.9}
               placeholder="blur"
               priority
             />
