@@ -1,6 +1,7 @@
 import React from "react";
 import illustration from "../../public/static/phone-illustration.png";
 import featureGraphic from "../../public/static/feature-graphic.png";
+import iphonePro from "../../public/static/iphone-pro.png";
 import philosophy from "../../public/static/philosophy.svg";
 import Image from "next/image";
 import { Button } from "../../components/Button";
@@ -217,6 +218,17 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
             <h4>450%</h4>
             <p className="text-gray-600">More Growth with Referrals</p>
           </article>
+          <div className="hidden lg:block relative z-10">
+            <Image
+              src={iphonePro}
+              alt="Phone in hand"
+              quality={100}
+              width={569 * 0.9}
+              height={506 * 0.9}
+              placeholder="blur"
+              priority
+            />
+          </div>
         </div>
       </section>
       <div className="px-5 md:px-8 max-w-8xl mx-auto mt-16 sm:mt-36">
