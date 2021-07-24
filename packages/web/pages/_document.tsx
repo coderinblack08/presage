@@ -14,7 +14,6 @@ class MyDocument extends Document {
               src="http://localhost:3001/umami.js"
             />
           ) : null}
-          <link rel="preconnect" href="https://stijndv.com" />
           <link
             rel="preload"
             href="/fonts/eudoxus-sans-var.woff2"

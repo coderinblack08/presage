@@ -42,6 +42,9 @@ export const ReferButton: React.FC<ReferButtonProps> = ({ article }) => {
             try {
               await mutateAsync([`/referrals/${article.id}`, {}, "post"], {
                 onSuccess: (data) => {
+                  if (data.new) {
+                    umami.trackEvent("New referral created", "referral");
+                  }
                   queryClient.setQueryData<Article>(
                     `/articles/${article.id}`,
                     (old) =>
@@ -117,7 +120,7 @@ export const ReferButton: React.FC<ReferButtonProps> = ({ article }) => {
           </div>
           <div className="flex items-center space-x-3 mt-4">
             <TwitterShareButton
-              title={referral?.article.title}
+              title={article.title}
               url={`${BASE_URL}/referral?${article.id}`}
               className="bg-white flex items-center justify-center rounded-lg shadow py-2 px-6 w-full"
               resetButtonStyle={false}
@@ -125,7 +128,7 @@ export const ReferButton: React.FC<ReferButtonProps> = ({ article }) => {
               <AiOutlineTwitter className="w-6 h-6 text-gray-600" />
             </TwitterShareButton>
             <FacebookShareButton
-              title={referral?.article.title}
+              title={article.title}
               url={`${BASE_URL}/referral?${article.id}`}
               className="bg-white flex items-center justify-center rounded-lg shadow py-2 px-6 w-full"
               resetButtonStyle={false}
@@ -133,7 +136,7 @@ export const ReferButton: React.FC<ReferButtonProps> = ({ article }) => {
               <AiFillFacebook className="w-6 h-6 text-gray-600" />
             </FacebookShareButton>
             <EmailShareButton
-              subject={referral?.article.title}
+              subject={article.title}
               body={`Checkout the article written by ${article.user.displayName} on presage`}
               url={`${BASE_URL}/referral?${article.id}`}
               className="bg-white flex items-center justify-center rounded-lg shadow py-2 px-6 w-full"

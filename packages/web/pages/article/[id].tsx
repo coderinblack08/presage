@@ -36,7 +36,10 @@ const RenderArticle: React.FC<{ article: Article }> = ({ article }) => {
   return <EditorContent editor={editor} />;
 };
 
-const ArticlePage: React.FC<{ id: string }> = ({ id }) => {
+const ArticlePage: React.FC<{ id: string; referred: boolean }> = ({
+  id,
+  referred,
+}) => {
   const { data: article } = useSSRQuery<Article>(`/articles/${id}`);
   const seo = {
     url: `https:joinpresage.com/article/${article.id}`,
@@ -55,6 +58,12 @@ const ArticlePage: React.FC<{ id: string }> = ({ id }) => {
       },
     ],
   };
+
+  useEffect(() => {
+    if (referred) {
+      umami.trackEvent(`User referred to article ${article.id}`, "referred");
+    }
+  }, [article.id, referred]);
 
   return (
     <>
@@ -149,6 +158,7 @@ const ArticlePage: React.FC<{ id: string }> = ({ id }) => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const id = context.query.id;
+  const referred = context.query.referred ? true : false;
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery(
     `/articles/${id}`,
@@ -158,6 +168,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       id,
+      referred,
       dehydratedState: dehydrate(queryClient),
     },
   };
