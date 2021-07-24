@@ -69,8 +69,6 @@ articlesQueriesRouter.get(
   isAuth(),
   async (req, res) => {
     const query: string = (req.query as any).query;
-    const journalId: string = (req.query as any).journalId;
-    const userId: string = (req.query as any).userId;
     let qb = getConnection()
       .getRepository(Article)
       .createQueryBuilder("article")
@@ -86,38 +84,15 @@ articlesQueriesRouter.get(
     if (query) {
       qb = qb
         .where(
-          `article.document @@ plainto_tsquery(:query) and article.published = true ${
-            userId ? 'and article."userId" = :user' : ""
-          }`,
-          { query, user: userId }
+          `article.document @@ plainto_tsquery(:query) and article.published = true`,
+          { query }
         )
         .orderBy("ts_rank(article.document, plainto_tsquery(:query))", "DESC");
     }
 
-    if (journalId) {
-      data = await qb
-        .where(
-          `article.published = true and article."journalId" = :journal ${
-            userId ? 'and article."userId" = :user' : ""
-          }`,
-          {
-            journal: journalId,
-            user: userId,
-          }
-        )
-        .orderBy('article."createdAt"', "DESC")
-        .limit(10)
-        .getMany();
-    }
-
-    if (!query && !journalId) {
+    if (!query) {
       qb = qb
-        .where(
-          `article.published = true ${
-            userId ? 'and article."userId" = :user' : ""
-          }`,
-          { user: userId }
-        )
+        .where("article.published = true")
         .orderBy('article."createdAt"', "DESC");
     }
 
@@ -130,6 +105,51 @@ articlesQueriesRouter.get(
         return y;
       })
     );
+  }
+);
+
+articlesQueriesRouter.get(
+  "/feed/:userId",
+  isAuth(),
+  async (req: Request<{ userId: string }>, res, next) => {
+    const userId = req.params.userId;
+    const journalId = req.query.journalId;
+    let qb = getConnection()
+      .getRepository(Article)
+      .createQueryBuilder("article")
+      .leftJoinAndSelect("article.tags", "tags")
+      .leftJoinAndSelect("article.user", "user")
+      .leftJoinAndSelect("article.journal", "journal")
+      .leftJoinAndSelect("article.likes", "likes", 'likes."userId" = :user', {
+        user: req.userId,
+      });
+
+    if (journalId) {
+      qb = qb
+        .where(
+          `article.published = true and article."journalId" = :journal and article."userId" = :user`,
+          {
+            journal: journalId,
+            user: userId,
+          }
+        )
+        .orderBy('article."createdAt"', "DESC");
+    }
+
+    if (!journalId) {
+      qb = qb
+        .where(`article.published = true and article."userId" = :user`, {
+          user: userId,
+        })
+        .orderBy('article."createdAt"', "DESC");
+    }
+
+    try {
+      const data = await qb.limit(10).getMany();
+      res.json(data);
+    } catch (error) {
+      next(createHttpError(500, error));
+    }
   }
 );
 
