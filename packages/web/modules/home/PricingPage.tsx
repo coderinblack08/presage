@@ -57,7 +57,7 @@ export const PricingPage = ({}) => {
           description="For power users trying to get the most out of Presage."
           title="Professionals"
           cost={price ? 5 : 50}
-          plan={price ? "yearly" : "monthly"}
+          plan={price ? "monthly" : "yearly"}
         />
       </div>
     </div>
