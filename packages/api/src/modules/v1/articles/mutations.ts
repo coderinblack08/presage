@@ -68,35 +68,45 @@ articlesMutationRouter.patch(
   isAuth(true),
   async (req: Request<{ id: string }>, res) => {
     const bodyJson = req.body.body;
-    const body = sanitizeHtml(
-      generateHTML(bodyJson, [
-        StarterKit,
-        Placeholder,
-        Underline,
-        Image,
-        Dropcursor,
-      ]),
-      {
-        ...sanitizeHtml.defaults,
-        allowedTags: ["img", ...sanitizeHtml.defaults.allowedTags],
-        allowedAttributes: {
-          img: ["src", "align"],
-          ...sanitizeHtml.defaults.allowedAttributes,
-        },
-        allowedSchemesByTag: {
-          img: ["http", "https"],
-          ...sanitizeHtml.defaults.allowedSchemesByTag,
-        },
-      }
-    );
-
-    const article = await Article.update(
-      { id: req.params.id, userId: req.userId },
-      {
+    let updateBody = {};
+    if (bodyJson) {
+      const body = sanitizeHtml(
+        generateHTML(bodyJson, [
+          StarterKit,
+          Placeholder,
+          Underline,
+          Image,
+          Dropcursor,
+        ]),
+        {
+          ...sanitizeHtml.defaults,
+          allowedTags: ["img", ...sanitizeHtml.defaults.allowedTags],
+          allowedAttributes: {
+            img: ["src", "align"],
+            ...sanitizeHtml.defaults.allowedAttributes,
+          },
+          allowedSchemesByTag: {
+            img: ["http", "https"],
+            ...sanitizeHtml.defaults.allowedSchemesByTag,
+          },
+        }
+      );
+      updateBody = {
+        ...updateBody,
         body: body,
         bodyJson: req.body.body,
         readingTime: readingTime(body).text,
-      }
+      };
+    }
+    if (req.body.title) {
+      updateBody = {
+        ...updateBody,
+        title: req.body.title,
+      };
+    }
+    const article = await Article.update(
+      { id: req.params.id, userId: req.userId },
+      updateBody
     );
     res.json(article.raw);
   }
