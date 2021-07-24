@@ -13,10 +13,10 @@ import { Waitlist } from "./Waitlist";
 
 interface LandingPageProps {}
 
-export function ItemCheck() {
+export function ItemCheck({ size = "medium" }: { size?: "small" | "medium" }) {
   return (
-    <div className="mt-1 flex items-center justify-center bg-gradient-to-b from-gray-100 to-gray-300 rounded-full p-1">
-      <MdCheck className="w-4 h-4" />
+    <div className="flex items-center justify-center bg-gradient-to-b from-gray-100 to-gray-300 rounded-full p-1">
+      <MdCheck className={size === "small" ? "w-3 h-3" : "w-4 h-4"} />
     </div>
   );
 }
@@ -141,7 +141,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
             </p>
             <ul className="mt-12 space-y-10">
               <li className="flex space-x-6 items-start">
-                <ItemCheck />
+                <div className="mt-1">
+                  <ItemCheck />
+                </div>
                 <div className="space-y-1 md:space-y-2">
                   <h4 className="text-lg md:h4 font-display">Publish</h4>
                   <p className="text-gray-700 font-normal">
@@ -152,7 +154,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
                 </div>
               </li>
               <li className="flex space-x-6 items-start">
-                <ItemCheck />
+                <div className="mt-1">
+                  <ItemCheck />
+                </div>
                 <div className="space-y-1 md:space-y-2">
                   <h4 className="text-lg md:h4 font-display">
                     Referrals and Rewards
@@ -166,7 +170,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
                 </div>
               </li>
               <li className="flex space-x-6 items-start">
-                <ItemCheck />
+                <div className="mt-1">
+                  <ItemCheck />
+                </div>
                 <div className="space-y-1 md:space-y-2">
                   <h4 className="text-lg md:h4 font-display">
                     Reading and Conversing

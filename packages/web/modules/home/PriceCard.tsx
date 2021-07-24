@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { Button } from "../../components/Button";
 import { MdCheck } from "react-icons/md";
+import { ItemCheck } from "./LandingPage";
 
 interface FeatureCardProps {
   title: string;
@@ -19,32 +20,27 @@ export const PriceCard: React.FC<FeatureCardProps> = ({
   cost,
 }) => {
   return (
-    <article className="relative w-full h-full p-5 my-4 md:p-7 max-w-lg col-span-1 bg-white shadow rounded-lg">
-      <h6 className="font-bold  text-gray-500">{title}</h6>
-
-      <div className="flex mt-1">
-        <h3 className="text-3xl font-bold leading-8">${cost}</h3>
-        <h4 className="leading-8  pb-0">/{plan} </h4>
+    <article className="relative w-full h-full p-3 my-4 max-w-sm bg-white shadow rounded-lg">
+      <div className="p-3">
+        <h6 className="font-semibold text-gray-600">{title}</h6>
+        <div className="flex items-center">
+          <h3>${cost}</h3>
+          <h4>/{plan} </h4>
+        </div>
+        <p className="text-gray-500 mt-1">{description}</p>
+        <ul className="my-6 space-y-4">
+          {features.map((item) => (
+            <li className="flex space-x-4 items-center" key={item}>
+              <ItemCheck size="small" />
+              <p className="text-gray-700 font-normal">{item}</p>
+            </li>
+          ))}
+        </ul>
       </div>
-
-      <p className="text-gray-600 mt-2 font-normal">{description}</p>
-
-      <ul className=" inline-block mt-6 mb-12">
-        {features.map((item) => (
-          <div key="index" className="flex text-gray-600 my-1">
-            <MdCheck className="my-auto mr-2" />
-            <p>{item}</p>
-          </div>
-        ))}
-      </ul>
       <div>
         <Link href="/" passHref>
-          <Button
-            size="large"
-            color="primary"
-            className="w-11/12  m-3 mx-auto inset-x-0 bottom-0 absolute"
-          >
-            <span>Create free account</span>
+          <Button size="large" className="w-full">
+            Create free account
           </Button>
         </Link>
       </div>
