@@ -2,10 +2,9 @@ import { Request, Router } from "express";
 import createHttpError from "http-errors";
 import { sign, verify } from "jsonwebtoken";
 import { nanoid } from "nanoid";
-import { getConnection } from "typeorm";
 import { Article } from "../../../entities/Article";
 import { Referral } from "../../../entities/Referral";
-import { User } from "../../../entities/User";
+import { UserPoints } from "../../../entities/UserPoints";
 import { limiter } from "../../../lib/rateLimit";
 import { isAuth } from "../auth/isAuth";
 
@@ -74,15 +73,13 @@ router.get(
   async (req: Request<{ token: string }>, res, next) => {
     const referral = await Referral.findOne({
       where: { token: req.params.token },
+      relations: ["article"],
     });
     if (!referral) {
       return next(createHttpError(404, "Token not found"));
     }
     try {
-      const jwtData: any = verify(
-        referral.jwt,
-        process.env.REFERRAL_TOKEN_SECRET!
-      );
+      verify(referral.jwt, process.env.REFERRAL_TOKEN_SECRET!);
       if (
         referral.claimed === false &&
         req.userId &&
@@ -95,12 +92,16 @@ router.get(
         } catch (error) {
           return next(createHttpError(500, error));
         }
-        await getConnection()
-          .createQueryBuilder()
-          .update(User)
-          .where({ id: jwtData.referrerId })
-          .set({ points: () => "points + 1" })
-          .execute();
+        const body = { userId: req.userId, creatorId: referral.article.userId };
+        const userPoints = await UserPoints.findOne({
+          where: body,
+        });
+        if (userPoints) {
+          userPoints.points = userPoints.points + 1;
+          await userPoints.save();
+        } else {
+          await UserPoints.create({ ...body, points: 1 }).save();
+        }
       }
     } catch {}
     res.json(referral);

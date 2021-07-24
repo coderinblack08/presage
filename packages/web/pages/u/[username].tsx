@@ -33,7 +33,7 @@ const UserPage: React.FC<
 
   return (
     <div>
-      <ArticleNavbar lightGray />
+      <ArticleNavbar user={user} lightGray />
       <header className="bg-white pt-4 md:pt-6 pb-12 md:pb-16">
         <div className="flex items-start space-x-6 md:space-x-8 max-w-4xl mx-auto px-5 md:px-8">
           <img

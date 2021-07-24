@@ -94,7 +94,7 @@ const ArticlePage: React.FC<{ id: string; referred: boolean }> = ({
         description=""
       />
       <div>
-        <ArticleNavbar lightGray />
+        <ArticleNavbar user={article.user} lightGray />
         <header className="bg-white">
           <div className="max-w-4xl mx-auto px-5 md:px-8 pt-4 md:pt-8 pb-10 md:pb-16">
             <Link href={`/u/${article.user.username}`}>

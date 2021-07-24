@@ -1,3 +1,4 @@
+import { ReactQueryDevtools } from "react-query/devtools";
 import { DefaultSeo } from "next-seo";
 import type { AppProps } from "next/app";
 import React from "react";
@@ -62,7 +63,7 @@ function MyApp({ Component, pageProps }: AppProps) {
               }}
             />
             <Component {...pageProps} />
-            {/* <ReactQueryDevtools /> */}
+            <ReactQueryDevtools />
           </AuthProvider>
         </AudioPlayerProvider>
       </Hydrate>

@@ -4,7 +4,7 @@ import router from "next/router";
 import React from "react";
 import { Discovery, TicketStar } from "react-iconly";
 import { useQuery } from "react-query";
-import { User } from "../lib/types";
+import { User, UserPoints } from "../lib/types";
 import { Button } from "./Button";
 import { Dropdown, MenuItem } from "./Dropdown";
 import { LoginButton } from "./LoginButton";
@@ -13,11 +13,15 @@ import { UserDropdown } from "./UserDropdown";
 
 interface ArticleNavbarProps {
   lightGray?: boolean;
-  user?: User;
+  user: User;
 }
 
-export const ArticleNavbar: React.FC<ArticleNavbarProps> = ({ lightGray }) => {
+export const ArticleNavbar: React.FC<ArticleNavbarProps> = ({
+  lightGray,
+  user,
+}) => {
   const { data: me } = useQuery<User>("/me");
+  const { data: points } = useQuery<UserPoints>(`/articles/points/${user.id}`);
 
   return (
     <nav className={lightGray ? "bg-white" : "bg-gray-100"}>
@@ -87,9 +91,9 @@ export const ArticleNavbar: React.FC<ArticleNavbarProps> = ({ lightGray }) => {
                   }
                 >
                   <div className="text-base font-bold">
-                    {me.points}{" "}
+                    {points?.points || 0}{" "}
                     <span className="text-gray-600">
-                      {me.points === 1 ? "Point" : "Points"}
+                      {points?.points === 1 ? "Point" : "Points"}
                     </span>
                   </div>
                 </Button>

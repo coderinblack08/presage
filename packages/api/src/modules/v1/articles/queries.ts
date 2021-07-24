@@ -3,6 +3,7 @@ import createHttpError from "http-errors";
 import { FindConditions, getConnection } from "typeorm";
 import { Article } from "../../../entities/Article";
 import { Like } from "../../../entities/Like";
+import { UserPoints } from "../../../entities/UserPoints";
 import { limiter } from "../../../lib/rateLimit";
 import { isAuth } from "../auth/isAuth";
 
@@ -171,6 +172,21 @@ articlesQueriesRouter.get(
       return res.json(body);
     } catch (e) {
       return next(createHttpError(500, e));
+    }
+  }
+);
+
+articlesQueriesRouter.get(
+  "/points/:creatorId",
+  isAuth(true),
+  async (req: Request<{ creatorId: string }>, res, next) => {
+    try {
+      const points = await UserPoints.findOne({
+        where: { userId: req.userId, creatorId: req.params.creatorId },
+      });
+      res.json(points);
+    } catch (error) {
+      next(createHttpError(500, error));
     }
   }
 );

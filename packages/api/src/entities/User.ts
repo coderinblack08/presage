@@ -21,6 +21,7 @@ import { Journal } from "./Journal";
 import { Like } from "./Like";
 import { Referral } from "./Referral";
 import { Reward } from "./Reward";
+import { UserPoints } from "./UserPoints";
 
 @Entity()
 export class User extends BaseEntity {
@@ -65,6 +66,12 @@ export class User extends BaseEntity {
   @OneToMany(() => Reward, (reward) => reward.user)
   rewards: Reward[];
 
+  @OneToMany(() => UserPoints, (up) => up.user)
+  userPoints: UserPoints[];
+
+  @OneToMany(() => UserPoints, (up) => up.creator)
+  readerPoints: UserPoints[];
+
   @OneToMany(() => Referral, (referral) => referral.referrer)
   referrals: Referral[];
 
@@ -77,9 +84,6 @@ export class User extends BaseEntity {
 
   @Column("int", { default: 0 })
   followersCount: number;
-
-  @Column("int", { default: 0 })
-  points: number;
 
   @Column("int", { default: 0 })
   followingCount: number;

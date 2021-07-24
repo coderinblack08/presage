@@ -7,7 +7,6 @@ export interface User {
   displayName: string;
   followersCount: number;
   followingCount: number;
-  points: number;
   isFollowing?: boolean;
   articles?: Article[];
   createdAt: string;
@@ -90,4 +89,12 @@ export interface Referral {
   count: number;
   claimed: boolean;
   createdAt: Date;
+}
+
+export interface UserPoints {
+  userId: string;
+  creatorId: string;
+  user: User;
+  creator: User;
+  points: number;
 }
