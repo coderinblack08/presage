@@ -1,4 +1,6 @@
-import { Request, Router } from "express";
+import { validate } from "class-validator";
+import { CookieOptions, Request, Router } from "express";
+import createHttpError from "http-errors";
 import passport from "passport";
 import { Strategy } from "passport-google-oauth20";
 import { getConnection } from "typeorm";
@@ -13,20 +15,11 @@ import { Article } from "../../../entities/Article";
 import { Journal } from "../../../entities/Journal";
 import { User } from "../../../entities/User";
 import { isDev } from "../../../lib/constants";
+import { limiter } from "../../../lib/rateLimit";
 import { createToken } from "./createToken";
 import { isAuth } from "./isAuth";
 
 const router = Router();
-const userFields: (keyof User)[] = [
-  "id",
-  "email",
-  "username",
-  "bio",
-  "profilePicture",
-  "displayName",
-  "createdAt",
-  "updatedAt",
-];
 
 const strategy = new Strategy(
   {
@@ -94,8 +87,9 @@ router.get(
   })
 );
 
-const options = {
+const options: CookieOptions = {
   httpOnly: true,
+  sameSite: "lax",
   domain: isDev() ? undefined : ".joinpresage.com",
 };
 
@@ -108,58 +102,96 @@ router.get(
   }
 );
 
-router.get("/me", isAuth(), async (req, res) => {
-  const user = req.userId
-    ? await User.findOne(req.userId, {
-        select: userFields,
-      })
-    : null;
-  res.json(user);
+router.get("/me", limiter({ max: 100 }), isAuth(), async (req, res, next) => {
+  try {
+    const user = req.userId ? await User.findOne(req.userId) : null;
+    res.json(user);
+  } catch (error) {
+    next(createHttpError(500, error));
+  }
 });
 
 router.get(
   "/user/:username",
+  limiter({ max: 100 }),
   isAuth(),
-  async (req: Request<{ username: string }>, res) => {
-    const user = await User.findOne({
-      where: { username: req.params.username },
-    });
-    if (!user) return res.json({});
-    const data = await getConnection()
-      .getRepository(Article)
-      .createQueryBuilder("article")
-      .leftJoinAndSelect("article.tags", "tags")
-      .leftJoinAndSelect("article.user", "user")
-      .leftJoinAndSelect("article.journal", "journal")
-      .leftJoinAndSelect("article.likes", "likes", 'likes."userId" = :user', {
-        user: req.userId,
-      })
-      .orderBy('article."createdAt"', "DESC")
-      .where('article.published = true and article."userId" = :user', {
-        user: user.id,
-      })
-      .limit(6)
-      .getMany();
+  async (req: Request<{ username: string }>, res, next) => {
+    try {
+      const user = await User.findOne({
+        where: { username: req.params.username },
+      });
+      if (!user) return res.json({});
+      const data = await getConnection()
+        .getRepository(Article)
+        .createQueryBuilder("article")
+        .leftJoinAndSelect("article.tags", "tags")
+        .leftJoinAndSelect("article.user", "user")
+        .leftJoinAndSelect("article.journal", "journal")
+        .leftJoinAndSelect("article.likes", "likes", 'likes."userId" = :user', {
+          user: req.userId,
+        })
+        .orderBy('article."createdAt"', "DESC")
+        .where('article.published = true and article."userId" = :user', {
+          user: user.id,
+        })
+        .limit(6)
+        .getMany();
 
-    const articles = data.map((x) => {
-      const y: any = { ...x, liked: x.likes.length === 1 };
-      delete y.likes;
+      const articles = data.map((x) => {
+        const y: any = { ...x, liked: x.likes.length === 1 };
+        delete y.likes;
 
-      return y;
-    });
-    if (req.userId) {
-      const following = await getConnection().query(
-        `select * from user_followers_user where "userId_1" = $1 and "userId_2" = $2`,
-        [user.id, req.userId]
-      );
-      return res.json({ ...user, articles, isFollowing: following.length > 0 });
-    } else {
-      return res.json({ ...user, articles });
+        return y;
+      });
+      if (req.userId) {
+        const following = await getConnection().query(
+          `select * from user_followers_user where "userId_1" = $1 and "userId_2" = $2`,
+          [user.id, req.userId]
+        );
+        return res.json({
+          ...user,
+          articles,
+          isFollowing: following.length > 0,
+        });
+      } else {
+        return res.json({ ...user, articles });
+      }
+    } catch (error) {
+      return next(createHttpError(500, error));
     }
   }
 );
 
-router.post("/logout", isAuth(true), (_, res) => {
+router.patch(
+  "/user",
+  limiter({ max: 20 }),
+  isAuth(true),
+  async (req, res, next) => {
+    const user = await User.findOne(req.userId);
+    if (!user) {
+      return next(createHttpError(404, "User not found"));
+    }
+    const { displayName, username, email, bio, profilePicture } = req.body;
+    if (displayName) user.displayName = displayName;
+    if (username) user.username = username;
+    if (email) user.email = email;
+    if (bio) user.bio = bio;
+    if (profilePicture) user.profilePicture = profilePicture;
+    try {
+      await validate(user, { skipMissingProperties: true });
+    } catch (error) {
+      return next(createHttpError(422, error));
+    }
+    try {
+      await user.save();
+      return res.json(user);
+    } catch (error) {
+      return next(createHttpError(500, error));
+    }
+  }
+);
+
+router.post("/logout", limiter({ max: 20 }), isAuth(true), (_, res) => {
   res.clearCookie("jid", options);
   res.send("Logged out successfully");
 });

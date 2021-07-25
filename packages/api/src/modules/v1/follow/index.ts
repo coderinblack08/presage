@@ -2,12 +2,14 @@ import { Request, Router } from "express";
 import createHttpError from "http-errors";
 import { getConnection } from "typeorm";
 import { User } from "../../../entities/User";
+import { limiter } from "../../../lib/rateLimit";
 import { isAuth } from "../auth/isAuth";
 
 const router = Router();
 
 router.post(
   "/follow/:id",
+  limiter({ max: 100 }),
   isAuth(true),
   async (req: Request<{ id: string }>, res, next) => {
     if (req.userId === req.params.id) {

@@ -1,7 +1,7 @@
+import Error from "next/error";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
 import React from "react";
-import { MdEdit } from "react-icons/md";
 import { QueryClient, useQuery } from "react-query";
 import { dehydrate } from "react-query/hydration";
 import { ArticleNavbar } from "../../components/ArticleNavbar";
@@ -10,23 +10,30 @@ import { ssrFetcher } from "../../lib/fetcher";
 import { useSSRQuery } from "../../lib/hooks/useSSRQuery";
 import { Article, Journal, User } from "../../lib/types";
 import { ArticleCard } from "../../modules/article/ArticleCard";
+import { EditProfileModal } from "../../modules/user/EditProfileModal";
 import { FollowButton } from "../../modules/user/FollowButton";
+import { isEqual } from "lodash";
+import { TextParser } from "../../modules/user/TextParser";
 
 const UserPage: React.FC<
   InferGetServerSidePropsType<typeof getServerSideProps>
-> = ({ username }) => {
+> = ({ username, userNonExistent }) => {
   const { data: me } = useQuery<User>(`/me`);
   const { data: user } = useSSRQuery<User>(`/user/${username}`);
   const { data: journals } = useQuery<Journal[]>(`/journals/${user.id}`);
   const router = useRouter();
   const journalId = router.query.journalId?.toString();
   const { data: articles } = useQuery<Article[]>(
-    `/articles${journalId ? `?journalId=${journalId}` : ""}`
+    `/articles/feed/${user.id}${journalId ? `?journalId=${journalId}` : ""}`
   );
+
+  if (userNonExistent) {
+    return <Error statusCode={404} />;
+  }
 
   return (
     <div>
-      <ArticleNavbar lightGray />
+      <ArticleNavbar user={user} lightGray />
       <header className="bg-white pt-4 md:pt-6 pb-12 md:pb-16">
         <div className="flex items-start space-x-6 md:space-x-8 max-w-4xl mx-auto px-5 md:px-8">
           <img
@@ -37,28 +44,19 @@ const UserPage: React.FC<
           <div className="w-full">
             <div className="flex items-center">
               <h4>{user.displayName}</h4>
-              <span className="text-gray-600 ml-2">@{user.username}</span>
+              <span className="text-gray-500 ml-2">@{user.username}</span>
             </div>
-            <p className="text-gray-600 mt-0.5">
-              <span className="font-semibold">{user.followersCount}</span>{" "}
-              followers ·{" "}
-              <span className="font-semibold">{user.followingCount}</span>{" "}
-              following
+            <p className="text-gray-500 mt-0.5">
+              {user.followersCount} followers · {user.followingCount} following
             </p>
             {user.bio && (
-              <p className="mt-4 text-gray-600 font-normal leading-7">
+              <TextParser className="mt-4 text-gray-600 leading-7">
                 {user.bio}
-              </p>
+              </TextParser>
             )}
-            <div className="mt-6">
+            <div className="mt-5">
               {me?.id === user.id ? (
-                <Button
-                  size="small"
-                  icon={<MdEdit className="w-5 h-5" />}
-                  rounded
-                >
-                  Edit Profile
-                </Button>
+                <EditProfileModal user={me} />
               ) : (
                 <FollowButton username={user.username} />
               )}
@@ -156,15 +154,20 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     `/user/${username}`,
     ssrFetcher(context.req.cookies.jid)
   );
-  const userId = queryClient.getQueryData<User>(`/user/${username}`)?.id;
-  await queryClient.prefetchQuery(
-    `/journals/${userId}`,
-    ssrFetcher(context.req.cookies.jid)
-  );
+  const user = queryClient.getQueryData<User>(`/user/${username}`);
+  const userNonExistent =
+    user === null || user === undefined || isEqual(user, {});
+  if (!userNonExistent) {
+    await queryClient.prefetchQuery(
+      `/journals/${user?.id}`,
+      ssrFetcher(context.req.cookies.jid)
+    );
+  }
 
   return {
     props: {
       username,
+      userNonExistent,
       dehydratedState: dehydrate(queryClient),
     },
   };

@@ -3,11 +3,12 @@ import createHttpError from "http-errors";
 import { getConnection } from "typeorm";
 import { v4 } from "uuid";
 import { Comment } from "../../../entities/Comment";
+import { limiter } from "../../../lib/rateLimit";
 import { isAuth } from "../auth/isAuth";
 
 const router = Router();
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", limiter({ max: 50 }), async (req, res) => {
   const parentId = req.query.parentId as string;
   const comment = parentId ? await Comment.findOne(parentId) : null;
   const comments = await getConnection()
@@ -31,6 +32,7 @@ router.get("/:id", async (req, res) => {
 
 router.post(
   "/:id",
+  limiter({ max: 50 }),
   isAuth(true),
   async (req: Request<{ id: string }>, res, next) => {
     const parent = req.body.parentId

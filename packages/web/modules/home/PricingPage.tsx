@@ -8,30 +8,31 @@ export const PricingPage = ({}) => {
   return (
     <div className="py-5 md:py-8">
       <h3 className="font-display">Ready to start with Presage?</h3>
-      <p className="text-gray-600 my-2">
+      <p className="text-gray-600 mt-2">
         Presage is free for individuals. Level up by going pro!
       </p>
-
-      <div className="flex mt-4 mb-9">
-        <p className={`pr-2 ${price ? "" : "font-bold"}`}>Monthly</p>
+      <div className="flex items-center mt-4">
+        <p className={`pr-3 ${price ? "" : "font-bold"} leading-none`}>
+          Monthly
+        </p>
         <Switch
           checked={price}
           onChange={setPrice}
-          className={
-            "relative focus:outline-none inline-flex items-center h-6 bg-gray-800 rounded-full w-11"
-          }
+          className={`${
+            price ? "bg-gray-800" : "bg-gray-200"
+          } relative inline-flex flex-shrink-0 h-[24px] w-[44px] border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none`}
         >
           <span
             className={`${
-              price ? "translate-x-6 " : "translate-x-1"
-            } inline-block w-4 h-4 transform transition bg-white rounded-full`}
+              price ? "translate-x-[20px]" : "translate-x-0"
+            } inline-block pointer-events-none h-[20px] w-[20px] rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200`}
           />
         </Switch>
-
-        <p className={`pl-2 ${!price ? "" : "font-bold"}`}>Annually</p>
+        <p className={`pl-3 ${!price ? "" : "font-bold"} leading-none`}>
+          Annually
+        </p>
       </div>
-
-      <div className="md:flex block mt-9 gap-5">
+      <div className="md:flex block mt-8 gap-4">
         <PriceCard
           features={[
             "3 free journals",
@@ -56,8 +57,8 @@ export const PricingPage = ({}) => {
           ]}
           description="For power users trying to get the most out of Presage."
           title="Professionals"
-          cost={price ? 5 : 50}
-          plan={price ? "monthly" : "yearly"}
+          cost={price ? 50 : 5}
+          plan={price ? "yearly" : "monthly"}
         />
       </div>
     </div>

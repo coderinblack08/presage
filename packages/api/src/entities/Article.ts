@@ -13,6 +13,7 @@ import {
 import { Comment } from "./Comment";
 import { Journal } from "./Journal";
 import { Like } from "./Like";
+import { Referral } from "./Referral";
 import { Tag } from "./Tag";
 import { User } from "./User";
 
@@ -39,6 +40,9 @@ export class Article extends BaseEntity {
   @Column("int", { default: 0 })
   points: number;
 
+  @Column("int", { default: 0 })
+  referralCount: number;
+
   @Column()
   userId: string;
 
@@ -51,6 +55,9 @@ export class Article extends BaseEntity {
 
   @OneToMany(() => Like, (like) => like.article)
   likes: Like[];
+
+  @OneToMany(() => Referral, (referral) => referral.article)
+  referrals: Referral[];
 
   @OneToMany(() => Comment, (comment) => comment.article)
   comments: Comment[];

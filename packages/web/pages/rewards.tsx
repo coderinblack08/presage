@@ -4,6 +4,7 @@ import { useQuery } from "react-query";
 import { Layout } from "../components/Layout";
 import { Reward } from "../lib/types";
 import { CreateRewardModal } from "../modules/rewards/CreateRewardModal";
+import { UpdateRewardModal } from "../modules/rewards/UpdateRewardModal";
 
 const Rewards: React.FC = () => {
   const { data: rewards } = useQuery<Reward[]>(`/rewards`);
@@ -26,25 +27,7 @@ const Rewards: React.FC = () => {
         </div>
         <div className="grid grid-cols-2 gap-3 mt-4">
           {rewards?.map((reward) => (
-            <button
-              key={reward.id}
-              className="flex flex-col justify-between text-left bg-white rounded-lg p-6 shadow"
-            >
-              <div>
-                <h4>{reward.name}</h4>
-                <p className="text-gray-500">{reward.description}</p>
-              </div>
-              <div className="flex items-center space-x-2 mt-6">
-                <div className="flex items-center text-gray-600">
-                  <TicketStar set="bulk" />
-                  <p className="ml-2">
-                    <span className="font-bold">{reward.points}</span> Points
-                  </p>
-                </div>
-                <span className="text-gray-600">·</span>
-                <p className="text-gray-600">Claimed {reward.claimed} times</p>
-              </div>
-            </button>
+            <UpdateRewardModal key={reward.id} reward={reward} />
           ))}
         </div>
       </div>

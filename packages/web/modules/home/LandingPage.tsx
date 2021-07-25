@@ -1,25 +1,23 @@
+import Image from "next/image";
 import React from "react";
-import illustration from "../../public/static/phone-illustration.png";
+import { MdCheck } from "react-icons/md";
+import { useMediaQuery } from "react-responsive";
+import { Footer } from "../../components/Footer";
+import { Navbar } from "../../components/Navbar";
 import featureGraphic from "../../public/static/feature-graphic.png";
 import iphonePro from "../../public/static/iphone-pro.png";
 import philosophy from "../../public/static/philosophy.svg";
-import Image from "next/image";
-import { Button } from "../../components/Button";
-import { FeatureCard } from "./FeatureCard";
+import phone from "../../public/static/phone-illustration.png";
 import { EmojiIcon } from "./EmojiIcon";
-import { Footer } from "../../components/Footer";
-import { useMediaQuery } from "react-responsive";
-import { Navbar } from "../../components/Navbar";
-import { MdCheck } from "react-icons/md";
-import { Input } from "../../components/Input";
+import { FeatureCard } from "./FeatureCard";
 import { Waitlist } from "./Waitlist";
 
 interface LandingPageProps {}
 
-function ItemCheck() {
+export function ItemCheck({ size = "medium" }: { size?: "small" | "medium" }) {
   return (
-    <div className="mt-1 flex items-center justify-center bg-gradient-to-b from-gray-100 to-gray-300 rounded-full p-1">
-      <MdCheck className="w-4 h-4" />
+    <div className="flex items-center justify-center bg-gradient-to-b from-gray-100 to-gray-300 rounded-full p-1">
+      <MdCheck className={size === "small" ? "w-3 h-3" : "w-4 h-4"} />
     </div>
   );
 }
@@ -34,21 +32,21 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
         <header className="mt-10 md:mt-0 flex justify-between items-center md:py-8">
           <div className="max-w-lg lg:max-w-2xl w-full">
             <h1 className="text-3xl leading-normal sm:h3 lg:h2 font-display font-bold">
-              A Medium alternative built for <br />
+              A Medium alternative helping you <br />
               <span className="text-3xl leading-normal sm:h3 lg:h2 text-gray-500 font-bold font-display">
-                referral podcasts and blogs
+                grow while you stay in control
               </span>
             </h1>
-            <p className="text-gray-600 font-display mt-4 !leading-[1.8] text-[13px] sm:text-base">
-              <strong className="text-gray-900">Three steps</strong> — write,
-              record, publish about anything. Grow your audience exponentially
-              with Presage&apos;s referral system.
+            <p className="text-gray-600 font-display mt-6 !leading-[1.8] text-[13px] sm:text-base">
+              Presage believes in empowering writers by letting them control and
+              earn from the content they own. Grow exponentially using referrals
+              and engaging rewards.
             </p>
             <Waitlist />
           </div>
           <div className="hidden md:block">
             <Image
-              src={illustration}
+              src={phone}
               alt="Phone in hand"
               quality={100}
               width={317 * (isTabletOrDesktop ? 0.75 : 1)}
@@ -62,24 +60,25 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
       <div className="relative px-5 md:px-8 max-w-8xl mx-auto" id="main">
         <section className="mt-20 md:mt-28">
           <EmojiIcon emoji="🔌" />
-          <p className="font-display font-bold">Our Features</p>
-          <h3 className="h4 md:h3 font-display">Comes Battery Packed</h3>
+          <p className="font-display font-bold">We Provide</p>
+          <h3 className="h4 md:h3 font-display">Powerful Features</h3>
           <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-5 mt-5 max-w-5xl">
             <FeatureCard
-              title="Feature Rich Editor"
-              description="Built into presage is an editor with a wide range of features (text formatting, markdown, equations, syntax highlighting, etc.), many of which Medium doesn't offer."
+              title="Empowering writers"
+              description="While Medium wants to claim they own your content, we believe in the empowerment of writers and letting you stay in control."
             />
             <FeatureCard
-              title="For Story-Tellers &amp; Bloggers"
-              description="Presage was designed to be a place to document and share your stories, studies, and more."
+              title="Grow with Referrals and Rewards"
+              description="Engage your audience and grow exponentially with referrals and twitch channel points like rewards."
             />
             <FeatureCard
-              title="Talk To Your Community"
-              description="We put community first, allowing for discussions, referrals, and upvotes."
+              title="Sponsor Marketplace"
+              description="Get matched on our sponsor marketplace to make it easier to find companies and people willing to sponsor you."
+              // beta
             />
             <FeatureCard
-              title="Grow Exponentially With Referrals"
-              description="Referrals have proven to be an effective way for startups to grow. Why don't we do the same for publishers?"
+              title="Integrate with our API"
+              description="Use presage as a CMS and display your content on your own site while we handle distribution and servers."
             />
           </div>
         </section>
@@ -131,20 +130,23 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
             </radialGradient>
           </defs>
         </svg>
-
         <div className="flex items-center justify-between space-x-10 max-w-8xl mx-auto">
           <div className="max-w-full lg:max-w-xl xl:max-w-2xl">
             <h3 className="h4 md:h3 text-gray-900 font-display">
               Sounds Great,
               <br />
-              <div className="text-gray-600 h4 md:h3">But How Do You Work?</div>
+              <div className="text-gray-600 h4 md:h3">
+                But How Does it Work?
+              </div>
             </h3>
             <p className="text-gray-600 mt-2">
               We’re built by 3 main components, see how these work for yourself.
             </p>
             <ul className="mt-12 space-y-10">
               <li className="flex space-x-6 items-start">
-                <ItemCheck />
+                <div className="mt-1">
+                  <ItemCheck />
+                </div>
                 <div className="space-y-1 md:space-y-2">
                   <h4 className="text-lg md:h4 font-display">Publish</h4>
                   <p className="text-gray-700 font-normal">
@@ -155,7 +157,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
                 </div>
               </li>
               <li className="flex space-x-6 items-start">
-                <ItemCheck />
+                <div className="mt-1">
+                  <ItemCheck />
+                </div>
                 <div className="space-y-1 md:space-y-2">
                   <h4 className="text-lg md:h4 font-display">
                     Referrals and Rewards
@@ -169,7 +173,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
                 </div>
               </li>
               <li className="flex space-x-6 items-start">
-                <ItemCheck />
+                <div className="mt-1">
+                  <ItemCheck />
+                </div>
                 <div className="space-y-1 md:space-y-2">
                   <h4 className="text-lg md:h4 font-display">
                     Reading and Conversing

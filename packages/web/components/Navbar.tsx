@@ -8,6 +8,7 @@ import { User } from "../lib/types";
 import { Button } from "./Button";
 import { DraftNavbar } from "./DraftNavbar";
 import { Dropdown, MenuItem } from "./Dropdown";
+import { LoginButton } from "./LoginButton";
 import { UserDropdown } from "./UserDropdown";
 
 interface NavbarProps {
@@ -116,13 +117,7 @@ export const Navbar: React.FC<NavbarProps> = ({ isDraft = false }) => {
             Contact
           </a>
         )}
-        {me ? (
-          <UserDropdown />
-        ) : (
-          <a href="http://localhost:4000/auth/google">
-            <Button rounded>Login</Button>
-          </a>
-        )}
+        {me ? <UserDropdown /> : <LoginButton />}
       </div>
     </>
   );

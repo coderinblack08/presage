@@ -23,6 +23,7 @@ export interface Article {
   user: User;
   bodyJson: any;
   points: number;
+  referralCount: number;
   tags: Tag[];
   journalId: string;
   journal: Journal;
@@ -75,4 +76,25 @@ export interface Reward {
   claimed: number;
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface Referral {
+  id: string;
+  jwt: string;
+  token: string;
+  articleId: string;
+  article: Article;
+  referrerId: string;
+  referrer: User;
+  count: number;
+  claimed: boolean;
+  createdAt: Date;
+}
+
+export interface UserPoints {
+  userId: string;
+  creatorId: string;
+  user: User;
+  creator: User;
+  points: number;
 }

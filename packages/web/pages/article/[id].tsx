@@ -1,19 +1,17 @@
 import { EditorContent, useEditor } from "@tiptap/react";
-import { format, formatDistanceToNow } from "date-fns";
+import { format } from "date-fns";
 import { GetServerSideProps } from "next";
 import { BlogJsonLd, NextSeo } from "next-seo";
 import Link from "next/link";
 import React, { useEffect } from "react";
-import { MdBookmarkBorder, MdShare } from "react-icons/md";
 import { QueryClient } from "react-query";
 import { dehydrate } from "react-query/hydration";
 import { ArticleNavbar } from "../../components/ArticleNavbar";
-import { Button } from "../../components/Button";
 import { ssrFetcher } from "../../lib/fetcher";
 import { useSSRQuery } from "../../lib/hooks/useSSRQuery";
 import { Article } from "../../lib/types";
+import { ActionBar } from "../../modules/article/ActionBar";
 import { CommentSection } from "../../modules/article/CommentSection";
-import { LikeButton } from "../../modules/article/LikeButton";
 import { Tags } from "../../modules/article/Tags";
 import { extensions } from "../../modules/draft/TipTapEditor";
 
@@ -38,7 +36,10 @@ const RenderArticle: React.FC<{ article: Article }> = ({ article }) => {
   return <EditorContent editor={editor} />;
 };
 
-const ArticlePage: React.FC<{ id: string }> = ({ id }) => {
+const ArticlePage: React.FC<{ id: string; referred: boolean }> = ({
+  id,
+  referred,
+}) => {
   const { data: article } = useSSRQuery<Article>(`/articles/${id}`);
   const seo = {
     url: `https:joinpresage.com/article/${article.id}`,
@@ -57,6 +58,12 @@ const ArticlePage: React.FC<{ id: string }> = ({ id }) => {
       },
     ],
   };
+
+  useEffect(() => {
+    if (referred) {
+      umami.trackEvent(`User referred to article ${article.id}`, "referred");
+    }
+  }, [article.id, referred]);
 
   return (
     <>
@@ -87,7 +94,7 @@ const ArticlePage: React.FC<{ id: string }> = ({ id }) => {
         description=""
       />
       <div>
-        <ArticleNavbar lightGray />
+        <ArticleNavbar user={article.user} lightGray />
         <header className="bg-white">
           <div className="max-w-4xl mx-auto px-5 md:px-8 pt-4 md:pt-8 pb-10 md:pb-16">
             <Link href={`/u/${article.user.username}`}>
@@ -117,7 +124,7 @@ const ArticlePage: React.FC<{ id: string }> = ({ id }) => {
             <h1 className="text-xl md:text-2xl lg:text-3xl font-bold !leading-normal">
               {article.title}
             </h1>
-            <p className="text-gray-600 mt-1">
+            <div className="text-gray-600 mt-1">
               {format(
                 new Date(article.publishedDate || article.createdAt),
                 "MMMM dd, yyyy"
@@ -129,30 +136,9 @@ const ArticlePage: React.FC<{ id: string }> = ({ id }) => {
                   · <Tags article={article} />
                 </div>
               ) : null}
-            </p>
-            <div className="flex items-center space-x-8 mt-6 md:mt-8">
-              <LikeButton article={article} />
-              <Button
-                color="transparent"
-                size="none"
-                icon={
-                  <MdShare className="w-5 h-5 md:w-6 md:h-6 text-gray-600" />
-                }
-                noAnimate
-              >
-                <span className="text-gray-600">0</span>
-              </Button>
-              <Button
-                color="transparent"
-                size="none"
-                icon={
-                  <MdBookmarkBorder className="w-5 h-5 md:w-6 md:h-6 text-gray-600" />
-                }
-                noAnimate
-              >
-                <span className="text-gray-600">0</span>
-              </Button>
             </div>
+
+            <ActionBar article={article} />
           </div>
         </header>
         <main className="max-w-4xl w-full px-5 md:px-8 mx-auto pb-12 md:pb-20">
@@ -172,6 +158,7 @@ const ArticlePage: React.FC<{ id: string }> = ({ id }) => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const id = context.query.id;
+  const referred = context.query.referred ? true : false;
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery(
     `/articles/${id}`,
@@ -181,6 +168,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       id,
+      referred,
       dehydratedState: dehydrate(queryClient),
     },
   };
