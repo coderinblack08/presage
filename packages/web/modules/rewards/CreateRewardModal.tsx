@@ -1,7 +1,7 @@
 import { Form, Formik } from "formik";
 import React, { useState } from "react";
+import { MdAdd } from "react-icons/md";
 import { useMutation, useQueryClient } from "react-query";
-import * as yup from "yup";
 import { Button } from "../../components/Button";
 import { InputField } from "../../components/InputField";
 import { Modal } from "../../components/Modal";
@@ -20,7 +20,12 @@ export const CreateRewardModal: React.FC<CreateRewardModalProps> = ({}) => {
 
   return (
     <>
-      <Button onClick={() => setIsOpen(true)}>Create</Button>
+      <Button
+        onClick={() => setIsOpen(true)}
+        icon={<MdAdd className="w-5 h-5" />}
+        size="xsmall"
+        color="white"
+      />
       <Modal isOpen={isOpen} closeModal={() => setIsOpen(false)}>
         <Formik
           initialValues={{
@@ -34,9 +39,21 @@ export const CreateRewardModal: React.FC<CreateRewardModalProps> = ({}) => {
           onSubmit={async (values) => {
             await mutateAsync(["/rewards", values, "post"], {
               onSuccess: (data) => {
-                queryClient.setQueryData<Reward[]>("/rewards", (old) =>
-                  old ? [data, ...old] : [data]
-                );
+                queryClient.setQueryData<Reward[]>("/rewards", (old) => {
+                  if (old) {
+                    for (let i = 0; i < old.length; i++) {
+                      if (
+                        data.points > old[i].points &&
+                        data.points < old[i + 1].points
+                      ) {
+                        old.splice(i + 1, 0, data);
+                        break;
+                      }
+                    }
+                    return old;
+                  }
+                  return [];
+                });
                 setIsOpen(false);
               },
             });

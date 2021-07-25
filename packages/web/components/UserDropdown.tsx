@@ -2,15 +2,20 @@ import { Menu } from "@headlessui/react";
 import { useRouter } from "next/router";
 import React from "react";
 import { Logout, TicketStar, User as UserIcon } from "react-iconly";
+import { MdExpandMore } from "react-icons/md";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { mutator } from "../lib/mutator";
 import { User } from "../lib/types";
 import { Avatar } from "./Avatar";
 import { Dropdown, MenuItem } from "./Dropdown";
 
-interface UserDropdownProps {}
+interface UserDropdownProps {
+  arrow?: boolean;
+}
 
-export const UserDropdown: React.FC<UserDropdownProps> = ({}) => {
+export const UserDropdown: React.FC<UserDropdownProps> = ({
+  arrow = false,
+}) => {
   const { data: me } = useQuery<User>("/me");
   const router = useRouter();
   const { mutateAsync } = useMutation(mutator);
@@ -21,8 +26,11 @@ export const UserDropdown: React.FC<UserDropdownProps> = ({}) => {
       {me ? (
         <Dropdown
           opener={
-            <Menu.Button className="focus:outline-none">
-              <Avatar user={me} />
+            <Menu.Button className="flex items-center space-x-2 focus:outline-none">
+              <Avatar small={arrow} user={me} />
+              {arrow ? (
+                <MdExpandMore className="w-6 h-6 text-gray-600" />
+              ) : null}
             </Menu.Button>
           }
         >
@@ -51,7 +59,7 @@ export const UserDropdown: React.FC<UserDropdownProps> = ({}) => {
               await mutateAsync(["/logout", {}, "post"], {
                 onSuccess: () => {
                   queryClient.clear();
-                  router.reload();
+                  router.push("/");
                 },
               });
             }}

@@ -10,7 +10,7 @@ export const Input: React.FC<InputProps> = React.forwardRef(
   ({ textarea, className, error, gray, ...props }, ref) => {
     return React.createElement(textarea ? "textarea" : "input", {
       ref,
-      className: `rounded-lg text-gray-800 placeholder-gray-600 ${
+      className: `font-medium rounded-lg text-gray-800 placeholder-gray-400 ${
         gray ? "bg-gray-100" : "bg-white shadow"
       } focus:outline-none w-full ${
         error ? "ring-1 ring-opacity-75 ring-red" : ""

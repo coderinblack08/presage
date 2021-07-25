@@ -9,6 +9,7 @@ const sizes = {
   medium: "py-2 px-7 rounded-lg",
   regular: "px-6 py-1.5 rounded-lg",
   small: "px-5 py-1.5 rounded-lg",
+  xsmall: "px-5 py-1 rounded-lg",
   none: "rounded-md",
 };
 
@@ -17,6 +18,7 @@ const iconSizes = {
   medium: "p-2.5 rounded-md",
   regular: "p-2 rounded-md",
   small: "p-1.5 rounded-md",
+  xsmall: "p-1 rounded-md",
   none: "rounded-md",
 };
 

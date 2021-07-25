@@ -26,24 +26,13 @@ export const UpdateRewardModal: React.FC<UpdateRewardModalProps> = ({
   return (
     <>
       <button
-        key={reward.id}
+        className="w-full flex items-center justify-between focus:outline-none"
         onClick={() => setIsOpen(true)}
-        className="flex flex-col justify-between text-left bg-white rounded-lg p-6 shadow"
       >
-        <div>
-          <h4>{reward.name}</h4>
-          <p className="text-gray-500">{reward.description}</p>
-        </div>
-        <div className="flex items-center space-x-2 mt-6">
-          <div className="flex items-center text-gray-600">
-            <TicketStar set="bulk" />
-            <p className="ml-2">
-              <span className="font-bold">{reward.points}</span> Points
-            </p>
-          </div>
-          <span className="text-gray-600">·</span>
-          <p className="text-gray-600">Claimed {reward.claimed} times</p>
-        </div>
+        <h6 className="font-semibold text-gray-600">{reward.name}</h6>
+        <p className="font-bold">
+          {reward.points} {reward.points === 1 ? "Point" : "Points"}
+        </p>
       </button>
       <Modal isOpen={isOpen} closeModal={() => setIsOpen(false)}>
         <Formik

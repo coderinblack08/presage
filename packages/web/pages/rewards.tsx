@@ -1,5 +1,4 @@
 import React from "react";
-import { TicketStar } from "react-iconly";
 import { useQuery } from "react-query";
 import { Layout } from "../components/Layout";
 import { Reward } from "../lib/types";

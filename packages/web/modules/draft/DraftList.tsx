@@ -1,41 +1,30 @@
+import Link from "next/link";
 import React from "react";
+import { MdDescription } from "react-icons/md";
 import { useQuery } from "react-query";
-import { Article } from "../../lib/types";
-import { DraftItem } from "./DraftItem";
-import { useNewDraft } from "./useNewDraft";
+import { Article, Journal } from "../../lib/types";
 
 interface DraftListProps {
-  journalId: string | null;
+  journal: Journal;
 }
 
-export const DraftList: React.FC<DraftListProps> = ({ journalId }) => {
+export const DraftList: React.FC<DraftListProps> = ({ journal }) => {
   const { data: drafts } = useQuery<Article[]>(
-    `/articles/drafts?journalId=${journalId}`
+    `/articles/drafts?journalId=${journal.id}`
   );
-  const newDraft = useNewDraft();
 
   return (
-    <main className="mt-3">
-      {!drafts ? (
-        <div className="spinner" />
-      ) : drafts?.length === 0 ? (
-        <div className="text-gray-400">
-          You have no drafts. Start by{" "}
-          <button
-            onClick={() => newDraft(journalId)}
-            className="underline text-gray-600"
-          >
-            creating one
-          </button>
-          .
-        </div>
-      ) : (
-        <div className="grid gap-3">
-          {drafts?.map((draft) => (
-            <DraftItem draft={draft} key={draft.id} />
-          ))}
-        </div>
-      )}
-    </main>
+    <ul className="mt-2">
+      {drafts?.map((draft) => (
+        <li key={draft.id}>
+          <Link href={`/publish?draftId=${draft.id}`}>
+            <a className="py-2 rounded-lg pl-8 pr-2 space-x-2.5 flex items-center text-gray-500">
+              <MdDescription className="w-5 h-5" />
+              <div className="font-semibold truncate">{draft.title}</div>
+            </a>
+          </Link>
+        </li>
+      ))}
+    </ul>
   );
 };
