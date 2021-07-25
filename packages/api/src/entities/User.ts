@@ -17,6 +17,7 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 import { Article } from "./Article";
+import { ClaimedReward } from "./ClaimedReward";
 import { Journal } from "./Journal";
 import { Like } from "./Like";
 import { Referral } from "./Referral";
@@ -74,6 +75,9 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Referral, (referral) => referral.referrer)
   referrals: Referral[];
+
+  @OneToMany(() => ClaimedReward, (cr) => cr.user)
+  claims: ClaimedReward[];
 
   @ManyToMany(() => User, (user) => user.following)
   @JoinTable()

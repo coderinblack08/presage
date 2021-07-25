@@ -24,7 +24,7 @@ const UserPage: React.FC<
   const router = useRouter();
   const journalId = router.query.journalId?.toString();
   const { data: articles } = useQuery<Article[]>(
-    `/articles/feed/${user.id}${journalId ? `?journalId=${journalId}` : ""}`
+    `/articles?userId=${user.id}${journalId ? `&journalId=${journalId}` : ""}`
   );
 
   if (userNonExistent) {

@@ -13,9 +13,11 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { ClaimedReward } from "./ClaimedReward";
 import { User } from "./User";
 
 export type RewardType = "shoutout" | "link" | "other";
@@ -51,8 +53,14 @@ export class Reward extends BaseEntity {
   @Column("int", { default: 0 })
   claimed: number;
 
+  @Column()
+  userId: string;
+
   @ManyToOne(() => User, (user) => user.rewards)
   user: User;
+
+  @OneToMany(() => ClaimedReward, (cr) => cr.reward)
+  claims: ClaimedReward[];
 
   @CreateDateColumn()
   createdAt: Date;

@@ -37,6 +37,16 @@
     scroll-behavior: smooth;
   }
 
+  html {
+    overflow: hidden;
+    height: 100%;
+  }
+
+  body {
+    height: 100%;
+    overflow: auto;
+  }
+
   .h2,
   h2 {
     font-weight: 700;

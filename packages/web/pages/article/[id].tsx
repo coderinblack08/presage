@@ -137,7 +137,6 @@ const ArticlePage: React.FC<{ id: string; referred: boolean }> = ({
                 </div>
               ) : null}
             </div>
-
             <ActionBar article={article} />
           </div>
         </header>

@@ -67,8 +67,17 @@ articlesQueriesRouter.get(
   "/",
   limiter({ max: 50 }),
   isAuth(),
-  async (req, res) => {
-    const query: string = (req.query as any).query;
+  async (
+    req: Request<
+      {},
+      any,
+      any,
+      { query: string; userId: string; journalId: string }
+    >,
+    res,
+    next
+  ) => {
+    const { userId, query, journalId } = req.query;
     let qb = getConnection()
       .getRepository(Article)
       .createQueryBuilder("article")
@@ -77,76 +86,37 @@ articlesQueriesRouter.get(
       .leftJoinAndSelect("article.journal", "journal")
       .leftJoinAndSelect("article.likes", "likes", 'likes."userId" = :user', {
         user: req.userId,
-      });
-
-    let data: Article[];
+      })
+      .where("article.published = true")
+      .orderBy('article."createdAt"', "DESC");
 
     if (query) {
       qb = qb
-        .where(
-          `article.document @@ plainto_tsquery(:query) and article.published = true`,
-          { query }
-        )
-        .orderBy("ts_rank(article.document, plainto_tsquery(:query))", "DESC");
+        .andWhere("article.document @@ plainto_tsquery(:query)", { query })
+        .addOrderBy(
+          "ts_rank(article.document, plainto_tsquery(:query))",
+          "DESC"
+        );
     }
 
-    if (!query) {
-      qb = qb
-        .where("article.published = true")
-        .orderBy('article."createdAt"', "DESC");
+    if (userId) {
+      qb = qb.andWhere('article."userId" = :userId', { userId });
     }
-
-    data = await qb.limit(10).getMany();
-    res.json(
-      data.map((x) => {
-        const y: any = { ...x, liked: x.likes.length === 1 };
-        delete y.likes;
-
-        return y;
-      })
-    );
-  }
-);
-
-articlesQueriesRouter.get(
-  "/feed/:userId",
-  isAuth(),
-  async (req: Request<{ userId: string }>, res, next) => {
-    const userId = req.params.userId;
-    const journalId = req.query.journalId;
-    let qb = getConnection()
-      .getRepository(Article)
-      .createQueryBuilder("article")
-      .leftJoinAndSelect("article.tags", "tags")
-      .leftJoinAndSelect("article.user", "user")
-      .leftJoinAndSelect("article.journal", "journal")
-      .leftJoinAndSelect("article.likes", "likes", 'likes."userId" = :user', {
-        user: req.userId,
-      });
 
     if (journalId) {
-      qb = qb
-        .where(
-          `article.published = true and article."journalId" = :journal and article."userId" = :user`,
-          {
-            journal: journalId,
-            user: userId,
-          }
-        )
-        .orderBy('article."createdAt"', "DESC");
-    }
-
-    if (!journalId) {
-      qb = qb
-        .where(`article.published = true and article."userId" = :user`, {
-          user: userId,
-        })
-        .orderBy('article."createdAt"', "DESC");
+      qb = qb.andWhere('article."journalId" = :journalId', { journalId });
     }
 
     try {
       const data = await qb.limit(10).getMany();
-      res.json(data);
+      res.json(
+        data.map((x) => {
+          const y: any = { ...x, liked: x.likes.length === 1 };
+          delete y.likes;
+
+          return y;
+        })
+      );
     } catch (error) {
       next(createHttpError(500, error));
     }

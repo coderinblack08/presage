@@ -1,8 +1,10 @@
 import { validate } from "class-validator";
 import { Request, Router } from "express";
 import createHttpError from "http-errors";
+import { ClaimedReward } from "../../../entities/ClaimedReward";
 import { Reward } from "../../../entities/Reward";
 import { User } from "../../../entities/User";
+import { UserPoints } from "../../../entities/UserPoints";
 import { limiter } from "../../../lib/rateLimit";
 import { isAuth } from "../auth/isAuth";
 
@@ -94,5 +96,38 @@ router.get("/:userId", limiter({ max: 50 }), async (req, res, next) => {
     next(createHttpError(500, error));
   }
 });
+
+router.post(
+  "/claim/:rewardId",
+  limiter({ max: 20 }),
+  isAuth(true),
+  async (req: Request<{ rewardId: string }>, res, next) => {
+    try {
+      const rewardId = req.params.rewardId;
+      const reward = await Reward.findOne(rewardId);
+      if (!reward) {
+        return next(createHttpError(404, "Reward not found"));
+      }
+
+      const userPoints = await UserPoints.findOne({
+        where: { userId: req.userId, creatorId: reward.userId },
+      });
+      if (!userPoints || userPoints.points < reward.points) {
+        return next(createHttpError(403, "Not enough points"));
+      }
+      userPoints.points -= reward.points;
+      await userPoints.save();
+
+      const claimedReward = await ClaimedReward.create({
+        reward: { id: reward.id },
+        user: { id: req.userId },
+      }).save();
+
+      res.json(claimedReward);
+    } catch (error) {
+      next(createHttpError(500, error));
+    }
+  }
+);
 
 export default router;
