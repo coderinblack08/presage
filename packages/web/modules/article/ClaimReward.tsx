@@ -2,10 +2,12 @@ import { RadioGroup } from "@headlessui/react";
 import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { TicketStar } from "react-iconly";
-import { useQuery } from "react-query";
+import { AiFillGift } from "react-icons/ai";
+import { useMutation, useQuery } from "react-query";
 import { Button } from "../../components/Button";
 import { Modal } from "../../components/Modal";
 import { ModalHeader } from "../../components/ModalHeader";
+import { mutator } from "../../lib/mutator";
 import { Reward, User, UserPoints } from "../../lib/types";
 
 interface ClaimRewardProps {
@@ -18,6 +20,7 @@ export const ClaimReward: React.FC<ClaimRewardProps> = ({ user }) => {
   );
   const { data: rewards } = useQuery<Reward[]>(`/rewards/${user.id}`);
   const [isOpen, setIsOpen] = useState(false);
+  const { mutateAsync, isLoading } = useMutation(mutator);
   const [selected, setSelected] = useState<Reward | null>(null);
 
   return (
@@ -47,7 +50,9 @@ export const ClaimReward: React.FC<ClaimRewardProps> = ({ user }) => {
           button={
             <Button
               size="small"
+              loading={isLoading}
               disabled={selected === null}
+              icon={<AiFillGift className="w-5 h-5" />}
               onClick={async () => {
                 if (selected && userPoints) {
                   if (selected.points > userPoints.points) {
@@ -55,8 +60,17 @@ export const ClaimReward: React.FC<ClaimRewardProps> = ({ user }) => {
                       "You don't have enough points to claim this reward"
                     );
                   }
-                  toast.success(
-                    `Hooray, you successfully claimed "${selected.name}"`
+                  await mutateAsync(
+                    [`/rewards/claim/${selected.id}`, {}, "post"],
+                    {
+                      onSuccess: (data) => {
+                        console.log(data);
+                        toast.success(
+                          `Hooray, you successfully claimed "${selected.name}"`
+                        );
+                        setIsOpen(false);
+                      },
+                    }
                   );
                 }
               }}
@@ -90,18 +104,29 @@ export const ClaimReward: React.FC<ClaimRewardProps> = ({ user }) => {
                       <div className="flex items-center justify-between w-full">
                         <div className="flex items-center">
                           <div className="text-sm">
-                            <RadioGroup.Label
-                              as="h6"
-                              className={`font-bold text-lg ${
-                                checked ? "text-white" : "text-gray-900"
-                              }`}
-                            >
-                              {reward.name} ({reward.points} Pt
-                              {reward.points === 1 ? "" : "s"}.)
-                            </RadioGroup.Label>
+                            <div className="flex items-center space-x-3">
+                              <RadioGroup.Label
+                                as="h4"
+                                className={`font-bold text-lg ${
+                                  checked ? "text-white" : "text-gray-900"
+                                }`}
+                              >
+                                {reward.name}
+                              </RadioGroup.Label>
+                              <div
+                                className={`px-4 py-1 font-bold small rounded-lg ${
+                                  checked
+                                    ? "bg-gray-100 text-gray-900"
+                                    : "bg-gray-800 text-white"
+                                }`}
+                              >
+                                {reward.points}{" "}
+                                {reward.points === 1 ? "Point" : "Points"}
+                              </div>
+                            </div>
                             <RadioGroup.Description
                               as="span"
-                              className={`mt-0.5 block ${
+                              className={`mt-1.5 block ${
                                 checked ? "text-gray-200" : "text-gray-500"
                               }`}
                             >

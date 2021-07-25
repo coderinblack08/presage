@@ -34,7 +34,7 @@ export const ArticleNavbar: React.FC<ArticleNavbarProps> = ({
             </div>
           </a>
         </Link>
-        <div className="flex items-center space-x-6 md:space-x-8 lg:space-x-10">
+        <div className="flex items-center space-x-6 md:space-x-8">
           <NavLink
             icon={
               <div className="hidden md:block">

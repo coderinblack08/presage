@@ -112,9 +112,11 @@ router.post(
       const userPoints = await UserPoints.findOne({
         where: { userId: req.userId, creatorId: reward.userId },
       });
+
       if (!userPoints || userPoints.points < reward.points) {
         return next(createHttpError(403, "Not enough points"));
       }
+
       userPoints.points -= reward.points;
       await userPoints.save();
 
@@ -122,7 +124,6 @@ router.post(
         reward: { id: reward.id },
         user: { id: req.userId },
       }).save();
-
       res.json(claimedReward);
     } catch (error) {
       next(createHttpError(500, error));
