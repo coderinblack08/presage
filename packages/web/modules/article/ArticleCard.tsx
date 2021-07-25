@@ -37,7 +37,8 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
             </div>
             <div>
               <p className="font-semibold text-gray-800 leading-none">
-                {article.user.displayName}
+                {article.user.displayName}{" "}
+                <span className="text-gray-600">in</span> {article.journal.name}
               </p>
               <p className="small text-gray-500 leading-none mt-2">
                 {formatDistanceToNow(date, {
