@@ -56,11 +56,6 @@ export const EditTagModal: React.FC<EditTagModalProps> = ({ id, noText }) => {
     <>
       <Button
         onClick={() => setIsOpen(true)}
-        icon={
-          <div className="scale-80">
-            <Bookmark set="bulk" />
-          </div>
-        }
         type="button"
         color="transparent"
         size="none"

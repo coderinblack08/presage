@@ -1,16 +1,10 @@
-import Link from "next/link";
 import React from "react";
-import { Search, Upload } from "react-iconly";
-import {
-  MdCloudUpload,
-  MdFileDownload,
-  MdFileUpload,
-  MdImportExport,
-  MdSort,
-} from "react-icons/md";
+import { Search } from "react-iconly";
+import { HiOutlineChevronDoubleLeft } from "react-icons/hi";
 import { useQuery } from "react-query";
 import { Input } from "../../components/Input";
 import { UserDropdown } from "../../components/UserDropdown";
+import { useSSRQuery } from "../../lib/hooks/useSSRQuery";
 import { Journal, Reward } from "../../lib/types";
 import { CreateRewardModal } from "../rewards/CreateRewardModal";
 import { UpdateRewardModal } from "../rewards/UpdateRewardModal";
@@ -20,18 +14,18 @@ import { DraftCollapsible } from "./DraftCollapsible";
 interface DraftSidebarProps {}
 
 export const DraftSidebar: React.FC<DraftSidebarProps> = ({}) => {
-  const { data: journals } = useQuery<Journal[]>("/journals/me");
-  const { data: rewards } = useQuery<Reward[]>("/rewards");
+  const { data: journals } = useSSRQuery<Journal[]>("/journals/me");
+  const { data: rewards } = useSSRQuery<Reward[]>("/rewards");
 
   return (
-    <nav className="relative bg-gray-50 border-r border-gray-100 max-w-xs p-6 h-screen">
+    <nav className="relative bg-gray-50 border-r border-gray-100 max-w-xs p-6 h-screen overflow-y-scroll">
       <div className="flex items-center justify-between">
-        <Link href="/explore">
-          <a className="font-display font-bold text-xl leading-none">presage</a>
-        </Link>
-        <UserDropdown arrow />
+        <UserDropdown fullName />
+        <button>
+          <HiOutlineChevronDoubleLeft className="w-5 h-5 text-gray-600" />
+        </button>
       </div>
-      <div className="relative mt-4 w-full">
+      <div className="relative mt-5 w-full">
         <Input placeholder="Search Drafts" className="w-full pl-12" />
         <div className="h-full mx-4 flex items-center pointer-events-none absolute top-0 left-0 text-gray-400">
           <Search size="small" stroke="bold" />

@@ -3,9 +3,24 @@ import React, { Fragment, ReactNode } from "react";
 
 interface DropdownProps {
   opener: ReactNode;
+  position?: "bottom-right" | "bottom-left";
 }
 
-export const Dropdown: React.FC<DropdownProps> = ({ opener, children }) => {
+export const Dropdown: React.FC<DropdownProps> = ({
+  opener,
+  children,
+  position = "bottom-left",
+}) => {
+  // let [reference, popper] = usePopper({
+  //   placement: "bottom-end",
+  //   strategy: "fixed",
+  //   modifiers: [],
+  // });
+  const className =
+    position === "bottom-right"
+      ? "right-0 origin-top-right"
+      : "left-0 origin-top-left";
+
   return (
     <Menu as="div" className="relative z-50 inline-block text-left">
       <div>{opener}</div>
@@ -18,7 +33,9 @@ export const Dropdown: React.FC<DropdownProps> = ({ opener, children }) => {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="origin-top-right absolute right-0 mt-2 w-56 rounded-lg bg-white shadow focus:outline-none">
+        <Menu.Items
+          className={`${className} absolute w-56 mt-2 rounded-lg bg-white shadow focus:outline-none`}
+        >
           {children}
         </Menu.Items>
       </Transition>

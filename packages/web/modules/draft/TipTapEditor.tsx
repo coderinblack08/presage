@@ -40,29 +40,31 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
     query: { id },
   } = useRouter();
   const { data: draft } = useQuery<Article>(`/articles/draft/${id}`);
-  const editor = useEditor({
-    extensions,
-    onUpdate: ({ editor }) => {
-      setFieldValue("body", editor.getJSON(), false);
-    },
-    content: draft?.body || null,
-    editorProps: {
-      attributes: {
-        class: "prose focus:outline-none py-8 lg:py-10 max-w-full",
+  const editor = useEditor(
+    {
+      extensions,
+      onUpdate: ({ editor }) => {
+        setFieldValue("body", editor.getJSON(), false);
+      },
+      content: draft?.body || null,
+      editorProps: {
+        attributes: {
+          class: "prose focus:outline-none py-2 max-w-full",
+        },
       },
     },
-  });
+    [id]
+  );
 
   useEffect(() => {
     useEditorStore.getState().setIsValid(isValid);
   }, [isValid]);
 
   useEffect(() => {
-    editor?.commands.setContent(draft?.body || null);
     return () => {
       editor?.destroy();
     };
-  }, [id]);
+  }, [editor]);
 
   return (
     <div>
@@ -70,7 +72,7 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
         <Field
           name="title"
           type="text"
-          className="bg-gray-100 placeholder-gray-400 h3 md:h2 w-full focus:outline-none leading-none"
+          className="bg-white placeholder-gray-400 h3 lg:h2 w-full focus:outline-none leading-none"
           placeholder="Untitled"
         />
         {!!errors.title ? (
@@ -79,26 +81,12 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
             <p className="text-red">{errors.title}</p>
           </div>
         ) : (
-          <div className="mt-2">
-            <div className="flex items-center divide-x divide-gray-300">
-              <div className="inline-flex items-center space-x-2.5 pr-4">
-                <img
-                  className="w-5 h-5 rounded-full"
-                  src={draft?.journal.picture}
-                  alt={draft?.journal.name}
-                />
-                <span className="text-gray-800 font-semibold">
-                  {draft?.journal.name}
-                </span>
+          <div>
+            {draft?.tags && draft.tags.length !== 0 ? (
+              <div className="mt-2 mb-5">
+                <Tags article={draft} />
               </div>
-              <div className="pl-4">
-                {draft?.tags && draft.tags.length !== 0 ? (
-                  <Tags article={draft} />
-                ) : (
-                  <div className="text-gray-500">No tags</div>
-                )}
-              </div>
-            </div>
+            ) : null}
           </div>
         )}
         {editor && <FormattingBubbleMenu editor={editor} />}

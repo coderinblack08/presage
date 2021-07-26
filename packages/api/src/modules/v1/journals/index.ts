@@ -12,7 +12,10 @@ router.get(
   isAuth(true),
   async (req, res, next) => {
     try {
-      const journals = await Journal.find({ where: { userId: req.userId } });
+      const journals = await Journal.find({
+        where: { userId: req.userId },
+        order: { createdAt: "ASC" },
+      });
       res.json(journals);
     } catch (error) {
       next(createHttpError(500, error));

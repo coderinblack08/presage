@@ -73,7 +73,7 @@ export const DraftEditor: React.FC<DraftEditorProps> = ({ id }) => {
       }}
     >
       {({ values }) => (
-        <Form className="max-w-5xl mx-auto">
+        <Form className="max-w-3xl mx-auto py-0 md:py-4 lg:py-8 xl:py-12">
           {values ? <TipTapEditor /> : null}
           <AutoSave />
         </Form>

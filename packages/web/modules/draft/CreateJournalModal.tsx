@@ -21,9 +21,10 @@ export const CreateJournalModal: React.FC<CreateJournalModalProps> = ({}) => {
     <>
       <Button
         onClick={() => setIsOpen(true)}
-        icon={<MdAdd className="w-5 h-5" />}
+        icon={<MdAdd className="w-5 h-5 text-gray-500" />}
         size="xsmall"
-        color="white"
+        color="transparent"
+        noAnimate
       />
       <Modal isOpen={isOpen} closeModal={() => setIsOpen(false)}>
         <Formik

@@ -2,12 +2,44 @@ import { Request, Router } from "express";
 import createHttpError from "http-errors";
 import { FindConditions, getConnection } from "typeorm";
 import { Article } from "../../../entities/Article";
+import { Journal } from "../../../entities/Journal";
 import { Like } from "../../../entities/Like";
 import { UserPoints } from "../../../entities/UserPoints";
 import { limiter } from "../../../lib/rateLimit";
+import { redis } from "../../../lib/redis";
 import { isAuth } from "../auth/isAuth";
 
 export const articlesQueriesRouter = Router();
+
+articlesQueriesRouter.get(
+  "/last-opened",
+  limiter({ max: 50 }),
+  isAuth(true),
+  async (req, res, next) => {
+    const key = `last-opened:${req.userId}`;
+    const draftId = await redis.get(key);
+    if (draftId) {
+      const article = await Article.findOne(draftId);
+      if (article) {
+        return res.json(article);
+      }
+    }
+    const journal = await Journal.findOne({
+      where: { userId: req.userId },
+      order: { createdAt: "ASC" },
+    });
+    if (journal) {
+      const draft = await Article.create({
+        title: "Untitled",
+        userId: req.userId,
+        journalId: journal.id,
+      }).save();
+      await redis.set(key, draft.id);
+      return res.json(draft);
+    }
+    return next(createHttpError(404, "No journal found"));
+  }
+);
 
 articlesQueriesRouter.get(
   "/drafts",
@@ -42,6 +74,7 @@ articlesQueriesRouter.get(
         where: { id: req.params.id, userId: req.userId },
         relations: ["journal"],
       });
+      await redis.set(`last-opened:${req.userId}`, req.params.id);
       res.json(article);
     } catch (error) {
       next(createHttpError(500, error));

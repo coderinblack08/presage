@@ -15,7 +15,7 @@ export const useNewDraft = () => {
           `/articles/drafts?journalId=${journalId}`,
           (old) => [data, ...(old || [])]
         );
-        router.push("/draft/[id]", `/draft/${data.id}`);
+        router.push(`/draft/${data.id}`);
       },
     });
   };

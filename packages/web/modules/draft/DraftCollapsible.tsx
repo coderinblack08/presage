@@ -1,7 +1,9 @@
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { MdAdd, MdArrowDropDown, MdMoreHoriz } from "react-icons/md";
 import { Button } from "../../components/Button";
-import { Journal } from "../../lib/types";
+import { useSSRQuery } from "../../lib/hooks/useSSRQuery";
+import { Article, Journal } from "../../lib/types";
 import { DraftList } from "./DraftList";
 import { useNewDraft } from "./useNewDraft";
 
@@ -12,7 +14,11 @@ interface DraftCollapsibleProps {
 export const DraftCollapsible: React.FC<DraftCollapsibleProps> = ({
   journal,
 }) => {
-  const [open, setOpen] = useState(false);
+  const {
+    query: { id },
+  } = useRouter();
+  const { data: draft } = useSSRQuery<Article>(`/articles/draft/${id}`);
+  const [open, setOpen] = useState(draft.journalId === journal.id);
   const newDraft = useNewDraft();
 
   return (

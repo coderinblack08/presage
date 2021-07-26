@@ -13,6 +13,7 @@ import { Article } from "../../../entities/Article";
 import { Like } from "../../../entities/Like";
 import { Tag } from "../../../entities/Tag";
 import { limiter } from "../../../lib/rateLimit";
+import { redis } from "../../../lib/redis";
 import { isAuth } from "../auth/isAuth";
 
 export const articlesMutationRouter = Router();

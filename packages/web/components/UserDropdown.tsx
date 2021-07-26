@@ -10,11 +10,11 @@ import { Avatar } from "./Avatar";
 import { Dropdown, MenuItem } from "./Dropdown";
 
 interface UserDropdownProps {
-  arrow?: boolean;
+  fullName?: boolean;
 }
 
 export const UserDropdown: React.FC<UserDropdownProps> = ({
-  arrow = false,
+  fullName = false,
 }) => {
   const { data: me } = useQuery<User>("/me");
   const router = useRouter();
@@ -25,12 +25,21 @@ export const UserDropdown: React.FC<UserDropdownProps> = ({
     <div>
       {me ? (
         <Dropdown
+          position={fullName ? "bottom-left" : "bottom-right"}
           opener={
             <Menu.Button className="flex items-center space-x-2 focus:outline-none">
-              <Avatar small={arrow} user={me} />
-              {arrow ? (
-                <MdExpandMore className="w-6 h-6 text-gray-600" />
-              ) : null}
+              {fullName ? (
+                <button className="flex items-center space-x-4 focus:outline-none">
+                  <img
+                    src={me?.profilePicture}
+                    alt={me?.displayName}
+                    className="w-7 h-7 object-cover rounded-full"
+                  />
+                  <h6 className="text-lg font-semibold">{me?.displayName}</h6>
+                </button>
+              ) : (
+                <Avatar user={me} />
+              )}
             </Menu.Button>
           }
         >
