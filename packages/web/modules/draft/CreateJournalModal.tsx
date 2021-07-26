@@ -61,6 +61,7 @@ export const CreateJournalModal: React.FC<CreateJournalModalProps> = ({}) => {
                   <InputField
                     placeholder="Description"
                     name="description"
+                    className="h-28"
                     textarea
                   />
                 </div>

@@ -17,9 +17,9 @@ articlesQueriesRouter.get(
   isAuth(true),
   async (req, res, next) => {
     const key = `last-opened:${req.userId}`;
-    const draftId = await redis.get(key);
-    if (draftId) {
-      const article = await Article.findOne(draftId);
+    let lastOpened = JSON.parse((await redis.get(key)) || "[]") as string[];
+    if (lastOpened.length > 0) {
+      const article = await Article.findOne(lastOpened[0]);
       if (article) {
         return res.json(article);
       }
@@ -34,7 +34,7 @@ articlesQueriesRouter.get(
         userId: req.userId,
         journalId: journal.id,
       }).save();
-      await redis.set(key, draft.id);
+      await redis.set(key, JSON.stringify([draft.id, ...lastOpened]));
       return res.json(draft);
     }
     return next(createHttpError(404, "No journal found"));
@@ -74,22 +74,12 @@ articlesQueriesRouter.get(
         where: { id: req.params.id, userId: req.userId },
         relations: ["journal"],
       });
-      await redis.set(`last-opened:${req.userId}`, req.params.id);
+      const key = `last-opened:${req.userId}`;
+      const lastOpened = (
+        JSON.parse((await redis.get(key)) || "[]") as string[]
+      ).filter((x) => x !== req.params.id);
+      await redis.set(key, JSON.stringify([req.params.id, ...lastOpened]));
       res.json(article);
-    } catch (error) {
-      next(createHttpError(500, error));
-    }
-  }
-);
-
-articlesQueriesRouter.delete(
-  "/:id",
-  limiter({ max: 20 }),
-  isAuth(true),
-  async (req: Request<{ id: string }>, res, next) => {
-    try {
-      await Article.delete({ id: req.params.id, userId: req.userId });
-      res.send(true);
     } catch (error) {
       next(createHttpError(500, error));
     }

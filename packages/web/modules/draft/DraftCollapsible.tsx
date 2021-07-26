@@ -28,14 +28,14 @@ export const DraftCollapsible: React.FC<DraftCollapsibleProps> = ({
           onClick={() => setOpen(!open)}
           icon={
             <MdArrowDropDown
-              className={`w-6 h-6 ${open ? "" : "-rotate-90"}`}
+              className={`text-gray-600 w-6 h-6 ${open ? "" : "-rotate-90"}`}
             />
           }
           color="transparent"
           size="none"
           noAnimate
         >
-          {journal.name}
+          <div className="text-gray-600 font-bold">{journal.name}</div>
         </Button>
         <div className="hidden group-hover:flex items-center space-x-2">
           <Button

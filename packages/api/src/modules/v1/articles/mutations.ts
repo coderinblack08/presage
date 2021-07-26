@@ -10,6 +10,7 @@ import readingTime from "reading-time";
 import sanitizeHtml from "sanitize-html";
 import { getConnection } from "typeorm";
 import { Article } from "../../../entities/Article";
+import { Journal } from "../../../entities/Journal";
 import { Like } from "../../../entities/Like";
 import { Tag } from "../../../entities/Tag";
 import { limiter } from "../../../lib/rateLimit";
@@ -177,5 +178,43 @@ articlesMutationRouter.patch(
       // connection.getRepository(Article).save({ id: req.params.id, tags });
       res.json(tags || []);
     });
+  }
+);
+
+articlesMutationRouter.delete(
+  "/:id",
+  limiter({ max: 20 }),
+  isAuth(true),
+  async (req: Request<{ id: string }>, res, next) => {
+    try {
+      await Article.delete(req.params.id);
+
+      const key = `last-opened:${req.userId}`;
+      const lastOpened = (
+        JSON.parse((await redis.get(key)) || "[]") as string[]
+      ).filter((x) => x !== req.params.id);
+      await redis.set(key, JSON.stringify(lastOpened));
+
+      const count = await Article.count({ where: { userId: req.userId } });
+      if (count === 0) {
+        const journal = await Journal.findOne({
+          where: { userId: req.userId },
+          order: { createdAt: "ASC" },
+        });
+        if (!journal) {
+          return res.send(true);
+        }
+        const article = await Article.create({
+          title: "Untitled",
+          userId: req.userId,
+          journalId: journal.id,
+        }).save();
+        await redis.set(key, JSON.stringify([article.id, ...lastOpened]));
+        return res.json(article);
+      }
+      return res.send(true);
+    } catch (error) {
+      return next(createHttpError(500, error));
+    }
   }
 );

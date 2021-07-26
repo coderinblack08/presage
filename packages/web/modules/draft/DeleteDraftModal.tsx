@@ -2,6 +2,7 @@ import { Dialog } from "@headlessui/react";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { Delete } from "react-iconly";
+import { MdDelete } from "react-icons/md";
 import { useMutation, useQueryClient } from "react-query";
 import { Button } from "../../components/Button";
 import { Modal } from "../../components/Modal";
@@ -11,13 +12,9 @@ import { Article } from "../../lib/types";
 
 interface DeleteDraftModalProps {
   id: string;
-  noText?: boolean;
 }
 
-export const DeleteDraftModal: React.FC<DeleteDraftModalProps> = ({
-  id,
-  noText,
-}) => {
+export const DeleteDraftModal: React.FC<DeleteDraftModalProps> = ({ id }) => {
   const [isOpen, setIsOpen] = useState(false);
   const { mutateAsync } = useMutation(mutator);
   const queryClient = useQueryClient();
@@ -25,20 +22,15 @@ export const DeleteDraftModal: React.FC<DeleteDraftModalProps> = ({
 
   return (
     <>
-      <Button
-        onClick={() => setIsOpen(true)}
-        icon={
-          <div className="scale-80">
-            <Delete set="bulk" />
-          </div>
-        }
-        color="transparent"
-        size="none"
-        type="button"
-        noAnimate
-        // eslint-disable-next-line react/no-children-prop
-        children={noText ? null : <span>Delete Draft</span>}
-      />
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          setIsOpen(true);
+        }}
+        className="focus:outline-none group-hover:block hidden transition"
+      >
+        <MdDelete className="w-5 h-5" />
+      </button>
       <Modal isOpen={isOpen} closeModal={() => setIsOpen(false)}>
         <ModalHeader
           handleClose={() => setIsOpen(false)}
@@ -46,7 +38,7 @@ export const DeleteDraftModal: React.FC<DeleteDraftModalProps> = ({
             <Button
               onClick={async () => {
                 await mutateAsync([`/articles/${id}`, null, "delete"], {
-                  onSuccess: () => {
+                  onSuccess: (data) => {
                     const article = queryClient.getQueryData<Article>(
                       `/articles/draft/${id}`
                     );
@@ -61,6 +53,12 @@ export const DeleteDraftModal: React.FC<DeleteDraftModalProps> = ({
                         return [];
                       }
                     );
+                    if (data !== true) {
+                      queryClient.setQueryData<Article[]>(
+                        `/articles/drafts?journalId=${article?.journalId}`,
+                        (old) => (old ? [data, ...old] : [])
+                      );
+                    }
                     router.push("/publish");
                   },
                 });

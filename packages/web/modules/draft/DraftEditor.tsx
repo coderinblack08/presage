@@ -53,7 +53,7 @@ export const DraftEditor: React.FC<DraftEditorProps> = ({ id }) => {
               }
             );
             queryClient.setQueryData<Article[]>(
-              `/articles/drafts?journalId=${draft.journalId}&published=${draft.published}`,
+              `/articles/drafts?journalId=${draft.journalId}`,
               (old) => {
                 if (old) {
                   const idx = old?.findIndex((v) => v.id === id);
