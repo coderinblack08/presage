@@ -49,28 +49,28 @@ export const FormattingBubbleMenu: React.FC<BubbleMenuProps> = ({ editor }) => {
       <div className="flex items-center space-x-2 px-4 py-1.5">
         <Button
           onClick={() => editor.chain().focus().toggleBold().run()}
-          color={editor.isActive("bold") ? "primary" : "transparent"}
+          color={editor.isActive("bold") ? "gray" : "transparent"}
           size="small"
           icon={<AiOutlineBold className="w-4 h-4" />}
           noAnimate
         />
         <Button
           onClick={() => editor.chain().focus().toggleItalic().run()}
-          color={editor.isActive("italic") ? "primary" : "transparent"}
+          color={editor.isActive("italic") ? "gray" : "transparent"}
           size="small"
           icon={<AiOutlineItalic className="w-4 h-4" />}
           noAnimate
         />
         <Button
           onClick={() => editor.chain().focus().toggleUnderline().run()}
-          color={editor.isActive("underline") ? "primary" : "transparent"}
+          color={editor.isActive("underline") ? "gray" : "transparent"}
           size="small"
           icon={<AiOutlineUnderline className="w-4 h-4" />}
           noAnimate
         />
         <Button
           onClick={() => editor.chain().focus().toggleStrike().run()}
-          color={editor.isActive("strike") ? "primary" : "transparent"}
+          color={editor.isActive("strike") ? "gray" : "transparent"}
           size="small"
           icon={<AiOutlineStrikethrough className="w-4 h-4" />}
           noAnimate

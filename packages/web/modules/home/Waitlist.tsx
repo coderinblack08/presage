@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { Button } from "../../components/Button";
 import { Input } from "../../components/Input";
 
@@ -44,7 +44,6 @@ export const Waitlist: React.FC<WaitlistProps> = ({}) => {
           Join Waitlist
         </Button>
       </form>
-      <Toaster position="top-center" gutter={8} />
     </>
   );
 };

@@ -72,6 +72,7 @@ module.exports = {
       typography: (theme) => ({
         DEFAULT: {
           css: {
+            color: theme("colors.gray.600"),
             pre: {
               backgroundColor: theme("colors.gray.800"),
               padding: "1.5rem",

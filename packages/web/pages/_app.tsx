@@ -2,6 +2,7 @@
 import { DefaultSeo } from "next-seo";
 import type { AppProps } from "next/app";
 import React from "react";
+import { Toaster } from "react-hot-toast";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Hydrate } from "react-query/hydration";
 import { AudioPlayerProvider } from "react-use-audio-player";
@@ -62,6 +63,7 @@ function MyApp({ Component, pageProps }: AppProps) {
                 title: "Presage",
               }}
             />
+            <Toaster />
             <Component {...pageProps} />
             {/* <ReactQueryDevtools /> */}
           </AuthProvider>

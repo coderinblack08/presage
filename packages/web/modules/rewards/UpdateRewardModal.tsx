@@ -30,7 +30,7 @@ export const UpdateRewardModal: React.FC<UpdateRewardModalProps> = ({
         onClick={() => setIsOpen(true)}
       >
         <h6 className="font-semibold text-gray-600">{reward.name}</h6>
-        <p className="font-bold">
+        <p className="font-bold text-gray-800">
           {reward.points} {reward.points === 1 ? "Point" : "Points"}
         </p>
       </button>

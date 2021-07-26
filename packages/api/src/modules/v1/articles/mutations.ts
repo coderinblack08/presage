@@ -60,6 +60,9 @@ articlesMutationRouter.post(
       userId: req.userId,
       journalId: req.body.journalId,
     }).save();
+    const key = `last-opened:${req.userId}`;
+    const lastOpened = JSON.parse((await redis.get(key)) || "[]") as string[];
+    await redis.set(key, JSON.stringify([article.id, ...lastOpened]));
     res.json(article);
   }
 );

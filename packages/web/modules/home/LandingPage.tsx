@@ -39,7 +39,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
             <p className="text-gray-600 mt-6 !leading-[1.8] text-[13px] sm:text-base">
               Presage believes in empowering writers by letting them control and
               earn from the content they own. Grow exponentially using referrals
-              and engaging rewards.
+              and rewards.
             </p>
             <Waitlist />
           </div>

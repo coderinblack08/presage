@@ -49,7 +49,7 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
       content: draft?.body || null,
       editorProps: {
         attributes: {
-          class: "prose focus:outline-none py-2 max-w-full",
+          class: "prose focus:outline-none py-3 max-w-full",
         },
       },
     },
@@ -57,8 +57,9 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
   );
 
   useEffect(() => {
-    useEditorStore.getState().setIsValid(isValid);
-  }, [isValid]);
+    const isLongEnough = editor?.getCharacterCount()! > 10;
+    useEditorStore.getState().setIsValid(isValid && isLongEnough);
+  }, [editor?.getCharacterCount(), isValid]);
 
   useEffect(() => {
     return () => {

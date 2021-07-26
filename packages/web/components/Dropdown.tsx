@@ -4,11 +4,13 @@ import React, { Fragment, ReactNode } from "react";
 interface DropdownProps {
   opener: ReactNode;
   position?: "bottom-right" | "bottom-left";
+  className?: string;
 }
 
 export const Dropdown: React.FC<DropdownProps> = ({
   opener,
   children,
+  className,
   position = "bottom-left",
 }) => {
   // let [reference, popper] = usePopper({
@@ -16,7 +18,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
   //   strategy: "fixed",
   //   modifiers: [],
   // });
-  const className =
+  const style =
     position === "bottom-right"
       ? "right-0 origin-top-right"
       : "left-0 origin-top-left";
@@ -34,7 +36,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
         leaveTo="transform opacity-0 scale-95"
       >
         <Menu.Items
-          className={`${className} absolute w-56 mt-2 rounded-lg bg-white shadow focus:outline-none`}
+          className={`absolute w-56 mt-4 rounded-lg bg-white shadow focus:outline-none ${style} ${className}`}
         >
           {children}
         </Menu.Items>

@@ -1,7 +1,7 @@
 import { Menu } from "@headlessui/react";
 import { useRouter } from "next/router";
 import React from "react";
-import { Logout, TicketStar, User as UserIcon } from "react-iconly";
+import { Discovery, Logout, TicketStar, User as UserIcon } from "react-iconly";
 import { MdExpandMore } from "react-icons/md";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { mutator } from "../lib/mutator";
@@ -25,6 +25,7 @@ export const UserDropdown: React.FC<UserDropdownProps> = ({
     <div>
       {me ? (
         <Dropdown
+          className="shadow-lg"
           position={fullName ? "bottom-left" : "bottom-right"}
           opener={
             <Menu.Button className="flex items-center space-x-2 focus:outline-none">
@@ -43,6 +44,18 @@ export const UserDropdown: React.FC<UserDropdownProps> = ({
             </Menu.Button>
           }
         >
+          {fullName ? (
+            <MenuItem
+              onClick={() => router.push("/explore")}
+              icon={
+                <div className="scale-80">
+                  <Discovery set="bulk" />
+                </div>
+              }
+            >
+              Explore
+            </MenuItem>
+          ) : null}
           <MenuItem
             onClick={() => router.push("/u/[username]", `/u/${me.username}`)}
             icon={
@@ -52,16 +65,6 @@ export const UserDropdown: React.FC<UserDropdownProps> = ({
             }
           >
             Profile
-          </MenuItem>
-          <MenuItem
-            onClick={() => router.push("/rewards")}
-            icon={
-              <div className="scale-80">
-                <TicketStar set="bulk" />
-              </div>
-            }
-          >
-            Rewards
           </MenuItem>
           <MenuItem
             onClick={async () => {

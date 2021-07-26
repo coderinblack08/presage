@@ -25,7 +25,6 @@ export const ClaimReward: React.FC<ClaimRewardProps> = ({ user }) => {
 
   return (
     <>
-      <Toaster />
       <div className="flex items-center flex-grow-0">
         <Button
           onClick={() => setIsOpen(true)}
