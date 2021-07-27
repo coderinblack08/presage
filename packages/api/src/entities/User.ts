@@ -52,8 +52,8 @@ export class User extends BaseEntity {
   @Column("text", { nullable: true })
   profilePicture: string | null;
 
-  @Column({ select: false })
-  googleId: string;
+  @Column("text", { select: false, nullable: true })
+  googleId: string | null;
 
   @OneToMany(() => Article, (article) => article.user)
   articles: Article[];

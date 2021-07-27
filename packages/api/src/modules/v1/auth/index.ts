@@ -20,6 +20,14 @@ import { createToken } from "./createToken";
 import { isAuth } from "./isAuth";
 
 const router = Router();
+const pictures = [
+  "magenta-purple",
+  "orange",
+  "plum-fuchsia",
+  "purple-orange-sky",
+  "rosy-pink",
+  "yellow-lime",
+];
 
 const strategy = new Strategy(
   {
@@ -50,14 +58,6 @@ const strategy = new Strategy(
       };
       if (!user) {
         user = await User.create(data).save();
-        const pictures = [
-          "magenta-purple",
-          "orange",
-          "plum-fuchsia",
-          "purple-orange-sky",
-          "rosy-pink",
-          "yellow-lime",
-        ];
         await Journal.create({
           user: { id: user.id },
           name: "Blog",
@@ -95,12 +95,47 @@ const options: CookieOptions = {
 
 router.get(
   "/auth/google/callback",
+  limiter({ max: 20 }),
   passport.authenticate("google", { session: false }),
   (req: any, res) => {
     res.cookie("jid", req.user.accessToken, options);
     res.redirect("http://localhost:3000/?authRedirect=true");
   }
 );
+
+if (isDev()) {
+  router.post("/auth/test-user", limiter({ max: 20 }), async (_, res, next) => {
+    try {
+      const user = await User.create({
+        username: uniqueNamesGenerator({
+          dictionaries: [
+            adjectives,
+            colors,
+            animals,
+            NumberDictionary.generate({ min: 10, max: 99 }),
+          ],
+          separator: "-",
+        }),
+        displayName: "Test User",
+        email: "test@gmail.com",
+        profilePicture: "https://placekitten.com/100/100",
+      }).save();
+      await Journal.create({
+        user: { id: user.id },
+        name: "Blog",
+        description: `${user.displayName}’s personal journal dedicated to blogging`,
+        picture: `http://localhost:3000/profile-picture/${
+          pictures[Math.floor(Math.random() * pictures.length)]
+        }.jpeg`,
+      }).save();
+      const accessToken = createToken(user);
+      res.cookie("jid", accessToken, options);
+      res.json({ accessToken });
+    } catch (error) {
+      next(createHttpError(500, error));
+    }
+  });
+}
 
 router.get("/me", limiter({ max: 100 }), isAuth(), async (req, res, next) => {
   try {
