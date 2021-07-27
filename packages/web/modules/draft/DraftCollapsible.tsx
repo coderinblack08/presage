@@ -1,3 +1,4 @@
+import { AnimatePresence } from "framer-motion";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { MdAdd, MdArrowDropDown, MdMoreHoriz } from "react-icons/md";
@@ -51,7 +52,9 @@ export const DraftCollapsible: React.FC<DraftCollapsibleProps> = ({
           />
         </div>
       </div>
-      {open && <DraftList journal={journal} />}
+      <AnimatePresence>
+        {open && <DraftList journal={journal} />}
+      </AnimatePresence>
     </div>
   );
 };

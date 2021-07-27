@@ -87,7 +87,10 @@ export const DraftSidebar: React.FC<DraftSidebarProps> = ({}) => {
             </div>
           </div>
           <div className="mt-12">
-            <div className="bg-white p-6 border-t border-gray-200/50 w-full">
+            <motion.div
+              whileHover={{ height: "14rem" }}
+              className="bg-white p-6 border-t border-gray-200/50 w-full"
+            >
               <h6 className="font-bold">Apply to Publish</h6>
               <p className="text-gray-600 font-normal text-sm mt-2">
                 Since we&apos;re still in beta, publishing articles is only
@@ -100,7 +103,7 @@ export const DraftSidebar: React.FC<DraftSidebarProps> = ({}) => {
               >
                 Apply Now →
               </a>
-            </div>
+            </motion.div>
           </div>
         </motion.nav>
       ) : null}

@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useRef } from "react";
@@ -13,15 +14,25 @@ interface DraftListProps {
 
 export const DraftList: React.FC<DraftListProps> = ({ journal }) => {
   const router = useRouter();
-  const ref = useRef<HTMLDivElement>(null);
   const { data: drafts } = useQuery<Article[]>(
     `/articles/drafts?journalId=${journal.id}`
   );
 
   return (
-    <ul className="mt-2">
+    <motion.ul
+      key="content"
+      initial="collapsed"
+      animate="open"
+      exit="collapsed"
+      variants={{
+        open: { opacity: 1, height: "auto" },
+        collapsed: { opacity: 0, height: 0 },
+      }}
+      transition={{ ease: [0.04, 0.62, 0.23, 0.98] }}
+      className="mt-2"
+    >
       {drafts?.map((draft) => (
-        <li key={draft.id}>
+        <motion.li key={draft.id}>
           <div
             onClick={() => {
               router.push(`/draft/${draft.id}`);
@@ -40,8 +51,8 @@ export const DraftList: React.FC<DraftListProps> = ({ journal }) => {
             </div>
             <DeleteDraftModal id={draft.id} />
           </div>
-        </li>
+        </motion.li>
       ))}
-    </ul>
+    </motion.ul>
   );
 };
