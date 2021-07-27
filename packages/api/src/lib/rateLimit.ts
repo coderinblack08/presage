@@ -4,6 +4,7 @@ import RedisStore from "rate-limit-redis";
 import { isDev, SECONDS_IN_HOUR } from "./constants";
 import { redis } from "./redis";
 
+// rate limiting disabled on dev
 export const limiter = (options: Partial<rateLimit.Options>) =>
   isDev()
     ? (_: any, __: any, next: NextFunction) => next()

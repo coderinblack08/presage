@@ -1,6 +1,5 @@
 import { Dialog } from "@headlessui/react";
 import React, { useEffect, useState } from "react";
-import { Bookmark } from "react-iconly";
 import { MdSave } from "react-icons/md";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { Button } from "../../components/Button";
@@ -12,10 +11,9 @@ import { Article } from "../../lib/types";
 
 interface EditTagModalProps {
   id: string;
-  noText?: boolean;
 }
 
-export const EditTagModal: React.FC<EditTagModalProps> = ({ id, noText }) => {
+export const EditTagModal: React.FC<EditTagModalProps> = ({ id }) => {
   const [isOpen, setIsOpen] = useState(false);
   const queryClient = useQueryClient();
   const { data: draft } = useQuery<Article>(`/articles/draft/${id}`);
@@ -60,11 +58,9 @@ export const EditTagModal: React.FC<EditTagModalProps> = ({ id, noText }) => {
         color="transparent"
         size="none"
         noAnimate
-        // eslint-disable-next-line react/no-children-prop
-        children={
-          noText ? null : <span className="text-gray-800">Edit Tags</span>
-        }
-      />
+      >
+        <span className="text-gray-800">Edit Tags</span>
+      </Button>
       <Modal isOpen={isOpen} closeModal={() => setIsOpen(false)}>
         <ModalHeader
           handleClose={() => setIsOpen(false)}

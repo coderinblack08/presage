@@ -1,3 +1,4 @@
+import "reflect-metadata";
 require("dotenv-safe").config();
 import cookieParser from "cookie-parser";
 import cors from "cors";
@@ -6,7 +7,6 @@ import helmet from "helmet";
 import http from "http";
 import passport from "passport";
 import { join } from "path";
-import "reflect-metadata";
 import { createConnection } from "typeorm";
 import { isDev } from "./lib/constants";
 import { v1 } from "./modules/v1";

@@ -18,10 +18,9 @@ router.post("/", limiter({ max: 20 }), isAuth(true), async (req, res, next) => {
   reward.link = req.body.link;
   reward.type = req.body.type;
   reward.user = { id: req.userId } as User;
-  try {
-    await validate(reward);
-  } catch (error) {
-    return next(createHttpError(422, error));
+  const errors = await validate(reward);
+  if (errors.length > 0) {
+    return next(createHttpError(422, errors));
   }
   try {
     const savedReward = await reward.save();
@@ -45,10 +44,9 @@ router.patch(
     reward.points = req.body.points;
     reward.link = req.body.link;
     reward.type = req.body.type;
-    try {
-      await validate(reward, { skipMissingProperties: true });
-    } catch (error) {
-      return next(createHttpError(422, error));
+    const errors = await validate(reward, { skipMissingProperties: true });
+    if (errors.length > 0) {
+      return next(createHttpError(422, errors));
     }
     try {
       await reward.save();

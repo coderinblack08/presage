@@ -89,7 +89,7 @@ export const DraftSidebar: React.FC<DraftSidebarProps> = ({}) => {
           <div className="mt-12">
             <motion.div
               whileHover={{ height: "14rem" }}
-              className="bg-white p-6 border-t border-gray-200/50 w-full"
+              className="bg-white p-6 rounded-t-xl border-t border-gray-200/50 w-full"
             >
               <h6 className="font-bold">Apply to Publish</h6>
               <p className="text-gray-600 font-normal text-sm mt-2">

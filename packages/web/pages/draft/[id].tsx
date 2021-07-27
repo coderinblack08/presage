@@ -12,6 +12,7 @@ import { DraftEditor } from "../../modules/draft/DraftEditor";
 import { DraftSidebar, useSidebarOpen } from "../../modules/draft/DraftSidebar";
 import { EditTagModal } from "../../modules/draft/EditTagModal";
 import { PublishButton } from "../../modules/draft/PublishButton";
+import { SettingsModal } from "../../modules/draft/SettingsModal";
 
 const DraftPage: React.FC<
   InferGetServerSidePropsType<typeof getServerSideProps>
@@ -59,7 +60,7 @@ const DraftPage: React.FC<
               <div className="flex items-center">
                 <div className="flex items-center space-x-8 pr-8 flex-shrink-0">
                   <EditTagModal id={draft.id} />
-                  <button>Settings</button>
+                  <SettingsModal id={draft.id} />
                 </div>
                 <div className="h-6 border-r border-gray-300" />
                 <div className="flex items-center space-x-8 pl-8">

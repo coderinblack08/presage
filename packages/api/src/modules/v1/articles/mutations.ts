@@ -4,6 +4,7 @@ import Placeholder from "@tiptap/extension-placeholder";
 import Underline from "@tiptap/extension-underline";
 import { generateHTML } from "@tiptap/html";
 import StarterKit from "@tiptap/starter-kit";
+import { validate } from "class-validator";
 import { Request, Router } from "express";
 import createHttpError from "http-errors";
 import readingTime from "reading-time";
@@ -71,9 +72,12 @@ articlesMutationRouter.patch(
   "/:id",
   limiter({ max: 500 }),
   isAuth(true),
-  async (req: Request<{ id: string }>, res) => {
-    const bodyJson = req.body.body;
-    let updateBody = {};
+  async (req: Request<{ id: string }>, res, next) => {
+    const article = await Article.findOne(req.params.id);
+    if (!article) {
+      return next(createHttpError(404, "Article not found"));
+    }
+    const { title, body: bodyJson, canonical } = req.body;
     if (bodyJson) {
       const body = sanitizeHtml(
         generateHTML(bodyJson, [
@@ -96,30 +100,30 @@ articlesMutationRouter.patch(
           },
         }
       );
-      updateBody = {
-        ...updateBody,
-        body: body,
-        bodyJson: req.body.body,
-        readingTime: readingTime(body).text,
-      };
+      article.body = body;
+      article.bodyJson = bodyJson;
+      article.readingTime = readingTime(body).text;
     }
-    if (req.body.title) {
-      updateBody = {
-        ...updateBody,
-        title: req.body.title,
-      };
+    if (title) {
+      article.title = title;
     }
-    if (req.body.canonical) {
-      updateBody = {
-        ...updateBody,
-        title: req.body.canonical,
-      };
+    if (canonical === "") {
+      article.canonical = null;
     }
-    const article = await Article.update(
-      { id: req.params.id, userId: req.userId },
-      updateBody
-    );
-    res.json(article.raw);
+    if (canonical) {
+      article.canonical = canonical;
+    }
+    if (typeof article.bodyJson !== "string") {
+      article.bodyJson = JSON.stringify(article.bodyJson);
+    }
+    const errors = await validate(article, { skipMissingProperties: true });
+    if (errors.length > 0) {
+      console.log(errors);
+
+      return next(createHttpError(422, errors));
+    }
+    await article.save();
+    res.json(article);
   }
 );
 
@@ -129,10 +133,10 @@ articlesMutationRouter.patch(
   isAuth(true),
   async (req: Request<{ id: string }>, res, next) => {
     if (!Array.isArray(req.body.tags)) {
-      next(createHttpError(400, "tags is not an array"));
+      return next(createHttpError(400, "tags is not an array"));
     }
     if (req.body.tags.length > 5) {
-      next(createHttpError(400, "tags are capped at 5 elements"));
+      return next(createHttpError(400, "tags are capped at 5 elements"));
     }
     const connection = getConnection();
     const article = await Article.findOne(req.params.id);

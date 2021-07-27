@@ -177,10 +177,9 @@ router.patch(
     if (email) user.email = email;
     if (bio) user.bio = bio;
     if (profilePicture) user.profilePicture = profilePicture;
-    try {
-      await validate(user, { skipMissingProperties: true });
-    } catch (error) {
-      return next(createHttpError(422, error));
+    const errors = await validate(user, { skipMissingProperties: true });
+    if (errors.length > 0) {
+      return next(createHttpError(422, errors));
     }
     try {
       await user.save();
