@@ -113,7 +113,7 @@ articlesMutationRouter.patch(
     if (canonical) {
       article.canonical = canonical;
     }
-    if (typeof article.bodyJson !== "string") {
+    if (typeof article.bodyJson !== "string" && article.bodyJson) {
       article.bodyJson = JSON.stringify(article.bodyJson);
     }
     const errors = await validate(article, { skipMissingProperties: true });

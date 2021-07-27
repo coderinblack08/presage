@@ -52,7 +52,6 @@ articlesQueriesRouter.get(
     const { journalId, published } = req.query as any;
     if (journalId && journalId !== "null") where.journalId = journalId;
     if (published) where.published = published;
-    console.log(where);
 
     const articles = await Article.find({
       where,
@@ -60,6 +59,10 @@ articlesQueriesRouter.get(
       relations: ["tags"],
       select: ["id", "title", "published", "createdAt", "updatedAt"],
     });
+    console.log(req.userId);
+
+    console.log({ articles });
+
     res.json(articles);
   }
 );
