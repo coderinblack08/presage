@@ -9,7 +9,7 @@ export const Select: React.FC<
 > = ({ children, className, color = "white", ...props }) => {
   return (
     <select
-      className={`form-select border-none focus:ring-none focus:border-none font-medium px-4 py-2 ${
+      className={`form-select border-none focus:ring-transparent focus:border-none font-medium px-4 py-2 ${
         color === "white" ? "bg-white shadow" : "bg-transparent"
       } rounded-lg focus:outline-none focus:ring-2 ${className}`}
       {...props}

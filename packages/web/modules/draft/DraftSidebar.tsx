@@ -1,9 +1,10 @@
-import shallow from "zustand/shallow";
 import React from "react";
 import { Search } from "react-iconly";
 import { HiOutlineChevronDoubleLeft } from "react-icons/hi";
 import create from "zustand";
 import { combine } from "zustand/middleware";
+import shallow from "zustand/shallow";
+import { Button } from "../../components/Button";
 import { Input } from "../../components/Input";
 import { UserDropdown } from "../../components/UserDropdown";
 import { useSSRQuery } from "../../lib/hooks/useSSRQuery";
@@ -12,7 +13,6 @@ import { CreateRewardModal } from "../rewards/CreateRewardModal";
 import { UpdateRewardModal } from "../rewards/UpdateRewardModal";
 import { CreateJournalModal } from "./CreateJournalModal";
 import { DraftCollapsible } from "./DraftCollapsible";
-import { Button } from "../../components/Button";
 
 interface DraftSidebarProps {}
 
@@ -30,7 +30,7 @@ export const DraftSidebar: React.FC<DraftSidebarProps> = ({}) => {
   return (
     <>
       {open ? (
-        <nav className="relative bg-gray-50 border-r border-gray-100 max-w-xs w-full p-6 h-screen overflow-y-scroll">
+        <nav className="relative bg-gray-50 border-r border-gray-100 border-gray-200/50 max-w-xs w-full p-6 h-screen overflow-y-scroll">
           <div className="flex items-center justify-between">
             <UserDropdown fullName />
             <Button
@@ -38,10 +38,11 @@ export const DraftSidebar: React.FC<DraftSidebarProps> = ({}) => {
                 <HiOutlineChevronDoubleLeft className="w-5 h-5 text-gray-600" />
               }
               color="transparent"
+              size="none"
               onClick={() => setOpen(false)}
-            ></Button>
+            />
           </div>
-          <div className="relative mt-5 w-full">
+          <div className="relative mt-4 w-full">
             <Input placeholder="Search Drafts" className="w-full pl-12" />
             <div className="h-full mx-4 flex items-center pointer-events-none absolute top-0 left-0 text-gray-500">
               <Search size="small" stroke="bold" />
@@ -74,6 +75,22 @@ export const DraftSidebar: React.FC<DraftSidebarProps> = ({}) => {
                 </li>
               ))}
             </ul>
+          </div>
+          <div className="absolute bottom-0 inset-x-0">
+            <div className="bg-white p-6 border-t border-gray-200/50 w-full">
+              <h6 className="font-bold">Apply to Publish</h6>
+              <p className="text-gray-600 font-normal text-sm mt-2">
+                Since we&apos;re still in beta, publishing articles is only
+                available for a select few. However, anyone can write and save
+                drafts!
+              </p>
+              <a
+                href="#"
+                className="font-semibold text-sm inline-block mt-4 hover:underline"
+              >
+                Apply Now →
+              </a>
+            </div>
           </div>
         </nav>
       ) : null}

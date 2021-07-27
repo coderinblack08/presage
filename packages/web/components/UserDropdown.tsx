@@ -36,7 +36,9 @@ export const UserDropdown: React.FC<UserDropdownProps> = ({
                     alt={me?.displayName}
                     className="w-7 h-7 object-cover rounded-full"
                   />
-                  <h6 className="text-lg font-semibold">{me?.displayName}</h6>
+                  <h6 className="font-display font-bold text-lg leading-none">
+                    {me?.displayName}
+                  </h6>
                 </button>
               ) : (
                 <Avatar user={me} />
