@@ -1,3 +1,4 @@
+import { AnimatePresence, AnimateSharedLayout, motion } from "framer-motion";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import React from "react";
 import { MdMenu } from "react-icons/md";
@@ -19,51 +20,59 @@ const DraftPage: React.FC<
   const [open, setOpen] = useSidebarOpen((x) => [x.open, x.setOpen], shallow);
 
   return (
-    <div className="flex items-start bg-white">
-      <DraftSidebar />
-      {draft ? (
-        <div className="w-full h-screen overflow-y-scroll bg-white md:px-12">
-          <header className="sticky top-0 bg-white flex items-center justify-between py-6 px-8">
-            <div className="flex items-center space-x-5">
-              {!open ? (
-                <Button
-                  icon={<MdMenu className="w-6 h-6 text-gray-600" />}
-                  color="transparent"
-                  size="none"
-                  onClick={() => setOpen(true)}
-                />
-              ) : null}
-              <div className="flex items-center space-x-3 pr-8">
-                <img
-                  src={draft.journal.picture}
-                  className="w-6 h-6 rounded-full"
-                  alt={draft.journal.name}
-                />
-                <h5 className="font-semibold truncate min-w-0">
-                  {draft.journal.name}{" "}
-                  <span className="hidden lg:inline text-gray-400 mx-1">/</span>{" "}
-                  <span className="hidden lg:inline text-gray-700 font-medium">
-                    {draft.title}
-                  </span>
-                </h5>
+    <div className="flex items-start bg-white w-screen h-screen">
+      <AnimateSharedLayout>
+        <DraftSidebar />
+        {draft ? (
+          <motion.div
+            className="w-full h-screen overflow-y-scroll bg-white md:px-12"
+            transition={{ type: "keyframes", ease: "easeOut" }}
+            layout
+          >
+            <header className="sticky z-50 top-0 bg-white flex items-center justify-between py-4 lg:py-6 px-8">
+              <div className="flex items-center space-x-5">
+                {!open ? (
+                  <Button
+                    icon={<MdMenu className="w-6 h-6 text-gray-600" />}
+                    color="transparent"
+                    size="none"
+                    onClick={() => setOpen(true)}
+                  />
+                ) : null}
+                <div className="hidden sm:flex items-center space-x-3 pr-8">
+                  <img
+                    src={draft.journal.picture}
+                    className="w-6 h-6 rounded-full"
+                    alt={draft.journal.name}
+                  />
+                  <h5 className="font-semibold truncate min-w-0">
+                    {draft.journal.name}{" "}
+                    <span className="hidden lg:inline text-gray-400 mx-1">
+                      /
+                    </span>{" "}
+                    <span className="hidden lg:inline text-gray-700 font-medium">
+                      {draft.title}
+                    </span>
+                  </h5>
+                </div>
               </div>
-            </div>
-            <div className="flex items-center">
-              <div className="flex items-center space-x-8 pr-8 flex-shrink-0">
-                <EditTagModal id={draft.id} />
-                <button>Settings</button>
+              <div className="flex items-center">
+                <div className="flex items-center space-x-8 pr-8 flex-shrink-0">
+                  <EditTagModal id={draft.id} />
+                  <button>Settings</button>
+                </div>
+                <div className="h-6 border-r border-gray-300" />
+                <div className="flex items-center space-x-8 pl-8">
+                  <PublishButton id={draft.id} />
+                </div>
               </div>
-              <div className="h-6 border-r border-gray-300" />
-              <div className="flex items-center space-x-8 pl-8">
-                <PublishButton id={draft.id} />
-              </div>
-            </div>
-          </header>
-          <main className="py-6 px-8">
-            <DraftEditor id={draft.id} />
-          </main>
-        </div>
-      ) : null}
+            </header>
+            <main className="py-6 px-8">
+              <DraftEditor id={draft.id} />
+            </main>
+          </motion.div>
+        ) : null}
+      </AnimateSharedLayout>
     </div>
   );
 };

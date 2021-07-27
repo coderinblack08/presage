@@ -109,6 +109,12 @@ articlesMutationRouter.patch(
         title: req.body.title,
       };
     }
+    if (req.body.canonical) {
+      updateBody = {
+        ...updateBody,
+        title: req.body.canonical,
+      };
+    }
     const article = await Article.update(
       { id: req.params.id, userId: req.userId },
       updateBody

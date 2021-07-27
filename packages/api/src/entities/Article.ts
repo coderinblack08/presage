@@ -1,4 +1,12 @@
 import {
+  IsBoolean,
+  IsDate,
+  IsJSON,
+  IsOptional,
+  IsString,
+  IsUrl,
+} from "class-validator";
+import {
   BaseEntity,
   Column,
   CreateDateColumn,
@@ -22,18 +30,31 @@ export class Article extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
+  @IsString()
   @Column("varchar", { length: 100 })
   title: string;
 
+  @IsString()
+  @IsOptional()
   @Column("text", { nullable: true })
   body: string | null;
 
+  @IsUrl()
+  @IsOptional()
+  @Column("text", { nullable: true })
+  canonical: string | null;
+
+  @IsJSON()
+  @IsOptional()
   @Column("json", { nullable: true })
   bodyJson: any | null;
 
+  @IsBoolean()
   @Column("bool", { default: false })
   published: boolean;
 
+  @IsString()
+  @IsOptional()
   @Column("text", { nullable: true })
   readingTime: string | null;
 
@@ -71,6 +92,8 @@ export class Article extends BaseEntity {
   @Column("tsvector", { select: false, nullable: true })
   document: any;
 
+  @IsDate()
+  @IsOptional()
   @Column("timestamp", { nullable: true })
   publishedDate: Date | null;
 
