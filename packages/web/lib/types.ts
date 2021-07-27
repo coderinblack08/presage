@@ -81,14 +81,12 @@ export interface Reward {
 
 export interface Referral {
   id: string;
-  jwt: string;
   token: string;
   articleId: string;
   article: Article;
   referrerId: string;
   referrer: User;
-  count: number;
-  claimed: boolean;
+  claimCount: number;
   createdAt: Date;
 }
 

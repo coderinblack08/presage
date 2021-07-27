@@ -16,9 +16,6 @@ export class Referral extends BaseEntity {
   id: string;
 
   @Column()
-  jwt: string;
-
-  @Column()
   token: string;
 
   @PrimaryColumn()
@@ -34,10 +31,7 @@ export class Referral extends BaseEntity {
   referrer: User;
 
   @Column("int", { default: 0 })
-  count: number;
-
-  @Column("bool", { default: false })
-  claimed: boolean;
+  claimCount: number;
 
   @CreateDateColumn()
   createdAt: Date;

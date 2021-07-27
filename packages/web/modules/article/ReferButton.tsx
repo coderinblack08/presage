@@ -85,8 +85,8 @@ export const ReferButton: React.FC<ReferButtonProps> = ({ article }) => {
             <li className="flex space-x-6 items-start">
               <ItemCheck />
               <p className="text-gray-700 font-normal">
-                You can earn up to one point for every article you refer (within
-                3 days).
+                You can earn up to three point for every article you refer (1
+                per person referred).
               </p>
             </li>
             <li className="flex space-x-6 items-start">
@@ -98,8 +98,8 @@ export const ReferButton: React.FC<ReferButtonProps> = ({ article }) => {
             </li>
           </ul>
           <label htmlFor="url" className="block mt-10 mb-2 font-bold">
-            You have referred {referral?.count}{" "}
-            {referral?.count === 1 ? "person" : "people"}
+            You have referred {referral?.claimCount}{" "}
+            {referral?.claimCount === 1 ? "person" : "people"}
           </label>
           <div className="flex items-center space-x-2">
             <Input color="gray" name="url" value={referralURL} />

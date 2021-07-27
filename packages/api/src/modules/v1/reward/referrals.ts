@@ -1,6 +1,5 @@
 import { Request, Router } from "express";
 import createHttpError from "http-errors";
-import { sign, verify } from "jsonwebtoken";
 import { nanoid } from "nanoid";
 import { Article } from "../../../entities/Article";
 import { Referral } from "../../../entities/Referral";
@@ -38,22 +37,18 @@ router.post(
     if (!article) {
       return next(createHttpError(404, "Article not found"));
     }
+
     const alreadyHasReferral = await Referral.findOne({
       where: { articleId: req.params.articleId, referrerId: req.userId },
     });
     if (alreadyHasReferral) {
       return res.json(alreadyHasReferral);
     }
-    const jwt = sign(
-      { referrerId: req.userId, articleId: req.params.articleId },
-      process.env.REFERRAL_TOKEN_SECRET!,
-      { expiresIn: "3d" }
-    );
+
     const token = nanoid();
     try {
       const referral = await Referral.create({
         token,
-        jwt,
         article: { id: req.params.articleId },
         referrer: { id: req.userId },
       }).save();
@@ -77,20 +72,14 @@ router.get(
     if (!referral) {
       return next(createHttpError(404, "Token not found"));
     }
-    try {
-      verify(referral.jwt, process.env.REFERRAL_TOKEN_SECRET!);
-      if (
-        referral.claimed === false &&
-        req.userId &&
-        req.userId !== referral.referrerId
-      ) {
-        try {
-          referral.claimed = true;
-          referral.count = referral.count + 1;
-          await referral.save();
-        } catch (error) {
-          return next(createHttpError(500, error));
-        }
+    if (req.userId && req.userId !== referral.referrerId) {
+      try {
+        referral.claimCount = referral.claimCount + 1;
+        await referral.save();
+      } catch (error) {
+        return next(createHttpError(500, error));
+      }
+      if (referral.claimCount <= 3) {
         const article = await Article.findOne(referral.articleId);
         const body = {
           userId: referral.referrerId,
@@ -106,7 +95,7 @@ router.get(
           await UserPoints.create({ ...body, points: 1 }).save();
         }
       }
-    } catch {}
+    }
     res.json(referral);
   }
 );
