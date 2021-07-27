@@ -70,7 +70,7 @@ const ArticlePage: React.FC<{ id: string; referred: boolean }> = ({
       <NextSeo
         title={article.title}
         description=""
-        canonical={seo.url}
+        canonical={article.canonical || seo.url}
         openGraph={{
           title: article.title,
           url: seo.url,
