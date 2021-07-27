@@ -59,10 +59,6 @@ articlesQueriesRouter.get(
       relations: ["tags"],
       select: ["id", "title", "published", "createdAt", "updatedAt"],
     });
-    console.log(req.userId);
-
-    console.log({ articles });
-
     res.json(articles);
   }
 );

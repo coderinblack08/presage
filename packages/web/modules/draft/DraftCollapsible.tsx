@@ -1,6 +1,6 @@
 import { AnimatePresence } from "framer-motion";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MdAdd, MdArrowDropDown, MdMoreHoriz } from "react-icons/md";
 import { Button } from "../../components/Button";
 import { useSSRQuery } from "../../lib/hooks/useSSRQuery";
@@ -21,6 +21,12 @@ export const DraftCollapsible: React.FC<DraftCollapsibleProps> = ({
   const { data: draft } = useSSRQuery<Article>(`/articles/draft/${id}`);
   const [open, setOpen] = useState(draft.journalId === journal.id);
   const newDraft = useNewDraft();
+
+  useEffect(() => {
+    if (open === false && draft.journalId === journal.id) {
+      setOpen(true);
+    }
+  }, [draft.journalId, journal.id, open]);
 
   return (
     <div key={journal.id} className="mt-3">

@@ -31,6 +31,7 @@ export const DraftList: React.FC<DraftListProps> = ({ journal }) => {
       transition={{ ease: [0.04, 0.62, 0.23, 0.98] }}
       className="mt-2"
     >
+      {/* <pre>{JSON.stringify(drafts, null, 2)}</pre> */}
       {drafts?.map((draft) => (
         <motion.li key={draft.id}>
           <div

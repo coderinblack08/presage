@@ -1,9 +1,9 @@
 import Image from "next/image";
 import React from "react";
 import { MdCheck } from "react-icons/md";
-import { useMediaQuery } from "react-responsive";
 import { Footer } from "../../components/Footer";
 import { Navbar } from "../../components/Navbar";
+import { useSSRMediaQuery } from "../../lib/hooks/useSSRMediaQuery";
 import featureGraphic from "../../public/static/feature-graphic.png";
 import philosophy from "../../public/static/philosophy.svg";
 import phone from "../../public/static/phone-illustration.png";
@@ -22,7 +22,7 @@ export function ItemCheck({ size = "medium" }: { size?: "small" | "medium" }) {
 }
 
 export const LandingPage: React.FC<LandingPageProps> = ({}) => {
-  const isTabletOrDesktop = useMediaQuery({ query: "(max-width: 1024px)" });
+  const isTabletOrDesktop = useSSRMediaQuery("(max-width: 1024px)");
 
   return (
     <div>

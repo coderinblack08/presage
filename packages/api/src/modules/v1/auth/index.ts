@@ -99,7 +99,7 @@ router.get(
   passport.authenticate("google", { session: false }),
   (req: any, res) => {
     res.cookie("jid", req.user.accessToken, options);
-    res.redirect("http://localhost:3000/?authRedirect=true");
+    res.redirect("http://localhost:3000/redirect");
   }
 );
 

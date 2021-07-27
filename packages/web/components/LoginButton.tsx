@@ -53,7 +53,7 @@ export const LoginButton: React.FC<LoginButtonProps> = ({}) => {
                 color="white"
                 onClick={async () => {
                   await mutateAsync(["/auth/test-user", {}, "post"], {
-                    onSuccess: () => router.push("/?authRedirect=true"),
+                    onSuccess: () => router.push("/redirect"),
                   });
                 }}
               >

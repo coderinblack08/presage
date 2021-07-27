@@ -1,8 +1,7 @@
 import { Menu } from "@headlessui/react";
 import { useRouter } from "next/router";
 import React from "react";
-import { Discovery, Logout, TicketStar, User as UserIcon } from "react-iconly";
-import { MdExpandMore } from "react-icons/md";
+import { Discovery, Logout, Upload, User as UserIcon } from "react-iconly";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { mutator } from "../lib/mutator";
 import { User } from "../lib/types";
@@ -11,10 +10,12 @@ import { Dropdown, MenuItem } from "./Dropdown";
 
 interface UserDropdownProps {
   fullName?: boolean;
+  showPublish?: boolean;
 }
 
 export const UserDropdown: React.FC<UserDropdownProps> = ({
   fullName = false,
+  showPublish = false,
 }) => {
   const { data: me } = useQuery<User>("/me");
   const router = useRouter();
@@ -30,7 +31,7 @@ export const UserDropdown: React.FC<UserDropdownProps> = ({
           opener={
             <Menu.Button className="flex items-center space-x-2 focus:outline-none">
               {fullName ? (
-                <button className="flex items-center space-x-4 focus:outline-none">
+                <div className="flex items-center space-x-4 focus:outline-none">
                   <img
                     src={me?.profilePicture}
                     alt={me?.displayName}
@@ -39,7 +40,7 @@ export const UserDropdown: React.FC<UserDropdownProps> = ({
                   <h6 className="font-display font-bold text-lg leading-none">
                     {me?.displayName}
                   </h6>
-                </button>
+                </div>
               ) : (
                 <Avatar user={me} />
               )}
@@ -68,6 +69,18 @@ export const UserDropdown: React.FC<UserDropdownProps> = ({
           >
             Profile
           </MenuItem>
+          {showPublish ? (
+            <MenuItem
+              onClick={() => router.push("/publish")}
+              icon={
+                <div className="scale-80">
+                  <Upload set="bulk" />
+                </div>
+              }
+            >
+              Publish
+            </MenuItem>
+          ) : null}
           <MenuItem
             onClick={async () => {
               await mutateAsync(["/logout", {}, "post"], {

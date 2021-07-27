@@ -48,7 +48,7 @@ export const ArticleNavbar: React.FC<ArticleNavbarProps> = ({
           {me ? (
             <div className="flex item-center space-x-4">
               <ClaimReward user={user} />
-              <UserDropdown />
+              <UserDropdown showPublish />
             </div>
           ) : (
             <LoginButton />

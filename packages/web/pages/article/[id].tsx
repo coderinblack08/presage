@@ -142,7 +142,7 @@ const ArticlePage: React.FC<{ id: string; referred: boolean }> = ({
         </header>
         <main className="max-w-4xl w-full px-5 md:px-8 mx-auto pb-12 md:pb-20">
           <article
-            className="prose w-full max-w-full py-12 md:py-16"
+            className="prose w-full max-w-full py-12 md:py-16 overflow-x-auto"
             dangerouslySetInnerHTML={{ __html: article.body }}
           />
           {/* <RenderArticle article={article} /> */}

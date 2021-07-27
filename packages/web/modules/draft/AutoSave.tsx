@@ -9,7 +9,7 @@ export const AutoSave: React.FC = () => {
     debounce(() => {
       if (!formik.isValid || !formik.dirty) return false;
       return formik.submitForm();
-    }, 500),
+    }, 1000),
     [formik.submitForm, formik.isValid, formik.initialValues, formik.values]
   );
 

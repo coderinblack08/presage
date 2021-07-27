@@ -9,10 +9,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = (props) => {
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    if (
-      typeof query.authRedirect === "string" &&
-      query.authRedirect === "true"
-    ) {
+    if (typeof query.reset === "string" && query.reset === "true") {
       replace("/explore", undefined, { shallow: true });
       queryClient.clear();
     }

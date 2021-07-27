@@ -43,6 +43,7 @@ export const DeleteDraftModal: React.FC<DeleteDraftModalProps> = ({ id }) => {
                     const article = queryClient.getQueryData<Article>(
                       `/articles/draft/${id}`
                     );
+                    setIsOpen(false);
                     queryClient.setQueryData<Article[]>(
                       `/articles/drafts?journalId=${article?.journalId}`,
                       (old) => {
@@ -68,7 +69,6 @@ export const DeleteDraftModal: React.FC<DeleteDraftModalProps> = ({ id }) => {
                     router.push("/publish");
                   },
                 });
-                setIsOpen(false);
               }}
               size="small"
               icon={<Delete set="bold" size="small" />}

@@ -11,11 +11,8 @@ export const useNewDraft = () => {
   const newDraft = async (journalId: string | null) => {
     await mutateAsync(["/articles", { journalId }, "post"], {
       onSuccess: (data: Article) => {
-        queryClient.setQueryData<Article[]>(
-          `/articles/drafts?journalId=${journalId}`,
-          (old) => [data, ...(old || [])]
-        );
-        router.push(`/draft/${data.id}`);
+        queryClient.refetchQueries(`/articles/drafts?journalId=${journalId}`);
+        router.push(`/draft/[id]`, `/draft/${data.id}`);
       },
     });
   };
