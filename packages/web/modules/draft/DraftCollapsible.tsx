@@ -52,7 +52,7 @@ export const DraftCollapsible: React.FC<DraftCollapsibleProps> = ({
           />
         </div>
       </div>
-      <AnimatePresence>
+      <AnimatePresence initial={false}>
         {open && <DraftList journal={journal} />}
       </AnimatePresence>
     </div>

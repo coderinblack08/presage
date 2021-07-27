@@ -68,6 +68,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ id }) => {
               />
               <div className="p-6 space-y-3">
                 <InputField
+                  description="Change meta tag canonical_url if this post was first published elsewhere (like your own blog)"
                   placeholder="https://example.com/blog"
                   name="canonical"
                   label="Canonical"

@@ -3,16 +3,19 @@ import React from "react";
 import { Input, InputProps } from "./Input";
 
 export const InputField: React.FC<
-  InputProps & { label: string }
-> = React.forwardRef(({ textarea, label, ...props }, ref) => {
+  InputProps & { label?: string; description?: string }
+> = React.forwardRef(({ textarea, label, description, ...props }, ref) => {
   const [field, meta] = useField(props as any);
 
   return (
     <div className="w-full">
       {label && (
-        <label htmlFor={props.name} className="font-bold mb-1.5 inline-block">
+        <label htmlFor={props.name} className="font-bold mb-1 inline-block">
           {label}
         </label>
+      )}
+      {description && (
+        <p className="text-gray-600 font-normal small mb-3">{description}</p>
       )}
       <Input
         ref={ref}

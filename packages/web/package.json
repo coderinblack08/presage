@@ -54,7 +54,7 @@
     "react-popper": "^2.2.5",
     "react-portal": "^4.2.1",
     "react-query": "^3.17.1",
-    "react-responsive": "^8.2.0",
+    "react-responsive": "^9.0.0-beta.2",
     "react-share": "^4.4.0",
     "react-tag-autocomplete": "^6.1.0",
     "react-use-audio-player": "^1.2.4",

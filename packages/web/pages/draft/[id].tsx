@@ -58,12 +58,12 @@ const DraftPage: React.FC<
                 </div>
               </div>
               <div className="flex items-center">
-                <div className="flex items-center space-x-8 pr-8 flex-shrink-0">
+                <div className="flex items-center space-x-10 pr-8 flex-shrink-0">
                   <EditTagModal id={draft.id} />
                   <SettingsModal id={draft.id} />
                 </div>
                 <div className="h-6 border-r border-gray-300" />
-                <div className="flex items-center space-x-8 pl-8">
+                <div className="flex items-center space-x-10 pl-8">
                   <PublishButton id={draft.id} />
                 </div>
               </div>
