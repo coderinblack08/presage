@@ -55,35 +55,40 @@ export class User extends BaseEntity {
   @Column("text", { select: false, nullable: true })
   googleId: string | null;
 
-  @OneToMany(() => Article, (article) => article.user)
+  @OneToMany(() => Article, (article) => article.user, { cascade: true })
   articles: Article[];
 
-  @OneToMany(() => Like, (like) => like.user)
+  @OneToMany(() => Like, (like) => like.user, { cascade: true })
   likes: Like[];
 
-  @OneToMany(() => Journal, (like) => like.user)
+  @OneToMany(() => Journal, (like) => like.user, { cascade: true })
   journals: Journal[];
 
-  @OneToMany(() => Reward, (reward) => reward.user)
+  @OneToMany(() => Reward, (reward) => reward.user, { cascade: true })
   rewards: Reward[];
 
-  @OneToMany(() => UserPoints, (up) => up.user)
+  @OneToMany(() => UserPoints, (up) => up.user, { cascade: true })
   userPoints: UserPoints[];
 
-  @OneToMany(() => UserPoints, (up) => up.creator)
+  @OneToMany(() => UserPoints, (up) => up.creator, { cascade: true })
   readerPoints: UserPoints[];
 
-  @OneToMany(() => Referral, (referral) => referral.referrer)
+  @OneToMany(() => Referral, (referral) => referral.referrer, { cascade: true })
   referrals: Referral[];
 
-  @OneToMany(() => ClaimedReward, (cr) => cr.user)
+  @OneToMany(() => ClaimedReward, (cr) => cr.user, { cascade: true })
   claims: ClaimedReward[];
 
-  @ManyToMany(() => User, (user) => user.following)
+  @ManyToMany(() => User, (user) => user.following, {
+    cascade: true,
+    onDelete: "CASCADE",
+  })
   @JoinTable()
   followers: User[];
 
-  @ManyToMany(() => User, (user) => user.followers)
+  @ManyToMany(() => User, (user) => user.followers, {
+    onDelete: "CASCADE",
+  })
   following: User[];
 
   @Column("int", { default: 0 })

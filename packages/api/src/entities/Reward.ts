@@ -37,7 +37,7 @@ export class Reward extends BaseEntity {
 
   @IsOptional()
   @IsUrl()
-  @Column("text", { nullable: true })
+  @Column("text", { nullable: true, select: false })
   link: string | null;
 
   @IsIn(["shoutout", "link", "other"])
@@ -56,7 +56,7 @@ export class Reward extends BaseEntity {
   @Column()
   userId: string;
 
-  @ManyToOne(() => User, (user) => user.rewards)
+  @ManyToOne(() => User, (user) => user.rewards, { onDelete: "CASCADE" })
   user: User;
 
   @OneToMany(() => ClaimedReward, (cr) => cr.reward)

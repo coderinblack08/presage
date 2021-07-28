@@ -2,11 +2,11 @@
 import { DefaultSeo } from "next-seo";
 import type { AppProps } from "next/app";
 import React from "react";
-import { Toaster } from "react-hot-toast";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Hydrate } from "react-query/hydration";
 import { AudioPlayerProvider } from "react-use-audio-player";
 import { AuthProvider } from "../components/AuthProvider";
+import { ErrorToast } from "../components/ErrorToast";
 import { fetcher } from "../lib/fetcher";
 import "../styles/globals.css";
 
@@ -16,11 +16,6 @@ const queryClient = new QueryClient({
       retry: false,
       staleTime: 1000 * 60 * 5,
       queryFn: fetcher,
-      onError: (error) => {
-        console.log(error);
-      },
-    },
-    mutations: {
       onError: (error) => {
         console.log(error);
       },
@@ -63,7 +58,7 @@ function MyApp({ Component, pageProps }: AppProps) {
                 title: "Presage",
               }}
             />
-            <Toaster />
+            <ErrorToast />
             <Component {...pageProps} />
             {/* <ReactQueryDevtools /> */}
           </AuthProvider>

@@ -42,7 +42,7 @@ const ArticlePage: React.FC<{ id: string; referred: boolean }> = ({
 }) => {
   const { data: article } = useSSRQuery<Article>(`/articles/${id}`);
   const seo = {
-    url: `https:joinpresage.com/article/${article.id}`,
+    url: `https://joinpresage.com/article/${article.id}`,
     articles: [
       {
         url: article.user.profilePicture,
@@ -78,7 +78,7 @@ const ArticlePage: React.FC<{ id: string; referred: boolean }> = ({
           article: {
             publishedTime: article.publishedDate || article.createdAt,
             modifiedTime: article.updatedAt,
-            authors: [`https:joinpresage.com/u/${article.user.username}`],
+            authors: [`https://joinpresage.com/u/${article.user.username}`],
             tags: article.tags.map((tag) => tag.name),
           },
           images: seo.articles,
@@ -142,7 +142,7 @@ const ArticlePage: React.FC<{ id: string; referred: boolean }> = ({
         </header>
         <main className="max-w-4xl w-full px-5 md:px-8 mx-auto pb-12 md:pb-20">
           <article
-            className="prose w-full max-w-full py-12 md:py-16 overflow-x-auto"
+            className="prose w-full max-w-full py-8 sm:py-12 md:py-16 overflow-x-auto"
             dangerouslySetInnerHTML={{ __html: article.body }}
           />
           {/* <RenderArticle article={article} /> */}

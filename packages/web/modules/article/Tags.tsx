@@ -11,7 +11,7 @@ export const Tags: React.FC<TagsProps> = ({ article }) => {
       {article.tags ? (
         <div className="inline-flex space-x-2">
           {article.tags.map((tag) => (
-            <div key={tag.id} className="text-gray-600">
+            <div key={tag.id} className="text-gray-600 truncate">
               <span className="text-gray-400">#</span>
               {tag.name}
             </div>

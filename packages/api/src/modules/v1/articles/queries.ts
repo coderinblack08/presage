@@ -209,6 +209,8 @@ articlesQueriesRouter.get(
       const points = await UserPoints.findOne({
         where: { userId: req.userId, creatorId: req.params.creatorId },
       });
+      console.log(points);
+
       res.json(points);
     } catch (error) {
       next(createHttpError(500, error));

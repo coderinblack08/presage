@@ -18,7 +18,7 @@ interface EditProfileModalProps {
 export const EditProfileModal: React.FC<EditProfileModalProps> = ({ user }) => {
   const queryClient = useQueryClient();
   const [isOpen, setIsOpen] = useState(false);
-  const { mutateAsync } = useMutation(mutator);
+  const { mutateAsync } = useMutation(mutator, {});
   const router = useRouter();
 
   return (
@@ -34,10 +34,10 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({ user }) => {
       <Modal isOpen={isOpen} closeModal={() => setIsOpen(false)}>
         <Formik
           initialValues={{
-            username: "" || user.username,
-            displayName: "" || user.displayName,
-            bio: "" || user.bio,
-            profilePicture: "" || user.profilePicture,
+            username: user.username || "",
+            displayName: user.displayName || "",
+            bio: user.bio || "",
+            profilePicture: user.profilePicture || "",
           }}
           // validationSchema={yup.object().shape({
           //   username: yup

@@ -220,7 +220,9 @@ router.patch(
       await user.save();
       return res.json(user);
     } catch (error) {
-      return next(createHttpError(500, error));
+      if (error.code === "23505") {
+        return res.status(500).json({ message: "Username already taken" });
+      }
     }
   }
 );

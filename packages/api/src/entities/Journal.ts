@@ -18,7 +18,7 @@ export class Journal extends BaseEntity {
   @Column()
   userId: string;
 
-  @ManyToOne(() => User, (user) => user.journals)
+  @ManyToOne(() => User, (user) => user.journals, { onDelete: "CASCADE" })
   user: User;
 
   @Column()

@@ -9,13 +9,25 @@ import { limiter } from "../../../lib/rateLimit";
 import { isAuth } from "../auth/isAuth";
 
 const router = Router();
+const columns = [
+  "id",
+  "name",
+  "description",
+  "link",
+  "type",
+  "points",
+  "claimed",
+  "userId",
+  "createdAt",
+  "updatedAt",
+] as (keyof Reward)[];
 
 router.post("/", limiter({ max: 20 }), isAuth(true), async (req, res, next) => {
   const reward = new Reward();
   reward.name = req.body.name;
   reward.description = req.body.description;
-  reward.points = req.body.points;
-  reward.link = req.body.link;
+  reward.points = parseInt(req.body.points);
+  if (reward.link) reward.link = req.body.link;
   reward.type = req.body.type;
   reward.user = { id: req.userId } as User;
   const errors = await validate(reward);
@@ -76,6 +88,7 @@ router.get("/", limiter({ max: 50 }), isAuth(true), async (req, res, next) => {
     const rewards = await Reward.find({
       where: { user: { id: req.userId } },
       order: { points: "ASC" },
+      select: columns,
     });
     res.json(rewards);
   } catch (error) {

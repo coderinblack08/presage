@@ -8,8 +8,8 @@ import {
   FacebookShareButton,
   TwitterShareButton,
 } from "react-share";
-import useClipboard from "react-use-clipboard";
 import { Button } from "../../components/Button";
+import { CopyLink } from "../../components/CopyLink";
 import { Input } from "../../components/Input";
 import { Modal } from "../../components/Modal";
 import { Tooltip } from "../../components/Tooltip";
@@ -28,9 +28,6 @@ export const ReferButton: React.FC<ReferButtonProps> = ({ article }) => {
   const [referral, setReferral] = useState<Referral | null>(null);
   const queryClient = useQueryClient();
   const referralURL = `${BASE_URL}/referral?token=${referral?.token}`;
-  const [isCopied, setCopied] = useClipboard(referralURL, {
-    successDuration: 1000,
-  });
 
   return (
     <>
@@ -101,15 +98,7 @@ export const ReferButton: React.FC<ReferButtonProps> = ({ article }) => {
             You have referred {referral?.claimCount}{" "}
             {referral?.claimCount === 1 ? "person" : "people"}
           </label>
-          <div className="flex items-center space-x-2">
-            <Input color="gray" name="url" value={referralURL} />
-            <Button
-              onClick={setCopied}
-              icon={<MdContentCopy className="w-5 h-5" />}
-            >
-              {isCopied ? "Copied" : "Copy"}
-            </Button>
-          </div>
+          <CopyLink url={referralURL} />
           <div className="mt-8">
             <hr className="border-b -mb-4" />
             <div className="flex justify-center">

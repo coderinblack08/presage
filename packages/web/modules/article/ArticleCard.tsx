@@ -1,4 +1,4 @@
-import { addMinutes, format, formatDistanceToNow } from "date-fns";
+import { formatDistanceToNow } from "date-fns";
 import Link from "next/link";
 import React from "react";
 import {
@@ -20,7 +20,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
 
   return (
     <Link href="/article/[id]" as={`/article/${article.id}`}>
-      <a className="flex flex-col justify-between bg-white rounded-xl shadow hover:shadow-md p-6 hover:-translate-y-1 transition">
+      <a className="flex flex-col justify-between bg-white rounded-xl shadow p-6">
         <div>
           <div className="flex items-center space-x-4">
             <div className="relative">

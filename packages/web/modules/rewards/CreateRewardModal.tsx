@@ -40,21 +40,7 @@ export const CreateRewardModal: React.FC<CreateRewardModalProps> = ({}) => {
           onSubmit={async (values) => {
             await mutateAsync(["/rewards", values, "post"], {
               onSuccess: (data) => {
-                queryClient.setQueryData<Reward[]>("/rewards", (old) => {
-                  if (old) {
-                    for (let i = 0; i < old.length; i++) {
-                      if (
-                        data.points > old[i].points &&
-                        data.points < old[i + 1].points
-                      ) {
-                        old.splice(i + 1, 0, data);
-                        break;
-                      }
-                    }
-                    return old;
-                  }
-                  return [];
-                });
+                queryClient.refetchQueries("/rewards");
                 setIsOpen(false);
               },
             });

@@ -7,7 +7,7 @@ export class Like extends BaseEntity {
   @PrimaryColumn()
   userId: string;
 
-  @ManyToOne(() => User, (u) => u.likes)
+  @ManyToOne(() => User, (u) => u.likes, { onDelete: "CASCADE" })
   user: User[];
 
   @PrimaryColumn()

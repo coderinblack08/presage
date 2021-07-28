@@ -27,7 +27,7 @@ export class Referral extends BaseEntity {
   @PrimaryColumn()
   referrerId: string;
 
-  @ManyToOne(() => User, (user) => user.referrals)
+  @ManyToOne(() => User, (user) => user.referrals, { onDelete: "CASCADE" })
   referrer: User;
 
   @Column("int", { default: 0 })

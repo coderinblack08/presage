@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useErrorStore } from "../components/ErrorToast";
 import { API_URL } from "./constants";
 
 export const mutator = async ([path, body, method = "post"]: [
@@ -17,14 +18,17 @@ export const mutator = async ([path, body, method = "post"]: [
 
   let request: any;
 
-  if (method === "delete") {
-    request = await axios.delete(`${API_URL}/v1` + path, config);
-  } else {
-    request = await axios[method](`${API_URL}/v1` + path, body, config);
-  }
-
-  if (request.status !== 200) {
-    throw new Error(request.data);
+  try {
+    if (method === "delete") {
+      request = await axios.delete(`${API_URL}/v1` + path, config);
+    } else {
+      request = await axios[method](`${API_URL}/v1` + path, body, config);
+    }
+  } catch (error) {
+    if (error.response) {
+      useErrorStore.getState().setError(error.response.data as Error);
+      throw new Error(error.response.data);
+    }
   }
 
   return request.data;
