@@ -1,11 +1,12 @@
 import { RadioGroup } from "@headlessui/react";
 import { AnimationProps } from "framer-motion";
+import Link from "next/link";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { TicketStar } from "react-iconly";
 import { AiFillGift } from "react-icons/ai";
 import { MdClose, MdContentCopy } from "react-icons/md";
-import { useMutation, useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { Button } from "../../components/Button";
 import { CopyLink } from "../../components/CopyLink";
 import { Input } from "../../components/Input";
@@ -39,8 +40,10 @@ export const ClaimReward: React.FC<ClaimRewardProps> = ({ user }) => {
   const { data: rewards } = useQuery<Reward[]>(`/rewards/${user.id}`);
   const [isOpen, setIsOpen] = useState(false);
   const [successful, setSuccessful] = useState(false);
+  const [link, setLink] = useState("");
   const { mutateAsync, isLoading } = useMutation(mutator);
   const [selected, setSelected] = useState<Reward | null>(null);
+  const queryClient = useQueryClient();
 
   return (
     <>
@@ -68,27 +71,50 @@ export const ClaimReward: React.FC<ClaimRewardProps> = ({ user }) => {
           <div>
             <button
               type="button"
-              onClick={() => setIsOpen(false)}
+              onClick={() => {
+                setIsOpen(false);
+                setTimeout(() => setSuccessful(false), 300);
+              }}
               className="absolute top-4 right-4 focus:outline-none focus-visible:ring rounded"
             >
               <MdClose className="text-gray-800 w-5 h-5" />
             </button>
             <div className="p-6">
               <h4>Congratulations</h4>
-              {selected?.link ? (
+              {selected?.type === "link" ? (
                 <>
                   <p className="text-gray-600 mt-1">
                     You have successfully claimed {'"' + selected?.name + '"'}.
                     Copy the private link below!
                   </p>
                   <div className="mt-6 mb-2">
-                    <CopyLink url="https://example.com/discord" />
+                    <CopyLink url={link} />
                   </div>
                   <p className="small text-gray-500">
                     You can view all your{" "}
                     <a
                       href="#"
                       className="small text-gray-900 hover:underline font-semibold"
+                    >
+                      claimed rewards anytime
+                    </a>
+                    .
+                  </p>
+                </>
+              ) : null}
+              {selected?.type === "shoutout" ? (
+                <>
+                  <p className="text-gray-600 mt-1">
+                    Your name will appear on the next article{" "}
+                    <Link href={`/u/${user.username}`}>
+                      <a className="text-gray-900 hover:underline font-semibold">
+                        {user.displayName}
+                      </a>
+                    </Link>{" "}
+                    publishes! You can view all your{" "}
+                    <a
+                      href="#"
+                      className="text-gray-900 hover:underline font-semibold"
                     >
                       claimed rewards anytime
                     </a>
@@ -118,10 +144,14 @@ export const ClaimReward: React.FC<ClaimRewardProps> = ({ user }) => {
                         [`/rewards/claim/${selected.id}`, {}, "post"],
                         {
                           onSuccess: (data) => {
-                            console.log(data);
-                            toast.success(
-                              `Hooray, you successfully claimed "${selected.name}"`
+                            if ("link" in data) {
+                              setLink(data.link);
+                            }
+                            queryClient.refetchQueries("/rewards/claimed");
+                            queryClient.refetchQueries(
+                              `/articles/points/${user.id}`
                             );
+                            setSuccessful(true);
                           },
                         }
                       );
@@ -135,7 +165,10 @@ export const ClaimReward: React.FC<ClaimRewardProps> = ({ user }) => {
                   Claim
                 </Button>
               }
-              handleClose={() => setIsOpen(false)}
+              handleClose={() => {
+                setIsOpen(false);
+                setTimeout(() => setSuccessful(false), 300);
+              }}
             />
             <div className="p-6">
               <h4>Claim Rewards</h4>

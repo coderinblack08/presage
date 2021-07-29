@@ -42,6 +42,7 @@ export const Navbar: React.FC<NavbarProps> = () => {
         </Link>
         <div className="flex items-center space-x-6 md:hidden">
           <Dropdown
+            position="bottom-right"
             opener={
               <Menu.Button className="focus:outline-none w-8 h-8 flex items-center justify-center">
                 <svg

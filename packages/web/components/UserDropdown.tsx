@@ -1,7 +1,13 @@
 import { Menu } from "@headlessui/react";
 import { useRouter } from "next/router";
 import React from "react";
-import { Discovery, Logout, Upload, User as UserIcon } from "react-iconly";
+import {
+  Discovery,
+  Logout,
+  Ticket,
+  Upload,
+  User as UserIcon,
+} from "react-iconly";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { mutator } from "../lib/mutator";
 import { User } from "../lib/types";
@@ -81,6 +87,17 @@ export const UserDropdown: React.FC<UserDropdownProps> = ({
               Publish
             </MenuItem>
           ) : null}
+          <MenuItem
+            onClick={() => router.push("/claimed-rewards")}
+            icon={
+              <div className="scale-80">
+                <Ticket set="bulk" />
+              </div>
+            }
+          >
+            Claimed Rewards
+          </MenuItem>
+          <hr className="border-gray-100" />
           <MenuItem
             onClick={async () => {
               await mutateAsync(["/logout", {}, "post"], {

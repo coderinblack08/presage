@@ -45,11 +45,11 @@ export const Dropdown: React.FC<DropdownProps> = ({
   );
 };
 
-export const MenuItem: React.FC<{ icon?: ReactNode; onClick?: () => void }> = ({
-  children,
-  icon,
-  onClick,
-}) => {
+export const MenuItem: React.FC<{
+  icon?: ReactNode;
+  onClick?: () => void;
+  className?: string;
+}> = ({ children, className, icon, onClick }) => {
   return (
     <div className="p-1">
       <Menu.Item onClick={onClick}>
@@ -57,7 +57,7 @@ export const MenuItem: React.FC<{ icon?: ReactNode; onClick?: () => void }> = ({
           <button
             className={`${
               active ? "bg-gray-100" : "bg-white"
-            } group flex items-center rounded-lg w-full px-4 py-2.5 focus:outline-none`}
+            } group flex items-center rounded-lg w-full px-4 py-2.5 focus:outline-none ${className}`}
           >
             {icon && <span className={children ? "mr-2" : ""}>{icon}</span>}
             {children}

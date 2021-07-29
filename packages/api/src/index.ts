@@ -1,3 +1,5 @@
+require("dotenv-safe").config();
+import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import express from "express";
@@ -9,7 +11,6 @@ import "reflect-metadata";
 import { createConnection } from "typeorm";
 import { isDev } from "./lib/constants";
 import { v1 } from "./modules/v1";
-require("dotenv-safe").config();
 
 async function main() {
   const conn = await createConnection({
@@ -25,6 +26,7 @@ async function main() {
   const app = express();
   app.set("trust proxy", 1);
   app.use(helmet());
+  app.use(morgan("dev"));
   app.use(cookieParser());
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));

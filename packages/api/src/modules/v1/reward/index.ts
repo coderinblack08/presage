@@ -1,6 +1,7 @@
 import { validate } from "class-validator";
 import { Request, Router } from "express";
 import createHttpError from "http-errors";
+import { getRepository } from "typeorm";
 import { ClaimedReward } from "../../../entities/ClaimedReward";
 import { Reward } from "../../../entities/Reward";
 import { User } from "../../../entities/User";
@@ -9,18 +10,6 @@ import { limiter } from "../../../lib/rateLimit";
 import { isAuth } from "../auth/isAuth";
 
 const router = Router();
-const columns = [
-  "id",
-  "name",
-  "description",
-  "link",
-  "type",
-  "points",
-  "claimed",
-  "userId",
-  "createdAt",
-  "updatedAt",
-] as (keyof Reward)[];
 
 router.post("/", limiter({ max: 20 }), isAuth(true), async (req, res, next) => {
   const reward = new Reward();
@@ -85,16 +74,39 @@ router.delete(
 
 router.get("/", limiter({ max: 50 }), isAuth(true), async (req, res, next) => {
   try {
-    const rewards = await Reward.find({
-      where: { user: { id: req.userId } },
-      order: { points: "ASC" },
-      select: columns,
-    });
+    const rewards = await getRepository(Reward)
+      .createQueryBuilder()
+      .addSelect("link")
+      .where('"userId" = :id', { id: req.userId })
+      .orderBy({ points: "ASC" })
+      .getMany();
     res.json(rewards);
   } catch (error) {
     next(createHttpError(500, error));
   }
 });
+
+router.get(
+  "/claimed",
+  limiter({ max: 50 }),
+  isAuth(true),
+  async (req, res, next) => {
+    try {
+      const rewards = await getRepository(ClaimedReward)
+        .createQueryBuilder("cr")
+        .leftJoinAndSelect("cr.reward", "reward")
+        .leftJoinAndSelect("cr.user", "user")
+        .addSelect("reward.link")
+        .where('cr."userId" = :id', { id: req.userId })
+        .orderBy({ points: "DESC" })
+        .getMany();
+
+      res.json(rewards);
+    } catch (error) {
+      next(createHttpError(500, error));
+    }
+  }
+);
 
 router.get("/:userId", limiter({ max: 50 }), async (req, res, next) => {
   try {
@@ -115,7 +127,11 @@ router.post(
   async (req: Request<{ rewardId: string }>, res, next) => {
     try {
       const rewardId = req.params.rewardId;
-      const reward = await Reward.findOne(rewardId);
+      const reward = await getRepository(Reward)
+        .createQueryBuilder()
+        .addSelect("link")
+        .where("id = :id", { id: rewardId })
+        .getOne();
       if (!reward) {
         return next(createHttpError(404, "Reward not found"));
       }
@@ -135,6 +151,11 @@ router.post(
         reward: { id: reward.id },
         user: { id: req.userId },
       }).save();
+
+      if (reward.type === "link") {
+        return res.json({ link: reward.link });
+      }
+
       res.json(claimedReward);
     } catch (error) {
       next(createHttpError(500, error));

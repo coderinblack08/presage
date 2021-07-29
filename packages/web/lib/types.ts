@@ -79,6 +79,16 @@ export interface Reward {
   updatedAt: Date;
 }
 
+export type ClaimStatus = "pending" | "declined" | "successful";
+
+export interface ClaimedReward {
+  id: string;
+  createdAt: string;
+  reward: Reward;
+  user: User;
+  status: ClaimStatus;
+}
+
 export interface Referral {
   id: string;
   token: string;

@@ -18,6 +18,7 @@
   font-style: normal;
   font-weight: 100 900;
   font-display: optional;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   src: url(/fonts/inter-var.woff2) format("woff2");
 }
 

@@ -45,21 +45,26 @@ articlesQueriesRouter.get(
   "/drafts",
   limiter({ max: 50 }),
   isAuth(true),
-  async (req, res) => {
-    const where: FindConditions<Article> = {
-      userId: req.userId,
-    };
-    const { journalId, published } = req.query as any;
-    if (journalId && journalId !== "null") where.journalId = journalId;
-    if (published) where.published = published;
+  async (req, res, next) => {
+    try {
+      const where: FindConditions<Article> = {
+        userId: req.userId,
+      };
+      const { journalId, published } = req.query as any;
+      if (journalId && journalId !== "null") where.journalId = journalId;
+      if (published) where.published = published;
 
-    const articles = await Article.find({
-      where,
-      order: { updatedAt: "DESC" },
-      relations: ["tags"],
-      select: ["id", "title", "published", "createdAt", "updatedAt"],
-    });
-    res.json(articles);
+      const articles = await Article.find({
+        where,
+        order: { updatedAt: "DESC" },
+        relations: ["tags"],
+        select: ["id", "title", "published", "createdAt", "updatedAt"],
+      });
+
+      res.json(articles);
+    } catch (error) {
+      next(createHttpError(500, error));
+    }
   }
 );
 

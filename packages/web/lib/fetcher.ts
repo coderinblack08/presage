@@ -14,6 +14,9 @@ export const fetcher = async <T = any>(
   context: QueryFunctionContext<any>,
   jid: string | null = null
 ): Promise<T | null> => {
+  if (!context.queryKey[0]) {
+    return null;
+  }
   let request: Response;
   if (typeof window === "undefined") {
     request = await fetch(`${API_URL}/v1` + context.queryKey, {

@@ -18,15 +18,17 @@ export const DraftCollapsible: React.FC<DraftCollapsibleProps> = ({
   const {
     query: { id },
   } = useRouter();
-  const { data: draft } = useSSRQuery<Article>(`/articles/draft/${id}`);
-  const [open, setOpen] = useState(draft.journalId === journal.id);
+  const { data: draft } = useSSRQuery<Article>(
+    id ? `/articles/draft/${id}` : ""
+  );
+  const [open, setOpen] = useState(draft?.journalId === journal.id);
   const newDraft = useNewDraft();
 
   useEffect(() => {
-    if (open === false && draft.journalId === journal.id) {
+    if (open === false && id && draft?.journalId === journal.id) {
       setOpen(true);
     }
-  }, [draft.journalId, journal.id, open]);
+  }, [draft?.journalId, id, journal.id, open]);
 
   return (
     <div key={journal.id} className="mt-3">
