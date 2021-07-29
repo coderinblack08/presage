@@ -25,6 +25,9 @@ export class ClaimedReward extends BaseEntity {
   })
   status: ClaimStatus;
 
+  @Column()
+  userId: string;
+
   @ManyToOne(() => Reward, (reward) => reward.claims, { onDelete: "CASCADE" })
   reward: Reward;
 

@@ -187,6 +187,9 @@ articlesQueriesRouter.get(
       //   }
       //   treeNode.children.push({ ...node, children: [] });
       // }
+      if (article?.published === false) {
+        return next(createHttpError(403, "Article not published yet"));
+      }
       const body = { ...article };
       if (req.userId) {
         const like = await Like.findOne({

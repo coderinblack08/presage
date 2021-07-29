@@ -152,6 +152,7 @@ router.post(
       const claimedReward = await ClaimedReward.create({
         reward: { id: reward.id },
         user: { id: req.userId },
+        status: reward.type === "link" ? "successful" : "pending",
       }).save();
 
       if (reward.type === "link") {

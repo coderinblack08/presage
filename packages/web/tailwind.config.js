@@ -37,6 +37,7 @@ module.exports = {
       black: "#000000",
       purple: "#9F66FF",
       blue: "#3B82F6",
+      green: "#22C55E",
       red: "#EF4444",
       transparent: "transparent",
       gray: require("tailwindcss/colors").gray,

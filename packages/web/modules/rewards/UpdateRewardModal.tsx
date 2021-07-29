@@ -29,8 +29,8 @@ export const UpdateRewardModal: React.FC<UpdateRewardModalProps> = ({
         className="w-full flex items-center justify-between focus:outline-none"
         onClick={() => setIsOpen(true)}
       >
-        <h6 className="font-semibold text-gray-600">{reward.name}</h6>
-        <p className="font-bold text-gray-800">
+        <h6 className="font-semibold text-gray-600 text-left">{reward.name}</h6>
+        <p className="font-bold text-gray-800 text-right">
           {reward.points} {reward.points === 1 ? "Point" : "Points"}
         </p>
       </button>
