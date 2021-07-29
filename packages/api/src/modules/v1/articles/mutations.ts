@@ -160,28 +160,29 @@ articlesMutationRouter.patch(
         `,
         [req.params.id]
       );
+      const uniqueTags = [...new Set(req.body.tags)];
       const tags: Tag[] =
         req.body.tags.length === 0
           ? null
           : await em.query(
               `
               insert into tag("name", "usedBy") 
-              values${req.body.tags
-                .map((_: string, index: number) => `($${index + 1}, 1)`)
+              values${uniqueTags
+                .map((_, index: number) => `($${index + 1}, 1)`)
                 .join(", ")}
               on conflict ("name")
               do update set "usedBy" = tag."usedBy" + 1
               returning *;
               `,
-              req.body.tags
+              uniqueTags
             );
       console.log(tags);
       if (req.body.tags.length > 0) {
         em.query(
           `
             insert into article_tags_tag("articleId", "tagId")
-            values${req.body.tags
-              .map((_: string, index: number) => `($1, $${index + 2})`)
+            values${uniqueTags
+              .map((_, index: number) => `($1, $${index + 2})`)
               .join(", ")};
           `,
           [req.params.id, ...tags.map((x) => x.id)]

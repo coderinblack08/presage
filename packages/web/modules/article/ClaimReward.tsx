@@ -1,7 +1,7 @@
 import { RadioGroup } from "@headlessui/react";
 import { AnimationProps } from "framer-motion";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { TicketStar } from "react-iconly";
 import { AiFillGift } from "react-icons/ai";
@@ -45,6 +45,11 @@ export const ClaimReward: React.FC<ClaimRewardProps> = ({ user }) => {
   const [selected, setSelected] = useState<Reward | null>(null);
   const queryClient = useQueryClient();
 
+  function closeModal() {
+    setIsOpen(false);
+    setTimeout(() => setSuccessful(false), 500);
+  }
+
   return (
     <>
       <div className="flex items-center flex-grow-0">
@@ -66,15 +71,12 @@ export const ClaimReward: React.FC<ClaimRewardProps> = ({ user }) => {
           </div>
         </Button>
       </div>
-      <Modal isOpen={isOpen} closeModal={() => setIsOpen(false)}>
+      <Modal isOpen={isOpen} closeModal={closeModal}>
         {successful ? (
           <div>
             <button
               type="button"
-              onClick={() => {
-                setIsOpen(false);
-                setTimeout(() => setSuccessful(false), 300);
-              }}
+              onClick={closeModal}
               className="absolute top-4 right-4 focus:outline-none focus-visible:ring rounded"
             >
               <MdClose className="text-gray-800 w-5 h-5" />
@@ -92,12 +94,11 @@ export const ClaimReward: React.FC<ClaimRewardProps> = ({ user }) => {
                   </div>
                   <p className="small text-gray-500">
                     You can view all your{" "}
-                    <a
-                      href="#"
-                      className="small text-gray-900 hover:underline font-semibold"
-                    >
-                      claimed rewards anytime
-                    </a>
+                    <Link href="/claimed-rewards">
+                      <a className="small text-gray-900 hover:underline font-semibold">
+                        claimed rewards anytime
+                      </a>
+                    </Link>
                     .
                   </p>
                 </>
@@ -112,12 +113,11 @@ export const ClaimReward: React.FC<ClaimRewardProps> = ({ user }) => {
                       </a>
                     </Link>{" "}
                     publishes! You can view all your{" "}
-                    <a
-                      href="#"
-                      className="text-gray-900 hover:underline font-semibold"
-                    >
-                      claimed rewards anytime
-                    </a>
+                    <Link href="/claimed-rewards">
+                      <a className="text-gray-900 hover:underline font-semibold">
+                        claimed rewards anytime
+                      </a>
+                    </Link>
                     .
                   </p>
                 </>
@@ -144,6 +144,8 @@ export const ClaimReward: React.FC<ClaimRewardProps> = ({ user }) => {
                         [`/rewards/claim/${selected.id}`, {}, "post"],
                         {
                           onSuccess: (data) => {
+                            console.log(data);
+
                             if ("link" in data) {
                               setLink(data.link);
                             }
@@ -165,10 +167,7 @@ export const ClaimReward: React.FC<ClaimRewardProps> = ({ user }) => {
                   Claim
                 </Button>
               }
-              handleClose={() => {
-                setIsOpen(false);
-                setTimeout(() => setSuccessful(false), 300);
-              }}
+              handleClose={closeModal}
             />
             <div className="p-6">
               <h4>Claim Rewards</h4>
@@ -192,7 +191,11 @@ export const ClaimReward: React.FC<ClaimRewardProps> = ({ user }) => {
                         value={reward}
                         className={({ active, checked }) =>
                           `${active ? "ring ring-gray-400/50" : ""}
-                  ${checked ? "bg-gray-900 text-white" : "bg-white"}
+                  ${
+                    checked
+                      ? "bg-gradient-to-b from-gray-600 to-gray-900 text-white"
+                      : "bg-white"
+                  }
                     relative rounded-lg shadow px-5 py-4 cursor-pointer flex focus:outline-none`
                         }
                       >
@@ -213,7 +216,7 @@ export const ClaimReward: React.FC<ClaimRewardProps> = ({ user }) => {
                                     <div
                                       className={`px-4 py-1 font-bold small rounded-lg ${
                                         checked
-                                          ? "bg-gray-100 text-gray-900"
+                                          ? "bg-gradient-to-b from-white to-gray-300 text-gray-900"
                                           : "bg-gray-800 text-white"
                                       }`}
                                     >

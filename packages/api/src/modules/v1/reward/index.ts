@@ -1,12 +1,13 @@
 import { validate } from "class-validator";
 import { Request, Router } from "express";
 import createHttpError from "http-errors";
-import { getRepository } from "typeorm";
+import { getConnection, getRepository } from "typeorm";
 import { ClaimedReward } from "../../../entities/ClaimedReward";
 import { Reward } from "../../../entities/Reward";
 import { User } from "../../../entities/User";
 import { UserPoints } from "../../../entities/UserPoints";
 import { limiter } from "../../../lib/rateLimit";
+import { redis } from "../../../lib/redis";
 import { isAuth } from "../auth/isAuth";
 
 const router = Router();
@@ -127,11 +128,12 @@ router.post(
   async (req: Request<{ rewardId: string }>, res, next) => {
     try {
       const rewardId = req.params.rewardId;
-      const reward = await getRepository(Reward)
-        .createQueryBuilder()
-        .addSelect("link")
-        .where("id = :id", { id: rewardId })
-        .getOne();
+      const [reward] = await getConnection().query(
+        `
+        select * from reward where id = $1;
+        `,
+        [rewardId]
+      );
       if (!reward) {
         return next(createHttpError(404, "Reward not found"));
       }
@@ -154,6 +156,16 @@ router.post(
 
       if (reward.type === "link") {
         return res.json({ link: reward.link });
+      }
+
+      if (reward.type === "shoutout") {
+        const key = `shoutout:${reward.userId}:${req.userId}`;
+        const shoutout = await redis.get(key);
+        if (shoutout) {
+          await redis.incr(key);
+        } else {
+          await redis.set(key, 1);
+        }
       }
 
       res.json(claimedReward);

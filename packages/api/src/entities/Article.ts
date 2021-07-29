@@ -23,6 +23,7 @@ import { Comment } from "./Comment";
 import { Journal } from "./Journal";
 import { Like } from "./Like";
 import { Referral } from "./Referral";
+import { Shoutout } from "./Shoutout";
 import { Tag } from "./Tag";
 import { User } from "./User";
 
@@ -80,6 +81,9 @@ export class Article extends BaseEntity {
 
   @OneToMany(() => Referral, (referral) => referral.article)
   referrals: Referral[];
+
+  @OneToMany(() => Shoutout, (shoutout) => shoutout.article, { cascade: true })
+  shoutouts: Shoutout[];
 
   @OneToMany(() => Comment, (comment) => comment.article)
   comments: Comment[];

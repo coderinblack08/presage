@@ -24,14 +24,15 @@ const ClaimedRewards: React.FC = () => {
         </p>
         <div className="grid gap-5 grid-cols-1 mt-8 lg:mt-10">
           {rewards?.map((claimed) => (
+            // @ts-ignore
             <a
               key={claimed.id}
-              className="group block bg-gray-50 rounded-lg p-6 hover:-translate-y-1 transition"
+              className="group block border-t-2 border-b-2 border-gray-100 hover:bg-gray-50 px-8 py-6 transition"
               {...(claimed.reward.type === "link"
                 ? { href: claimed.reward.link, target: "_blank" }
                 : {})}
             >
-              <div className="flex items-center space-x-3 focus:outline-none mb-3">
+              <div className="flex items-center space-x-3 focus:outline-none mb-4">
                 <img
                   src={claimed.user.profilePicture}
                   alt={claimed.user.displayName}
@@ -46,13 +47,13 @@ const ClaimedRewards: React.FC = () => {
               </h6>
               <p className="text-gray-600 mt-1">{claimed.reward.description}</p>
               <div className="flex items-center space-x-1.5 mt-1">
-                <p
+                <div
                   className={`text-sm font-semibold ${
                     claimed.status === "declined" ? "text-red" : "text-gray-900"
                   }`}
                 >
                   {claimed.status}
-                </p>
+                </div>
                 <span className="text-gray-500">·</span>
                 <p className="text-gray-500 text-sm">
                   Claimed at{" "}

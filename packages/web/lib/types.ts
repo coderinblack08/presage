@@ -28,6 +28,7 @@ export interface Article {
   journalId: string;
   journal: Journal;
   comments: Comment[];
+  shoutouts: Shoutout[];
   canonical: string | null;
   liked: boolean | null;
   publishedDate: string | null;
@@ -106,4 +107,12 @@ export interface UserPoints {
   user: User;
   creator: User;
   points: number;
+}
+
+export interface Shoutout {
+  id: string;
+  articleId: string;
+  userId: string;
+  user: User;
+  article: Article;
 }

@@ -22,6 +22,7 @@ import { Journal } from "./Journal";
 import { Like } from "./Like";
 import { Referral } from "./Referral";
 import { Reward } from "./Reward";
+import { Shoutout } from "./Shoutout";
 import { UserPoints } from "./UserPoints";
 
 @Entity()
@@ -75,6 +76,9 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Referral, (referral) => referral.referrer, { cascade: true })
   referrals: Referral[];
+
+  @OneToMany(() => Shoutout, (shoutout) => shoutout.user, { cascade: true })
+  shoutouts: Shoutout[];
 
   @OneToMany(() => ClaimedReward, (cr) => cr.user, { cascade: true })
   claims: ClaimedReward[];

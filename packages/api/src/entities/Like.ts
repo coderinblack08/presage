@@ -13,6 +13,6 @@ export class Like extends BaseEntity {
   @PrimaryColumn()
   articleId: Article[];
 
-  @ManyToOne(() => Article, (a) => a.likes)
+  @ManyToOne(() => Article, (a) => a.likes, { onDelete: "CASCADE" })
   article: Article[];
 }

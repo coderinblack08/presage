@@ -22,19 +22,29 @@ export const DraftCollapsible: React.FC<DraftCollapsibleProps> = ({
     id ? `/articles/draft/${id}` : ""
   );
   const [open, setOpen] = useState(draft?.journalId === journal.id);
+  const [initialized, setInitialized] = useState(false);
   const newDraft = useNewDraft();
 
   useEffect(() => {
-    if (open === false && id && draft?.journalId === journal.id) {
+    if (
+      open === false &&
+      !initialized &&
+      id &&
+      draft?.journalId === journal.id
+    ) {
       setOpen(true);
+      setInitialized(true);
     }
-  }, [draft?.journalId, id, journal.id, open]);
+  }, [draft?.journalId, id, initialized, journal.id, open]);
 
   return (
     <div key={journal.id} className="mt-3">
       <div className="group flex items-center justify-between h-6">
         <Button
-          onClick={() => setOpen(!open)}
+          onClick={() => {
+            setInitialized(true);
+            setOpen(!open);
+          }}
           icon={
             <MdArrowDropDown
               className={`text-gray-600 w-6 h-6 ${open ? "" : "-rotate-90"}`}

@@ -7,6 +7,7 @@ import React, { useEffect } from "react";
 import { QueryClient } from "react-query";
 import { dehydrate } from "react-query/hydration";
 import { ArticleNavbar } from "../../components/ArticleNavbar";
+import { Button } from "../../components/Button";
 import { ssrFetcher } from "../../lib/fetcher";
 import { useSSRQuery } from "../../lib/hooks/useSSRQuery";
 import { Article } from "../../lib/types";
@@ -141,10 +142,44 @@ const ArticlePage: React.FC<{ id: string; referred: boolean }> = ({
           </div>
         </header>
         <main className="max-w-4xl w-full px-5 md:px-8 mx-auto pb-12 md:pb-20">
-          <article
-            className="prose w-full max-w-full py-8 sm:py-12 md:py-16 overflow-x-auto"
-            dangerouslySetInnerHTML={{ __html: article.body }}
-          />
+          <div className="py-8 sm:py-12 md:py-16 overflow-y-auto">
+            {article.shoutouts.length > 0 ? (
+              <div className="pb-8 mb-10 border-b">
+                <div className="flex items-center space-x-3">
+                  <h6 className="text-lg font-bold">Shoutouts</h6>
+                  <Button size="small" color="white" rounded>
+                    Claim
+                  </Button>
+                </div>
+                <p className="text-gray-600 text-sm mt-2">
+                  Thanks for helping grow this community!
+                </p>
+                <div className="flex items-center space-x-8 mt-5">
+                  {article.shoutouts.map((shoutout) => (
+                    <Link
+                      key={shoutout.id}
+                      href={`/u/${shoutout.user.username}`}
+                    >
+                      <a className="flex items-center space-x-3">
+                        <img
+                          src={shoutout.user.profilePicture}
+                          alt={shoutout.user.displayName}
+                          className="w-6 h-6 rounded-full"
+                        />
+                        <span className="text-gray-700 font-bold">
+                          {shoutout.user.displayName}
+                        </span>
+                      </a>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            ) : null}
+            <article
+              className="prose w-full max-w-full overflow-x-auto"
+              dangerouslySetInnerHTML={{ __html: article.body }}
+            />
+          </div>
           {/* <RenderArticle article={article} /> */}
           <div>
             <CommentSection article={article} />

@@ -21,7 +21,9 @@ export class Referral extends BaseEntity {
   @PrimaryColumn()
   articleId: string;
 
-  @ManyToOne(() => Article, (article) => article.referrals)
+  @ManyToOne(() => Article, (article) => article.referrals, {
+    onDelete: "CASCADE",
+  })
   article: Article;
 
   @PrimaryColumn()

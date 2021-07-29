@@ -158,7 +158,7 @@ articlesQueriesRouter.get(
     if (!req.params.id) res.sendStatus(500);
     try {
       const article = await Article.findOne(req.params.id, {
-        relations: ["user", "journal"],
+        relations: ["user", "journal", "shoutouts"],
       });
       // let comments = await getConnection()
       //   .getRepository(Comment)

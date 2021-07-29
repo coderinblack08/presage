@@ -15,7 +15,7 @@ export const CopyLink: React.FC<CopyLinkProps> = ({ url }) => {
 
   return (
     <div className="flex items-center space-x-2">
-      <Input color="gray" name="url" value={url} />
+      <Input color="gray" name="url" value={url} readOnly />
       <Button onClick={setCopied} icon={<MdContentCopy className="w-5 h-5" />}>
         {isCopied ? "Copied" : "Copy"}
       </Button>
