@@ -1,6 +1,6 @@
 import { Form, Formik } from "formik";
 import React, { useState } from "react";
-import { MdAdd } from "react-icons/md";
+import { MdCreateNewFolder } from "react-icons/md";
 import { useMutation, useQueryClient } from "react-query";
 import * as yup from "yup";
 import { Button } from "../../components/Button";
@@ -21,7 +21,7 @@ export const CreateJournalModal: React.FC<CreateJournalModalProps> = ({}) => {
     <>
       <Button
         onClick={() => setIsOpen(true)}
-        icon={<MdAdd className="w-5 h-5 text-gray-500" />}
+        icon={<MdCreateNewFolder className="w-5 h-5 text-gray-500" />}
         size="xsmall"
         color="transparent"
         noAnimate

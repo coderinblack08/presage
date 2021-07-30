@@ -1,7 +1,6 @@
 import {
   IsBoolean,
   IsDate,
-  IsEmpty,
   IsJSON,
   IsOptional,
   IsString,
@@ -91,7 +90,9 @@ export class Article extends BaseEntity {
   @Column()
   journalId: string;
 
-  @ManyToOne(() => Journal, (journal) => journal.articles)
+  @ManyToOne(() => Journal, (journal) => journal.articles, {
+    onDelete: "CASCADE",
+  })
   journal: Journal;
 
   @Column("tsvector", { select: false, nullable: true })
