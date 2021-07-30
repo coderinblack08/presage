@@ -1,9 +1,14 @@
+import { Transition } from "@headlessui/react";
+import { createPortal } from "react-dom";
 import { EditorContent, useEditor } from "@tiptap/react";
 import { format } from "date-fns";
 import { GetServerSideProps } from "next";
 import { BlogJsonLd, NextSeo } from "next-seo";
 import Link from "next/link";
-import React, { useEffect } from "react";
+import React, { Fragment, useEffect } from "react";
+import toast, { Toaster } from "react-hot-toast";
+import { MdClose } from "react-icons/md";
+import { Portal } from "react-portal";
 import { QueryClient } from "react-query";
 import { dehydrate } from "react-query/hydration";
 import { ArticleNavbar } from "../../components/ArticleNavbar";
@@ -12,9 +17,11 @@ import { ssrFetcher } from "../../lib/fetcher";
 import { useSSRQuery } from "../../lib/hooks/useSSRQuery";
 import { Article } from "../../lib/types";
 import { ActionBar } from "../../modules/article/ActionBar";
+import { ClaimReward } from "../../modules/article/ClaimReward";
 import { CommentSection } from "../../modules/article/CommentSection";
 import { Tags } from "../../modules/article/Tags";
 import { extensions } from "../../modules/draft/TipTapEditor";
+import { ClientOnlyPortal } from "../../components/ClientOnlyPortal";
 
 const RenderArticle: React.FC<{ article: Article }> = ({ article }) => {
   const editor = useEditor({
@@ -66,8 +73,47 @@ const ArticlePage: React.FC<{ id: string; referred: boolean }> = ({
     }
   }, [article.id, referred]);
 
+  useEffect(() => {
+    if (referred) {
+      toast.custom(
+        (t) => (
+          <Transition
+            as={Fragment}
+            show={t.visible}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0 scale-95"
+            enterTo="opacity-100 scale-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100 scale-100"
+            leaveTo="opacity-0 scale-95"
+          >
+            <div className="relative bg-white p-6 shadow-xl rounded-xl max-w-md">
+              <button
+                className="absolute top-4 right-4 focus:outline-none"
+                onClick={() => toast.dismiss(t.id)}
+              >
+                <MdClose className="text-gray-500 w-4 h-4" />
+              </button>
+              <h4 className="text-xl">Login to Claim </h4>
+              <p className="text-gray-600 mt-1">
+                It seems you&apos;ve been referred to this article. Login to
+                help the referrer claim rewards. Enjoy the article!
+              </p>
+            </div>
+          </Transition>
+        ),
+        { position: "bottom-left", duration: 8000 }
+      );
+    }
+  }, [referred]);
+
   return (
     <>
+      <ClientOnlyPortal selector="#__next">
+        <div className="relative z-10">
+          <Toaster toastOptions={{ style: { zIndex: 0 } }} />
+        </div>
+      </ClientOnlyPortal>
       <NextSeo
         title={article.title}
         description=""
@@ -144,12 +190,22 @@ const ArticlePage: React.FC<{ id: string; referred: boolean }> = ({
         <main className="max-w-4xl w-full px-5 md:px-8 mx-auto pb-12 md:pb-20">
           <div className="py-8 sm:py-12 md:py-16 overflow-y-auto">
             {article.shoutouts.length > 0 ? (
-              <div className="pb-8 mb-10 border-b">
+              <div className="pb-10 mb-10 border-b">
                 <div className="flex items-center space-x-3">
                   <h6 className="text-lg font-bold">Shoutouts</h6>
-                  <Button size="small" color="white" rounded>
-                    Claim
-                  </Button>
+                  <ClaimReward
+                    user={article.user}
+                    opener={(setIsOpen) => (
+                      <Button
+                        size="small"
+                        color="white"
+                        rounded
+                        onClick={() => setIsOpen(true)}
+                      >
+                        Claim
+                      </Button>
+                    )}
+                  />
                 </div>
                 <p className="text-gray-600 text-sm mt-2">
                   Thanks for helping grow this community!

@@ -1,15 +1,13 @@
 import { RadioGroup } from "@headlessui/react";
-import { AnimationProps } from "framer-motion";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { TicketStar } from "react-iconly";
 import { AiFillGift } from "react-icons/ai";
-import { MdClose, MdContentCopy } from "react-icons/md";
+import { MdClose } from "react-icons/md";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { Button } from "../../components/Button";
 import { CopyLink } from "../../components/CopyLink";
-import { Input } from "../../components/Input";
 import { Modal } from "../../components/Modal";
 import { ModalHeader } from "../../components/ModalHeader";
 import { mutator } from "../../lib/mutator";
@@ -17,23 +15,12 @@ import { Reward, User, UserPoints } from "../../lib/types";
 
 interface ClaimRewardProps {
   user: User;
+  opener?: (
+    setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
+  ) => React.ReactNode;
 }
 
-const variants: AnimationProps["variants"] = {
-  hidden: {
-    opacity: 0,
-  },
-  visible: {
-    opacity: 1,
-    transition: { delay: 1.5, duration: 1.5 },
-  },
-  exit: {
-    x: "448px",
-    transition: { ease: "easeInOut" },
-  },
-};
-
-export const ClaimReward: React.FC<ClaimRewardProps> = ({ user }) => {
+export const ClaimReward: React.FC<ClaimRewardProps> = ({ user, opener }) => {
   const { data: userPoints } = useQuery<UserPoints>(
     `/articles/points/${user.id}`
   );
@@ -52,25 +39,29 @@ export const ClaimReward: React.FC<ClaimRewardProps> = ({ user }) => {
 
   return (
     <>
-      <div className="flex items-center flex-grow-0">
-        <Button
-          onClick={() => setIsOpen(true)}
-          size="small"
-          color="gray"
-          icon={
-            <div className="scale-80">
-              <TicketStar set="bulk" />
+      {opener ? (
+        opener(setIsOpen)
+      ) : (
+        <div className="flex items-center flex-grow-0">
+          <Button
+            onClick={() => setIsOpen(true)}
+            size="small"
+            color="gray"
+            icon={
+              <div className="scale-80">
+                <TicketStar set="bulk" />
+              </div>
+            }
+          >
+            <div className="text-base font-bold">
+              {userPoints?.points || 0}{" "}
+              <span className="text-gray-600">
+                {userPoints?.points === 1 ? "Point" : "Points"}
+              </span>
             </div>
-          }
-        >
-          <div className="text-base font-bold">
-            {userPoints?.points || 0}{" "}
-            <span className="text-gray-600">
-              {userPoints?.points === 1 ? "Point" : "Points"}
-            </span>
-          </div>
-        </Button>
-      </div>
+          </Button>
+        </div>
+      )}
       <Modal isOpen={isOpen} closeModal={closeModal}>
         {successful ? (
           <div>

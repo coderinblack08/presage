@@ -49,10 +49,13 @@ const UserPage: React.FC<
             <p className="text-gray-500 mt-0.5">
               {user.followersCount} followers · {user.followingCount} following
             </p>
-            {user.bio && (
+            {/* {user.bio && (
               <TextParser className="mt-4 text-gray-600 leading-7">
                 {user.bio}
               </TextParser>
+            )} */}
+            {user.bio && (
+              <div className="mt-4 text-gray-600 leading-7">{user.bio}</div>
             )}
             <div className="mt-5">
               {me?.id === user.id ? (
@@ -81,12 +84,8 @@ const UserPage: React.FC<
           </div>
         </div>
       </header>
-      <main className="pt-8 pb-16 md:pb-20 md:pt-12">
+      <main className="pt-8 pb-20">
         <div className="max-w-4xl mx-auto px-5 md:px-8">
-          <p className="font-bold">12 entries</p>
-          <p className="text-gray-500 mt-1 text-sm">
-            Kevin Lu’s personal journal dedicated to blogging
-          </p>
           <div className="mt-6 mb-4 max-w-4xl inline-flex items-center space-x-2">
             <Button
               size="small"

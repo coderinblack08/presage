@@ -47,7 +47,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
               </p>
             </div>
           </div>
-          <h4 className="mt-4">{article.title}</h4>
+          <h4 className="mt-6">{article.title}</h4>
           <div className="text-gray-600 mt-1">
             {article.readingTime}
             {article.tags.length > 0 ? " · " : null}
