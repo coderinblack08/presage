@@ -4,6 +4,7 @@ import React from "react";
 import { HiOutlineExternalLink } from "react-icons/hi";
 import { QueryClient, useQuery } from "react-query";
 import { dehydrate } from "react-query/hydration";
+import { BASE_URL } from "../lib/constants";
 import { ssrFetcher } from "../lib/fetcher";
 import { ClaimedReward } from "../lib/types";
 import { DashboardLayout } from "../modules/draft/DashboardLayout";
@@ -29,8 +30,14 @@ const ClaimedRewards: React.FC = () => {
               <a
                 key={claimed.id}
                 className="group block hover:bg-gray-50 p-8 transition"
-                {...(claimed.reward.type === "link"
-                  ? { href: claimed.reward.link, target: "_blank" }
+                {...(claimed.reward.type === "link" ||
+                claimed.reward.type === "shoutout"
+                  ? {
+                      href:
+                        claimed.reward.link ||
+                        `${BASE_URL}/article/${claimed.shoutoutArticle}`,
+                      target: "_blank",
+                    }
                   : {})}
               >
                 <div className="flex items-center space-x-3 focus:outline-none mb-4">
@@ -65,11 +72,13 @@ const ClaimedRewards: React.FC = () => {
                     {format(new Date(claimed.createdAt), "MMMM dd, yyyy")}
                   </p>
                 </div>
-                {claimed.reward.type === "link" && claimed.reward.link ? (
+                {claimed.reward.type === "link" ||
+                claimed.reward.type === "shoutout" ? (
                   <a className="inline-flex space-x-2 items-center mt-5 group-hover:underline text-gray-700">
                     <HiOutlineExternalLink className="w-4 h-4" />
                     <span className="font-bold text-sm">
-                      {claimed.reward.link}
+                      {claimed.reward.link ||
+                        `${BASE_URL}/article/${claimed.shoutoutArticle}`}
                     </span>
                   </a>
                 ) : null}

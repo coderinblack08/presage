@@ -9,13 +9,13 @@ import React, { Fragment, useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { MdClose } from "react-icons/md";
 import { Portal } from "react-portal";
-import { QueryClient } from "react-query";
+import { QueryClient, useQuery } from "react-query";
 import { dehydrate } from "react-query/hydration";
 import { ArticleNavbar } from "../../components/ArticleNavbar";
 import { Button } from "../../components/Button";
 import { ssrFetcher } from "../../lib/fetcher";
 import { useSSRQuery } from "../../lib/hooks/useSSRQuery";
-import { Article } from "../../lib/types";
+import { Article, User } from "../../lib/types";
 import { ActionBar } from "../../modules/article/ActionBar";
 import { ClaimReward } from "../../modules/article/ClaimReward";
 import { CommentSection } from "../../modules/article/CommentSection";
@@ -49,6 +49,7 @@ const ArticlePage: React.FC<{ id: string; referred: boolean }> = ({
   referred,
 }) => {
   const { data: article } = useSSRQuery<Article>(`/articles/${id}`);
+  const { data: me } = useQuery<User>("/me");
   const seo = {
     url: `https://joinpresage.com/article/${article.id}`,
     articles: [
@@ -74,7 +75,7 @@ const ArticlePage: React.FC<{ id: string; referred: boolean }> = ({
   }, [article.id, referred]);
 
   useEffect(() => {
-    if (referred) {
+    if (referred && !me) {
       toast.custom(
         (t) => (
           <Transition
@@ -105,7 +106,7 @@ const ArticlePage: React.FC<{ id: string; referred: boolean }> = ({
         { position: "bottom-left", duration: 8000 }
       );
     }
-  }, [referred]);
+  }, [referred, me]);
 
   return (
     <>
@@ -143,9 +144,9 @@ const ArticlePage: React.FC<{ id: string; referred: boolean }> = ({
       <div>
         <ArticleNavbar user={article.user} lightGray />
         <header className="bg-white">
-          <div className="max-w-4xl mx-auto px-5 md:px-8 pt-4 md:pt-8 pb-10 md:pb-16">
+          <div className="max-w-4xl mx-auto px-5 md:px-8 pt-6 md:pt-10 pb-10 md:pb-16">
             <Link href={`/u/${article.user.username}`}>
-              <a className="flex items-center space-x-5 mb-8">
+              <a className="inline-flex items-center space-x-5 mb-8">
                 <div className="relative">
                   <img
                     src={article.journal.picture}
@@ -171,7 +172,7 @@ const ArticlePage: React.FC<{ id: string; referred: boolean }> = ({
             <h1 className="text-xl md:text-2xl lg:text-3xl font-bold !leading-normal">
               {article.title}
             </h1>
-            <div className="text-gray-600 mt-1">
+            <div className="text-gray-600 py-1 overflow-y-auto whitespace-nowrap">
               {format(
                 new Date(article.publishedDate || article.createdAt),
                 "MMMM dd, yyyy"
@@ -254,6 +255,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     `/articles/${id}`,
     ssrFetcher(context.req.cookies.jid)
   );
+  await queryClient.prefetchQuery("/me", ssrFetcher(context.req.cookies.jid));
 
   return {
     props: {

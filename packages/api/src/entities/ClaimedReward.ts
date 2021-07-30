@@ -25,6 +25,9 @@ export class ClaimedReward extends BaseEntity {
   })
   status: ClaimStatus;
 
+  @Column("text", { nullable: true })
+  shoutoutArticle: string | null;
+
   @Column()
   userId: string;
 

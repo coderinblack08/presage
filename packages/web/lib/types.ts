@@ -87,6 +87,7 @@ export interface ClaimedReward {
   createdAt: string;
   reward: Reward;
   user: User;
+  shoutoutArticle: string | null;
   status: ClaimStatus;
 }
 

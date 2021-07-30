@@ -59,6 +59,7 @@ publishRouter.post(
           .update(ClaimedReward)
           .set({
             status: "successful",
+            shoutoutArticle: req.params.id,
           })
           .where({ userId: In(userIds) })
           .execute();
