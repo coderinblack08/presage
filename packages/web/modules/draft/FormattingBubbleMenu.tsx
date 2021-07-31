@@ -3,6 +3,7 @@ import React from "react";
 import {
   AiOutlineBold,
   AiOutlineItalic,
+  AiOutlineLink,
   AiOutlineStrikethrough,
   AiOutlineUnderline,
 } from "react-icons/ai";
@@ -10,7 +11,7 @@ import { Button } from "../../components/Button";
 import { Select } from "../../components/Select";
 
 interface BubbleMenuProps {
-  editor: any;
+  editor: Editor;
 }
 
 export const FormattingBubbleMenu: React.FC<BubbleMenuProps> = ({ editor }) => {
@@ -73,6 +74,25 @@ export const FormattingBubbleMenu: React.FC<BubbleMenuProps> = ({ editor }) => {
           color={editor.isActive("strike") ? "gray" : "transparent"}
           size="small"
           icon={<AiOutlineStrikethrough className="w-4 h-4" />}
+          noAnimate
+        />
+        <Button
+          onClick={() => {
+            if (editor.isActive("link")) {
+              editor.chain().focus().unsetLink().run();
+            } else {
+              const url = window.prompt("URL");
+              editor
+                .chain()
+                .focus()
+                .extendMarkRange("link")
+                .setLink({ href: url })
+                .run();
+            }
+          }}
+          color={editor.isActive("link") ? "gray" : "transparent"}
+          size="small"
+          icon={<AiOutlineLink className="w-4 h-4" />}
           noAnimate
         />
         <Button

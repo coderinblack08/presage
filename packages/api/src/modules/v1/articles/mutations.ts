@@ -1,5 +1,6 @@
 import Dropcursor from "@tiptap/extension-dropcursor";
 import Image from "@tiptap/extension-image";
+import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
 import Underline from "@tiptap/extension-underline";
 import { generateHTML } from "@tiptap/html";
@@ -86,6 +87,7 @@ articlesMutationRouter.patch(
           Underline,
           Image,
           Dropcursor,
+          Link,
         ]),
         {
           ...sanitizeHtml.defaults,

@@ -1,9 +1,10 @@
 import Dropcursor from "@tiptap/extension-dropcursor";
 import Image from "@tiptap/extension-image";
+import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
 import Underline from "@tiptap/extension-underline";
-import StarterKit from "@tiptap/starter-kit";
 import { EditorContent, useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
 import { Field, useFormikContext } from "formik";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
@@ -21,8 +22,9 @@ export const extensions = [
   StarterKit,
   Placeholder,
   Underline,
-  Image,
   Dropcursor,
+  Image,
+  Link,
   // StarterKit.configure({ codeBlock: false }),
   // CodeBlockLowlight.extend({
   //   addNodeView() {
@@ -52,14 +54,20 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
           class: "prose focus:outline-none py-3 max-w-full",
         },
       },
-    },
-    [id]
+    }
+    // [id]
   );
 
   useEffect(() => {
     const isLongEnough = editor?.getCharacterCount()! > 10;
     useEditorStore.getState().setIsValid(isValid && isLongEnough);
   }, [editor?.getCharacterCount(), isValid]);
+
+  useEffect(() => {
+    if (editor && draft) {
+      !editor.isDestroyed && editor.commands.setContent(draft.body || null);
+    }
+  }, [editor, draft, id]);
 
   useEffect(() => {
     return () => {

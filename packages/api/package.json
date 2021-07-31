@@ -10,6 +10,7 @@
   "dependencies": {
     "@tiptap/extension-dropcursor": "^2.0.0-beta.17",
     "@tiptap/extension-image": "^2.0.0-beta.14",
+    "@tiptap/extension-link": "^2.0.0-beta.19",
     "@tiptap/extension-placeholder": "^2.0.0-beta.25",
     "@tiptap/extension-underline": "^2.0.0-beta.15",
     "@tiptap/html": "^2.0.0-beta.85",
