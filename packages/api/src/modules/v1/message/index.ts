@@ -50,6 +50,9 @@ export const createMessageSocket = (
           userId,
         }).save();
         const user = await User.findOne(userId);
+        await DirectMessage.update(directMessageId, {
+          lastMessageSentAt: new Date().toUTCString(),
+        });
         io.to(directMessageId).emit("new message", { ...savedMessage, user });
       } else {
         cb(new Error("Join the room before messaging"));

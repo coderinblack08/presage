@@ -18,7 +18,7 @@ const ClaimedRewards: React.FC = () => {
       <header className="sticky z-50 top-0 bg-white flex items-center justify-between py-4 lg:py-6 px-8">
         <OpenButton />
       </header>
-      <main className="py-4 md:py-8 lg:py-12 px-8 max-w-3xl mx-auto">
+      <main className="py-4 md:py-8 lg:py-12 px-8 max-w-4xl mx-auto">
         <h3 className="h4 md:h3">Claimed Rewards</h3>
         <p className="text-gray-600 mt-1">
           Claim rewards by viewing the writers&apos;s profile page
@@ -30,15 +30,13 @@ const ClaimedRewards: React.FC = () => {
               <a
                 key={claimed.id}
                 className="group block hover:bg-gray-50 p-8 transition"
-                {...(claimed.reward.type === "link" ||
-                claimed.reward.type === "shoutout"
-                  ? {
-                      href:
-                        claimed.reward.link ||
-                        `${BASE_URL}/article/${claimed.shoutoutArticle}`,
-                      target: "_blank",
-                    }
-                  : {})}
+                href={
+                  claimed.reward.link || claimed.reward.type === "shoutout"
+                    ? `${BASE_URL}/article/${claimed.shoutoutArticle}`
+                    : `${BASE_URL}/chat/${claimed.directMessage?.id}`
+                }
+                target="_blank"
+                rel="noreferrer"
               >
                 <div className="flex items-center space-x-3 focus:outline-none mb-4">
                   <img
@@ -72,16 +70,14 @@ const ClaimedRewards: React.FC = () => {
                     {format(new Date(claimed.createdAt), "MMMM dd, yyyy")}
                   </p>
                 </div>
-                {claimed.reward.type === "link" ||
-                claimed.reward.type === "shoutout" ? (
-                  <a className="inline-flex space-x-2 items-center mt-5 group-hover:underline text-gray-700">
-                    <HiOutlineExternalLink className="w-4 h-4" />
-                    <span className="font-bold text-sm">
-                      {claimed.reward.link ||
-                        `${BASE_URL}/article/${claimed.shoutoutArticle}`}
-                    </span>
-                  </a>
-                ) : null}
+                <div className="inline-flex space-x-2 items-center mt-5 group-hover:underline text-gray-700">
+                  <HiOutlineExternalLink className="w-4 h-4" />
+                  <span className="font-bold text-sm">
+                    {claimed.reward.link || claimed.reward.type === "shoutout"
+                      ? `${BASE_URL}/article/${claimed.shoutoutArticle}`
+                      : `${BASE_URL}/chat/${claimed.directMessage?.id}`}
+                  </span>
+                </div>
               </a>
             ))}
           </div>

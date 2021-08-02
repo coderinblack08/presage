@@ -94,6 +94,9 @@ export const ClaimReward: React.FC<ClaimRewardProps> = ({ user, opener }) => {
                   </p>
                 </>
               ) : null}
+              {selected?.type === "other" ? (
+                <p className="text-gray-600 mt-1">Check your messages</p>
+              ) : null}
               {selected?.type === "shoutout" ? (
                 <>
                   <p className="text-gray-600 mt-1">

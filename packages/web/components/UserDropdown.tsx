@@ -4,6 +4,7 @@ import React from "react";
 import {
   Discovery,
   Logout,
+  Message,
   Ticket,
   Upload,
   User as UserIcon,
@@ -74,6 +75,16 @@ export const UserDropdown: React.FC<UserDropdownProps> = ({
             }
           >
             Profile
+          </MenuItem>
+          <MenuItem
+            onClick={() => router.push("/messages")}
+            icon={
+              <div className="scale-80">
+                <Message set="bulk" />
+              </div>
+            }
+          >
+            Messages
           </MenuItem>
           {showPublish ? (
             <MenuItem

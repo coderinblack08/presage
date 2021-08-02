@@ -88,6 +88,8 @@ export interface ClaimedReward {
   reward: Reward;
   user: User;
   shoutoutArticle: string | null;
+  directMessageId: string | null;
+  directMessage: DirectMessage | null;
   status: ClaimStatus;
 }
 

@@ -1,6 +1,7 @@
 import { formatDistanceToNow } from "date-fns";
-import { isEqual, merge } from "lodash";
+import { isEqual } from "lodash";
 import { GetServerSideProps } from "next";
+import Link from "next/link";
 import React, {
   useCallback,
   useContext,
@@ -111,7 +112,7 @@ const ChatPage: React.FC<{ id: string }> = ({ id }) => {
             <OpenButton />
             <h1 className="text-lg font-bold">{otherPerson(dm).displayName}</h1>
           </div>
-          {!dm.open ? (
+          {me?.id === dm.senderId ? null : !dm.open ? (
             <Button
               size="regular"
               rounded
@@ -144,18 +145,24 @@ const ChatPage: React.FC<{ id: string }> = ({ id }) => {
         </header>
         <div className="pt-8 pb-14 max-w-3xl w-full mx-auto border-b border-gray-100 px-6 md:px-0">
           <h4>{dm.reward.name}</h4>
-          <p className="text-gray-600">
-            {dm.reward.description} · Claimed{" "}
-            {formatDistanceToNow(new Date(dm.claimedReward.createdAt), {
-              addSuffix: true,
-            })}{" "}
-          </p>
-          <div className="flex items-center space-x-2 mt-2">
-            <div className="text-gray-500 text-sm">
-              {" "}
-              Status: {dm.open ? "Pending" : dm.claimedReward.status}
+          <p className="text-gray-600">{dm.reward.description}</p>
+          <div>
+            <div className="inline text-gray-500 text-sm">
+              Claimed{" "}
+              {formatDistanceToNow(new Date(dm.claimedReward.createdAt), {
+                addSuffix: true,
+              })}{" "}
+              ·{" "}
             </div>
-            <HiOutlineExternalLink className="w-4 h-4 text-gray-500" />
+            <Link href="/claimed-rewards">
+              <a className="group inline-flex items-center space-x-2 mt-2">
+                <div className="text-gray-500 text-sm group-hover:underline">
+                  {" "}
+                  Status: {dm.open ? "Pending" : dm.claimedReward.status}
+                </div>
+                <HiOutlineExternalLink className="w-4 h-4 text-gray-500" />
+              </a>
+            </Link>
           </div>
         </div>
         <main className="h-full w-full overflow-y-auto flex flex-col space-y-8 max-w-3xl mx-auto py-8 px-6 md:px-0">

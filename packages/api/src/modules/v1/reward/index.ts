@@ -97,6 +97,7 @@ router.get(
       const rewards = await getRepository(ClaimedReward)
         .createQueryBuilder("cr")
         .leftJoinAndSelect("cr.reward", "reward")
+        .leftJoinAndSelect("cr.directMessage", "directMessage")
         .leftJoinAndSelect("cr.user", "user")
         .addSelect("reward.link")
         .where('cr."userId" = :id', { id: req.userId })
@@ -210,6 +211,11 @@ router.post(
       const dm = await DirectMessage.findOne(req.params.id);
       if (!dm) {
         return next(createHttpError(404, "DM doesn't exist"));
+      }
+      if (dm.recipientId !== req.userId) {
+        return next(
+          createHttpError(403, "You don't have permissions to set the status")
+        );
       }
       dm.open = status === "pending";
       await dm.save();

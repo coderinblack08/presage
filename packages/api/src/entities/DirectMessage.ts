@@ -34,10 +34,10 @@ export class DirectMessage extends BaseEntity {
   messages: Message[];
 
   @ManyToOne(() => User, (user) => user.sentMessages)
-  sender: User;
+  sender: User; // person who claimed the reward
 
   @ManyToOne(() => User, (user) => user.receivedMessages)
-  recipient: User;
+  recipient: User; // the creator of the reward, author
 
   @OneToOne(() => ClaimedReward, (cr) => cr.directMessage)
   @JoinColumn({ name: "claimedRewardId" })
