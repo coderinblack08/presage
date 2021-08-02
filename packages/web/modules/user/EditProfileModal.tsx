@@ -39,16 +39,16 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({ user }) => {
             bio: user.bio || "",
             profilePicture: user.profilePicture || "",
           }}
-          // validationSchema={yup.object().shape({
-          //   username: yup
-          //     .string()
-          //     .matches(/^[a-zA-Z0-9]+$/, "username must be alphanumeric")
-          //     .max(50)
-          //     .required(),
-          //   displayName: yup.string().max(50).required(),
-          //   bio: yup.string().max(500).nullable(),
-          //   profilePicture: yup.string().url().nullable(),
-          // })}
+          validationSchema={yup.object().shape({
+            username: yup
+              .string()
+              .matches(/^[\-a-zA-Z0-9]+$/, "username must be alphanumeric")
+              .max(50)
+              .required(),
+            displayName: yup.string().max(50).required(),
+            bio: yup.string().max(500).nullable(),
+            profilePicture: yup.string().url().nullable(),
+          })}
           onSubmit={async (values) => {
             await mutateAsync([`/user`, values, "patch"], {
               onSuccess: (user) => {

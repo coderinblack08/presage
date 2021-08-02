@@ -16,6 +16,7 @@
     "@tiptap/html": "^2.0.0-beta.85",
     "@tiptap/starter-kit": "^2.0.0-beta.82",
     "class-validator": "^0.13.1",
+    "cookie": "^0.4.1",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
@@ -48,6 +49,7 @@
     "yup": "^0.32.9"
   },
   "devDependencies": {
+    "@types/cookie": "^0.4.1",
     "@types/cookie-parser": "^1.4.2",
     "@types/cors": "^2.8.10",
     "@types/dotenv-safe": "^8.1.1",

@@ -6,6 +6,7 @@ import commentRouter from "./comment";
 import rewardRouter from "./reward";
 import referralRouter from "./reward/referrals";
 import followRouter from "./follow";
+import messageRouter from "./message";
 import { uploadImageRouter } from "./uploadImage";
 import { join } from "path";
 
@@ -19,3 +20,4 @@ v1.use("/journals", journalRouter);
 v1.use("/rewards", rewardRouter);
 v1.use("/comments", commentRouter);
 v1.use("/referrals", referralRouter);
+v1.use("/messages", messageRouter);

@@ -1,16 +1,20 @@
 require("dotenv-safe").config();
-import morgan from "morgan";
+import cookie from "cookie";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import express from "express";
 import helmet from "helmet";
 import http from "http";
+import jwt from "jsonwebtoken";
+import morgan from "morgan";
 import passport from "passport";
 import { join } from "path";
 import "reflect-metadata";
+import { Server } from "socket.io";
 import { createConnection } from "typeorm";
 import { isDev } from "./lib/constants";
 import { v1 } from "./modules/v1";
+import { createMessageSocket } from "./modules/v1/message";
 
 async function main() {
   const conn = await createConnection({
@@ -23,6 +27,14 @@ async function main() {
   });
   await conn.runMigrations();
 
+  const corsConfig = {
+    origin: isDev()
+      ? ["http://localhost:3000", "http://a12470b0dfbe.ngrok.io"]
+      : "https://joinpresage.com",
+    maxAge: !isDev() ? 86400 : undefined,
+    credentials: true,
+  };
+
   const app = express();
   app.set("trust proxy", 1);
   app.use(helmet());
@@ -30,15 +42,7 @@ async function main() {
   app.use(cookieParser());
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
-  app.use(
-    cors({
-      origin: isDev()
-        ? ["http://localhost:3000", "http://a12470b0dfbe.ngrok.io"]
-        : "https://joinpresage.com",
-      maxAge: !isDev() ? 86400 : undefined,
-      credentials: true,
-    })
-  );
+  app.use(cors(corsConfig));
   app.use(passport.initialize());
   passport.serializeUser((user: any, done) => done(null, user.accessToken));
 
@@ -46,7 +50,22 @@ async function main() {
   app.use("/", v1);
 
   const server = http.createServer(app);
-  // const io = new Server(server);
+  const io = new Server(server, { cors: corsConfig });
+  io.use((socket, next) => {
+    const error = new Error("not authorized");
+    const cookies = socket.request.headers.cookie;
+    if (!cookies) return next(error);
+    const token = cookie.parse(cookies)["jid"];
+    if (!token) return next(error);
+    try {
+      const payload: any = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET!);
+      (socket as any).userId = payload.userId;
+      return next();
+    } catch {}
+
+    return next(error);
+  });
+  createMessageSocket(io);
   server.listen(4000, () => console.log("🚀 Server started on port 4000"));
 }
 

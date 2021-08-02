@@ -117,3 +117,27 @@ export interface Shoutout {
   user: User;
   article: Article;
 }
+
+export interface DirectMessage {
+  id: string;
+  open: boolean;
+  senderId: string;
+  recipientId: string;
+  claimedRewardId: string;
+  messages: Message[];
+  sender: User;
+  recipient: User;
+  claimedReward: ClaimedReward;
+  lastMessageSentAt: Date | null;
+  createdAt: Date;
+}
+
+export interface Message {
+  id: string;
+  message: string;
+  directMessageId: string;
+  userId: string;
+  user: User;
+  directMessage: DirectMessage;
+  createdAt: Date;
+}

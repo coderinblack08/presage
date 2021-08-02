@@ -1,10 +1,4 @@
-import {
-  IsAlphanumeric,
-  IsEmail,
-  IsOptional,
-  IsUrl,
-  Length,
-} from "class-validator";
+import { IsEmail, IsOptional, IsUrl, Length, Matches } from "class-validator";
 import {
   BaseEntity,
   Column,
@@ -18,8 +12,10 @@ import {
 } from "typeorm";
 import { Article } from "./Article";
 import { ClaimedReward } from "./ClaimedReward";
+import { DirectMessage } from "./DirectMessage";
 import { Journal } from "./Journal";
 import { Like } from "./Like";
+import { Message } from "./Message";
 import { Referral } from "./Referral";
 import { Reward } from "./Reward";
 import { Shoutout } from "./Shoutout";
@@ -36,7 +32,7 @@ export class User extends BaseEntity {
   email: string | null;
 
   @Length(1, 50)
-  @IsAlphanumeric()
+  @Matches(/^[\-a-zA-Z0-9]+$/)
   @Column({ unique: true })
   username: string;
 
@@ -80,8 +76,17 @@ export class User extends BaseEntity {
   @OneToMany(() => Shoutout, (shoutout) => shoutout.user, { cascade: true })
   shoutouts: Shoutout[];
 
+  @OneToMany(() => DirectMessage, (dm) => dm.sender, { cascade: true })
+  sentMessages: DirectMessage[];
+
+  @OneToMany(() => DirectMessage, (dm) => dm.recipient, { cascade: true })
+  receivedMessages: DirectMessage[];
+
   @OneToMany(() => ClaimedReward, (cr) => cr.user, { cascade: true })
   claims: ClaimedReward[];
+
+  @OneToMany(() => Message, (message) => message.user, { cascade: true })
+  messages: Message[];
 
   @ManyToMany(() => User, (user) => user.following, {
     cascade: true,

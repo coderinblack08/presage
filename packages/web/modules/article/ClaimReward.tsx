@@ -131,23 +131,25 @@ export const ClaimReward: React.FC<ClaimRewardProps> = ({ user, opener }) => {
                           "You don't have enough points to claim this reward"
                         );
                       }
-                      await mutateAsync(
-                        [`/rewards/claim/${selected.id}`, {}, "post"],
-                        {
-                          onSuccess: (data) => {
-                            console.log(data);
+                      try {
+                        await mutateAsync(
+                          [`/rewards/claim/${selected.id}`, {}, "post"],
+                          {
+                            onSuccess: (data) => {
+                              console.log(data);
 
-                            if ("link" in data) {
-                              setLink(data.link);
-                            }
-                            queryClient.refetchQueries("/rewards/claimed");
-                            queryClient.refetchQueries(
-                              `/articles/points/${user.id}`
-                            );
-                            setSuccessful(true);
-                          },
-                        }
-                      );
+                              if ("link" in data) {
+                                setLink(data.link);
+                              }
+                              queryClient.refetchQueries("/rewards/claimed");
+                              queryClient.refetchQueries(
+                                `/articles/points/${user.id}`
+                              );
+                              setSuccessful(true);
+                            },
+                          }
+                        );
+                      } catch {}
                     } else {
                       return toast.error(
                         "You don't have enough points to claim this reward"

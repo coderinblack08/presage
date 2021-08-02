@@ -3,6 +3,7 @@ import { Request, Router } from "express";
 import createHttpError from "http-errors";
 import { getConnection, getRepository } from "typeorm";
 import { ClaimedReward } from "../../../entities/ClaimedReward";
+import { DirectMessage } from "../../../entities/DirectMessage";
 import { Reward } from "../../../entities/Reward";
 import { User } from "../../../entities/User";
 import { UserPoints } from "../../../entities/UserPoints";
@@ -128,14 +129,19 @@ router.post(
   async (req: Request<{ rewardId: string }>, res, next) => {
     try {
       const rewardId = req.params.rewardId;
-      const [reward] = await getConnection().query(
+      const [reward] = (await getConnection().query(
         `
         select * from reward where id = $1;
         `,
         [rewardId]
-      );
+      )) as [Reward];
       if (!reward) {
-        return next(createHttpError(404, "Reward not found"));
+        return res.status(400).json({ message: "Reward not found" });
+      }
+      if (reward.userId === req.userId) {
+        return res
+          .status(403)
+          .json({ message: "You can't claim your own reward" });
       }
 
       const userPoints = await UserPoints.findOne({
@@ -143,7 +149,7 @@ router.post(
       });
 
       if (!userPoints || userPoints.points < reward.points) {
-        return next(createHttpError(403, "Not enough points"));
+        return res.status(403).json({ message: "Not enough points" });
       }
 
       userPoints.points -= reward.points;
@@ -154,6 +160,15 @@ router.post(
         user: { id: req.userId },
         status: reward.type === "link" ? "successful" : "pending",
       }).save();
+
+      if (reward.type === "other") {
+        const dm = await DirectMessage.create({
+          senderId: req.userId,
+          recipientId: reward.userId,
+          claimedRewardId: claimedReward.id,
+        }).save();
+        return res.json(dm);
+      }
 
       if (reward.type === "link") {
         return res.json({ link: reward.link });

@@ -4,9 +4,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
+import { DirectMessage } from "./DirectMessage";
 import { Reward } from "./Reward";
 import { User } from "./User";
 
@@ -29,6 +32,9 @@ export class ClaimedReward extends BaseEntity {
   shoutoutArticle: string | null;
 
   @Column()
+  rewardId: string;
+
+  @Column()
   userId: string;
 
   @ManyToOne(() => Reward, (reward) => reward.claims, { onDelete: "CASCADE" })
@@ -36,6 +42,9 @@ export class ClaimedReward extends BaseEntity {
 
   @ManyToOne(() => User, (user) => user.claims, { onDelete: "CASCADE" })
   user: User;
+
+  @OneToOne(() => DirectMessage, (dm) => dm.claimedReward)
+  directMessage: DirectMessage;
 
   @CreateDateColumn()
   createdAt: Date;

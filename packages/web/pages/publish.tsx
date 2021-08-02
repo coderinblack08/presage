@@ -26,7 +26,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   );
   return {
     redirect: {
-      destination: `/draft/${lastOpened.id}`,
+      destination: `/draft/${lastOpened?.id}`,
       permanent: false,
     },
   };

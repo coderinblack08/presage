@@ -2,7 +2,7 @@ import React from "react";
 import { MdMenu } from "react-icons/md";
 import shallow from "zustand/shallow";
 import { Button } from "../../components/Button";
-import { useSidebarOpen } from "./DraftSidebar";
+import { useSidebarOpen } from "../../components/Sidebar";
 
 interface OpenButtonProps {}
 
