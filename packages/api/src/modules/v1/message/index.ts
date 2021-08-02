@@ -39,8 +39,13 @@ export const createMessageSocket = (
       const { message, directMessageId } = data;
       const { userId } = socket as any;
       if (socket.rooms.has(directMessageId)) {
+        if (message.trim().length === 0 || message.trim().length > 500) {
+          cb(
+            new Error("Message must be between 0 and 500 characters in length")
+          );
+        }
         const savedMessage = await Message.create({
-          message,
+          message: message.trim(),
           directMessageId,
           userId,
         }).save();

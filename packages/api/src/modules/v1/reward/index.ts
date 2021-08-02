@@ -191,4 +191,34 @@ router.post(
   }
 );
 
+router.post(
+  "/close/:id",
+  limiter({ max: 100 }),
+  isAuth(true),
+  async (req: Request<{ id: string }>, res, next) => {
+    const { status } = req.body;
+    if (
+      !(
+        status === "declined" ||
+        status === "successful" ||
+        status === "pending"
+      )
+    ) {
+      return next(createHttpError(400, "Invalid status"));
+    }
+    try {
+      const dm = await DirectMessage.findOne(req.params.id);
+      if (!dm) {
+        return next(createHttpError(404, "DM doesn't exist"));
+      }
+      dm.open = status === "pending";
+      await dm.save();
+      await ClaimedReward.update(dm.claimedRewardId, { status });
+      res.json(dm);
+    } catch (error) {
+      next(createHttpError(500, error));
+    }
+  }
+);
+
 export default router;

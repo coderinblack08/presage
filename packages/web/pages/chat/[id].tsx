@@ -1,6 +1,6 @@
 import { formatDistanceToNow } from "date-fns";
-import { isEqual } from "lodash";
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import { isEqual, merge } from "lodash";
+import { GetServerSideProps } from "next";
 import React, {
   useCallback,
   useContext,
@@ -8,21 +8,32 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { QueryClient, useQuery, useQueryClient } from "react-query";
+import { HiOutlineExternalLink } from "react-icons/hi";
+import {
+  QueryClient,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "react-query";
 import { dehydrate } from "react-query/hydration";
 import { Button } from "../../components/Button";
 import { useErrorStore } from "../../components/ErrorToast";
 import { Input } from "../../components/Input";
 import { ssrFetcher } from "../../lib/fetcher";
 import { useSSRQuery } from "../../lib/hooks/useSSRQuery";
+import { mutator } from "../../lib/mutator";
 import { SocketContext } from "../../lib/socket";
-import { DirectMessage, Message, Reward, User } from "../../lib/types";
+import {
+  ClaimStatus,
+  DirectMessage,
+  Message,
+  Reward,
+  User,
+} from "../../lib/types";
 import { DashboardLayout } from "../../modules/draft/DashboardLayout";
 import { OpenButton } from "../../modules/draft/OpenButton";
 
-const Chat: React.FC<
-  InferGetServerSidePropsType<typeof getServerSideProps>
-> = ({ id }) => {
+const ChatPage: React.FC<{ id: string }> = ({ id }) => {
   const socket = useContext(SocketContext);
   const [message, setMessage] = useState("");
   const { data: dm } = useSSRQuery<DirectMessage & { reward: Reward }>(
@@ -32,6 +43,8 @@ const Chat: React.FC<
     staleTime: Infinity,
   });
   const { data: me } = useQuery<User>(`/me`);
+  const { mutateAsync, isLoading } = useMutation(mutator);
+  const [loadingState, setLoadingState] = useState<ClaimStatus>("pending");
   const queryClient = useQueryClient();
   const stake = useRef<HTMLDivElement | null>(null);
 
@@ -81,6 +94,15 @@ const Chat: React.FC<
     return me?.id === dm.senderId ? dm.recipient : dm.sender;
   }
 
+  async function completeReward(status: ClaimStatus) {
+    setLoadingState(status);
+    await mutateAsync([`/rewards/close/${id}`, { status }, "post"], {
+      onSuccess: () => {
+        queryClient.refetchQueries(`/messages/dm/${id}`);
+      },
+    });
+  }
+
   return (
     <DashboardLayout message>
       <div className="flex flex-col justify-between w-full h-screen">
@@ -89,23 +111,52 @@ const Chat: React.FC<
             <OpenButton />
             <h1 className="text-lg font-bold">{otherPerson(dm).displayName}</h1>
           </div>
-          <div className="flex items-center space-x-2">
-            <Button size="regular" color="gray" rounded>
-              Reject
+          {!dm.open ? (
+            <Button
+              size="regular"
+              rounded
+              loading={isLoading && loadingState === "pending"}
+              onClick={() => completeReward("pending")}
+            >
+              Reopen
             </Button>
-            <Button size="regular" rounded>
-              Finish
-            </Button>
-          </div>
+          ) : (
+            <div className="flex items-center space-x-2">
+              <Button
+                loading={isLoading && loadingState === "declined"}
+                onClick={() => completeReward("declined")}
+                size="regular"
+                color="gray"
+                rounded
+              >
+                Reject
+              </Button>
+              <Button
+                loading={isLoading && loadingState === "successful"}
+                onClick={() => completeReward("successful")}
+                size="regular"
+                rounded
+              >
+                Finish
+              </Button>
+            </div>
+          )}
         </header>
-        <div className="pt-8 pb-14 max-w-3xl w-full mx-auto border-b border-gray-100">
+        <div className="pt-8 pb-14 max-w-3xl w-full mx-auto border-b border-gray-100 px-6 md:px-0">
           <h4>{dm.reward.name}</h4>
           <p className="text-gray-600">
             {dm.reward.description} · Claimed{" "}
             {formatDistanceToNow(new Date(dm.claimedReward.createdAt), {
               addSuffix: true,
-            })}
+            })}{" "}
           </p>
+          <div className="flex items-center space-x-2 mt-2">
+            <div className="text-gray-500 text-sm">
+              {" "}
+              Status: {dm.open ? "Pending" : dm.claimedReward.status}
+            </div>
+            <HiOutlineExternalLink className="w-4 h-4 text-gray-500" />
+          </div>
         </div>
         <main className="h-full w-full overflow-y-auto flex flex-col space-y-8 max-w-3xl mx-auto py-8 px-6 md:px-0">
           {messages?.map((message) => (
@@ -137,17 +188,29 @@ const Chat: React.FC<
               </div>
             </div>
           ))}
+          {!dm.open ? (
+            <div className="pt-8">
+              <hr className="border-b -mb-4" />
+              <div className="flex justify-center">
+                <p className="text-gray-500 bg-white px-5 inline">
+                  This DM has been closed
+                </p>
+              </div>
+            </div>
+          ) : null}
           <div ref={stake} />
         </main>
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            socket?.emit(
-              "send message",
-              { message: message.trim(), directMessageId: id },
-              errorHandler
-            );
-            setMessage("");
+            if (dm.open) {
+              socket?.emit(
+                "send message",
+                { message: message.trim(), directMessageId: id },
+                errorHandler
+              );
+              setMessage("");
+            }
           }}
           className="w-full bg-white max-w-3xl px-6 md:px-0 mx-auto py-6 inset-x-0 flex items-center space-x-2"
         >
@@ -158,7 +221,11 @@ const Chat: React.FC<
             className="!rounded-full !px-5"
             gray
           />
-          <Button type="submit" rounded>
+          <Button
+            type="submit"
+            disabled={message.trim().length === 0 || !dm.open}
+            rounded
+          >
             Send
           </Button>
         </form>
@@ -198,4 +265,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
-export default Chat;
+export default ChatPage;
