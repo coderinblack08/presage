@@ -10,6 +10,7 @@ import { Button } from "../../components/Button";
 import { CopyLink } from "../../components/CopyLink";
 import { Modal } from "../../components/Modal";
 import { ModalHeader } from "../../components/ModalHeader";
+import { BASE_URL } from "../../lib/constants";
 import { mutator } from "../../lib/mutator";
 import { Reward, User, UserPoints } from "../../lib/types";
 
@@ -95,7 +96,14 @@ export const ClaimReward: React.FC<ClaimRewardProps> = ({ user, opener }) => {
                 </>
               ) : null}
               {selected?.type === "other" ? (
-                <p className="text-gray-600 mt-1">Check your messages</p>
+                <p className="text-gray-600 mt-1">
+                  You selected the reward {'"' + selected?.name + '"'}.{" "}
+                  <Link href={link}>
+                    <a className="text-gray-900 hover:underline font-semibold">
+                      Message {user.displayName} to claim the reward.
+                    </a>
+                  </Link>
+                </p>
               ) : null}
               {selected?.type === "shoutout" ? (
                 <>
@@ -139,10 +147,11 @@ export const ClaimReward: React.FC<ClaimRewardProps> = ({ user, opener }) => {
                           [`/rewards/claim/${selected.id}`, {}, "post"],
                           {
                             onSuccess: (data) => {
-                              console.log(data);
-
                               if ("link" in data) {
                                 setLink(data.link);
+                              }
+                              if (selected.type === "other") {
+                                setLink(`/chat/${data.id}`);
                               }
                               queryClient.refetchQueries("/rewards/claimed");
                               queryClient.refetchQueries(

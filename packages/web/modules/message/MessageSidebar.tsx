@@ -23,7 +23,7 @@ export const MessageSidebar: React.FC<MessageSidebarProps> = ({}) => {
         {dms?.length === 0 ? (
           <p className="text-gray-400 mt-1 text-sm">No messages found</p>
         ) : null}
-        <div className="grid gap-6 max-w-xs mt-4">
+        <div className="grid gap-8 max-w-xs mt-4">
           {dms?.map((dm) => (
             <Link href={`/chat/${dm.id}`} key={dm.id}>
               <a className="rounded-lg flex items-center space-x-4">

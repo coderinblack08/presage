@@ -91,7 +91,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
               </p>
             </Button>
           </div>
-          <Button icon={<MdBookmarkBorder className="w-5 h-5" />}>Save</Button>
+          <Button>Save</Button>
         </div>
       </a>
     </Link>
