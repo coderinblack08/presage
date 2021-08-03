@@ -3,7 +3,7 @@ import React from "react";
 import { QueryClient } from "react-query";
 import { dehydrate } from "react-query/hydration";
 import { ssrFetcher } from "../lib/fetcher";
-import { User } from "../lib/types";
+import { DirectMessage, User } from "../lib/types";
 import { DashboardLayout } from "../modules/draft/DashboardLayout";
 
 const Messages: React.FC = () => {
@@ -24,6 +24,16 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       redirect: {
         destination: "/",
         permanent: false,
+      },
+    };
+  }
+
+  const dms = queryClient.getQueryData<DirectMessage[]>("/messages/dms");
+  if (dms && dms.length > 0) {
+    return {
+      redirect: {
+        destination: `/chat/${dms[0].id}`,
+        permanent: true,
       },
     };
   }
