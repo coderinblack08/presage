@@ -115,7 +115,8 @@ articlesQueriesRouter.get(
         user: req.userId,
       })
       .where("article.published = true")
-      .orderBy('article."createdAt"', "DESC");
+      .orderBy('article."publishedDate"', "DESC")
+      .addOrderBy('article.points + article."referralCount"', "DESC");
 
     if (query) {
       qb = qb
