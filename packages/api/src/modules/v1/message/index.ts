@@ -100,11 +100,11 @@ router.get(
               ? type === "recipient"
                 ? `where dm."recipientId" = $1`
                 : `where dm."senderId" = $1`
-              : ""
+              : 'where dm."recipientId" = $1 or dm."senderId" = $1'
           }
           order by dm.open desc, dm."lastMessageSentAt" desc;
         `,
-        type ? [req.userId] : []
+        [req.userId]
       );
       res.json(dms);
     } catch (error) {
@@ -119,6 +119,18 @@ router.get(
   isAuth(true),
   async (req: Request<{ id: string }>, res, next) => {
     try {
+      const directMessage = await DirectMessage.findOne(req.params.id);
+      if (!directMessage) {
+        return next(createHttpError(404, "DM doesn't exist"));
+      }
+      if (
+        !(
+          directMessage.recipientId === req.userId ||
+          directMessage.senderId === req.userId
+        )
+      ) {
+        return next(createHttpError(403, "Not authorized"));
+      }
       const messages = await Message.find({
         where: { directMessageId: req.params.id },
         order: { createdAt: "DESC" },
@@ -140,7 +152,13 @@ router.get(
       const dm = await DirectMessage.findOne(req.params.id, {
         relations: ["recipient", "sender", "claimedReward"],
       });
+      if (!dm) {
+        return next(createHttpError(404, "DM doesn't exist"));
+      }
       const reward = await Reward.findOne(dm?.claimedReward.rewardId);
+      if (!(dm.recipientId === req.userId || dm.senderId === req.userId)) {
+        return next(createHttpError(403, "Not authorized"));
+      }
       res.json({ ...dm, reward });
     } catch (error) {
       next(createHttpError(500, error));

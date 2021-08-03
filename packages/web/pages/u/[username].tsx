@@ -108,15 +108,8 @@ const UserPage: React.FC<
                 onClick={() =>
                   router.push(`/u/${user.username}?journalId=${journal.id}`)
                 }
-                size="small"
-                icon={
-                  <img
-                    src={journal.picture}
-                    alt={journal.name}
-                    className="flex-shrink-0 w-6 h-6 object-cover rounded-full"
-                  />
-                }
                 color={journal.id === journalId ? "white" : "transparent"}
+                size="small"
               >
                 <p
                   className={

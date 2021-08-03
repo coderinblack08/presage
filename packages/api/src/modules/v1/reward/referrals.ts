@@ -37,7 +37,6 @@ router.post(
     if (!article) {
       return next(createHttpError(404, "Article not found"));
     }
-
     const alreadyHasReferral = await Referral.findOne({
       where: { articleId: req.params.articleId, referrerId: req.userId },
     });

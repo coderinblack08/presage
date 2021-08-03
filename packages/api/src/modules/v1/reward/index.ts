@@ -42,6 +42,9 @@ router.patch(
     if (!reward) {
       return next(createHttpError(404, "Reward not found"));
     }
+    if (reward.userId !== req.userId) {
+      return next(createHttpError(403, "Not authorized"));
+    }
     reward.name = req.body.name;
     reward.description = req.body.description;
     reward.points = req.body.points;
@@ -66,7 +69,10 @@ router.delete(
   isAuth(true),
   async (req: Request<{ id: string }>, res, next) => {
     try {
-      const result = await Reward.delete(req.params.id);
+      const result = await Reward.delete({
+        id: req.params.id,
+        userId: req.userId,
+      });
       res.json(result.raw);
     } catch (error) {
       return next(createHttpError(500, error));

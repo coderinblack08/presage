@@ -78,6 +78,9 @@ articlesMutationRouter.patch(
     if (!article) {
       return next(createHttpError(404, "Article not found"));
     }
+    if (article.userId !== req.userId) {
+      return next(createHttpError(403, "Not authorized"));
+    }
     const { title, body: bodyJson, canonical } = req.body;
     if (bodyJson) {
       const body = sanitizeHtml(
@@ -142,7 +145,12 @@ articlesMutationRouter.patch(
     }
     const connection = getConnection();
     const article = await Article.findOne(req.params.id);
-    if (!article) next(createHttpError(500, "no article found"));
+    if (!article) {
+      next(createHttpError(500, "no article found"));
+    }
+    if (article?.userId !== req.userId) {
+      return next(createHttpError(403, "Not authorized"));
+    }
     await connection.transaction(async (em) => {
       em.query(
         `
@@ -203,7 +211,7 @@ articlesMutationRouter.delete(
   isAuth(true),
   async (req: Request<{ id: string }>, res, next) => {
     try {
-      await Article.delete(req.params.id);
+      await Article.delete({ id: req.params.id, userId: req.userId });
 
       const key = `last-opened:${req.userId}`;
       const lastOpened = (

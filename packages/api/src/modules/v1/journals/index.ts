@@ -24,6 +24,25 @@ router.get(
   }
 );
 
+router.patch(
+  "/:id",
+  limiter({ max: 20 }),
+  isAuth(true),
+  async (req: Request<{ id: string }>, res, next) => {
+    const journal = await Journal.findOne(req.params.id, {
+      relations: ["articles"],
+    });
+    if (!journal) {
+      return next(createHttpError(404, "Journal not found"));
+    }
+    if (journal.userId !== req.userId) {
+      return next(
+        createHttpError(403, "You are not allowed to delete this journal")
+      );
+    }
+  }
+);
+
 router.delete(
   "/:id",
   limiter({ max: 20 }),
