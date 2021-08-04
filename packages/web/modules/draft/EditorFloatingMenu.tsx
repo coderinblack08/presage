@@ -2,6 +2,7 @@ import { Editor, FloatingMenu } from "@tiptap/react";
 import React, { useRef } from "react";
 import { MdCode, MdImage } from "react-icons/md";
 import { useMutation } from "react-query";
+import { ClientOnlyPortal } from "../../components/ClientOnlyPortal";
 import { mutator } from "../../lib/mutator";
 
 interface EditorFloatingMenuProps {
@@ -54,7 +55,7 @@ export const EditorFloatingMenu: React.FC<EditorFloatingMenuProps> = ({
       />
       <FloatingMenu
         className="flex items-center overflow-hidden rounded-lg divide-x divide-gray-200 bg-white shadow"
-        tippyOptions={{ duration: 100 }}
+        tippyOptions={{ duration: 100, zIndex: 10 }}
         editor={editor}
       >
         <button

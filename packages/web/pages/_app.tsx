@@ -27,50 +27,50 @@ const queryClient = new QueryClient({
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <IdProvider>
-      <SocketContext.Provider value={socket}>
-        <QueryClientProvider client={queryClient}>
-          <Hydrate state={pageProps.dehydratedState}>
-            <AudioPlayerProvider>
-              <AuthProvider>
-                <DefaultSeo
-                  title="Presage"
-                  description="An open-source Medium alternative built for referral podcasts and blogs"
-                  canonical="https://joinpresage.com"
-                  additionalMetaTags={[
+    <SocketContext.Provider value={socket}>
+      <QueryClientProvider client={queryClient}>
+        <Hydrate state={pageProps.dehydratedState}>
+          <AudioPlayerProvider>
+            <AuthProvider>
+              <DefaultSeo
+                title="Presage"
+                description="An open-source Medium alternative built for referral podcasts and blogs"
+                canonical="https://joinpresage.com"
+                additionalMetaTags={[
+                  {
+                    content: "width=device-width, initial-scale=1",
+                    name: "viewport",
+                  },
+                ]}
+                openGraph={{
+                  type: "website",
+                  url: "https://joinpresage.com",
+                  locale: "en_IE",
+                  site_name: "Presage",
+                  description:
+                    "An open-source Medium alternative built for referral podcasts and blogs",
+                  images: [
                     {
-                      content: "width=device-width, initial-scale=1",
-                      name: "viewport",
+                      url: "/static/thumbnail.png",
+                      width: 1440,
+                      height: 900,
+                      alt:
+                        "Presage is an open-source Medium alternative built for referral podcasts and blogs",
                     },
-                  ]}
-                  openGraph={{
-                    type: "website",
-                    url: "https://joinpresage.com",
-                    locale: "en_IE",
-                    site_name: "Presage",
-                    description:
-                      "An open-source Medium alternative built for referral podcasts and blogs",
-                    images: [
-                      {
-                        url: "/static/thumbnail.png",
-                        width: 1440,
-                        height: 900,
-                        alt:
-                          "Presage is an open-source Medium alternative built for referral podcasts and blogs",
-                      },
-                    ],
-                    title: "Presage",
-                  }}
-                />
-                <ErrorToast />
+                  ],
+                  title: "Presage",
+                }}
+              />
+              <ErrorToast />
+              <IdProvider>
                 <Component {...pageProps} />
-                {/* <ReactQueryDevtools /> */}
-              </AuthProvider>
-            </AudioPlayerProvider>
-          </Hydrate>
-        </QueryClientProvider>
-      </SocketContext.Provider>
-    </IdProvider>
+              </IdProvider>
+              {/* <ReactQueryDevtools /> */}
+            </AuthProvider>
+          </AudioPlayerProvider>
+        </Hydrate>
+      </QueryClientProvider>
+    </SocketContext.Provider>
   );
 }
 

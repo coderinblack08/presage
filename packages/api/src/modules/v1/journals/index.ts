@@ -1,3 +1,4 @@
+import { validate } from "class-validator";
 import { Request, Router } from "express";
 import createHttpError from "http-errors";
 import { Journal } from "../../../entities/Journal";
@@ -29,16 +30,29 @@ router.patch(
   limiter({ max: 20 }),
   isAuth(true),
   async (req: Request<{ id: string }>, res, next) => {
-    const journal = await Journal.findOne(req.params.id, {
-      relations: ["articles"],
-    });
-    if (!journal) {
-      return next(createHttpError(404, "Journal not found"));
-    }
-    if (journal.userId !== req.userId) {
-      return next(
-        createHttpError(403, "You are not allowed to delete this journal")
-      );
+    try {
+      const journal = await Journal.findOne(req.params.id);
+      if (!journal) {
+        return next(createHttpError(404, "Journal not found"));
+      }
+      if (journal.userId !== req.userId) {
+        return next(
+          createHttpError(403, "You are not allowed to delete this journal")
+        );
+      }
+      if (req.body.name) journal.name = req.body.name;
+      if (req.body.description || req.body.description === "") {
+        journal.description = req.body.description;
+      }
+      const errors = await validate(journal, { skipMissingProperties: true });
+      if (errors.length > 0) {
+        console.log(errors);
+        return next(createHttpError(422, errors));
+      }
+      journal.save();
+      res.json(journal);
+    } catch (error) {
+      next(createHttpError(500, error));
     }
   }
 );
@@ -79,10 +93,19 @@ router.delete(
   }
 );
 
-router.get("/:user", limiter({ max: 100 }), async (req, res, next) => {
+router.get("/:user", limiter({ max: 50 }), async (req, res, next) => {
   try {
     const journals = await Journal.find({ where: { userId: req.params.user } });
     res.json(journals);
+  } catch (error) {
+    next(createHttpError(500, error));
+  }
+});
+
+router.get("/id/:id", limiter({ max: 50 }), async (req, res, next) => {
+  try {
+    const journal = await Journal.findOne(req.params.id);
+    res.json(journal);
   } catch (error) {
     next(createHttpError(500, error));
   }

@@ -1,7 +1,7 @@
 import { Dialog } from "@headlessui/react";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { Delete } from "react-iconly";
 import { MdDelete } from "react-icons/md";
 import { useMutation, useQueryClient } from "react-query";

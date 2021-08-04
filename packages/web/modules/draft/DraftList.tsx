@@ -1,10 +1,8 @@
 import { motion } from "framer-motion";
-import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useRef } from "react";
-import { MdDelete, MdDescription } from "react-icons/md";
+import React from "react";
+import { MdDescription } from "react-icons/md";
 import { useQuery } from "react-query";
-import { Button } from "../../components/Button";
 import { Article, Journal } from "../../lib/types";
 import { DeleteDraftModal } from "./DeleteDraftModal";
 

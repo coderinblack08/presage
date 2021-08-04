@@ -2405,6 +2405,28 @@
   dependencies:
     "@babel/runtime" "^7.13.10"
 
+"@radix-ui/react-dialog@^0.0.19":
+  version "0.0.19"
+  resolved "https://registry.yarnpkg.com/@radix-ui/react-dialog/-/react-dialog-0.0.19.tgz#5a76fa380142a7a97c15c585ab071f63fba5297d"
+  integrity sha512-7FbWaj/C/TDpfJ+VJ4wNAQIjENDNfwAqNvAfeb+TEtBjgjmsfRDgA1AMenlA5N1QuRtAokRMTHUs3ukW49oQ+g==
+  dependencies:
+    "@babel/runtime" "^7.13.10"
+    "@radix-ui/primitive" "0.0.5"
+    "@radix-ui/react-compose-refs" "0.0.5"
+    "@radix-ui/react-context" "0.0.5"
+    "@radix-ui/react-dismissable-layer" "0.0.14"
+    "@radix-ui/react-focus-guards" "0.0.7"
+    "@radix-ui/react-focus-scope" "0.0.14"
+    "@radix-ui/react-id" "0.0.6"
+    "@radix-ui/react-polymorphic" "0.0.12"
+    "@radix-ui/react-portal" "0.0.14"
+    "@radix-ui/react-presence" "0.0.14"
+    "@radix-ui/react-primitive" "0.0.14"
+    "@radix-ui/react-slot" "0.0.12"
+    "@radix-ui/react-use-controllable-state" "0.0.6"
+    aria-hidden "^1.1.1"
+    react-remove-scroll "^2.4.0"
+
 "@radix-ui/react-dismissable-layer@0.0.14":
   version "0.0.14"
   resolved "https://registry.yarnpkg.com/@radix-ui/react-dismissable-layer/-/react-dismissable-layer-0.0.14.tgz#9d8a3415a2830688070c6596dec18b43c33df7b2"
@@ -2528,7 +2550,7 @@
     "@radix-ui/react-use-size" "0.0.6"
     "@radix-ui/rect" "0.0.5"
 
-"@radix-ui/react-portal@0.0.14":
+"@radix-ui/react-portal@0.0.14", "@radix-ui/react-portal@^0.0.14":
   version "0.0.14"
   resolved "https://registry.yarnpkg.com/@radix-ui/react-portal/-/react-portal-0.0.14.tgz#31513d8777cf5e50a3a30ebc9deb34821e890e9e"
   integrity sha512-Wi9arVwVenonjZIX6znCBYaasua03Tb+UtrBZShepJkLGtbGxDlzExijiGIaIRNetl46Oc2pw0F6Y6HffDnUww==
