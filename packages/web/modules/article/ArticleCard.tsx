@@ -20,7 +20,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
 
   return (
     <Link href="/article/[id]" as={`/article/${article.id}`}>
-      <a className="flex flex-col justify-between bg-white rounded-xl shadow p-6">
+      <a className="flex flex-col justify-between bg-white rounded-xl shadow p-5 sm:p-6">
         <div>
           <div className="flex items-center space-x-4">
             <div className="relative">
@@ -70,7 +70,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
             >
               <p className="text-gray-600 font-semibold">
                 {article.points}{" "}
-                <span className="hidden lg:inline font-semibold">
+                <span className="hidden sm:inline font-semibold">
                   like{article.points !== 1 ? "s" : ""}
                 </span>
               </p>
@@ -87,7 +87,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
             >
               <p className="text-gray-600 font-semibold">
                 0{" "}
-                <span className="hidden lg:inline font-semibold">comments</span>
+                <span className="hidden sm:inline font-semibold">comments</span>
               </p>
             </Button>
           </div>

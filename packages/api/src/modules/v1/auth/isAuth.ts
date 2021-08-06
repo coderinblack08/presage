@@ -6,12 +6,15 @@ export const isAuth: (
   shouldThrow?: boolean
 ) => RequestHandler<{}, any, any, {}> =
   (shouldThrow = false) =>
-  (req, _, next) => {
+  (req, res, next) => {
     const token = req.cookies.jid;
 
-    const code = new createError.Unauthorized();
     if (!token) {
-      return next(shouldThrow && createError(code, "not authenticated"));
+      if (shouldThrow) {
+        return res.status(401).json({ message: "Not authenticated" });
+      } else {
+        return next();
+      }
     }
 
     try {
@@ -20,5 +23,9 @@ export const isAuth: (
       return next();
     } catch {}
 
-    return next(shouldThrow && createError(code, "not authenticated"));
+    if (shouldThrow) {
+      return res.status(401).json({ message: "Not authenticated" });
+    } else {
+      return next();
+    }
   };
