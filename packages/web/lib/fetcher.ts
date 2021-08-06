@@ -17,16 +17,17 @@ export const fetcher = async <T = any>(
   if (!context.queryKey[0]) {
     return null;
   }
+  const url = `${API_URL}/v1` + context.queryKey;
   let request: Response;
   if (typeof window === "undefined") {
-    request = await fetch(`${API_URL}/v1` + context.queryKey, {
+    request = await fetch(url, {
       headers: {
         cookie: `jid=${jid}`,
       },
       credentials: "include",
     });
   } else {
-    request = await fetch(`${API_URL}/v1` + context.queryKey, {
+    request = await fetch(url, {
       credentials: "include",
     });
   }

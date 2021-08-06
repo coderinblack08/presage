@@ -110,7 +110,6 @@ export const DraftCollapsible: React.FC<DraftCollapsibleProps> = ({
                   Delete
                 </div>
               </DropdownMenu.Item>
-              {/* <EditJournal id={journal.id} /> */}
               <DropdownMenu.Item
                 as="button"
                 onSelect={(e) => {

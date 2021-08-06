@@ -37,7 +37,7 @@ router.patch(
       }
       if (journal.userId !== req.userId) {
         return next(
-          createHttpError(403, "You are not allowed to delete this journal")
+          createHttpError(403, "You are not allowed to edit this journal")
         );
       }
       if (req.body.name) journal.name = req.body.name;
@@ -85,7 +85,7 @@ router.delete(
         )
       );
 
-      await journal.remove();
+      await journal.softRemove();
       res.json(journal);
     } catch (error) {
       next(createHttpError(500, error));
@@ -121,14 +121,20 @@ router.post("/", limiter({ max: 20 }), isAuth(true), async (req, res, next) => {
       "rosy-pink",
       "yellow-lime",
     ];
-    const journal = await Journal.create({
+    const journal = Journal.create({
       user: { id: req.userId },
       name: req.body.name,
       description: req.body.description,
       picture: `http://localhost:3000/profile-picture/${
         pictures[Math.floor(Math.random() * pictures.length)]
       }.jpeg`,
-    }).save();
+    });
+    const errors = await validate(journal, { skipMissingProperties: true });
+    if (errors.length > 0) {
+      console.log(errors);
+      return next(createHttpError(422, errors));
+    }
+    await journal.save();
     console.log(journal);
     res.json(journal);
   } catch (error) {

@@ -1,6 +1,6 @@
 import { Request, Router } from "express";
 import createHttpError from "http-errors";
-import { FindConditions, getConnection } from "typeorm";
+import { FindConditions, getRepository } from "typeorm";
 import { Article } from "../../../entities/Article";
 import { Journal } from "../../../entities/Journal";
 import { Like } from "../../../entities/Like";
@@ -94,28 +94,31 @@ articlesQueriesRouter.get(
   "/",
   limiter({ max: 50 }),
   isAuth(),
-  async (
-    req: Request<
-      {},
-      any,
-      any,
-      { query: string; userId: string; journalId: string }
-    >,
-    res,
-    next
-  ) => {
-    const { userId, query, journalId } = req.query;
-    let qb = getConnection()
-      .getRepository(Article)
+  async (req, res, next) => {
+    const {
+      userId,
+      query,
+      journalId,
+      limit = "10",
+      skip = "0",
+    } = req.query as {
+      query: string;
+      userId: string;
+      journalId: string;
+      limit: string;
+      skip: string;
+    };
+
+    /**
+      Because of typeorm's inability to combine both order, inner join, and pagination, 
+      we have to do this in two different queries
+      O(2 * limit + offset) rather than O(limit + offset) 
+    */
+    let qb = getRepository(Article)
       .createQueryBuilder("article")
-      .leftJoinAndSelect("article.tags", "tags")
-      .leftJoinAndSelect("article.user", "user")
-      .leftJoinAndSelect("article.journal", "journal")
-      .leftJoinAndSelect("article.likes", "likes", 'likes."userId" = :user', {
-        user: req.userId,
-      })
+      .select("article.id")
       .where("article.published = true")
-      .orderBy('article."publishedDate"', "DESC")
+      .orderBy(`article."publishedDate"`, "DESC")
       .addOrderBy('article.points + article."referralCount"', "DESC");
 
     if (query) {
@@ -136,15 +139,47 @@ articlesQueriesRouter.get(
     }
 
     try {
-      const data = await qb.limit(10).getMany();
-      res.json(
-        data.map((x) => {
-          const y: any = { ...x, liked: x.likes.length === 1 };
-          delete y.likes;
+      const take = Math.min(+limit, 50) + 1;
+      console.log(skip, take);
 
-          return y;
+      const result = await qb
+        .take(take)
+        .skip(+skip)
+        .getMany();
+      const ids = result.map((x) => x.id);
+
+      if (ids.length === 0) {
+        return res.json({ data: [], hasMore: false });
+      }
+
+      let data = await getRepository(Article)
+        .createQueryBuilder("article")
+        .leftJoinAndSelect("article.tags", "tags")
+        .leftJoinAndSelect("article.user", "user")
+        .leftJoinAndSelect("article.journal", "journal")
+        .leftJoinAndSelect("article.likes", "likes", 'likes."userId" = :user', {
+          user: req.userId,
         })
+        .where("article.id IN (:...ids)", { ids })
+        .getMany();
+
+      data = data.map((x) => {
+        const y: any = { ...x, liked: x.likes.length === 1 };
+        delete y.likes;
+        return y;
+      });
+
+      data = data.sort((a, b) => ids.indexOf(a.id) - ids.indexOf(b.id));
+      console.log(
+        data.map((x) => x.id),
+        ids
       );
+
+      const hasMore = data.length === take;
+      res.json({
+        data: hasMore ? data.slice(0, -1) : data,
+        hasMore,
+      });
     } catch (error) {
       next(createHttpError(500, error));
     }

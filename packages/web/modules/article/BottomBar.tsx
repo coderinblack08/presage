@@ -1,6 +1,6 @@
 import React from "react";
-import { TicketStar, Bookmark, Chat, Heart } from "react-iconly";
-import { MdBookmark, MdChat, MdReply, MdThumbUp } from "react-icons/md";
+import { TicketStar } from "react-iconly";
+import { MdBookmark, MdChat, MdThumbUp } from "react-icons/md";
 import { useMutation, useQueryClient } from "react-query";
 import { Button } from "../../components/Button";
 import { mutator } from "../../lib/mutator";
@@ -49,17 +49,6 @@ export const BottomBar: React.FC<BottomBarProps> = ({ article }) => {
                         ...old,
                         ...newData,
                       } as any)
-                  );
-                  queryClient.setQueryData<Article[]>(
-                    `/articles/explore`,
-                    (old) => {
-                      if (old) {
-                        const idx = old?.findIndex((v) => v.id === article.id);
-                        old[idx] = { ...old[idx], ...newData };
-                        return old;
-                      }
-                      return [];
-                    }
                   );
                 },
               }

@@ -143,3 +143,8 @@ export interface Message {
   directMessage: DirectMessage;
   createdAt: Date;
 }
+
+export type PaginatedResponse<T = any> = {
+  data: T[];
+  hasMore: boolean;
+};

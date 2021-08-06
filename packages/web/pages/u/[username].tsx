@@ -1,5 +1,6 @@
-import Error from "next/error";
+import { isEqual } from "lodash";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import Error from "next/error";
 import { useRouter } from "next/router";
 import React from "react";
 import { QueryClient, useQuery } from "react-query";
@@ -10,10 +11,9 @@ import { ssrFetcher } from "../../lib/fetcher";
 import { useSSRQuery } from "../../lib/hooks/useSSRQuery";
 import { Article, Journal, User } from "../../lib/types";
 import { ArticleCard } from "../../modules/article/ArticleCard";
+import { useScrollPagination } from "../../modules/article/useScrollPagination";
 import { EditProfileModal } from "../../modules/user/EditProfileModal";
 import { FollowButton } from "../../modules/user/FollowButton";
-import { isEqual } from "lodash";
-import { TextParser } from "../../modules/user/TextParser";
 
 const UserPage: React.FC<
   InferGetServerSidePropsType<typeof getServerSideProps>
@@ -23,8 +23,9 @@ const UserPage: React.FC<
   const { data: journals } = useQuery<Journal[]>(`/journals/${user.id}`);
   const router = useRouter();
   const journalId = router.query.journalId?.toString();
-  const { data: articles } = useQuery<Article[]>(
-    `/articles?userId=${user.id}${journalId ? `&journalId=${journalId}` : ""}`
+  const { data: articles, isFetching, ref } = useScrollPagination<Article>(
+    "/articles",
+    { journalId: journalId || null }
   );
 
   if (userNonExistent) {
@@ -124,15 +125,18 @@ const UserPage: React.FC<
             ))}
           </div>
           <div className="grid grid-cols-1 gap-4">
-            {articles?.length === 0 ? (
+            {articles?.pages?.length === 0 ? (
               <div className="text-gray-500 p-6 rounded-lg bg-white shadow">
                 This journal is empty, check on it later.
               </div>
             ) : null}
-            {articles?.map((article) => (
-              <ArticleCard key={article.id} article={article} />
-            ))}
+            {articles?.pages?.map((page) =>
+              page.data.map((article) => (
+                <ArticleCard key={article.id} article={article} />
+              ))
+            )}
           </div>
+          {!isFetching && <div ref={ref} />}
         </div>
       </main>
     </div>

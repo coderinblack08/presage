@@ -1,19 +1,21 @@
 import React, { useState } from "react";
 import { Search } from "react-iconly";
-import { useQuery } from "react-query";
 import { Button } from "../../components/Button";
 import { Input } from "../../components/Input";
 import { Article } from "../../lib/types";
 import { ArticleCard } from "../article/ArticleCard";
+import { useScrollPagination } from "../article/useScrollPagination";
 
 interface ExplorePageProps {}
 
 export const ExplorePage: React.FC<ExplorePageProps> = ({}) => {
   const [query, setQuery] = useState("");
   const [actualQuery, setActualQuery] = useState("");
-  const [oldArticles, setOldArticles] = useState<Article[] | undefined>([]);
-  const { data: articles, isFetching } = useQuery<Article[]>(
-    `/articles${actualQuery ? `?query=${actualQuery}` : ""}`
+  const { data: articles, isFetching, ref } = useScrollPagination<Article>(
+    "/articles",
+    {
+      query: actualQuery || null,
+    }
   );
 
   return (
@@ -27,7 +29,6 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({}) => {
           <Input
             onKeyDown={(e) => {
               if (e.key === "Enter") {
-                setOldArticles(articles);
                 setActualQuery(query);
               }
             }}
@@ -60,10 +61,13 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({}) => {
       </div>
       <main className="mt-4">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          {(isFetching ? oldArticles : articles)?.map((article) => (
-            <ArticleCard key={article.id} article={article} />
-          ))}
+          {articles?.pages?.map((page) =>
+            page.data.map((article) => (
+              <ArticleCard key={article.id} article={article} />
+            ))
+          )}
         </div>
+        {!isFetching && <div ref={ref} />}
       </main>
     </div>
   );

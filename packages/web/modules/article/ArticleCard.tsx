@@ -91,7 +91,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
               </p>
             </Button>
           </div>
-          <Button>Save</Button>
+          <Button size="regular">Save</Button>
         </div>
       </a>
     </Link>
