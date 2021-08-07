@@ -5,8 +5,8 @@ import { Article } from "../../../entities/Article";
 import { Journal } from "../../../entities/Journal";
 import { Like } from "../../../entities/Like";
 import { UserPoints } from "../../../entities/UserPoints";
+import { addToLastOpened, getLastOpened } from "../../../lib/lastOpened";
 import { limiter } from "../../../lib/rateLimit";
-import { redis } from "../../../lib/redis";
 import { isAuth } from "../auth/isAuth";
 
 export const articlesQueriesRouter = Router();
@@ -16,8 +16,7 @@ articlesQueriesRouter.get(
   limiter({ max: 50 }),
   isAuth(true),
   async (req, res, next) => {
-    const key = `last-opened:${req.userId}`;
-    let lastOpened = JSON.parse((await redis.get(key)) || "[]") as string[];
+    const lastOpened = await getLastOpened(req.userId!);
     if (lastOpened.length > 0) {
       const article = await Article.findOne(lastOpened[0]);
       if (article) {
@@ -34,7 +33,7 @@ articlesQueriesRouter.get(
         userId: req.userId,
         journalId: journal.id,
       }).save();
-      await redis.set(key, JSON.stringify([draft.id, ...lastOpened]));
+      await addToLastOpened(req.userId!, draft);
       return res.json(draft);
     }
     return next(createHttpError(404, "No journal found"));
@@ -78,11 +77,9 @@ articlesQueriesRouter.get(
         where: { id: req.params.id, userId: req.userId },
         relations: ["journal"],
       });
-      const key = `last-opened:${req.userId}`;
-      const lastOpened = (
-        JSON.parse((await redis.get(key)) || "[]") as string[]
-      ).filter((x) => x !== req.params.id);
-      await redis.set(key, JSON.stringify([req.params.id, ...lastOpened]));
+      if (article) {
+        await addToLastOpened(req.userId!, article);
+      }
       res.json(article);
     } catch (error) {
       next(createHttpError(500, error));

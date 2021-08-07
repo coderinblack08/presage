@@ -14,20 +14,12 @@ import {
 import { Article } from "../../../entities/Article";
 import { Journal } from "../../../entities/Journal";
 import { User } from "../../../entities/User";
-import { isDev } from "../../../lib/constants";
+import { getRandomPicture, isDev } from "../../../lib/constants";
 import { limiter } from "../../../lib/rateLimit";
 import { createToken } from "./createToken";
 import { isAuth } from "./isAuth";
 
 const router = Router();
-const pictures = [
-  "magenta-purple",
-  "orange",
-  "plum-fuchsia",
-  "purple-orange-sky",
-  "rosy-pink",
-  "yellow-lime",
-];
 
 const strategy = new Strategy(
   {
@@ -62,9 +54,7 @@ const strategy = new Strategy(
           user: { id: user.id },
           name: "Blog",
           description: `${user.displayName}’s personal journal dedicated to blogging`,
-          picture: `http://localhost:3000/profile-picture/${
-            pictures[Math.floor(Math.random() * pictures.length)]
-          }.jpeg`,
+          picture: getRandomPicture(),
         }).save();
       }
       return done(null, { accessToken: createToken(user) });

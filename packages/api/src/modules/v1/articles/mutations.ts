@@ -15,8 +15,8 @@ import { Article } from "../../../entities/Article";
 import { Journal } from "../../../entities/Journal";
 import { Like } from "../../../entities/Like";
 import { Tag } from "../../../entities/Tag";
+import { addToLastOpened, removeFromLastOpened } from "../../../lib/lastOpened";
 import { limiter } from "../../../lib/rateLimit";
-import { redis } from "../../../lib/redis";
 import { isAuth } from "../auth/isAuth";
 
 export const articlesMutationRouter = Router();
@@ -62,9 +62,7 @@ articlesMutationRouter.post(
       userId: req.userId,
       journalId: req.body.journalId,
     }).save();
-    const key = `last-opened:${req.userId}`;
-    const lastOpened = JSON.parse((await redis.get(key)) || "[]") as string[];
-    await redis.set(key, JSON.stringify([article.id, ...lastOpened]));
+    await addToLastOpened(req.userId!, article);
     res.json(article);
   }
 );
@@ -212,12 +210,7 @@ articlesMutationRouter.delete(
   async (req: Request<{ id: string }>, res, next) => {
     try {
       await Article.delete({ id: req.params.id, userId: req.userId });
-
-      const key = `last-opened:${req.userId}`;
-      const lastOpened = (
-        JSON.parse((await redis.get(key)) || "[]") as string[]
-      ).filter((x) => x !== req.params.id);
-      await redis.set(key, JSON.stringify(lastOpened));
+      await removeFromLastOpened(req.userId!, req.params.id);
 
       const count = await Article.count({ where: { userId: req.userId } });
       if (count === 0) {
@@ -233,7 +226,7 @@ articlesMutationRouter.delete(
           userId: req.userId,
           journalId: journal.id,
         }).save();
-        await redis.set(key, JSON.stringify([article.id, ...lastOpened]));
+        await addToLastOpened(req.userId!, article);
         return res.json(article);
       }
       return res.send(true);

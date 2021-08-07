@@ -2,8 +2,9 @@ import { validate } from "class-validator";
 import { Request, Router } from "express";
 import createHttpError from "http-errors";
 import { Journal } from "../../../entities/Journal";
+import { getRandomPicture } from "../../../lib/constants";
+import { removeFromLastOpened } from "../../../lib/lastOpened";
 import { limiter } from "../../../lib/rateLimit";
-import { redis } from "../../../lib/redis";
 import { isAuth } from "../auth/isAuth";
 
 const router = Router();
@@ -74,18 +75,16 @@ router.delete(
           createHttpError(403, "You are not allowed to delete this journal")
         );
       }
-      const key = `last-opened:${req.userId}`;
-      let lastOpened = JSON.parse((await redis.get(key)) || "[]") as string[];
-      await redis.set(
-        key,
-        JSON.stringify(
-          lastOpened.filter(
-            (x) => journal.articles.find((y) => y.id === x) === undefined
-          )
-        )
-      );
-
+      await removeFromLastOpened(req.userId, journal.articles);
       await journal.softRemove();
+      const journals = await Journal.count({ where: { userId: req.userId } });
+      if (journals === 0) {
+        await Journal.create({
+          user: { id: req.userId },
+          name: "Blog",
+          picture: getRandomPicture(),
+        }).save();
+      }
       res.json(journal);
     } catch (error) {
       next(createHttpError(500, error));
@@ -113,21 +112,11 @@ router.get("/id/:id", limiter({ max: 50 }), async (req, res, next) => {
 
 router.post("/", limiter({ max: 20 }), isAuth(true), async (req, res, next) => {
   try {
-    const pictures = [
-      "magenta-purple",
-      "orange",
-      "plum-fuchsia",
-      "purple-orange-sky",
-      "rosy-pink",
-      "yellow-lime",
-    ];
     const journal = Journal.create({
       user: { id: req.userId },
       name: req.body.name,
       description: req.body.description,
-      picture: `http://localhost:3000/profile-picture/${
-        pictures[Math.floor(Math.random() * pictures.length)]
-      }.jpeg`,
+      picture: getRandomPicture(),
     });
     const errors = await validate(journal, { skipMissingProperties: true });
     if (errors.length > 0) {
