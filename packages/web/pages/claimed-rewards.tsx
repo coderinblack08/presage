@@ -1,14 +1,12 @@
-import { format } from "date-fns";
 import { GetServerSideProps } from "next";
 import React from "react";
-import { HiOutlineExternalLink } from "react-icons/hi";
 import { QueryClient, useQuery } from "react-query";
 import { dehydrate } from "react-query/hydration";
-import { BASE_URL } from "../lib/constants";
 import { ssrFetcher } from "../lib/fetcher";
 import { ClaimedReward } from "../lib/types";
 import { DashboardLayout } from "../modules/draft/DashboardLayout";
 import { OpenButton } from "../modules/draft/OpenButton";
+import { ClaimedRewardItem } from "../modules/rewards/ClaimedRewardItem";
 
 const ClaimedRewards: React.FC = () => {
   const { data: rewards } = useQuery<ClaimedReward[]>("/rewards/claimed");
@@ -26,63 +24,11 @@ const ClaimedRewards: React.FC = () => {
         {rewards && rewards.length > 0 ? (
           <div className="grid border-t-2 border-b-2 border-gray-100 divide-y-2 divide-gray-100 grid-cols-1 mt-10 lg:mt-12">
             {rewards?.map((claimed) => (
-              // @ts-ignore
-              <a
-                key={claimed.id}
-                className="group block hover:bg-gray-50 p-8 transition"
-                href={
-                  claimed.reward.link || claimed.reward.type === "shoutout"
-                    ? `${BASE_URL}/article/${claimed.shoutoutArticle}`
-                    : `${BASE_URL}/chat/${claimed.directMessage?.id}`
-                }
-                target="_blank"
-                rel="noreferrer"
-              >
-                <div className="flex items-center space-x-3 focus:outline-none mb-4">
-                  <img
-                    src={claimed.user.profilePicture}
-                    alt={claimed.user.displayName}
-                    className="w-6 h-6 object-cover rounded-full"
-                  />
-                  <h6 className="font-semibold text-gray-800 leading-none">
-                    {claimed.user.displayName}
-                  </h6>
-                </div>
-                <h6 className="text-lg md:text-xl lg:text-2xl font-bold">
-                  {claimed.reward.name}
-                </h6>
-                <p className="text-gray-600 mt-2">
-                  {claimed.reward.description}
-                </p>
-                <div className="flex items-center space-x-1.5 mt-1">
-                  <div
-                    className={`text-sm font-semibold ${
-                      claimed.status === "declined"
-                        ? "text-red"
-                        : "text-gray-900"
-                    }`}
-                  >
-                    {claimed.status}
-                  </div>
-                  <span className="text-gray-500">·</span>
-                  <p className="text-gray-500 text-sm">
-                    Claimed at{" "}
-                    {format(new Date(claimed.createdAt), "MMMM dd, yyyy")}
-                  </p>
-                </div>
-                <div className="inline-flex space-x-2 items-center mt-5 group-hover:underline text-gray-700">
-                  <HiOutlineExternalLink className="w-4 h-4" />
-                  <span className="font-bold text-sm">
-                    {claimed.reward.link || claimed.reward.type === "shoutout"
-                      ? `${BASE_URL}/article/${claimed.shoutoutArticle}`
-                      : `${BASE_URL}/chat/${claimed.directMessage?.id}`}
-                  </span>
-                </div>
-              </a>
+              <ClaimedRewardItem claimed={claimed} key={claimed.id} />
             ))}
           </div>
         ) : (
-          <div className="mt-6 lg:mt-8 pt-6 border-t">
+          <div className="mt-8 lg:mt-10 pt-6 border-t">
             <p className="text-gray-500 text-sm">No rewards found.</p>
           </div>
         )}

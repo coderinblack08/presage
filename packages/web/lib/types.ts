@@ -65,7 +65,7 @@ export interface Journal {
   createdAt: String;
 }
 
-export type RewardType = "shoutout" | "link" | "other";
+export type RewardType = "shoutout" | "link";
 
 export interface Reward {
   id: string;
@@ -80,7 +80,7 @@ export interface Reward {
   updatedAt: Date;
 }
 
-export type ClaimStatus = "pending" | "declined" | "successful";
+export type ClaimStatus = "pending" | "declined" | "successful" | "canceled";
 
 export interface ClaimedReward {
   id: string;
@@ -88,8 +88,6 @@ export interface ClaimedReward {
   reward: Reward;
   user: User;
   shoutoutArticle: string | null;
-  directMessageId: string | null;
-  directMessage: DirectMessage | null;
   status: ClaimStatus;
 }
 
@@ -120,31 +118,12 @@ export interface Shoutout {
   article: Article;
 }
 
-export interface DirectMessage {
-  id: string;
-  open: boolean;
-  senderId: string;
-  recipientId: string;
-  claimedRewardId: string;
-  messages: Message[];
-  sender: User;
-  recipient: User;
-  claimedReward: ClaimedReward;
-  lastMessageSentAt: Date | null;
-  createdAt: Date;
-}
-
-export interface Message {
-  id: string;
-  message: string;
-  directMessageId: string;
-  userId: string;
-  user: User;
-  directMessage: DirectMessage;
-  createdAt: Date;
-}
-
 export type PaginatedResponse<T = any> = {
   data: T[];
   hasMore: boolean;
+};
+
+export type ModalProps = {
+  isOpen: boolean;
+  closeModal: () => void;
 };

@@ -32,7 +32,7 @@ export const DraftList: React.FC<DraftListProps> = ({ journal }) => {
       {/* <pre>{JSON.stringify(drafts, null, 2)}</pre> */}
       {drafts?.map((draft) => (
         <motion.li key={draft.id}>
-          <div
+          <a
             onClick={() => {
               router.push(`/draft/${draft.id}`);
             }}
@@ -49,7 +49,7 @@ export const DraftList: React.FC<DraftListProps> = ({ journal }) => {
               </div>
             </div>
             <DeleteDraftModal id={draft.id} />
-          </div>
+          </a>
         </motion.li>
       ))}
     </motion.ul>

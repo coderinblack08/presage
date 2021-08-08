@@ -3,7 +3,7 @@ import { Request, Router } from "express";
 import createHttpError from "http-errors";
 import { Journal } from "../../../entities/Journal";
 import { getRandomPicture } from "../../../lib/constants";
-import { removeFromLastOpened } from "../../../lib/lastOpened";
+import { removeFromLastOpened } from "../articles/lastOpened";
 import { limiter } from "../../../lib/rateLimit";
 import { isAuth } from "../auth/isAuth";
 

@@ -65,23 +65,6 @@ const UserPage: React.FC<
                 <FollowButton username={user.username} />
               )}
             </div>
-            {/* <form className="relative flex items-center mt-5 max-w-md">
-              <Input
-                placeholder="Email Address"
-                type="email"
-                className="!py-3.5 pl-5 pr-44 max-w-3xl"
-                required
-              />
-              <Button
-                type="submit"
-                className="absolute right-1.5 flex-shrink-0"
-              >
-                Subscribe
-              </Button>
-            </form>
-            <label className="text-gray-400 small mt-2 block">
-              Get notified when @{user.username} posts
-            </label> */}
           </div>
         </div>
       </header>
@@ -129,11 +112,12 @@ const UserPage: React.FC<
               <div className="text-gray-500 p-6 rounded-lg bg-white shadow">
                 This journal is empty, check on it later.
               </div>
-            ) : null}
-            {articles?.pages?.map((page) =>
-              page.data.map((article) => (
-                <ArticleCard key={article.id} article={article} />
-              ))
+            ) : (
+              articles?.pages?.map((page) =>
+                page.data.map((article) => (
+                  <ArticleCard key={article.id} article={article} />
+                ))
+              )
             )}
           </div>
           {!isFetching && <div ref={ref} />}

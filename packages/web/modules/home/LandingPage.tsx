@@ -28,7 +28,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({}) => {
     <div>
       <Navbar />
       <div className="py-4 md:py-0 px-5 md:px-8 max-w-8xl mx-auto">
-        <header className="mt-10 md:mt-0 flex justify-between items-center md:py-8">
+        <header className="mt-10 md:mt-0 flex justify-between items-center md:py-14">
           <div className="max-w-lg lg:max-w-2xl w-full">
             <h1 className="text-3xl leading-normal sm:h3 lg:h2 font-display font-bold">
               A Medium alternative helping you <br />

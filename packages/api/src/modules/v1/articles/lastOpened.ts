@@ -1,5 +1,5 @@
-import { Article } from "../entities/Article";
-import { redis } from "./redis";
+import { Article } from "../../../entities/Article";
+import { redis } from "../../../lib/redis";
 
 export const getLastOpenedKey = (userId: string) => `last-opened:${userId}`;
 

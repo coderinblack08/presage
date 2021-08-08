@@ -1,33 +1,37 @@
 import { validate } from "class-validator";
 import { Request, Router } from "express";
 import createHttpError from "http-errors";
-import { getConnection, getRepository } from "typeorm";
+import SqlString from "sqlstring";
+import { getConnection, getRepository, Not } from "typeorm";
 import { ClaimedReward } from "../../../entities/ClaimedReward";
-import { DirectMessage } from "../../../entities/DirectMessage";
 import { Reward } from "../../../entities/Reward";
 import { User } from "../../../entities/User";
 import { UserPoints } from "../../../entities/UserPoints";
 import { limiter } from "../../../lib/rateLimit";
-import { redis } from "../../../lib/redis";
 import { isAuth } from "../auth/isAuth";
+import { pushToShoutoutQueue } from "./shoutout";
 
 const router = Router();
 
 router.post("/", limiter({ max: 20 }), isAuth(true), async (req, res, next) => {
   const reward = new Reward();
+
   reward.name = req.body.name;
   reward.description = req.body.description;
   reward.points = parseInt(req.body.points);
-  if (reward.link) reward.link = req.body.link;
+  if (req.body.link && req.body.type === "link") {
+    reward.link = req.body.link;
+  }
   reward.type = req.body.type;
   reward.user = { id: req.userId } as User;
+
   const errors = await validate(reward);
   if (errors.length > 0) {
     return next(createHttpError(422, errors));
   }
   try {
-    const savedReward = await reward.save();
-    res.json(savedReward);
+    await reward.save();
+    res.json(reward);
   } catch (error) {
     return next(createHttpError(500, error));
   }
@@ -69,11 +73,53 @@ router.delete(
   isAuth(true),
   async (req: Request<{ id: string }>, res, next) => {
     try {
-      const result = await Reward.delete({
-        id: req.params.id,
-        userId: req.userId,
+      await getConnection().transaction(async (em) => {
+        const reward = await em.getRepository(Reward).findOne({
+          where: {
+            id: req.params.id,
+            userId: req.userId,
+          },
+        });
+        if (!reward) {
+          return next(createHttpError(404, "Reward doesn't exist"));
+        }
+
+        if (reward.type !== "shoutout" && reward.type !== "link") {
+          const claimed = await em.getRepository(ClaimedReward).find({
+            where: {
+              rewardId: req.params.id,
+              status: "pending",
+            },
+          });
+
+          if (claimed.length > 0) {
+            // refund users
+            await em
+              .createQueryBuilder()
+              .update(UserPoints)
+              .set({
+                points: () => `$points + ${SqlString.escape(reward.points)}`,
+              })
+              .where(`"userId" IN (:...ids)`, {
+                ids: claimed.map((x) => x.userId),
+              })
+              .andWhere(`"creatorId" = :id`, { id: reward.userId })
+              .execute();
+
+            // change status
+            await em
+              .createQueryBuilder()
+              .update(ClaimedReward)
+              .set({ status: "canceled" })
+              .where("status = 'pending'")
+              .andWhere(`"rewardId" = :id`, { id: reward.id })
+              .execute();
+          }
+        }
+
+        reward.softRemove();
+        res.json(reward);
       });
-      res.json(result.raw);
     } catch (error) {
       return next(createHttpError(500, error));
     }
@@ -83,11 +129,13 @@ router.delete(
 router.get("/", limiter({ max: 50 }), isAuth(true), async (req, res, next) => {
   try {
     const rewards = await getRepository(Reward)
-      .createQueryBuilder()
-      .addSelect("link")
-      .where('"userId" = :id', { id: req.userId })
+      .createQueryBuilder("reward")
+      .addSelect("reward.link")
+      .where('reward."userId" = :id', { id: req.userId })
       .orderBy({ points: "ASC" })
       .getMany();
+    console.log(rewards);
+
     res.json(rewards);
   } catch (error) {
     next(createHttpError(500, error));
@@ -100,16 +148,20 @@ router.get(
   isAuth(true),
   async (req, res, next) => {
     try {
-      const rewards = await getRepository(ClaimedReward)
-        .createQueryBuilder("cr")
-        .leftJoinAndSelect("cr.reward", "reward")
-        .leftJoinAndSelect("cr.directMessage", "directMessage")
-        .leftJoinAndSelect("cr.user", "user")
-        .addSelect("reward.link")
-        .where('cr."userId" = :id', { id: req.userId })
-        .orderBy({ points: "DESC" })
-        .getMany();
-
+      const rewards = await getConnection().query(
+        `
+        select
+          cr.*,
+          to_jsonb(u) as user,
+          to_jsonb(r) as reward
+        from claimed_reward cr
+        left join reward r on r.id = cr."rewardId"
+        left join public.user u on u.id = r."userId"
+        where cr."userId" = $1
+        order by points desc;
+      `,
+        [req.userId]
+      );
       res.json(rewards);
     } catch (error) {
       next(createHttpError(500, error));
@@ -138,7 +190,7 @@ router.post(
       const rewardId = req.params.rewardId;
       const [reward] = (await getConnection().query(
         `
-        select * from reward where id = $1;
+        select * from reward where id = $1 and "deletedAt" is null;
         `,
         [rewardId]
       )) as [Reward];
@@ -168,65 +220,12 @@ router.post(
         status: reward.type === "link" ? "successful" : "pending",
       }).save();
 
-      if (reward.type === "other") {
-        const dm = await DirectMessage.create({
-          senderId: req.userId,
-          recipientId: reward.userId,
-          claimedRewardId: claimedReward.id,
-        }).save();
-        return res.json(dm);
-      }
-
       if (reward.type === "link") {
         return res.json({ link: reward.link });
       }
 
-      if (reward.type === "shoutout") {
-        const key = `shoutout:${reward.userId}:${req.userId}`;
-        const shoutout = await redis.get(key);
-        if (shoutout) {
-          await redis.incr(key);
-        } else {
-          await redis.set(key, 1);
-        }
-      }
-
+      await pushToShoutoutQueue(req.userId!, reward.userId);
       res.json(claimedReward);
-    } catch (error) {
-      next(createHttpError(500, error));
-    }
-  }
-);
-
-router.post(
-  "/close/:id",
-  limiter({ max: 100 }),
-  isAuth(true),
-  async (req: Request<{ id: string }>, res, next) => {
-    const { status } = req.body;
-    if (
-      !(
-        status === "declined" ||
-        status === "successful" ||
-        status === "pending"
-      )
-    ) {
-      return next(createHttpError(400, "Invalid status"));
-    }
-    try {
-      const dm = await DirectMessage.findOne(req.params.id);
-      if (!dm) {
-        return next(createHttpError(404, "DM doesn't exist"));
-      }
-      if (dm.recipientId !== req.userId) {
-        return next(
-          createHttpError(403, "You don't have permissions to set the status")
-        );
-      }
-      dm.open = status === "pending";
-      await dm.save();
-      await ClaimedReward.update(dm.claimedRewardId, { status });
-      res.json(dm);
     } catch (error) {
       next(createHttpError(500, error));
     }

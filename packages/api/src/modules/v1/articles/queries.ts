@@ -5,7 +5,7 @@ import { Article } from "../../../entities/Article";
 import { Journal } from "../../../entities/Journal";
 import { Like } from "../../../entities/Like";
 import { UserPoints } from "../../../entities/UserPoints";
-import { addToLastOpened, getLastOpened } from "../../../lib/lastOpened";
+import { addToLastOpened, getLastOpened } from "./lastOpened";
 import { limiter } from "../../../lib/rateLimit";
 import { isAuth } from "../auth/isAuth";
 
@@ -167,11 +167,6 @@ articlesQueriesRouter.get(
       });
 
       data = data.sort((a, b) => ids.indexOf(a.id) - ids.indexOf(b.id));
-      console.log(
-        data.map((x) => x.id),
-        ids
-      );
-
       const hasMore = data.length === take;
       res.json({
         data: hasMore ? data.slice(0, -1) : data,

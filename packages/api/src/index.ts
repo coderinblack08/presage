@@ -3,7 +3,6 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import express from "express";
 import helmet from "helmet";
-import http from "http";
 import morgan from "morgan";
 import passport from "passport";
 import { join } from "path";
@@ -42,27 +41,9 @@ async function main() {
   app.use(passport.initialize());
   passport.serializeUser((user: any, done) => done(null, user.accessToken));
 
-  app.use("/v1", v1);
   app.use("/", v1);
-
-  const server = http.createServer(app);
-  // const io = new Server(server, { cors: corsConfig });
-  // io.use((socket, next) => {
-  //   const error = new Error("not authorized");
-  //   const cookies = socket.request.headers.cookie;
-  //   if (!cookies) return next(error);
-  //   const token = cookie.parse(cookies)["jid"];
-  //   if (!token) return next(error);
-  //   try {
-  //     const payload: any = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET!);
-  //     (socket as any).userId = payload.userId;
-  //     return next();
-  //   } catch {}
-
-  //   return next(error);
-  // });
-  // createMessageSocket(io);
-  server.listen(4000, () => console.log("🚀 Server started on port 4000"));
+  app.use("/v1", v1);
+  app.listen(4000, () => console.log("🚀 Server started on port 4000"));
 }
 
 main().catch(console.error);

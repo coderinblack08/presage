@@ -69,7 +69,7 @@ export const DraftSidebar: React.FC<DraftSidebarProps> = ({}) => {
           {rewards?.length === 0 ? (
             <p className="text-gray-500 mt-1 text-sm">No rewards found</p>
           ) : null}
-          <ul className="space-y-3 mt-3">
+          <ul className="mt-2">
             {rewards?.map((reward) => (
               <li key={reward.id}>
                 <UpdateRewardModal reward={reward} />

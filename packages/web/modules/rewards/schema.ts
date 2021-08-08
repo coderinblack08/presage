@@ -7,11 +7,7 @@ export const rewardSchema = yup.object().shape({
     .string()
     .url("link must be a valid url, don't forget http!")
     .nullable(),
-  type: yup
-    .string()
-    .oneOf(["shoutout", "link", "other"])
-    .default("other")
-    .required(),
+  type: yup.string().oneOf(["shoutout", "link"]).required(),
   points: yup
     .number()
     .typeError("points must be a number")

@@ -11,6 +11,7 @@ import {
   BaseEntity,
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   ManyToOne,
   OneToMany,
@@ -20,7 +21,8 @@ import {
 import { ClaimedReward } from "./ClaimedReward";
 import { User } from "./User";
 
-export type RewardType = "shoutout" | "link" | "other";
+export type RewardType = "shoutout" | "link";
+const rewardEnum = ["shoutout", "link"];
 
 @Entity()
 export class Reward extends BaseEntity {
@@ -40,8 +42,8 @@ export class Reward extends BaseEntity {
   @Column("text", { nullable: true, select: false })
   link: string | null;
 
-  @IsIn(["shoutout", "link", "other"])
-  @Column({ type: "enum", enum: ["shoutout", "link", "other"] })
+  @IsIn(rewardEnum)
+  @Column({ type: "enum", enum: rewardEnum })
   type: RewardType;
 
   @IsInt()
@@ -67,4 +69,7 @@ export class Reward extends BaseEntity {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @DeleteDateColumn()
+  deletedAt: Date | null;
 }

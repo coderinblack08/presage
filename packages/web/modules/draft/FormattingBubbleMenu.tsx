@@ -11,7 +11,7 @@ import { Button } from "../../components/Button";
 import { Select } from "../../components/Select";
 
 interface BubbleMenuProps {
-  editor: Editor;
+  editor: any;
 }
 
 export const FormattingBubbleMenu: React.FC<BubbleMenuProps> = ({ editor }) => {
@@ -49,6 +49,7 @@ export const FormattingBubbleMenu: React.FC<BubbleMenuProps> = ({ editor }) => {
       </div>
       <div className="flex items-center space-x-2 px-4 py-1.5">
         <Button
+          type="button"
           onClick={() => editor.chain().focus().toggleBold().run()}
           color={editor.isActive("bold") ? "gray" : "transparent"}
           size="small"
@@ -56,6 +57,7 @@ export const FormattingBubbleMenu: React.FC<BubbleMenuProps> = ({ editor }) => {
           noAnimate
         />
         <Button
+          type="button"
           onClick={() => editor.chain().focus().toggleItalic().run()}
           color={editor.isActive("italic") ? "gray" : "transparent"}
           size="small"
@@ -63,6 +65,7 @@ export const FormattingBubbleMenu: React.FC<BubbleMenuProps> = ({ editor }) => {
           noAnimate
         />
         <Button
+          type="button"
           onClick={() => editor.chain().focus().toggleUnderline().run()}
           color={editor.isActive("underline") ? "gray" : "transparent"}
           size="small"
@@ -70,6 +73,7 @@ export const FormattingBubbleMenu: React.FC<BubbleMenuProps> = ({ editor }) => {
           noAnimate
         />
         <Button
+          type="button"
           onClick={() => editor.chain().focus().toggleStrike().run()}
           color={editor.isActive("strike") ? "gray" : "transparent"}
           size="small"
@@ -77,17 +81,20 @@ export const FormattingBubbleMenu: React.FC<BubbleMenuProps> = ({ editor }) => {
           noAnimate
         />
         <Button
+          type="button"
           onClick={() => {
             if (editor.isActive("link")) {
               editor.chain().focus().unsetLink().run();
             } else {
               const url = window.prompt("URL");
-              editor
-                .chain()
-                .focus()
-                .extendMarkRange("link")
-                .setLink({ href: url })
-                .run();
+              if (url !== "") {
+                editor
+                  .chain()
+                  .focus()
+                  .extendMarkRange("link")
+                  .setLink({ href: url })
+                  .run();
+              }
             }
           }}
           color={editor.isActive("link") ? "gray" : "transparent"}

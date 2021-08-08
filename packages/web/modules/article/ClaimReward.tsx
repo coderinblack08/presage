@@ -10,7 +10,6 @@ import { Button } from "../../components/Button";
 import { CopyLink } from "../../components/CopyLink";
 import { Modal } from "../../components/Modal";
 import { ModalHeader } from "../../components/ModalHeader";
-import { BASE_URL } from "../../lib/constants";
 import { mutator } from "../../lib/mutator";
 import { Reward, User, UserPoints } from "../../lib/types";
 
@@ -95,16 +94,6 @@ export const ClaimReward: React.FC<ClaimRewardProps> = ({ user, opener }) => {
                   </p>
                 </>
               ) : null}
-              {selected?.type === "other" ? (
-                <p className="text-gray-600 mt-1">
-                  You selected the reward {'"' + selected?.name + '"'}.{" "}
-                  <Link href={link}>
-                    <a className="text-gray-900 hover:underline font-semibold">
-                      Message {user.displayName} to claim the reward.
-                    </a>
-                  </Link>
-                </p>
-              ) : null}
               {selected?.type === "shoutout" ? (
                 <>
                   <p className="text-gray-600 mt-1">
@@ -149,9 +138,6 @@ export const ClaimReward: React.FC<ClaimRewardProps> = ({ user, opener }) => {
                             onSuccess: (data) => {
                               if ("link" in data) {
                                 setLink(data.link);
-                              }
-                              if (selected.type === "other") {
-                                setLink(`/chat/${data.id}`);
                               }
                               queryClient.refetchQueries("/rewards/claimed");
                               queryClient.refetchQueries(
@@ -249,7 +235,7 @@ export const ClaimReward: React.FC<ClaimRewardProps> = ({ user, opener }) => {
                   </div>
                 </RadioGroup>
               ) : (
-                <div className="mt-4 text-gray-500 font-normal">
+                <div className="mt-6 text-gray-500 font-normal border-t border-gray-300 pt-4">
                   No rewards found
                 </div>
               )}

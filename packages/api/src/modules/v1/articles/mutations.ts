@@ -15,7 +15,7 @@ import { Article } from "../../../entities/Article";
 import { Journal } from "../../../entities/Journal";
 import { Like } from "../../../entities/Like";
 import { Tag } from "../../../entities/Tag";
-import { addToLastOpened, removeFromLastOpened } from "../../../lib/lastOpened";
+import { addToLastOpened, removeFromLastOpened } from "./lastOpened";
 import { limiter } from "../../../lib/rateLimit";
 import { isAuth } from "../auth/isAuth";
 

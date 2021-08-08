@@ -8,21 +8,21 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { DirectMessage } from "./DirectMessage";
 import { Reward } from "./Reward";
 import { User } from "./User";
 
-type ClaimStatus = "pending" | "declined" | "successful";
+type ClaimStatus = "pending" | "declined" | "successful" | "canceled";
+const claimEnum = ["pending", "declined", "successful", "canceled"];
 
 @Entity()
 export class ClaimedReward extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @IsIn(["pending", "declined", "successful"])
+  @IsIn(claimEnum)
   @Column({
     type: "enum",
-    enum: ["pending", "declined", "successful"],
+    enum: claimEnum,
     default: "pending",
   })
   status: ClaimStatus;
@@ -36,14 +36,11 @@ export class ClaimedReward extends BaseEntity {
   @Column()
   userId: string;
 
-  @ManyToOne(() => Reward, (reward) => reward.claims, { onDelete: "CASCADE" })
+  @ManyToOne(() => Reward, (reward) => reward.claims)
   reward: Reward;
 
   @ManyToOne(() => User, (user) => user.claims, { onDelete: "CASCADE" })
   user: User;
-
-  @OneToOne(() => DirectMessage, (dm) => dm.claimedReward)
-  directMessage: DirectMessage;
 
   @CreateDateColumn()
   createdAt: Date;

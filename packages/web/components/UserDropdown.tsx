@@ -76,16 +76,6 @@ export const UserDropdown: React.FC<UserDropdownProps> = ({
           >
             Profile
           </MenuItem>
-          <MenuItem
-            onClick={() => router.push("/messages")}
-            icon={
-              <div className="scale-80">
-                <Message set="bulk" />
-              </div>
-            }
-          >
-            Messages
-          </MenuItem>
           {showPublish ? (
             <MenuItem
               onClick={() => router.push("/publish")}
