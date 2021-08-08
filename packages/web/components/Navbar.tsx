@@ -67,6 +67,7 @@ export const Navbar: React.FC<NavbarProps> = () => {
               Explore
             </MenuItem>
             <MenuItem
+              onClick={() => router.push("/pricing")}
               icon={
                 <div className="scale-80">
                   <Wallet set="bulk" />
