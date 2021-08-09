@@ -114,9 +114,7 @@ if (isDev()) {
         user: { id: user.id },
         name: "Blog",
         description: `${user.displayName}’s personal journal dedicated to blogging`,
-        picture: `http://localhost:3000/profile-picture/${
-          pictures[Math.floor(Math.random() * pictures.length)]
-        }.jpeg`,
+        picture: getRandomPicture(),
       }).save();
       const accessToken = createToken(user);
       res.cookie("jid", accessToken, options);

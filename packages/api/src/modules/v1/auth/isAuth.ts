@@ -1,5 +1,4 @@
 import { RequestHandler } from "express";
-import createError from "http-errors";
 import jwt from "jsonwebtoken";
 
 export const isAuth: (

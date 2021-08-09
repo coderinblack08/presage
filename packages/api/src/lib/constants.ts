@@ -1,4 +1,5 @@
 export const isDev = () => process.env.NODE_ENV !== "production";
+export const isTest = () => process.env.NODE_ENV === "test";
 export const CLIENT_URL = isDev()
   ? "http://localhost:3000"
   : "https://joinpresage.com";
