@@ -1,41 +1,55 @@
-import { PassportStrategy } from "@nestjs/passport";
 import { Injectable } from "@nestjs/common";
+import { JwtService } from "@nestjs/jwt";
+import { PassportStrategy } from "@nestjs/passport";
+import { ConfigService } from "@nestjs/config";
+import { Profile } from "passport";
 import {
   Strategy,
   StrategyOptions,
   VerifyCallback,
 } from "passport-google-oauth2";
-import { Profile } from "passport";
-import { ConfigService } from "nestjs-config";
+import { User } from "../user/user.entity";
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, "google") {
-  constructor(private readonly config: ConfigService) {
+  constructor(private config: ConfigService, private jwtService: JwtService) {
     super({
-      clientID: config.get("auth.clientID"),
-      clientSecret: config.get("auth.clientSecret"),
+      clientID: config.get("google.clientID"),
+      clientSecret: config.get("google.clientSecret"),
       callbackURL: "http://localhost:4000/auth/google/callback",
-      scope: [
-        "https://www.googleapis.com/auth/userinfo.profile",
-        "https://www.googleapis.com/auth/userinfo.email",
-      ],
+      scope: ["profile", "email"],
     } as StrategyOptions);
   }
+
   async validate(
-    accessToken: string,
     _: string,
+    __: string,
     profile: Profile,
     done: VerifyCallback
   ): Promise<any> {
-    const { name, emails, photos } = profile;
-    const user = {
-      email: emails[0].value,
-      firstName: name.givenName,
-      lastName: name.familyName,
-      picture: photos[0].value,
-      accessToken,
-    };
+    const { id: googleId, displayName, emails, photos } = profile;
+    const email = emails ? emails[0].value : null;
+    const photo = photos ? photos[0].value : null;
+
+    let user = await User.findOne({ where: { googleId } });
+    if (!user) {
+      user = User.create({
+        email,
+        username: "",
+        profilePicture: photo,
+        displayName,
+        googleId,
+      });
+      await user.save();
+    }
     console.log(user);
     done(null, user);
+  }
+
+  async login(user: any) {
+    const payload = { id: user.id };
+    return {
+      accessToken: this.jwtService.sign(payload),
+    };
   }
 }

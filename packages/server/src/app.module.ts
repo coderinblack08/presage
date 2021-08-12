@@ -1,27 +1,22 @@
 import { Module } from "@nestjs/common";
+import { ConfigModule } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { ConfigModule } from "nestjs-config";
 import path from "path";
-import { getConnectionOptions } from "typeorm";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { AuthModule } from "./auth/auth.module";
-import { UserModule } from './user/user.module';
+import * as connectionOptions from "./ormconfig";
+import { UserModule } from "./user/user.module";
+import configuration from "./config/configuration";
 
 @Module({
   imports: [
-    ConfigModule.load(
-      path.resolve(__dirname, "config", "**/!(*.d).config.{ts,js}"),
-      {
-        modifyConfigName: (name) => name.replace(".config", ""),
-      }
-    ),
-    TypeOrmModule.forRootAsync({
-      useFactory: async () => {
-        const options = await getConnectionOptions(process.env.NODE_ENV);
-        return options;
-      },
+    ConfigModule.forRoot({
+      envFilePath: path.join(__dirname, "../.env"),
+      load: [configuration],
+      isGlobal: true,
     }),
+    TypeOrmModule.forRoot(connectionOptions),
     AuthModule,
     UserModule,
   ],
