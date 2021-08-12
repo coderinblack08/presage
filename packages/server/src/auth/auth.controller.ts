@@ -5,6 +5,7 @@ import { User } from "../user/user.entity";
 import { GoogleStrategy } from "./google.strategy";
 import { JwtAuthGuard } from "./jwt-auth.guard";
 import { Public } from "./public.decorator";
+import { UserId } from "./user.param";
 
 @Controller("auth")
 export class AuthController {
@@ -20,9 +21,8 @@ export class AuthController {
   @Public()
   @UseGuards(JwtAuthGuard)
   @Get("me")
-  async test(@Req() req: Request) {
-    console.log({ user: req.user });
-    return req.user ? User.findOne(req.user?.id) : null;
+  async test(@UserId() userId: string) {
+    return userId ? User.findOne(userId) : null;
   }
 
   @UseGuards(AuthGuard("google"))
