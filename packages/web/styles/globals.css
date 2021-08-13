@@ -7,6 +7,22 @@
 @layer base {
   :root {
     font-size: 14px;
-    color: theme("colors.gray.900");
+  }
+
+  body,
+  html,
+  #__next {
+    @apply antialiased text-gray-900;
+    scroll-behavior: smooth;
+  }
+
+  p,
+  span:not(h1 > span),
+  div,
+  li,
+  a,
+  button {
+    font-size: 1rem;
+    font-weight: 500;
   }
 }
