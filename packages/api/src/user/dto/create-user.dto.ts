@@ -16,7 +16,7 @@ export class CreateUserDto {
 
   @IsOptional()
   @IsEmail()
-  readonly email: string;
+  readonly email?: string | null;
 
   @IsNotEmpty()
   @Length(1, 50)
@@ -24,11 +24,11 @@ export class CreateUserDto {
 
   @IsOptional()
   @Length(1, 500)
-  readonly bio: string | null;
+  readonly bio?: string | null;
 
   @IsUrl()
-  readonly profilePicture: string | null;
+  readonly profilePicture?: string | null;
 
   @IsString()
-  readonly googleId: string | null;
+  readonly googleId?: string | null;
 }

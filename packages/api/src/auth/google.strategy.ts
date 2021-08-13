@@ -1,18 +1,22 @@
 import { Injectable } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
 import { PassportStrategy } from "@nestjs/passport";
-import { ConfigService } from "@nestjs/config";
 import { Profile } from "passport";
 import {
   Strategy,
   StrategyOptions,
   VerifyCallback,
 } from "passport-google-oauth2";
-import { User } from "../user/user.entity";
+import { UserService } from "../user/user.service";
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, "google") {
-  constructor(private config: ConfigService, private jwtService: JwtService) {
+  constructor(
+    private config: ConfigService,
+    private jwtService: JwtService,
+    private userService: UserService
+  ) {
     super({
       clientID: config.get("google.clientID"),
       clientSecret: config.get("google.clientSecret"),
@@ -27,23 +31,28 @@ export class GoogleStrategy extends PassportStrategy(Strategy, "google") {
     profile: Profile,
     done: VerifyCallback
   ): Promise<any> {
-    const { id: googleId, displayName, emails, photos } = profile;
-    const email = emails ? emails[0].value : null;
-    const photo = photos ? photos[0].value : null;
+    try {
+      const { id: googleId, displayName, emails, photos } = profile;
+      const email = emails ? emails[0].value : null;
+      const photo = photos ? photos[0].value : null;
 
-    let user = await User.findOne({ where: { googleId } });
-    if (!user) {
-      user = User.create({
-        email,
-        username: "",
-        profilePicture: photo,
-        displayName,
-        googleId,
-      });
-      await user.save();
+      const user = await this.userService.findOne({ where: { googleId } });
+      if (!user) {
+        const username = this.userService.generateUsername();
+        this.userService.create({
+          username,
+          email,
+          displayName,
+          profilePicture: photo,
+          googleId,
+        });
+      }
+
+      console.log(user);
+      done(null, user);
+    } catch (error) {
+      done(error, undefined);
     }
-    console.log(user);
-    done(null, user);
   }
 
   async login(user: any) {

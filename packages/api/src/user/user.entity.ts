@@ -1,10 +1,9 @@
-import { IsEmail } from "class-validator";
 import {
-  Entity,
   BaseEntity,
-  PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
 
@@ -13,7 +12,6 @@ export class User extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @IsEmail()
   @Column("text", { nullable: true, select: false })
   email: string | null;
 
