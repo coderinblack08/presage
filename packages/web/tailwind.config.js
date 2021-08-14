@@ -9,6 +9,20 @@ module.exports = {
   mode: "jit",
   darkMode: false, // or 'media' or 'class'
   theme: {
+    spinner: (theme) => ({
+      default: {
+        color: theme("colors.gray.900"),
+        size: "1em",
+        border: "2px",
+        speed: "500ms",
+      },
+      light: {
+        color: theme("colors.gray.100"),
+        size: "1em",
+        border: "2px",
+        speed: "500ms",
+      },
+    }),
     fontFamily: {
       sans: [
         "Inter",
@@ -43,6 +57,10 @@ module.exports = {
     extend: {},
   },
   plugins: [
+    require("tailwindcss-spinner")({
+      className: "spinner",
+      themeKey: "spinner",
+    }),
     require("@tailwindcss/forms")({
       strategy: "class",
     }),

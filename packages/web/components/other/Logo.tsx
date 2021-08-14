@@ -11,7 +11,7 @@ export const Logo: React.FC<LogoProps> = ({
   small = false,
   iconOnly = false,
 }) => {
-  const width = small ? 30 : 40;
+  const width = small ? 32 : 40;
 
   return (
     <div className="flex items-center">

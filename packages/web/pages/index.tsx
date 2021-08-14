@@ -1,70 +1,75 @@
 import type { NextPage } from "next";
-import Image from "next/image";
-import { Navbar } from "../components/navigation/Navbar";
-import { ListCheck } from "../modules/landing-page/ListCheck";
-import globe from "../public/static/globe.png";
+import { AiFillGithub } from "react-icons/ai";
+import { FeatureCard } from "../modules/landing-page/FeatureCard";
+import { HeroSection } from "../modules/landing-page/HeroSection";
 
 const Home: NextPage = () => {
   return (
-    <header className="relative w-screen h-[36rem] md:h-screen max-h-[72rem] bg-gray-100">
-      <Navbar />
-      <header className="relative z-10 flex flex-col items-center max-w-3xl mx-auto py-8 md:py-16 px-5">
-        <h1 className="font-display font-bold text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-center !leading-snug">
-          <span className="text-gray-500">Earn from publishing</span> <br />
-          Reward your top readers
-        </h1>
-        <p className="text-gray-500 text-center mt-4 md:mt-8 !leading-loose text-sm sm:text-base md:text-[1.1rem] max-w-xl md:max-w-2xl">
-          <strong className="text-gray-600">Quit Medium & Substack</strong> and
-          publish on Presage. Brainstrom, draft, and revise without
-          distractions. Reward your readers for refering your articles.
-        </p>
-        <div className="flex items-center space-x-3 max-w-xl w-full mt-6">
-          <input
-            type="text"
-            placeholder="Enter your email..."
-            className="w-full px-5 py-2.5 rounded-lg shadow"
-          />
-          <button className="px-8 py-2.5 shadow rounded-lg bg-gray-900 text-white font-bold flex-shrink-0">
-            Join Waitlist
-          </button>
-        </div>
-        <ul className="flex items-center space-x-10 mt-6">
-          <li className="flex items-center space-x-2">
-            <ListCheck />
-            <span className="text-gray-600 font-semibold text-sm">
-              Generous Free Plan
-            </span>
-          </li>
-          <li className="flex items-center space-x-2">
-            <ListCheck />
-            <span className="text-gray-600 font-semibold text-sm">
-              Grow with Referrals
-            </span>
-          </li>
-          <li className="flex items-center space-x-2">
-            <ListCheck />
-            <span className="text-gray-600 font-semibold text-sm">
-              Open Source
-            </span>
-          </li>
-        </ul>
-      </header>
-      <div
-        className="pt-32 w-screen flex items-center absolute z-0 bottom-0"
-        style={{
-          background: "linear-gradient(180deg, #F3F4F6 0%, #BABEC6 100%)",
-        }}
-      >
-        <div className="px-5 md:px-16 lg:px-36 mx-auto">
-          <Image
-            src={globe}
-            alt="Paper airplanes orbiting globe"
-            quality={100}
-            priority
-          />
+    <div className="bg-gray-100">
+      <HeroSection />
+      <div className="bg-gray-50 border-b overflow-auto">
+        <div className="max-w-7xl mx-auto grid grid-cols-3 gap-12 divide-x divide-dashed border-l border-r border-dashed">
+          <div className="flex items-center space-x-5 p-8">
+            <div className="font-display text-4xl font-bold">2.8x</div>
+            <p className="text-gray-500">
+              Increased <br /> Revenue
+            </p>
+          </div>
+          <div className="flex items-center space-x-5 p-8">
+            <div className="font-display text-4xl font-bold">78%</div>
+            <p className="text-gray-500">
+              Larger <br /> Audience
+            </p>
+          </div>
+          <div className="flex items-center space-x-5 p-8">
+            <div className="font-display text-4xl font-bold">56%</div>
+            <p className="text-gray-500">
+              More <br /> Engagement
+            </p>
+          </div>
         </div>
       </div>
-    </header>
+      <main>
+        <div className="max-w-7xl mx-auto py-20 px-8 border-l border-r border-dashed">
+          <h2 className="font-bold text-3xl md:text-4xl text-gray-900 font-display !leading-snug">
+            Sounds Great,
+            <br />
+            <span className="text-gray-600">But How Does it Work?</span>
+          </h2>
+          <p className="text-gray-500 mt-5 max-w-2xl">
+            Our goal is to support independent journalism for everyone without
+            prejudice. We also believe in keeping our code open-source for all
+            to see (a star never hurts).
+          </p>
+          <div className="flex items-center space-x-2 mt-4">
+            <AiFillGithub className="w-6 h-6 text-gray-600" />
+            <div className="text-gray-600 font-semibold">
+              coderinblack / <span className="text-gray-600">presage</span>
+            </div>
+          </div>
+        </div>
+        <div className="border-t border-dashed">
+          <div className="max-w-7xl mx-auto border-l border-r border-dashed">
+            <div className="grid grid-cols-1 md:grid-cols-2 divide-dashed divide-y md:divide-x">
+              <FeatureCard
+                color="purple"
+                title="Reward Top Readers"
+                description="Incentive readers to refer with rewards. Setup rewards like shoutouts, free swag, and more with rewards."
+                time="30 seconds"
+                category="Growth"
+              />
+              <FeatureCard
+                color="pink"
+                title="Earn Revenue from Writing"
+                description="Readers who subscribe to your content pay a monthly or yearly fee to access paywalled content."
+                time="1 minute"
+                category="Revenue"
+              />
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
   );
 };
 

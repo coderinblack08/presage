@@ -1,14 +1,34 @@
 import React from "react";
 import { AiOutlineInstagram, AiOutlineTwitter } from "react-icons/ai";
-import { Button } from "../Button";
+import { Button } from "../primatives/Button";
 import { Logo } from "../other/Logo";
+import { useMediaQuery } from "react-responsive";
 
 interface NavbarProps {}
 
 export const Navbar: React.FC<NavbarProps> = ({}) => {
+  const isTabletOrMobile = useMediaQuery({ query: "(max-width: 768px)" });
+
   return (
-    <nav className="relative z-20 flex items-center justify-between max-w-7xl mx-auto px-5 py-6 md:py-8">
-      <Logo small />
+    <nav className="relative z-20 flex items-center justify-between max-w-7xl mx-auto px-5 lg:px-10 py-6">
+      <Logo small={isTabletOrMobile} />
+      <button className="block md:hidden">
+        <svg
+          className="w-6 h-6"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M4 6H20M8 12H20M4 18H20"
+            stroke="#111827"
+            strokeWidth="2"
+            strokeMiterlimit="10"
+            strokeLinecap="square"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </button>
       <div className="hidden md:flex items-center space-x-8">
         <ul className="flex items-center space-x-10">
           <li>
@@ -26,8 +46,8 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
           <a href="https://twitter.com/joinpresage">
             <AiOutlineTwitter className="w-6 h-6" />
           </a>
-          <Button>Login</Button>
         </div>
+        <Button rounded>Login</Button>
       </div>
     </nav>
   );
