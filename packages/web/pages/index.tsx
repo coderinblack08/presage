@@ -9,7 +9,7 @@ const Home: NextPage = () => {
     <div className="bg-gray-100">
       <HeroSection />
       <div className="bg-gray-50 overflow-auto shadow-sm px-5">
-        <div className="max-w-7xl mx-5 sm:mx-auto grid grid-cols-2 sm:grid-cols-3 grid-border sm:divide-x sm:divide-dashed sm:border-l sm:border-r sm:border-dashed">
+        <div className="max-w-7xl mx-5 sm:mx-auto grid grid-cols-2 sm:grid-cols-3 grid-border sm:divide-x sm:divide-dashed border-l border-r border-dashed">
           <Statistic statistic="2.8x" description="Increased Revenue" />
           <Statistic statistic="78%" description="Larger Audience" />
           <Statistic statistic="56%" description="More Engagement" />

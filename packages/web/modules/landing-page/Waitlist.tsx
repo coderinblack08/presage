@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
-import { Button } from "../../components/primatives/Button";
-import { Input } from "../../components/primatives/Input";
+import { Button } from "../../components/button";
+import { Input } from "../../components/input/Input";
 
 interface WaitlistProps {}
 

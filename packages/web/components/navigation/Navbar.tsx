@@ -1,12 +1,14 @@
 import React from "react";
-import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { AiOutlineInstagram, AiOutlineTwitter } from "react-icons/ai";
-import { Button } from "../primatives/Button";
-import { Logo } from "../other/Logo";
 import { useMediaQuery } from "react-responsive";
-import { Dropdown } from "../primatives/dropdown";
-import { DropdownItem } from "../primatives/dropdown/DropdownItem";
-import { DropdownDivider } from "../primatives/dropdown/DropdownDivider";
+import { Button } from "../button";
+import {
+  Dropdown,
+  DropdownDivider,
+  DropdownItem,
+  DropdownTrigger,
+} from "../dropdown";
+import { Logo } from "./Logo";
 
 interface NavbarProps {}
 
@@ -17,25 +19,27 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
     <nav className="relative z-20 flex items-center justify-between max-w-7xl mx-auto px-5 lg:px-10 py-6">
       <Logo small={isTabletOrMobile} />
       <Dropdown
-        wrapperClassName="block md:hidden"
+        className="block md:hidden"
         trigger={
-          <DropdownMenu.Trigger>
-            <svg
-              className="w-6 h-6"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M4 6H20M8 12H20M4 18H20"
-                stroke="#111827"
-                strokeWidth="2"
-                strokeMiterlimit="10"
-                strokeLinecap="square"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </DropdownMenu.Trigger>
+          <DropdownTrigger className="block md:hidden">
+            <Button size="none" color="transparent" noAnimate>
+              <svg
+                className="w-6 h-6"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M4 6H20M8 12H20M4 18H20"
+                  stroke="#111827"
+                  strokeWidth="2"
+                  strokeMiterlimit="10"
+                  strokeLinecap="square"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </Button>
+          </DropdownTrigger>
         }
       >
         <DropdownItem>Explore</DropdownItem>
