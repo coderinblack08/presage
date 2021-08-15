@@ -79,5 +79,9 @@ export const DropdownTrigger: React.FC<DropdownTriggerProps> = ({
   className,
   children,
 }) => {
-  return <DropdownMenu.Trigger as="div">{children}</DropdownMenu.Trigger>;
+  return (
+    <DropdownMenu.Trigger className={className} as="div">
+      {children}
+    </DropdownMenu.Trigger>
+  );
 };

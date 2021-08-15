@@ -36,7 +36,7 @@
     font-weight: 500;
   }
 
-  @media (max-width: 640px) {
+  @media (max-width: 639px) {
     .grid-border > * {
       border-left: 1px dashed theme("colors.gray.200");
     }
