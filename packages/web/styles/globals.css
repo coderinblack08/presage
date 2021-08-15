@@ -17,6 +17,16 @@
     scroll-behavior: smooth;
   }
 
+  html {
+    overflow: hidden;
+    height: 100%;
+  }
+
+  body {
+    height: 100%;
+    overflow: auto;
+  }
+
   p,
   div,
   li,
@@ -24,5 +34,19 @@
   button {
     font-size: 1rem;
     font-weight: 500;
+  }
+
+  @media (max-width: 640px) {
+    .grid-border > * {
+      border-left: 1px dashed theme("colors.gray.200");
+    }
+
+    .grid-border > *:not(:nth-child(2n)) {
+      border-left: none;
+    }
+
+    .grid-border > *:not(:nth-child(-n + 2)) {
+      border-top: 1px dashed theme("colors.gray.200");
+    }
   }
 }
