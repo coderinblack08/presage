@@ -11,7 +11,10 @@
     "build-storybook": "build-storybook"
   },
   "dependencies": {
+    "@radix-ui/react-dropdown-menu": "^0.0.23",
+    "@radix-ui/react-id": "^0.0.6",
     "@svgr/webpack": "^5.5.0",
+    "framer-motion": "^4.1.17",
     "next": "11.1.0",
     "next-seo": "^4.26.0",
     "react": "17.0.2",

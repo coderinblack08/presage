@@ -9,7 +9,7 @@ const connectionOptions: ConnectionOptions = {
   port: 5432,
   username: "postgres",
   password: "",
-  database: isTest ? "presagedb-test" : "presagedb",
+  database: isTest ? "presage-test" : "presage",
   synchronize: true,
   logging: !isTest,
   migrationsRun: true,

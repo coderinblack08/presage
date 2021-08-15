@@ -11,7 +11,7 @@ export const Logo: React.FC<LogoProps> = ({
   small = false,
   iconOnly = false,
 }) => {
-  const width = small ? 32 : 40;
+  const width = small ? 32 : 36;
 
   return (
     <div className="flex items-center">
@@ -24,8 +24,8 @@ export const Logo: React.FC<LogoProps> = ({
       {iconOnly || (
         <div
           className={`text-black font-display font-bold ${
-            small ? "text-xl ml-3" : "text-2xl ml-4"
-          } -mt-1`}
+            small ? "text-xl" : "text-2xl"
+          } -mt-1 ml-3`}
         >
           presage
         </div>

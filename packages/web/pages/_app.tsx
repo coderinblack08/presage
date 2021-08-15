@@ -1,6 +1,8 @@
 import "../styles/globals.css";
+import React from "react";
 import { DefaultSeo } from "next-seo";
 import type { AppProps } from "next/app";
+import { IdProvider } from "@radix-ui/react-id";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -34,7 +36,9 @@ function MyApp({ Component, pageProps }: AppProps) {
           title: "Presage",
         }}
       />
-      <Component {...pageProps} />
+      <IdProvider>
+        <Component {...pageProps} />
+      </IdProvider>
     </>
   );
 }
