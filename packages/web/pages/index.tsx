@@ -1,4 +1,8 @@
 import type { NextPage } from "next";
+import rat from "../public/static/animals/rat.png";
+import rabbit from "../public/static/animals/rabbit.png";
+import bird from "../public/static/animals/bird.png";
+import walrus from "../public/static/animals/walrus.png";
 import { AiFillGithub } from "react-icons/ai";
 import { FeatureCard } from "../modules/landing-page/FeatureCard";
 import { HeroSection } from "../modules/landing-page/HeroSection";
@@ -9,7 +13,7 @@ const Home: NextPage = () => {
     <div className="bg-gray-100">
       <HeroSection />
       <div className="bg-gray-50 overflow-auto shadow-sm px-5">
-        <div className="max-w-7xl sm:mx-auto grid grid-cols-2 sm:grid-cols-3 grid-border sm:divide-x sm:divide-dashed border-l border-r border-dashed">
+        <div className="max-w-7xl sm:mx-auto grid grid-cols-2 sm:grid-cols-3 not-sm-grid-border sm:divide-x sm:divide-dashed border-l border-r border-dashed">
           <Statistic statistic="2.8x" description="Increased Revenue" />
           <Statistic statistic="78%" description="Larger Audience" />
           <Statistic statistic="56%" description="More Engagement" />
@@ -37,15 +41,16 @@ const Home: NextPage = () => {
             >
               <AiFillGithub className="w-6 h-6 text-gray-600" />
               <div className="text-gray-600 font-semibold">
-                coderinblack / <span className="text-gray-600">presage</span>
+                coderinblack / <span className="text-gray-900">presage</span>
               </div>
             </a>
           </div>
         </div>
         <div className="border-t border-dashed px-5">
           <div className="max-w-7xl mx-auto border-l border-r border-dashed">
-            <div className="grid grid-cols-1 md:grid-cols-2 divide-dashed divide-y md:divide-y-0 md:divide-x">
+            <div className="grid grid-cols-1 md:grid-cols-2 feature-grid">
               <FeatureCard
+                animal={rabbit}
                 color="purple"
                 title="Reward Top Readers"
                 description="Incentive readers to refer with rewards. Setup rewards like shoutouts, free swag, and more with rewards."
@@ -53,10 +58,28 @@ const Home: NextPage = () => {
                 category="Growth"
               />
               <FeatureCard
+                animal={bird}
                 color="pink"
                 title="Earn Revenue from Writing"
-                description="Readers who subscribe to your content pay a monthly or yearly fee to access paywalled content."
+                description="Readers who subscribe to your content pay a monthly or yearly fee to access pay-walled content."
                 time="1 minute"
+                category="Revenue"
+              />
+              <FeatureCard
+                animal={walrus}
+                color="red"
+                title="Sponsor Marketplace"
+                description="Get sponsored and paid for the content you create. Match with sponsors on Presage’s marketplace."
+                time="1 minute"
+                category="Revenue"
+                wip
+              />
+              <FeatureCard
+                animal={rat}
+                color="yellow"
+                title="Post Anywhere with our API"
+                description="Use our public API to host your content on your own website while having access to the vast variety of features Presage offers."
+                time="2 minute"
                 category="Revenue"
               />
             </div>
