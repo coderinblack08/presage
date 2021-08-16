@@ -1,12 +1,12 @@
 import React from "react";
-import { useMediaQuery } from "react-responsive";
-import { Navbar } from "./Navbar";
+import { useScreen } from "../../lib/useScreen";
 import { ListCheck } from "../../modules/landing-page/ListCheck";
 import { Waitlist } from "../../modules/landing-page/Waitlist";
+import { Navbar } from "./Navbar";
 interface HeroSectionProps {}
 
 export const HeroSection: React.FC<HeroSectionProps> = ({}) => {
-  const isTabletOrMobile = useMediaQuery({ query: "(max-width: 640px)" });
+  const { isTablet } = useScreen();
 
   return (
     <header className="relative bg-gray-100">
@@ -26,13 +26,13 @@ export const HeroSection: React.FC<HeroSectionProps> = ({}) => {
           <li className="flex items-center space-x-2 flex-shrink-0">
             <ListCheck />
             <span className="text-gray-600 font-semibold text-sm">
-              {isTabletOrMobile ? "Free Plan" : "Generous Free Plan"}
+              {isTablet ? "Free Plan" : "Generous Free Plan"}
             </span>
           </li>
           <li className="flex items-center space-x-2 flex-shrink-0">
             <ListCheck />
             <span className="text-gray-600 font-semibold text-sm">
-              {isTabletOrMobile ? "Referrals" : "Grow with Referrals"}
+              {isTablet ? "Referrals" : "Grow with Referrals"}
             </span>
           </li>
           <li className="flex items-center space-x-2 flex-shrink-0">

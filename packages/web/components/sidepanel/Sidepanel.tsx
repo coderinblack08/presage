@@ -30,11 +30,11 @@ export const Sidepanel: React.FC<SidepanelProps> = ({
   );
 };
 
-interface SidebarTriggerProps {
+interface SidepanelTriggerProps {
   className?: string;
 }
 
-export const SidebarTrigger: React.FC<SidebarTriggerProps> = ({
+export const SidepanelTrigger: React.FC<SidepanelTriggerProps> = ({
   className,
   children,
 }) => {

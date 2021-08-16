@@ -3,9 +3,9 @@ import { MdSearch } from "react-icons/md";
 import { Logo } from "../../components/branding/Logo";
 import { Input } from "../../components/input";
 
-interface NavigationSidebarProps {}
+interface SidebarProps {}
 
-export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({}) => {
+export const Sidebar: React.FC<SidebarProps> = ({}) => {
   return (
     <nav className="relative h-screen w-64">
       <div className="px-6 py-8">

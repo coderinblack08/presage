@@ -1,7 +1,6 @@
 import { useRouter } from "next/dist/client/router";
 import React from "react";
 import { AiOutlineInstagram, AiOutlineTwitter } from "react-icons/ai";
-import { useMediaQuery } from "react-responsive";
 import { useMeQuery } from "../../src/generated/graphql";
 import { Button } from "../../components/button";
 import {
@@ -11,17 +10,18 @@ import {
   DropdownTrigger,
 } from "../../components/dropdown";
 import { Logo } from "../../components/branding/Logo";
+import { useScreen } from "../../lib/useScreen";
 
 interface NavbarProps {}
 
 export const Navbar: React.FC<NavbarProps> = ({}) => {
-  const isTabletOrMobile = useMediaQuery({ query: "(max-width: 640px)" });
+  const { isTablet } = useScreen();
   const [{ data: user }] = useMeQuery();
   const router = useRouter();
 
   return (
     <nav className="relative z-20 flex items-center justify-between max-w-7xl mx-auto px-5 lg:px-10 py-6">
-      <Logo small={isTabletOrMobile} />
+      <Logo small={isTablet} />
       <Dropdown
         align="start"
         className="block md:hidden"
