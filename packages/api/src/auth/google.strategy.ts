@@ -36,10 +36,10 @@ export class GoogleStrategy extends PassportStrategy(Strategy, "google") {
       const email = emails ? emails[0].value : null;
       const photo = photos ? photos[0].value : null;
 
-      const user = await this.userService.findOne({ where: { googleId } });
+      let user = await this.userService.findOne({ where: { googleId } });
       if (!user) {
         const username = this.userService.generateUsername();
-        this.userService.create({
+        user = await this.userService.create({
           username,
           email,
           displayName,

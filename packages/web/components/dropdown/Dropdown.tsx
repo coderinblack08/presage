@@ -45,6 +45,7 @@ export const DropdownDivider: React.FC<DropdownDividerProps> = ({}) => {
 interface DropdownItemProps {
   icon?: React.ReactNode;
   disabled?: boolean;
+  href?: string;
   onClick?: (event: Event) => void;
 }
 
@@ -53,6 +54,7 @@ export const DropdownItem: React.FC<DropdownItemProps> = ({
   children,
   onClick,
   disabled,
+  href,
   ...props
 }) => {
   return (
@@ -62,7 +64,7 @@ export const DropdownItem: React.FC<DropdownItemProps> = ({
       className={`${
         icon ? "flex items-center" : ""
       } px-4 py-2 focus:outline-none focus:bg-gray-100 w-full text-left`}
-      as="button"
+      as={href ? "a" : "button"}
       {...props}
     >
       {icon ? <div className="mr-2">{icon}</div> : null}

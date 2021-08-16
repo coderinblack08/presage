@@ -1,3 +1,4 @@
+import { useRouter } from "next/dist/client/router";
 import React from "react";
 import { AiOutlineInstagram, AiOutlineTwitter } from "react-icons/ai";
 import { useMediaQuery } from "react-responsive";
@@ -14,6 +15,7 @@ interface NavbarProps {}
 
 export const Navbar: React.FC<NavbarProps> = ({}) => {
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 640px)" });
+  const router = useRouter();
 
   return (
     <nav className="relative z-20 flex items-center justify-between max-w-7xl mx-auto px-5 lg:px-10 py-6">
@@ -48,7 +50,9 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
         <DropdownItem>Twitter</DropdownItem>
         <DropdownItem>Instagram</DropdownItem>
         <DropdownDivider />
-        <DropdownItem>Login</DropdownItem>
+        <DropdownItem href="http://localhost:4000/auth/google">
+          Login
+        </DropdownItem>
       </Dropdown>
       <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
         <ul className="flex items-center space-x-8 lg:space-x-10">
@@ -68,7 +72,9 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
             <AiOutlineTwitter className="w-6 h-6 text-gray-800" />
           </a>
         </div>
-        <Button rounded>Login</Button>
+        <a href="http://localhost:4000/auth/google">
+          <Button rounded>Login</Button>
+        </a>
       </div>
     </nav>
   );
