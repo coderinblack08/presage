@@ -1,14 +1,12 @@
-import "../styles/globals.css";
-import React from "react";
+import { IdProvider } from "@radix-ui/react-id";
 import { DefaultSeo } from "next-seo";
 import type { AppProps } from "next/app";
-import { Provider as UrqlProvider } from "urql";
-import { IdProvider } from "@radix-ui/react-id";
-import { client } from "../lib/createUrqlClient";
+import React from "react";
+import "../styles/globals.css";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <UrqlProvider value={client}>
+    <>
       <DefaultSeo
         title="Presage"
         description="An open-source Medium alternative built for referral podcasts and blogs"
@@ -41,7 +39,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <IdProvider>
         <Component {...pageProps} />
       </IdProvider>
-    </UrqlProvider>
+    </>
   );
 }
 

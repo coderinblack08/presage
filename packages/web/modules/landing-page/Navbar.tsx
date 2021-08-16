@@ -3,14 +3,14 @@ import React from "react";
 import { AiOutlineInstagram, AiOutlineTwitter } from "react-icons/ai";
 import { useMediaQuery } from "react-responsive";
 import { useMeQuery } from "../../src/generated/graphql";
-import { Button } from "../button";
+import { Button } from "../../components/button";
 import {
   Dropdown,
   DropdownDivider,
   DropdownItem,
   DropdownTrigger,
-} from "../dropdown";
-import { Logo } from "./Logo";
+} from "../../components/dropdown";
+import { Logo } from "../../components/branding/Logo";
 
 interface NavbarProps {}
 

@@ -1,10 +1,8 @@
-import Image from "next/image";
 import React from "react";
 import { useMediaQuery } from "react-responsive";
-import { Navbar } from "../../components/navigation/Navbar";
+import { Navbar } from "./Navbar";
 import { ListCheck } from "../../modules/landing-page/ListCheck";
 import { Waitlist } from "../../modules/landing-page/Waitlist";
-import globe from "../../public/static/globe.png";
 interface HeroSectionProps {}
 
 export const HeroSection: React.FC<HeroSectionProps> = ({}) => {

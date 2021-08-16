@@ -1,6 +1,6 @@
 import React from "react";
 import { Meta } from "@storybook/react";
-import { Navbar } from "../components/navigation/Navbar";
+import { Navbar } from "../modules/landing-page/Navbar";
 
 export default {
   title: "Navigation/Navbar",
