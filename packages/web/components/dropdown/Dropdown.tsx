@@ -8,6 +8,7 @@ interface DropdownRootProps {
   side?: RadixDropdownTypes.DropdownMenuContentOwnProps["side"];
   align?: RadixDropdownTypes.DropdownMenuContentOwnProps["align"];
   children?: React.ReactNode;
+  alignOffset?: number;
   trigger: React.ReactNode;
   className?: string;
 }
@@ -18,6 +19,7 @@ export const Dropdown: React.FC<DropdownRootProps> = ({
   align,
   side,
   className,
+  alignOffset,
   children,
   ...props
 }) => {
@@ -26,9 +28,10 @@ export const Dropdown: React.FC<DropdownRootProps> = ({
       {trigger}
       <DropdownMenu.Content
         sideOffset={8}
+        alignOffset={alignOffset}
         align={align}
         side={side}
-        className={`bg-white border rounded-lg shadow-xl w-56 overflow-hidden py-2 ${className}`}
+        className={`bg-white border rounded-lg shadow-sm w-56 overflow-hidden py-2 ${className}`}
         initial={{ y: -12, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         as={motion.div}

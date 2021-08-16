@@ -57,7 +57,11 @@ export const Button: React.FC<ButtonProps> = ({
       disabled={disabled || loading}
       className={`${icon && !children ? iconSizes[size] : sizes[size]} ${
         colors[color]
-      } focus:outline-none focus:ring focus:ring-gray-300 flex items-center justify-center transition ${
+      } ${
+        color === "transparent"
+          ? ""
+          : "focus:outline-none focus:ring focus:ring-gray-300"
+      } flex items-center justify-center transition ${
         rounded ? "!rounded-full" : ""
       } ${className}`}
       {...props}

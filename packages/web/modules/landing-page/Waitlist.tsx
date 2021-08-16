@@ -27,9 +27,8 @@ export const Waitlist: React.FC<WaitlistProps> = ({}) => {
       }}
     >
       <Input
-        placeholder="Email Address"
         type="email"
-        className="w-full"
+        placeholder="Email Address"
         onChange={(e) => setEmail(e.target.value)}
         value={email}
         required

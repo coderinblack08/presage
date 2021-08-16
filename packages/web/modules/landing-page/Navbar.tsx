@@ -67,7 +67,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
           </li>
         </ul>
         <div className="h-6 w-[1px] bg-gray-300" />
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-5">
           <a href="https://instagram.com/joinpresage">
             <AiOutlineInstagram className="w-6 h-6 text-gray-800" />
           </a>

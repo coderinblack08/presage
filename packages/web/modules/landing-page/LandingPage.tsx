@@ -1,8 +1,8 @@
 import React from "react";
 import { AiFillGithub } from "react-icons/ai";
-import { FeatureCard } from "../../modules/landing-page/FeatureCard";
-import { HeroSection } from "../../modules/landing-page/HeroSection";
-import { Statistic } from "../../modules/landing-page/Statistic";
+import { FeatureCard } from "./FeatureCard";
+import { HeroSection } from "./HeroSection";
+import { Statistic } from "./Statistic";
 import bird from "../../public/static/animals/bird.png";
 import rabbit from "../../public/static/animals/rabbit.png";
 import rat from "../../public/static/animals/rat.png";
@@ -37,7 +37,7 @@ export const LandingPage: React.FC = () => {
             </p>
             <a
               href="https://github.com/coderinblack08/presage"
-              className="flex items-center space-x-2 mt-6"
+              className="inline-flex items-center space-x-2 mt-6"
             >
               <AiFillGithub className="w-6 h-6 text-gray-600" />
               <div className="text-gray-600 font-semibold">
