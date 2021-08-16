@@ -15,6 +15,8 @@ interface DropdownRootProps {
 export const Dropdown: React.FC<DropdownRootProps> = ({
   trigger,
   open,
+  align,
+  side,
   className,
   children,
   ...props
@@ -24,7 +26,9 @@ export const Dropdown: React.FC<DropdownRootProps> = ({
       {trigger}
       <DropdownMenu.Content
         sideOffset={8}
-        className={`bg-white border rounded-lg shadow w-56 overflow-hidden py-2 ${className}`}
+        align={align}
+        side={side}
+        className={`bg-white border rounded-lg shadow-xl w-56 overflow-hidden py-2 ${className}`}
         initial={{ y: -12, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         as={motion.div}
@@ -62,9 +66,10 @@ export const DropdownItem: React.FC<DropdownItemProps> = ({
       disabled={disabled}
       onSelect={onClick}
       className={`${
-        icon ? "flex items-center" : ""
-      } px-4 py-2 focus:outline-none focus:bg-gray-100 w-full text-left`}
+        icon ? "flex items-center" : "block"
+      } px-4 py-2 cursor-pointer focus:outline-none focus:bg-gray-100 w-full text-left`}
       as={href ? "a" : "button"}
+      href={href || undefined}
       {...props}
     >
       {icon ? <div className="mr-2">{icon}</div> : null}

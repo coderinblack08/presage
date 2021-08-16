@@ -1,14 +1,13 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { FindOneOptions, Repository } from "typeorm";
+import { DeepPartial, FindOneOptions, Repository } from "typeorm";
 import {
-  uniqueNamesGenerator,
   adjectives,
-  colors,
   animals,
+  colors,
   NumberDictionary,
+  uniqueNamesGenerator,
 } from "unique-names-generator";
-import { CreateUserDto } from "./dto/create-user.dto";
 import { User } from "./user.entity";
 
 @Injectable()
@@ -34,7 +33,7 @@ export class UserService {
     });
   }
 
-  async create(dto: CreateUserDto) {
-    return this.userRepository.create(dto).save();
+  async create(data: DeepPartial<User>) {
+    return this.userRepository.create(data).save();
   }
 }

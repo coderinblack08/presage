@@ -2,6 +2,7 @@ import { useRouter } from "next/dist/client/router";
 import React from "react";
 import { AiOutlineInstagram, AiOutlineTwitter } from "react-icons/ai";
 import { useMediaQuery } from "react-responsive";
+import { useMeQuery } from "../../src/generated/graphql";
 import { Button } from "../button";
 import {
   Dropdown,
@@ -15,12 +16,14 @@ interface NavbarProps {}
 
 export const Navbar: React.FC<NavbarProps> = ({}) => {
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 640px)" });
+  const [{ data: user }] = useMeQuery();
   const router = useRouter();
 
   return (
     <nav className="relative z-20 flex items-center justify-between max-w-7xl mx-auto px-5 lg:px-10 py-6">
       <Logo small={isTabletOrMobile} />
       <Dropdown
+        align="start"
         className="block md:hidden"
         trigger={
           <DropdownTrigger className="block md:hidden">
@@ -72,9 +75,19 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
             <AiOutlineTwitter className="w-6 h-6 text-gray-800" />
           </a>
         </div>
-        <a href="http://localhost:4000/auth/google">
-          <Button rounded>Login</Button>
-        </a>
+        {user?.me ? (
+          <div>
+            <img
+              className="w-10 h-10 rounded-full object-cover"
+              src={user.me?.profilePicture}
+              alt={user?.me?.displayName}
+            />
+          </div>
+        ) : (
+          <a href="http://localhost:4000/auth/google">
+            <Button rounded>Login</Button>
+          </a>
+        )}
       </div>
     </nav>
   );
