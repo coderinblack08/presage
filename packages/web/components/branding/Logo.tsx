@@ -24,8 +24,8 @@ export const Logo: React.FC<LogoProps> = ({
       {iconOnly || (
         <div
           className={`text-black font-display font-bold ${
-            small ? "text-xl" : "text-2xl"
-          } -mt-1 ml-3`}
+            small ? "text-xl ml-3" : "text-2xl ml-3.5"
+          } -mt-1`}
         >
           presage
         </div>
