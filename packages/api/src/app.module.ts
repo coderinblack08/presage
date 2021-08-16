@@ -24,9 +24,17 @@ import { UserModule } from "./user/user.module";
         console.log(configService.get("isDev"));
         return {
           debug: configService.get("isDev"),
-          playground: configService.get("isDev"),
+          playground: configService.get("isDev")
+            ? {
+                settings: {
+                  "request.credentials": "include",
+                },
+              }
+            : false,
           autoSchemaFile: true,
+          cors: { credentials: true, origin: "http://localhost:3000" },
           include: [UserModule],
+          context: ({ req, res }) => ({ req, res }),
         };
       },
       inject: [ConfigService],
