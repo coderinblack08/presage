@@ -6,7 +6,7 @@ import { Navbar } from "./Navbar";
 interface HeroSectionProps {}
 
 export const HeroSection: React.FC<HeroSectionProps> = ({}) => {
-  const { isTablet } = useScreen();
+  const { isSmallerThanTablet } = useScreen();
 
   return (
     <header className="relative bg-gray-100">
@@ -26,13 +26,13 @@ export const HeroSection: React.FC<HeroSectionProps> = ({}) => {
           <li className="flex items-center space-x-2 flex-shrink-0">
             <ListCheck />
             <span className="text-gray-600 font-semibold text-sm">
-              {isTablet ? "Free Plan" : "Generous Free Plan"}
+              {isSmallerThanTablet ? "Free Plan" : "Generous Free Plan"}
             </span>
           </li>
           <li className="flex items-center space-x-2 flex-shrink-0">
             <ListCheck />
             <span className="text-gray-600 font-semibold text-sm">
-              {isTablet ? "Referrals" : "Grow with Referrals"}
+              {isSmallerThanTablet ? "Referrals" : "Grow with Referrals"}
             </span>
           </li>
           <li className="flex items-center space-x-2 flex-shrink-0">

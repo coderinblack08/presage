@@ -25,12 +25,12 @@ export const LandingPage: React.FC = () => {
       <main>
         <div className="px-5">
           <div className="max-w-7xl mx-auto py-20 px-8 border-l border-r border-dashed">
-            <h2 className="font-bold text-3xl md:text-4xl text-gray-900 font-display !leading-snug">
+            <h2 className="font-bold text-2xl sm:text-3xl md:text-4xl text-gray-900 font-display !leading-snug">
               Sounds Great,
               <br />
               <span className="text-gray-600">But How Does it Work?</span>
             </h2>
-            <p className="text-gray-500 mt-4 max-w-2xl">
+            <p className="text-gray-500 mt-4 max-w-2xl text-sm sm:text-base leading-relaxed sm:leading-loose">
               Our goal is to support independent journalism for everyone without
               prejudice. We also believe in keeping our code open-source for all
               to see (a star never hurts).

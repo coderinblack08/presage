@@ -1,6 +1,6 @@
 import React from "react";
 import * as Dialog from "@radix-ui/react-dialog";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 
 interface SidepanelProps {
   trigger: React.ReactNode;
@@ -12,8 +12,10 @@ export const Sidepanel: React.FC<SidepanelProps> = ({
   align = "left",
   children,
 }) => {
+  const [open, setOpen] = React.useState(false);
+
   return (
-    <Dialog.Root>
+    <Dialog.Root open={open} onOpenChange={setOpen}>
       {trigger}
       <Dialog.Overlay>
         <div className="absolute inset-0 h-screen w-screen bg-gray-900/75 backdrop-blur-lg" />
@@ -22,6 +24,10 @@ export const Sidepanel: React.FC<SidepanelProps> = ({
         className={`fixed inset-y-0 h-screen ${
           align === "right" ? "right-0" : "left-0"
         }`}
+        initial={{ x: -300 }}
+        animate={{ x: 0 }}
+        exit={{ x: -300 }}
+        transition={{ type: "keyframes" }}
         as={motion.div}
       >
         {children}

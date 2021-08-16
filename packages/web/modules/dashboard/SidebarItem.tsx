@@ -55,7 +55,13 @@ export const SidebarItem: React.FC<SidebarItemProps> = ({ name }) => {
           }`}
         >
           {icons[name][isFocused ? "focused" : "default"]}
-          <span className="font-semibold capitalize">{name}</span>
+          <span
+            className={`capitalize ${
+              isFocused ? "font-semibold" : "font-medium"
+            }`}
+          >
+            {name}
+          </span>
         </div>
       </a>
     </Link>

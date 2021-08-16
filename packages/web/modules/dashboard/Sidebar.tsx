@@ -1,6 +1,5 @@
 import { AddOutlined } from "@material-ui/icons";
 import React from "react";
-import { FiSearch } from "react-icons/fi";
 import { HiLockOpen, HiOutlineSelector, HiUserCircle } from "react-icons/hi";
 import { Logo } from "../../components/branding/Logo";
 import { Button } from "../../components/button";
@@ -10,8 +9,8 @@ import {
   DropdownItem,
   DropdownTrigger,
 } from "../../components/dropdown";
-import { Input } from "../../components/input";
 import { useMeQuery } from "../../src/generated/graphql";
+import { JumpTo } from "./JumpTo";
 import { SidebarItem } from "./SidebarItem";
 
 interface SidebarProps {}
@@ -20,16 +19,11 @@ export const Sidebar: React.FC<SidebarProps> = ({}) => {
   const [{ data: user }] = useMeQuery();
 
   return (
-    <nav className="flex flex-col relative h-screen w-[21.5rem] flex-shrink-0 border-r">
+    <div className="flex flex-col relative h-screen w-[21.5rem] flex-shrink-0 border-r bg-white">
       <div className="px-5 pt-8">
         <Logo />
         <div className="mt-5">
-          <Input
-            icon={<FiSearch className="w-5 h-5 text-gray-400" />}
-            placeholder="Jump to..."
-            shortcut="⌘K"
-            outline
-          />
+          <JumpTo />
         </div>
       </div>
       <div className="pt-6 pb-8 space-y-1.5 border-b">
@@ -39,7 +33,7 @@ export const Sidebar: React.FC<SidebarProps> = ({}) => {
         <SidebarItem name="settings" />
       </div>
       <div className="h-full px-9 py-8 space-y-3">
-        <h4 className="font-semibold text-sm">My Journals</h4>
+        <h4 className="font-bold text-sm">My Journals</h4>
         <Button
           icon={<AddOutlined fontSize="small" className="text-gray-500" />}
           color="transparent"
@@ -74,7 +68,9 @@ export const Sidebar: React.FC<SidebarProps> = ({}) => {
       >
         <div className="px-5 py-2">
           <h6 className="font-bold">{user?.me?.displayName}</h6>
-          <p className="text-gray-500 text-sm">@{user?.me?.username}</p>
+          <p className="text-gray-500 text-sm truncate">
+            @{user?.me?.username}
+          </p>
         </div>
         <DropdownDivider />
         <DropdownItem icon={<HiUserCircle className="w-5 h-5" />}>
@@ -84,6 +80,6 @@ export const Sidebar: React.FC<SidebarProps> = ({}) => {
           Sign Out
         </DropdownItem>
       </Dropdown>
-    </nav>
+    </div>
   );
 };

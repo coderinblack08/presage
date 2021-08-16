@@ -15,13 +15,13 @@ import { useScreen } from "../../lib/useScreen";
 interface NavbarProps {}
 
 export const Navbar: React.FC<NavbarProps> = ({}) => {
-  const { isTablet } = useScreen();
+  const { isSmallerThanTablet } = useScreen();
   const [{ data: user }] = useMeQuery();
   const router = useRouter();
 
   return (
     <nav className="relative z-20 flex items-center justify-between max-w-7xl mx-auto px-5 lg:px-10 py-6">
-      <Logo small={isTablet} />
+      <Logo small={isSmallerThanTablet} />
       <Dropdown
         align="start"
         className="block md:hidden"
