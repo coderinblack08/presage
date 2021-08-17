@@ -18,7 +18,7 @@ export const Sidepanel: React.FC<SidepanelProps> = ({
     <Dialog.Root open={open} onOpenChange={setOpen}>
       {trigger}
       <Dialog.Overlay>
-        <div className="absolute inset-0 h-screen w-screen bg-gray-900/75 backdrop-blur-lg" />
+        <div className="fixed inset-0 h-screen w-screen bg-black/75 backdrop-blur-lg" />
       </Dialog.Overlay>
       <Dialog.Content
         className={`fixed inset-y-0 h-screen ${

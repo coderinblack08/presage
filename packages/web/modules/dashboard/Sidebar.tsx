@@ -1,8 +1,6 @@
-import { AddOutlined } from "@material-ui/icons";
 import React from "react";
 import { HiLockOpen, HiOutlineSelector, HiUserCircle } from "react-icons/hi";
 import { Logo } from "../../components/branding/Logo";
-import { Button } from "../../components/button";
 import {
   Dropdown,
   DropdownDivider,
@@ -11,6 +9,7 @@ import {
 } from "../../components/dropdown";
 import { useMeQuery } from "../../src/generated/graphql";
 import { JournalList } from "./JournalList";
+import { JournalModal } from "./JournalModal";
 import { JumpTo } from "./JumpTo";
 import { SidebarItem } from "./SidebarItem";
 
@@ -36,15 +35,7 @@ export const Sidebar: React.FC<SidebarProps> = ({}) => {
       <div className="h-full px-7">
         <div className="flex items-center justify-between pt-4 pb-3">
           <h4 className="font-bold text-sm">My Journals</h4>
-          <Button
-            icon={
-              <AddOutlined fontSize="small" className="text-gray-400 -mr-1" />
-            }
-            color="transparent"
-            size="none"
-          >
-            <span className="text-sm font-semibold text-gray-500">New</span>
-          </Button>
+          <JournalModal />
         </div>
         <JournalList />
       </div>
