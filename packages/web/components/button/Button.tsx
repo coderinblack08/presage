@@ -39,6 +39,7 @@ export type ButtonProps = DetailedHTMLProps<
   transition?: boolean;
   rounded?: boolean;
   loading?: boolean;
+  outline?: boolean;
 };
 
 export const Button: React.FC<ButtonProps> = ({
@@ -50,6 +51,7 @@ export const Button: React.FC<ButtonProps> = ({
   className,
   children,
   disabled,
+  outline,
   ...props
 }) => {
   return (
@@ -63,7 +65,7 @@ export const Button: React.FC<ButtonProps> = ({
           : "focus:outline-none focus:ring focus:ring-gray-300"
       } flex items-center justify-center transition ${
         rounded ? "!rounded-full" : ""
-      } ${className}`}
+      } ${outline ? "border shadow-sm" : ""} ${className}`}
       {...props}
     >
       <span className={`flex items-center ${loading ? "opacity-0" : ""}`}>

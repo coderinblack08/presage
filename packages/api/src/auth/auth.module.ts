@@ -6,10 +6,12 @@ import { GoogleStrategy } from "./google.strategy";
 import { JwtModule } from "@nestjs/jwt";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { JwtStrategy } from "./jwt.strategy";
+import { JournalModule } from "src/journal/journal.module";
 
 @Module({
   imports: [
     UserModule,
+    JournalModule,
     PassportModule.register({ defaultStrategy: "jwt" }),
     JwtModule.registerAsync({
       imports: [ConfigModule],

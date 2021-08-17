@@ -8,6 +8,7 @@ import {
   StrategyOptions,
   VerifyCallback,
 } from "passport-google-oauth2";
+import { JournalService } from "src/journal/journal.service";
 import { UserService } from "../user/user.service";
 
 @Injectable()
@@ -15,7 +16,8 @@ export class GoogleStrategy extends PassportStrategy(Strategy, "google") {
   constructor(
     private config: ConfigService,
     private jwtService: JwtService,
-    private userService: UserService
+    private userService: UserService,
+    private journalService: JournalService
   ) {
     super({
       clientID: config.get("google.clientID"),
@@ -45,6 +47,11 @@ export class GoogleStrategy extends PassportStrategy(Strategy, "google") {
           displayName,
           profilePicture: photo,
           googleId,
+        });
+        await this.journalService.create({
+          name: "Blog",
+          description: `${displayName}'s blog`,
+          userId: user.id,
         });
       }
       done(null, user);

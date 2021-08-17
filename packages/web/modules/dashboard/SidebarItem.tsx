@@ -48,9 +48,9 @@ export const SidebarItem: React.FC<SidebarItemProps> = ({ name }) => {
 
   return (
     <Link href={routes[name]} passHref>
-      <a className={`block px-9 ${isFocused ? "bg-gray-100" : ""} py-3 w-full`}>
+      <a className={`block px-7 ${isFocused ? "bg-gray-100" : ""} py-3 w-full`}>
         <div
-          className={`flex items-center space-x-3 w-full ${
+          className={`flex items-center space-x-3.5 w-full ${
             isFocused ? "text-gray-800" : "text-gray-500"
           }`}
         >

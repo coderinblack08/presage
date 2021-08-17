@@ -7,5 +7,6 @@ import { JournalService } from "./journal.service";
 @Module({
   imports: [TypeOrmModule.forFeature([Journal])],
   providers: [JournalResolver, JournalService],
+  exports: [JournalService],
 })
 export class JournalModule {}

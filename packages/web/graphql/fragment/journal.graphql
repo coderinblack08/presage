@@ -1,0 +1,8 @@
+fragment Journal on Journal {
+  id
+  name
+  color
+  description
+  createdAt
+  updatedAt
+}

@@ -10,6 +10,7 @@ import {
   DropdownTrigger,
 } from "../../components/dropdown";
 import { useMeQuery } from "../../src/generated/graphql";
+import { JournalList } from "./JournalList";
 import { JumpTo } from "./JumpTo";
 import { SidebarItem } from "./SidebarItem";
 
@@ -20,29 +21,32 @@ export const Sidebar: React.FC<SidebarProps> = ({}) => {
 
   return (
     <div className="flex flex-col relative h-screen w-[21.5rem] flex-shrink-0 border-r bg-white">
-      <div className="px-5 pt-8">
+      <div className="px-4 pt-8">
         <Logo />
         <div className="mt-5">
           <JumpTo />
         </div>
       </div>
-      <div className="pt-6 pb-8 space-y-1.5 border-b">
+      <div className="py-6 space-y-1.5 border-b">
         <SidebarItem name="learn" />
         <SidebarItem name="explore" />
         <SidebarItem name="rewards" />
         <SidebarItem name="settings" />
       </div>
-      <div className="h-full px-9 py-8 space-y-3">
-        <h4 className="font-bold text-sm">My Journals</h4>
-        <Button
-          icon={<AddOutlined fontSize="small" className="text-gray-500" />}
-          color="transparent"
-          size="none"
-        >
-          <span className="text-sm font-semibold text-gray-500">
-            New Journal
-          </span>
-        </Button>
+      <div className="h-full px-7">
+        <div className="flex items-center justify-between pt-4 pb-3">
+          <h4 className="font-bold text-sm">My Journals</h4>
+          <Button
+            icon={
+              <AddOutlined fontSize="small" className="text-gray-400 -mr-1" />
+            }
+            color="transparent"
+            size="none"
+          >
+            <span className="text-sm font-semibold text-gray-500">New</span>
+          </Button>
+        </div>
+        <JournalList />
       </div>
       <Dropdown
         align="end"
