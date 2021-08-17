@@ -19,6 +19,7 @@
     "skipLibCheck": true,
     "baseUrl": "."
   },
+  "references": [{ "path": "../common" }],
   "exclude": ["node_modules"],
   "include": ["./src/**/*.tsx", "./src/**/*.ts", "index.d.ts"]
 }

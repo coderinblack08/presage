@@ -1,11 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import {
-  DeepPartial,
-  FindOneOptions,
-  getConnection,
-  Repository,
-} from "typeorm";
+import { DeepPartial, FindOneOptions, Repository } from "typeorm";
 import {
   adjectives,
   animals,

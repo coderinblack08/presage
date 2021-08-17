@@ -79,7 +79,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
           <div>
             <img
               className="w-10 h-10 rounded-full object-cover"
-              src={user.me?.profilePicture}
+              src={user.me?.profilePicture || ""}
               alt={user?.me?.displayName}
             />
           </div>

@@ -47,8 +47,6 @@ export class GoogleStrategy extends PassportStrategy(Strategy, "google") {
           googleId,
         });
       }
-
-      console.log(user);
       done(null, user);
     } catch (error) {
       done(error, undefined);

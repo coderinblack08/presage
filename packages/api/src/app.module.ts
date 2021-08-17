@@ -9,6 +9,7 @@ import { AuthModule } from "./auth/auth.module";
 import configuration from "./config/configuration";
 import * as connectionOptions from "./ormconfig";
 import { UserModule } from "./user/user.module";
+import { JournalModule } from "./journal/journal.module";
 
 @Module({
   imports: [
@@ -21,7 +22,6 @@ import { UserModule } from "./user/user.module";
     GraphQLModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => {
-        console.log(configService.get("isDev"));
         return {
           debug: configService.get("isDev"),
           playground: configService.get("isDev")
@@ -33,7 +33,7 @@ import { UserModule } from "./user/user.module";
             : false,
           autoSchemaFile: true,
           cors: { credentials: true, origin: "http://localhost:3000" },
-          include: [UserModule],
+          include: [UserModule, JournalModule],
           context: ({ req, res }) => ({ req, res }),
         };
       },
@@ -41,6 +41,7 @@ import { UserModule } from "./user/user.module";
     }),
     AuthModule,
     UserModule,
+    JournalModule,
   ],
   controllers: [AppController],
   providers: [AppService],

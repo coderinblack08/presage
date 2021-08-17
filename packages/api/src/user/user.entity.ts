@@ -1,9 +1,11 @@
 import { Field, ID, ObjectType } from "@nestjs/graphql";
+import { Journal } from "src/journal/journal.entity";
 import {
   BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
@@ -37,6 +39,9 @@ export class User extends BaseEntity {
 
   @Column("text", { select: false, nullable: true })
   googleId: string | null;
+
+  @OneToMany(() => Journal, (journal) => journal.user)
+  journals: Journal[];
 
   @Field(() => Date)
   @CreateDateColumn()

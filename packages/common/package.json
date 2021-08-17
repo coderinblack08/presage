@@ -2,8 +2,8 @@
   "name": "@presage/common",
   "version": "0.0.1",
   "private": true,
-  "main": "dist/index.js",
-  "typings": "dist/index.d.ts",
+  "main": "dist/src/index.js",
+  "typings": "dist/src/index.d.ts",
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w"

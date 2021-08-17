@@ -14,7 +14,6 @@ export class UserResolver {
   @UseGuards(JwtAuthGuard)
   @Query(() => User, { nullable: true })
   async me(@CurrentUser() userId: string, @Context() context: any) {
-    console.log(userId, context.req.user);
     return userId ? this.userService.findOne({ where: { id: userId } }) : null;
   }
 }
