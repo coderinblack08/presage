@@ -1,4 +1,5 @@
 import { Module } from "@nestjs/common";
+import GraphQLJSON from "graphql-type-json";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { GraphQLModule } from "@nestjs/graphql";
 import { TypeOrmModule } from "@nestjs/typeorm";
@@ -10,6 +11,7 @@ import configuration from "./config/configuration";
 import * as connectionOptions from "./ormconfig";
 import { UserModule } from "./user/user.module";
 import { JournalModule } from "./journal/journal.module";
+import { ArticleModule } from "./article/article.module";
 
 @Module({
   imports: [
@@ -42,6 +44,7 @@ import { JournalModule } from "./journal/journal.module";
     AuthModule,
     UserModule,
     JournalModule,
+    ArticleModule,
   ],
   controllers: [AppController],
   providers: [AppService],

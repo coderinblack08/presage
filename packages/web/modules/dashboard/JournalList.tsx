@@ -1,4 +1,5 @@
 import { ChevronRightOutlined } from "@material-ui/icons";
+import { useRouter } from "next/dist/client/router";
 import React from "react";
 import { useFindJournalsQuery } from "../../generated/graphql";
 
@@ -6,6 +7,7 @@ interface JournalListProps {}
 
 export const JournalList: React.FC<JournalListProps> = ({}) => {
   const [{ data: journals }] = useFindJournalsQuery();
+  const router = useRouter();
 
   return (
     <ul className="my-2.5">
@@ -16,7 +18,10 @@ export const JournalList: React.FC<JournalListProps> = ({}) => {
       ) : null}
       {journals?.findJournals.map((journal) => (
         <li key={journal.id}>
-          <button className="py-2 w-full text-left flex items-center justify-between">
+          <button
+            onClick={() => router.push(`/?journal=${journal.id}`)}
+            className="py-2 w-full text-left flex items-center justify-between"
+          >
             <div className="flex items-center space-x-3 min-w-0">
               <div
                 className="w-[16px] h-[16px] flex-shrink-0 rounded-md"
