@@ -1,6 +1,7 @@
 import React from "react";
+import * as Portal from "@radix-ui/react-portal";
 import * as Dialog from "@radix-ui/react-dialog";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 
 interface SidepanelProps {
   trigger: React.ReactNode;
@@ -16,22 +17,25 @@ export const Sidepanel: React.FC<SidepanelProps> = ({
 
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
-      {trigger}
-      <Dialog.Overlay>
-        <div className="fixed inset-0 h-screen w-screen bg-black/75 backdrop-blur-lg" />
-      </Dialog.Overlay>
-      <Dialog.Content
-        className={`fixed inset-y-0 h-screen ${
-          align === "right" ? "right-0" : "left-0"
-        }`}
-        initial={{ x: -300 }}
-        animate={{ x: 0 }}
-        exit={{ x: -300 }}
-        transition={{ type: "keyframes" }}
-        as={motion.div}
-      >
-        {children}
-      </Dialog.Content>
+      <div>{trigger}</div>
+      <Portal.Root>
+        <Dialog.Overlay>
+          <div className="fixed inset-0 h-screen w-screen bg-black/75 backdrop-blur-lg" />
+        </Dialog.Overlay>
+        <Dialog.Content>
+          <motion.div
+            className={`fixed inset-y-0 h-screen ${
+              align === "right" ? "right-0" : "left-0"
+            }`}
+            initial={{ x: -300 }}
+            animate={{ x: 0 }}
+            exit={{ x: -300 }}
+            transition={{ type: "keyframes" }}
+          >
+            {children}
+          </motion.div>
+        </Dialog.Content>
+      </Portal.Root>
     </Dialog.Root>
   );
 };

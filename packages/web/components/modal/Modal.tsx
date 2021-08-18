@@ -93,5 +93,9 @@ export const ModalTrigger: React.FC<{ className?: string }> = ({
   className,
   children,
 }) => {
-  return <Dialog.Trigger className={className}>{children}</Dialog.Trigger>;
+  return (
+    <Dialog.Trigger className={className} as="div">
+      {children}
+    </Dialog.Trigger>
+  );
 };

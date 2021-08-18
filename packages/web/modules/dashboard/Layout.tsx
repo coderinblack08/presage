@@ -1,9 +1,7 @@
 import React from "react";
 import { HotKeys, KeyMap } from "react-hotkeys";
-import { useMediaQuery } from "react-responsive";
 import { useJumpToHandlers } from "./JumpTo";
-import { Sidebar } from "./Sidebar";
-import { SidebarPanel } from "./SidebarPanel";
+import { ResponsiveSidebar } from "./ResponsiveSidebar";
 
 interface LayoutProps {}
 
@@ -19,12 +17,11 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   const handlers = {
     JUMP_TO: handler,
   };
-  const hideSidebar = useMediaQuery({ query: "(max-width: 900px)" });
 
   return (
     <HotKeys keyMap={keyMap} handlers={handlers}>
       <div className="flex">
-        {hideSidebar ? <SidebarPanel /> : <Sidebar />}
+        <ResponsiveSidebar />
         <div className="w-full h-screen overflow-auto">{children}</div>
       </div>
     </HotKeys>
