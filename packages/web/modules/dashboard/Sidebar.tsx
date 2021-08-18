@@ -7,7 +7,7 @@ import {
   DropdownItem,
   DropdownTrigger,
 } from "../../components/dropdown";
-import { useMeQuery } from "../../src/generated/graphql";
+import { useMeQuery } from "../../generated/graphql";
 import { JournalList } from "./JournalList";
 import { JournalModal } from "./JournalModal";
 import { JumpTo } from "./JumpTo";
@@ -32,12 +32,10 @@ export const Sidebar: React.FC<SidebarProps> = ({}) => {
         <SidebarItem name="rewards" />
         <SidebarItem name="settings" />
       </div>
-      <div className="h-full px-7">
-        <div className="flex items-center justify-between pt-4 pb-3">
-          <h4 className="font-bold text-sm">My Journals</h4>
-          <JournalModal />
-        </div>
+      <div className="h-full overflow-y-scroll px-7 py-6">
+        <h4 className="font-bold text-sm">My Journals</h4>
         <JournalList />
+        <JournalModal />
       </div>
       <Dropdown
         align="end"

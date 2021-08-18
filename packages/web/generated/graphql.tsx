@@ -16,6 +16,12 @@ export type Scalars = {
   DateTime: any;
 };
 
+export type CreateJournalArgs = {
+  name: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+  color?: Maybe<Scalars['String']>;
+};
+
 
 export type Journal = {
   __typename?: 'Journal';
@@ -38,16 +44,12 @@ export type Mutation = {
 
 
 export type MutationCreateJournalArgs = {
-  name: Scalars['String'];
-  description?: Maybe<Scalars['String']>;
-  color?: Maybe<Scalars['String']>;
+  data: CreateJournalArgs;
 };
 
 
 export type MutationUpdateJournalArgs = {
-  name?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  color?: Maybe<Scalars['String']>;
+  data: UpdateJournalArgs;
   id: Scalars['String'];
 };
 
@@ -60,6 +62,12 @@ export type Query = {
   __typename?: 'Query';
   me?: Maybe<User>;
   findJournals: Array<Journal>;
+};
+
+export type UpdateJournalArgs = {
+  name?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  color?: Maybe<Scalars['String']>;
 };
 
 export type User = {
@@ -77,6 +85,13 @@ export type User = {
 export type JournalFragment = { __typename?: 'Journal', id: string, name: string, color: string, description?: Maybe<string>, createdAt: any, updatedAt: any };
 
 export type UserFragment = { __typename?: 'User', id: string, profilePicture?: Maybe<string>, displayName: string, username: string, bio?: Maybe<string>, createdAt: any };
+
+export type CreateJournalMutationVariables = Exact<{
+  data: CreateJournalArgs;
+}>;
+
+
+export type CreateJournalMutation = { __typename?: 'Mutation', createJournal: { __typename?: 'Journal', id: string, name: string, color: string, description?: Maybe<string>, createdAt: any, updatedAt: any } };
 
 export type FindJournalsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -108,6 +123,17 @@ export const UserFragmentDoc = gql`
   createdAt
 }
     `;
+export const CreateJournalDocument = gql`
+    mutation CreateJournal($data: CreateJournalArgs!) {
+  createJournal(data: $data) {
+    ...Journal
+  }
+}
+    ${JournalFragmentDoc}`;
+
+export function useCreateJournalMutation() {
+  return Urql.useMutation<CreateJournalMutation, CreateJournalMutationVariables>(CreateJournalDocument);
+};
 export const FindJournalsDocument = gql`
     query FindJournals {
   findJournals {

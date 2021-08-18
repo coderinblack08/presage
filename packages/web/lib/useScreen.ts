@@ -1,9 +1,9 @@
-import { useMediaQuery } from "react-responsive";
+import { useSSRMediaQuery } from "./useSSRMediaQuery";
 
 export const useScreen = () => {
-  const isSmallerThanMobile = useMediaQuery({ query: "(max-width: 640px)" });
-  const isSmallerThanTablet = useMediaQuery({ query: "(max-width: 768px)" });
-  const isSmallerThanDesktop = useMediaQuery({ query: "(max-width: 1024px)" });
+  const isSmallerThanMobile = useSSRMediaQuery("(max-width: 640px)");
+  const isSmallerThanTablet = useSSRMediaQuery("(max-width: 768px)");
+  const isSmallerThanDesktop = useSSRMediaQuery("(max-width: 1024px)");
 
   return { isSmallerThanMobile, isSmallerThanDesktop, isSmallerThanTablet };
 };

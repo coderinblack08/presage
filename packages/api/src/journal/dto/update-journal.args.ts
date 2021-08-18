@@ -1,5 +1,5 @@
-import { ArgsType, PartialType } from "@nestjs/graphql";
+import { InputType, PartialType } from "@nestjs/graphql";
 import { CreateJournalArgs } from "./create-journal.args";
 
-@ArgsType()
+@InputType()
 export class UpdateJournalArgs extends PartialType(CreateJournalArgs) {}

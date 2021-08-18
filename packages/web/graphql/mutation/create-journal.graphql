@@ -1,0 +1,5 @@
+mutation CreateJournal($data: CreateJournalArgs!) {
+  createJournal(data: $data) {
+    ...Journal
+  }
+}

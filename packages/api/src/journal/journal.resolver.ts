@@ -34,7 +34,7 @@ export class JournalResolver {
   @Mutation(() => Journal)
   async createJournal(
     @CurrentUser() userId: string,
-    @Args() args: CreateJournalArgs
+    @Args("data") args: CreateJournalArgs
   ) {
     try {
       const journal = await this.journalService.create({ ...args, userId });
@@ -52,7 +52,7 @@ export class JournalResolver {
   async updateJournal(
     @CurrentUser() userId: string,
     @Args("id", ParseUUIDPipe) id: string,
-    @Args() args: UpdateJournalArgs
+    @Args("data") args: UpdateJournalArgs
   ) {
     try {
       const journal = await this.journalService.update(

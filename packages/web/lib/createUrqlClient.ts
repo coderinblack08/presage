@@ -1,5 +1,12 @@
-import { dedupExchange, cacheExchange, fetchExchange } from "@urql/core";
+import { dedupExchange, fetchExchange } from "@urql/core";
+import { cacheExchange } from "@urql/exchange-graphcache";
+import {
+  CreateJournalMutation,
+  FindJournalsDocument,
+  FindJournalsQuery,
+} from "../generated/graphql";
 import { isServer } from "./constants";
+import { updateCacheQuery } from "./updateCacheUtils";
 
 export const createUrqlClient = (ssrExchange: any, ctx: any) => {
   let cookie = "";
@@ -13,6 +20,31 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => {
       credentials: "include" as const,
       headers: cookie ? { cookie } : undefined,
     },
-    exchanges: [dedupExchange, cacheExchange, ssrExchange, fetchExchange],
+    exchanges: [
+      dedupExchange,
+      cacheExchange({
+        updates: {
+          Mutation: {
+            createJournal: (
+              result: CreateJournalMutation,
+              _args,
+              cache,
+              _info
+            ) => {
+              updateCacheQuery<CreateJournalMutation, FindJournalsQuery>(
+                cache,
+                { query: FindJournalsDocument },
+                (old) => ({
+                  ...old,
+                  findJournals: [...old.findJournals, result.createJournal],
+                })
+              );
+            },
+          },
+        },
+      }),
+      ssrExchange,
+      fetchExchange,
+    ],
   };
 };

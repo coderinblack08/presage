@@ -65,12 +65,6 @@ export const Modal: React.FC<ModalProps> = ({
                     className={`relative z-50 inline-block w-full max-w-lg overflow-hidden text-left align-middle transition-all transform bg-white rounded-xl p-6`}
                     onClick={stopPropagation}
                   >
-                    <Dialog.Close
-                      as="button"
-                      className="absolute top-0 right-0 m-3"
-                    >
-                      <Close className="text-gray-400" fontSize="small" />
-                    </Dialog.Close>
                     <Dialog.Title className="text-xl font-bold" as="h1">
                       {title}
                     </Dialog.Title>
@@ -78,6 +72,12 @@ export const Modal: React.FC<ModalProps> = ({
                       {description}
                     </Dialog.Description>
                     <div className="mt-6">{children}</div>
+                    <Dialog.Close
+                      as="button"
+                      className="absolute top-0 right-0 m-3"
+                    >
+                      <Close className="text-gray-400" fontSize="small" />
+                    </Dialog.Close>
                   </div>
                 </div>
               </div>

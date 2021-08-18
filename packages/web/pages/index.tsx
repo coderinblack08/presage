@@ -4,7 +4,7 @@ import React from "react";
 import { createUrqlClient } from "../lib/createUrqlClient";
 import { Layout } from "../modules/dashboard/Layout";
 import { LandingPage } from "../modules/landing-page/LandingPage";
-import { useMeQuery } from "../src/generated/graphql";
+import { useMeQuery } from "../generated/graphql";
 
 const Home: NextPage = () => {
   const [{ data: user }] = useMeQuery();

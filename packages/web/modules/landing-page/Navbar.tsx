@@ -1,7 +1,7 @@
 import { useRouter } from "next/dist/client/router";
 import React from "react";
 import { AiOutlineInstagram, AiOutlineTwitter } from "react-icons/ai";
-import { useMeQuery } from "../../src/generated/graphql";
+import { useMeQuery } from "../../generated/graphql";
 import { Button } from "../../components/button";
 import {
   Dropdown,

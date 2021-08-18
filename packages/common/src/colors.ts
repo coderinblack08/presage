@@ -7,3 +7,7 @@ export const journalColors = [
   "#4AB3FF",
   "#844AFF",
 ];
+
+export const generateColor = () => {
+  return journalColors[Math.floor(Math.random() * journalColors.length)];
+};

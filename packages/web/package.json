@@ -21,6 +21,8 @@
     "@radix-ui/react-portal": "^0.0.15",
     "@svgr/webpack": "^5.5.0",
     "@urql/core": "^2.2.0",
+    "@urql/exchange-graphcache": "^4.3.0",
+    "formik": "^2.2.9",
     "framer-motion": "^4.1.17",
     "graphql": "^15.5.1",
     "next": "11.1.0",
@@ -35,6 +37,7 @@
     "react-responsive": "^9.0.0-beta.3",
     "tailwindcss-spinner": "^1.2.0",
     "urql": "^2.0.4",
+    "yup": "^0.32.9",
     "zustand": "^3.5.8"
   },
   "devDependencies": {

@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { journalColors } from "@presage/common";
+import { generateColor } from "@presage/common";
 import {
   FindConditions,
   FindManyOptions,
@@ -25,12 +25,8 @@ export class JournalService {
     },
   } as FindOneOptions<Journal> | FindManyOptions<Journal>;
 
-  generateColor() {
-    return journalColors[Math.floor(Math.random() * journalColors.length)];
-  }
-
   async findOne(id: string) {
-    return this.journalRepository.findOne(id, this.sortOptions);
+    return this.journalRepository.findOne(id);
   }
 
   async find(criteria: FindManyOptions<Journal>) {
@@ -42,7 +38,7 @@ export class JournalService {
 
   async create(args: CreateJournalArgs) {
     if (!args.color) {
-      args.color = this.generateColor();
+      args.color = generateColor();
     }
     return this.journalRepository.create(args).save();
   }
