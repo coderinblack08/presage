@@ -67,14 +67,10 @@
   }
 }
 
-/* slate.js placeholders */
-.selected-empty-element {
-  position: relative;
-}
-
-.selected-empty-element:after {
-  content: "Type '/' for commands";
-  color: #aaa;
-  position: absolute;
-  top: 0;
+.ProseMirror p.is-empty::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: theme("colors.gray.400");
+  pointer-events: none;
+  height: 0;
 }

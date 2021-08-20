@@ -18,11 +18,11 @@ const DraftPage: NextPage = () => {
 
   return (
     <Layout>
-      <div className="max-w-3xl mx-auto px-5 py-20">
+      <div className="max-w-3xl mx-auto px-8 py-32">
         <input
           type="text"
           value={draft?.findArticle?.title}
-          className="text-4xl font-bold w-full mb-4"
+          className="text-5xl font-bold w-full mb-6"
         />
         <TipTapEditor />
       </div>

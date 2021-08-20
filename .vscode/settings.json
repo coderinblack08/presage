@@ -2,5 +2,13 @@
   "conventionalCommits.scopes": ["api", "web", "api, web"],
   "files.watcherExclude": {
     "**/target": true
+  },
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "old": true
   }
 }
