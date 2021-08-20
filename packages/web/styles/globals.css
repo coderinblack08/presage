@@ -66,3 +66,15 @@
     }
   }
 }
+
+/* slate.js placeholders */
+.selected-empty-element {
+  position: relative;
+}
+
+.selected-empty-element:after {
+  content: "Type '/' for commands";
+  color: #aaa;
+  position: absolute;
+  top: 0;
+}

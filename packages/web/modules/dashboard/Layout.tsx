@@ -1,7 +1,7 @@
 import React from "react";
 import { HotKeys, KeyMap } from "react-hotkeys";
-import { useJumpToHandlers } from "./JumpTo";
-import { ResponsiveSidebar } from "./ResponsiveSidebar";
+import { useJumpToHandlers } from "./sidebar/JumpTo";
+import { ResponsiveSidebar } from "./sidebar/ResponsiveSidebar";
 
 interface LayoutProps {}
 

@@ -1,0 +1,14 @@
+fragment Article on Article {
+  id
+  title
+  description
+  canonical
+  html
+  editorJSON
+  isPublished
+  publishedAt
+  journalId
+  userId
+  createdAt
+  updatedAt
+}

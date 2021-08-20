@@ -1,16 +1,16 @@
 import React from "react";
 import { HiLockOpen, HiOutlineSelector, HiUserCircle } from "react-icons/hi";
-import { Logo } from "../../components/branding/Logo";
+import { Logo } from "../../../components/branding/Logo";
 import {
   Dropdown,
   DropdownDivider,
   DropdownItem,
   DropdownTrigger,
-} from "../../components/dropdown";
-import { useMeQuery } from "../../generated/graphql";
-import { JournalList } from "./JournalList";
-import { JournalModal } from "./JournalModal";
+} from "../../../components/dropdown";
+import { useMeQuery } from "../../../generated/graphql";
+import { JournalList } from "./drafts/JournalList";
 import { JumpTo } from "./JumpTo";
+import { MoreRoutes } from "./MoreRoutes";
 import { SidebarItem } from "./SidebarItem";
 
 interface SidebarProps {}
@@ -26,16 +26,16 @@ export const Sidebar: React.FC<SidebarProps> = ({}) => {
           <JumpTo />
         </div>
       </div>
-      <div className="py-6 space-y-1.5 border-b">
+      <div className="pb-7 pt-5 space-y-1.5 border-b">
         <SidebarItem name="learn" />
         <SidebarItem name="explore" />
         <SidebarItem name="rewards" />
         <SidebarItem name="settings" />
+        <MoreRoutes />
+        {/* <SidebarItem name="more" /> */}
       </div>
-      <div className="h-full overflow-y-scroll px-7 py-6">
-        <h4 className="font-bold text-sm">My Journals</h4>
+      <div className="h-full overflow-y-scroll">
         <JournalList />
-        <JournalModal />
       </div>
       <Dropdown
         align="end"

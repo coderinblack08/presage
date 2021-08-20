@@ -1,7 +1,12 @@
 import { dedupExchange, fetchExchange } from "@urql/core";
 import { cacheExchange } from "@urql/exchange-graphcache";
 import {
+  CreateBlankArticleMutation,
   CreateJournalMutation,
+  FindArticleDocument,
+  FindArticleQuery,
+  FindDraftsDocument,
+  FindDraftsQuery,
   FindJournalsDocument,
   FindJournalsQuery,
 } from "../generated/graphql";
@@ -37,6 +42,24 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => {
                 (old) => ({
                   ...old,
                   findJournals: [...old.findJournals, result.createJournal],
+                })
+              );
+            },
+            createArticle: (
+              result: CreateBlankArticleMutation,
+              _args,
+              cache,
+              _info
+            ) => {
+              updateCacheQuery<CreateBlankArticleMutation, FindDraftsQuery>(
+                cache,
+                {
+                  query: FindDraftsDocument,
+                  variables: { journalId: result.createArticle.journalId },
+                },
+                (old) => ({
+                  ...old,
+                  findDrafts: [...old.findDrafts, result.createArticle],
                 })
               );
             },

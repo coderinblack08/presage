@@ -1,6 +1,6 @@
 import React from "react";
-import { useHasMounted } from "../../lib/useHasMounted";
-import { useSSRMediaQuery } from "../../lib/useSSRMediaQuery";
+import { useHasMounted } from "../../../lib/useHasMounted";
+import { useSSRMediaQuery } from "../../../lib/useSSRMediaQuery";
 import { Sidebar } from "./Sidebar";
 import { SidebarPanel } from "./SidebarPanel";
 

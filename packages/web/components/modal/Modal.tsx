@@ -8,6 +8,10 @@ interface ModalProps {
   trigger: React.ReactNode;
   title: string;
   description: string;
+  children: (props: {
+    open: boolean;
+    setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  }) => React.ReactNode;
 }
 
 export const Modal: React.FC<ModalProps> = ({
@@ -71,7 +75,7 @@ export const Modal: React.FC<ModalProps> = ({
                     <Dialog.Description className="text-gray-500 mt-1">
                       {description}
                     </Dialog.Description>
-                    <div className="mt-6">{children}</div>
+                    <div className="mt-6">{children({ open, setOpen })}</div>
                     <Dialog.Close
                       as="button"
                       className="absolute top-0 right-0 m-3"

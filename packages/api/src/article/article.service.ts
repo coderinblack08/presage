@@ -1,4 +1,9 @@
-import { Injectable } from "@nestjs/common";
+import {
+  HttpCode,
+  HttpException,
+  HttpStatus,
+  Injectable,
+} from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Article } from "./article.entity";
@@ -10,8 +15,25 @@ export class ArticleService {
     @InjectRepository(Article) private articleRepository: Repository<Article>
   ) {}
 
-  async createBlank(userId: string) {
-    return this.articleRepository.create({ title: "Untitled", userId }).save();
+  async createBlank(userId: string, journalId: string) {
+    return this.articleRepository
+      .create({ title: "Untitled", journalId, userId })
+      .save();
+  }
+
+  async findOne(id: string, userId: string) {
+    const article = await this.articleRepository.findOne(id);
+    if (!article) {
+      throw new HttpException("Article not found", HttpStatus.NOT_FOUND);
+    }
+    if (article.userId !== userId && !article?.isPublished) {
+      throw new HttpException("Forbidden", HttpStatus.FORBIDDEN);
+    }
+    return article;
+  }
+
+  async findDrafts(userId: string, journalId: string) {
+    return this.articleRepository.find({ where: { userId, journalId } });
   }
 
   async update(id: string, data: UpdateArticleInput) {

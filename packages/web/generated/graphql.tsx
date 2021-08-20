@@ -14,6 +14,26 @@ export type Scalars = {
   Float: number;
   /** A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format. */
   DateTime: any;
+  /** The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
+  JSONObject: any;
+};
+
+export type Article = {
+  __typename?: 'Article';
+  id: Scalars['String'];
+  title: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+  canonical?: Maybe<Scalars['String']>;
+  editorJSON?: Maybe<Scalars['JSONObject']>;
+  html?: Maybe<Scalars['String']>;
+  isPublished: Scalars['Boolean'];
+  userId: Scalars['String'];
+  user: User;
+  journalId: Scalars['String'];
+  journal: Journal;
+  publishedAt?: Maybe<Scalars['DateTime']>;
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
 };
 
 export type CreateJournalArgs = {
@@ -21,6 +41,7 @@ export type CreateJournalArgs = {
   description?: Maybe<Scalars['String']>;
   color?: Maybe<Scalars['String']>;
 };
+
 
 
 export type Journal = {
@@ -31,6 +52,7 @@ export type Journal = {
   color: Scalars['String'];
   userId: Scalars['String'];
   user: User;
+  articles: Array<Article>;
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
 };
@@ -40,6 +62,7 @@ export type Mutation = {
   createJournal: Journal;
   updateJournal?: Maybe<Journal>;
   deleteJournal: Scalars['Boolean'];
+  createArticle: Article;
 };
 
 
@@ -58,10 +81,27 @@ export type MutationDeleteJournalArgs = {
   id: Scalars['String'];
 };
 
+
+export type MutationCreateArticleArgs = {
+  journalId: Scalars['String'];
+};
+
 export type Query = {
   __typename?: 'Query';
   me?: Maybe<User>;
   findJournals: Array<Journal>;
+  findDrafts: Array<Article>;
+  findArticle?: Maybe<Article>;
+};
+
+
+export type QueryFindDraftsArgs = {
+  journalId: Scalars['String'];
+};
+
+
+export type QueryFindArticleArgs = {
+  id: Scalars['String'];
 };
 
 export type UpdateJournalArgs = {
@@ -82,9 +122,18 @@ export type User = {
   updatedAt: Scalars['DateTime'];
 };
 
+export type ArticleFragment = { __typename?: 'Article', id: string, title: string, description?: Maybe<string>, canonical?: Maybe<string>, html?: Maybe<string>, editorJSON?: Maybe<any>, isPublished: boolean, publishedAt?: Maybe<any>, journalId: string, userId: string, createdAt: any, updatedAt: any };
+
 export type JournalFragment = { __typename?: 'Journal', id: string, name: string, color: string, description?: Maybe<string>, createdAt: any, updatedAt: any };
 
 export type UserFragment = { __typename?: 'User', id: string, profilePicture?: Maybe<string>, displayName: string, username: string, bio?: Maybe<string>, createdAt: any };
+
+export type CreateBlankArticleMutationVariables = Exact<{
+  journalId: Scalars['String'];
+}>;
+
+
+export type CreateBlankArticleMutation = { __typename?: 'Mutation', createArticle: { __typename?: 'Article', id: string, title: string, description?: Maybe<string>, canonical?: Maybe<string>, html?: Maybe<string>, editorJSON?: Maybe<any>, isPublished: boolean, publishedAt?: Maybe<any>, journalId: string, userId: string, createdAt: any, updatedAt: any } };
 
 export type CreateJournalMutationVariables = Exact<{
   data: CreateJournalArgs;
@@ -92,6 +141,20 @@ export type CreateJournalMutationVariables = Exact<{
 
 
 export type CreateJournalMutation = { __typename?: 'Mutation', createJournal: { __typename?: 'Journal', id: string, name: string, color: string, description?: Maybe<string>, createdAt: any, updatedAt: any } };
+
+export type FindArticleQueryVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type FindArticleQuery = { __typename?: 'Query', findArticle?: Maybe<{ __typename?: 'Article', id: string, title: string, description?: Maybe<string>, canonical?: Maybe<string>, html?: Maybe<string>, editorJSON?: Maybe<any>, isPublished: boolean, publishedAt?: Maybe<any>, journalId: string, userId: string, createdAt: any, updatedAt: any }> };
+
+export type FindDraftsQueryVariables = Exact<{
+  journalId: Scalars['String'];
+}>;
+
+
+export type FindDraftsQuery = { __typename?: 'Query', findDrafts: Array<{ __typename?: 'Article', id: string, title: string, description?: Maybe<string>, canonical?: Maybe<string>, html?: Maybe<string>, editorJSON?: Maybe<any>, isPublished: boolean, publishedAt?: Maybe<any>, journalId: string, userId: string, createdAt: any, updatedAt: any }> };
 
 export type FindJournalsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -103,6 +166,22 @@ export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type MeQuery = { __typename?: 'Query', me?: Maybe<{ __typename?: 'User', id: string, profilePicture?: Maybe<string>, displayName: string, username: string, bio?: Maybe<string>, createdAt: any }> };
 
+export const ArticleFragmentDoc = gql`
+    fragment Article on Article {
+  id
+  title
+  description
+  canonical
+  html
+  editorJSON
+  isPublished
+  publishedAt
+  journalId
+  userId
+  createdAt
+  updatedAt
+}
+    `;
 export const JournalFragmentDoc = gql`
     fragment Journal on Journal {
   id
@@ -123,6 +202,17 @@ export const UserFragmentDoc = gql`
   createdAt
 }
     `;
+export const CreateBlankArticleDocument = gql`
+    mutation CreateBlankArticle($journalId: String!) {
+  createArticle(journalId: $journalId) {
+    ...Article
+  }
+}
+    ${ArticleFragmentDoc}`;
+
+export function useCreateBlankArticleMutation() {
+  return Urql.useMutation<CreateBlankArticleMutation, CreateBlankArticleMutationVariables>(CreateBlankArticleDocument);
+};
 export const CreateJournalDocument = gql`
     mutation CreateJournal($data: CreateJournalArgs!) {
   createJournal(data: $data) {
@@ -133,6 +223,28 @@ export const CreateJournalDocument = gql`
 
 export function useCreateJournalMutation() {
   return Urql.useMutation<CreateJournalMutation, CreateJournalMutationVariables>(CreateJournalDocument);
+};
+export const FindArticleDocument = gql`
+    query FindArticle($id: String!) {
+  findArticle(id: $id) {
+    ...Article
+  }
+}
+    ${ArticleFragmentDoc}`;
+
+export function useFindArticleQuery(options: Omit<Urql.UseQueryArgs<FindArticleQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<FindArticleQuery>({ query: FindArticleDocument, ...options });
+};
+export const FindDraftsDocument = gql`
+    query FindDrafts($journalId: String!) {
+  findDrafts(journalId: $journalId) {
+    ...Article
+  }
+}
+    ${ArticleFragmentDoc}`;
+
+export function useFindDraftsQuery(options: Omit<Urql.UseQueryArgs<FindDraftsQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<FindDraftsQuery>({ query: FindDraftsDocument, ...options });
 };
 export const FindJournalsDocument = gql`
     query FindJournals {

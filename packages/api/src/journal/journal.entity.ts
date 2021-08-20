@@ -1,4 +1,5 @@
 import { Field, ID, ObjectType } from "@nestjs/graphql";
+import { Article } from "src/article/article.entity";
 import { User } from "src/user/user.entity";
 import {
   BaseEntity,
@@ -7,6 +8,7 @@ import {
   DeleteDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
@@ -40,6 +42,10 @@ export class Journal extends BaseEntity {
     onDelete: "CASCADE",
   })
   user: User;
+
+  @Field(() => [Article])
+  @OneToMany(() => Article, (article) => article.journal, { cascade: true })
+  articles: Article[];
 
   @DeleteDateColumn()
   deletedAt: Date;

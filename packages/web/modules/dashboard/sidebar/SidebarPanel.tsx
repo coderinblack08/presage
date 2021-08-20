@@ -1,5 +1,5 @@
 import React from "react";
-import { Sidepanel, SidepanelTrigger } from "../../components/sidepanel";
+import { Sidepanel, SidepanelTrigger } from "../../../components/sidepanel";
 import { Sidebar } from "./Sidebar";
 
 interface SidebarPanelProps {}

@@ -65,12 +65,18 @@ export const Button: React.FC<ButtonProps> = ({
           : "focus:outline-none focus:ring focus:ring-gray-300"
       } flex items-center justify-center transition ${
         rounded ? "!rounded-full" : ""
-      } ${outline ? "border shadow-sm" : ""} ${className}`}
+      } ${
+        outline ? "border shadow-sm focus:border-gray-500/50" : ""
+      } ${className}`}
       {...props}
     >
       <span className={`flex items-center ${loading ? "opacity-0" : ""}`}>
         {icon && <span className={children ? "mr-2" : ""}>{icon}</span>}
-        <div className={`inline font-bold ${size in ["small"] ? "small" : ""}`}>
+        <div
+          className={`inline font-bold ${
+            ["small"].includes(size) ? "text-sm" : ""
+          }`}
+        >
           {children}
         </div>
       </span>

@@ -18,20 +18,20 @@ interface SidebarItemProps {
 
 const icons = {
   learn: {
-    focused: <Home />,
-    default: <HomeOutlined />,
+    focused: <Home fontSize="medium" />,
+    default: <HomeOutlined fontSize="medium" />,
   },
   explore: {
-    focused: <Explore />,
-    default: <ExploreOutlined />,
+    focused: <Explore fontSize="medium" />,
+    default: <ExploreOutlined fontSize="medium" />,
   },
   settings: {
-    focused: <Settings />,
-    default: <SettingsOutlined />,
+    focused: <Settings fontSize="medium" />,
+    default: <SettingsOutlined fontSize="medium" />,
   },
   rewards: {
-    focused: <EmojiEvents />,
-    default: <EmojiEventsOutlined />,
+    focused: <EmojiEvents fontSize="medium" />,
+    default: <EmojiEventsOutlined fontSize="medium" />,
   },
 };
 
@@ -48,7 +48,7 @@ export const SidebarItem: React.FC<SidebarItemProps> = ({ name }) => {
 
   return (
     <Link href={routes[name]} passHref>
-      <a className={`block px-7 ${isFocused ? "bg-gray-100" : ""} py-3 w-full`}>
+      <a className={`block px-8 ${isFocused ? "bg-gray-100" : ""} py-3 w-full`}>
         <div
           className={`flex items-center space-x-3.5 w-full ${
             isFocused ? "text-gray-800" : "text-gray-500"
@@ -57,7 +57,7 @@ export const SidebarItem: React.FC<SidebarItemProps> = ({ name }) => {
           {icons[name][isFocused ? "focused" : "default"]}
           <span
             className={`capitalize ${
-              isFocused ? "font-semibold" : "font-medium"
+              isFocused ? "font-semibold" : "font-medium text-gray-500"
             }`}
           >
             {name}

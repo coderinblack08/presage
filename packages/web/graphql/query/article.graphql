@@ -1,0 +1,5 @@
+query FindArticle($id: String!) {
+  findArticle(id: $id) {
+    ...Article
+  }
+}

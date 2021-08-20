@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { FiSearch } from "react-icons/fi";
-import { Input } from "../../components/input";
-import { useIsMac } from "../../lib/useIsMac";
+import { Input } from "../../../components/input";
+import { useIsMac } from "../../../lib/useIsMac";
 import create from "zustand";
 import { combine } from "zustand/middleware";
 import { useRef } from "react";

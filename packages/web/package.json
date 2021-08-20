@@ -20,11 +20,14 @@
     "@radix-ui/react-id": "^0.0.6",
     "@radix-ui/react-portal": "^0.0.15",
     "@svgr/webpack": "^5.5.0",
+    "@tiptap/react": "^2.0.0-beta.60",
+    "@tiptap/starter-kit": "^2.0.0-beta.97",
     "@urql/core": "^2.2.0",
     "@urql/exchange-graphcache": "^4.3.0",
     "formik": "^2.2.9",
     "framer-motion": "^4.1.17",
     "graphql": "^15.5.1",
+    "lodash.isequal": "^4.5.0",
     "next": "11.1.0",
     "next-seo": "^4.26.0",
     "next-urql": "^3.2.0",
@@ -54,6 +57,7 @@
     "@storybook/react": "^6.3.7",
     "@tailwindcss/forms": "^0.3.3",
     "@tailwindcss/typography": "^0.4.1",
+    "@types/lodash.isequal": "^4.5.5",
     "@types/react": "17.0.17",
     "autoprefixer": "^10.3.1",
     "babel-loader": "^8.2.2",
@@ -64,5 +68,9 @@
     "postcss-loader": "4.2.0",
     "tailwindcss": "^2.2.7",
     "typescript": "4.3.5"
+  },
+  "resolutions": {
+    "prosemirror-model": "1.13.1",
+    "prosemirror-view": "1.16.5"
   }
 }

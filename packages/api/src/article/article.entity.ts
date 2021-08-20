@@ -5,13 +5,15 @@ import {
   BaseEntity,
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { Journal } from "src/journal/journal.entity";
 
-@Entity()
+@Entity("articles")
 @ObjectType()
 export class Article extends BaseEntity {
   @Field()
@@ -30,13 +32,18 @@ export class Article extends BaseEntity {
   @Column("text", { nullable: true })
   canonical: string | null;
 
-  @Field(() => GraphQLJSONObject)
+  @Field(() => GraphQLJSONObject, { nullable: true })
   @Column("json", { nullable: true })
   // eslint-disable-next-line @typescript-eslint/ban-types
   editorJSON: JSON | null;
 
+  @Field(() => String, { nullable: true })
   @Column("text", { nullable: true })
-  html: string;
+  html: string | null;
+
+  @Field()
+  @Column("bool", { default: false })
+  isPublished: boolean;
 
   @Field()
   @Column()
@@ -45,6 +52,23 @@ export class Article extends BaseEntity {
   @Field(() => User)
   @ManyToOne(() => User, { onDelete: "CASCADE" })
   user: User;
+
+  @Field()
+  @Column()
+  journalId: string;
+
+  @Field(() => Journal)
+  @ManyToOne(() => Journal, (journal) => journal.articles, {
+    onDelete: "CASCADE",
+  })
+  journal: Journal;
+
+  @Field(() => Date, { nullable: true })
+  @Column("timestamp", { nullable: true })
+  publishedAt: Date | null;
+
+  @DeleteDateColumn()
+  deletedAt: Date | null;
 
   @Field()
   @CreateDateColumn()

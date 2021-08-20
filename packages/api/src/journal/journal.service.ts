@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { generateColor } from "@presage/common";
+import { Article } from "src/article/article.entity";
 import {
   FindConditions,
   FindManyOptions,
@@ -15,7 +16,9 @@ import { Journal } from "./journal.entity";
 export class JournalService {
   constructor(
     @InjectRepository(Journal)
-    private readonly journalRepository: Repository<Journal>
+    private readonly journalRepository: Repository<Journal>,
+    @InjectRepository(Journal)
+    private readonly articleRepository: Repository<Article>
   ) {}
 
   sortOptions = {
@@ -54,6 +57,11 @@ export class JournalService {
   }
 
   async delete(criteria: FindConditions<Journal>) {
-    return this.journalRepository.softDelete(criteria);
+    const journal = await this.journalRepository.findOne(criteria, {
+      relations: ["article"],
+    }); // should remove articles
+    if (journal) {
+      journal.softRemove();
+    }
   }
 }

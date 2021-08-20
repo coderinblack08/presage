@@ -35,7 +35,7 @@ import { ArticleModule } from "./article/article.module";
             : false,
           autoSchemaFile: true,
           cors: { credentials: true, origin: "http://localhost:3000" },
-          include: [UserModule, JournalModule],
+          include: [UserModule, JournalModule, ArticleModule],
           context: ({ req, res }) => ({ req, res }),
         };
       },
