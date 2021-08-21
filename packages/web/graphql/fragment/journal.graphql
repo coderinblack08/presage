@@ -1,7 +1,7 @@
 fragment Journal on Journal {
   id
   name
-  color
+  emoji
   description
   createdAt
   updatedAt

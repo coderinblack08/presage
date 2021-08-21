@@ -27,7 +27,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
         className="block md:hidden"
         trigger={
           <DropdownTrigger className="block md:hidden">
-            <Button size="none" color="transparent">
+            <Button shadow={false} size="none" color="transparent">
               <svg
                 className="w-6 h-6"
                 viewBox="0 0 24 24"

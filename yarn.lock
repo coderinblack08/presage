@@ -3483,6 +3483,29 @@
   resolved "https://registry.yarnpkg.com/@radix-ui/react-polymorphic/-/react-polymorphic-0.0.13.tgz#d010d48281626191c9513f11db5d82b37662418a"
   integrity sha512-0sGqBp+v9/yrsMhPfAejxcem2MwAFgaSAxF3Sieaklm6ZVYM/hTZxxWI5NVOLGV+482GwW0wIqwpVUzREjmh+w==
 
+"@radix-ui/react-popover@^0.0.20":
+  version "0.0.20"
+  resolved "https://registry.yarnpkg.com/@radix-ui/react-popover/-/react-popover-0.0.20.tgz#ad8a25c72e94a83dbf7df0a9240150bd984743a1"
+  integrity sha512-ZZ1u4USf4lplboKUq/ilbT50GjJCqBOFu3EMKF37NaV23n/cioGmbL7MraEWPY4MIAoEj633AEDzVTEefoTNTw==
+  dependencies:
+    "@babel/runtime" "^7.13.10"
+    "@radix-ui/primitive" "0.0.5"
+    "@radix-ui/react-compose-refs" "0.0.5"
+    "@radix-ui/react-context" "0.0.5"
+    "@radix-ui/react-dismissable-layer" "0.0.15"
+    "@radix-ui/react-focus-guards" "0.0.7"
+    "@radix-ui/react-focus-scope" "0.0.15"
+    "@radix-ui/react-id" "0.0.6"
+    "@radix-ui/react-polymorphic" "0.0.13"
+    "@radix-ui/react-popper" "0.0.18"
+    "@radix-ui/react-portal" "0.0.15"
+    "@radix-ui/react-presence" "0.0.15"
+    "@radix-ui/react-primitive" "0.0.15"
+    "@radix-ui/react-slot" "0.0.12"
+    "@radix-ui/react-use-controllable-state" "0.0.6"
+    aria-hidden "^1.1.1"
+    react-remove-scroll "^2.4.0"
+
 "@radix-ui/react-popper@0.0.18":
   version "0.0.18"
   resolved "https://registry.yarnpkg.com/@radix-ui/react-popper/-/react-popper-0.0.18.tgz#e85ec077c18ffca92ce97cc19586dcc6f022fffb"
@@ -4517,6 +4540,11 @@
   dependencies:
     defer-to-connect "^1.0.1"
 
+"@tabler/icons@^1.41.2":
+  version "1.41.2"
+  resolved "https://registry.yarnpkg.com/@tabler/icons/-/icons-1.41.2.tgz#effccbb261539b68609cc7dc660a058683170ee1"
+  integrity sha512-X6cQmMC24hiwg0p2BzasvU3IeCCdOk0f/9d6gNNtJM4lzG2TCloTns1bVvU5MAFkITGukxUqjPFE3Ecd6kGsfw==
+
 "@tailwindcss/forms@^0.3.3":
   version "0.3.3"
   resolved "https://registry.yarnpkg.com/@tailwindcss/forms/-/forms-0.3.3.tgz#a29d22668804f3dae293dcadbef1aa6315c45b64"
@@ -4890,6 +4918,13 @@
   resolved "https://registry.yarnpkg.com/@types/cors/-/cors-2.8.10.tgz#61cc8469849e5bcdd0c7044122265c39cec10cf4"
   integrity sha512-C7srjHiVG3Ey1nR6d511dtDkCEjxuN9W1HWAEjGq8kpcwmNM6JJkpC0xvabM7BXTG2wDq8Eu33iH9aQKa7IvLQ==
 
+"@types/emoji-mart@^3.0.5":
+  version "3.0.5"
+  resolved "https://registry.yarnpkg.com/@types/emoji-mart/-/emoji-mart-3.0.5.tgz#0e5d6fefe28c150606a75a962bcf1c5956439001"
+  integrity sha512-bsMEXVPrasIJ03u61msIKMMiL7Hh6dGQ3Gcz3CjytTxTQKQRdf/g0owWTSSL5mvKNgu9UfgornrF6qqClPk1Jw==
+  dependencies:
+    "@types/react" "*"
+
 "@types/eslint-scope@^3.7.0":
   version "3.7.1"
   resolved "https://registry.yarnpkg.com/@types/eslint-scope/-/eslint-scope-3.7.1.tgz#8dc390a7b4f9dd9f1284629efce982e41612116e"
@@ -5118,6 +5153,11 @@
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/@types/minimist/-/minimist-1.2.2.tgz#ee771e2ba4b3dc5b372935d549fd9617bf345b8c"
   integrity sha512-jhuKLIRrhvCPLqwPcx6INqmKeiA5EWrsCOPhrlFSrbrmU4ZMPjj5Ul/oLCMDO98XRUIwVm78xICz4EPCektzeQ==
+
+"@types/node-emoji@^1.8.1":
+  version "1.8.1"
+  resolved "https://registry.yarnpkg.com/@types/node-emoji/-/node-emoji-1.8.1.tgz#689cb74fdf6e84309bcafce93a135dfecd01de3f"
+  integrity sha512-0fRfA90FWm6KJfw6P9QGyo0HDTCmthZ7cWaBQndITlaWLTZ6njRyKwrwpzpg+n6kBXBIGKeUHEQuBx7bphGJkA==
 
 "@types/node-fetch@^2.5.7":
   version "2.5.12"
@@ -9146,6 +9186,14 @@ emittery@^0.8.1:
   version "0.8.1"
   resolved "https://registry.yarnpkg.com/emittery/-/emittery-0.8.1.tgz#bb23cc86d03b30aa75a7f734819dee2e1ba70860"
   integrity sha512-uDfvUjVrfGJJhymx/kz6prltenw1u7WrCg1oa94zYY8xxVpLLUu045LAT0dhDZdXG58/EpPL/5kA180fQ/qudg==
+
+emoji-mart@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/emoji-mart/-/emoji-mart-3.0.1.tgz#9ce86706e02aea0506345f98464814a662ca54c6"
+  integrity sha512-sxpmMKxqLvcscu6mFn9ITHeZNkGzIvD0BSNFE/LJESPbCA8s1jM6bCDPjWbV31xHq7JXaxgpHxLB54RCbBZSlg==
+  dependencies:
+    "@babel/runtime" "^7.0.0"
+    prop-types "^15.6.0"
 
 "emoji-regex@>=6.0.0 <=6.1.1":
   version "6.1.1"
@@ -14218,7 +14266,7 @@ node-emoji@1.10.0:
   dependencies:
     lodash.toarray "^4.4.0"
 
-node-emoji@^1.8.1:
+node-emoji@^1.11.0, node-emoji@^1.8.1:
   version "1.11.0"
   resolved "https://registry.yarnpkg.com/node-emoji/-/node-emoji-1.11.0.tgz#69a0150e6946e2f115e9d7ea4df7971e2628301c"
   integrity sha512-wo2DpQkQp7Sjm2A0cq+sN7EHKO6Sl0ctXeBdFZrL9T9+UywORbufTcTZxom8YqpLQt/FqNMUkOpkZrJVYSKD3A==

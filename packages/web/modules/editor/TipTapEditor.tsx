@@ -1,7 +1,7 @@
+import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
 import { BubbleMenu, EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import Link from "@tiptap/extension-link";
 import React from "react";
 import {
   AiOutlineBold,
@@ -10,11 +10,6 @@ import {
   AiOutlineUnderline,
 } from "react-icons/ai";
 import { Button } from "../../components/button";
-import {
-  LinkOverlay,
-  LinkOverlayExtension,
-  setLink,
-} from "./extensions/link/LinkOverlay";
 import { SlashCommands } from "./extensions/slash-menu/commands";
 
 interface TipTapEditorProps {}
@@ -25,7 +20,6 @@ export const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
       StarterKit,
       SlashCommands,
       Placeholder.configure({ placeholder: "Type '/' for commands" }),
-      LinkOverlayExtension,
       Link,
     ],
     content: "<p>Hello World! 🌎️</p>",
@@ -49,15 +43,10 @@ export const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
             <Button shadow={false} icon={<AiOutlineBold />} />
             <Button shadow={false} icon={<AiOutlineItalic />} />
             <Button shadow={false} icon={<AiOutlineUnderline />} />
-            <Button
-              shadow={false}
-              icon={<AiOutlineLink />}
-              onClick={() => setLink(editor)}
-            />
+            <Button shadow={false} icon={<AiOutlineLink />} />
           </div>
         </BubbleMenu>
       )}
-      <LinkOverlay editor={editor} />
       <EditorContent editor={editor} />
     </>
   );

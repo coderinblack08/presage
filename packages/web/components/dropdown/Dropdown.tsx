@@ -31,7 +31,7 @@ export const Dropdown: React.FC<DropdownRootProps> = ({
         alignOffset={alignOffset}
         align={align}
         side={side}
-        className={`bg-white border rounded-lg shadow-sm w-56 overflow-hidden py-2 ${className}`}
+        className={`bg-white border rounded-lg shadow w-56 overflow-hidden py-2 ${className}`}
         initial={{ y: -12, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         as={motion.div}
@@ -75,8 +75,8 @@ export const DropdownItem: React.FC<DropdownItemProps> = ({
       href={href || undefined}
       {...props}
     >
-      {icon ? <div className="mr-2">{icon}</div> : null}
-      <div>{children}</div>
+      {icon ? <div className="mr-2 text-gray-600">{icon}</div> : null}
+      <div className="text-gray-600">{children}</div>
     </DropdownMenu.Item>
   );
 };

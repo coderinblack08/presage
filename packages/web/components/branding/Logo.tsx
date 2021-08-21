@@ -14,7 +14,7 @@ export const Logo: React.FC<LogoProps> = ({
   const width = small ? 32 : 36;
 
   return (
-    <div className="flex items-center">
+    <div className="flex items-center select-none">
       <Image
         width={width}
         height={(width / 509) * 289}

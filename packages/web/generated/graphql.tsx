@@ -39,7 +39,7 @@ export type Article = {
 export type CreateJournalArgs = {
   name: Scalars['String'];
   description?: Maybe<Scalars['String']>;
-  color?: Maybe<Scalars['String']>;
+  emoji?: Maybe<Scalars['String']>;
 };
 
 
@@ -49,7 +49,7 @@ export type Journal = {
   id: Scalars['ID'];
   name: Scalars['String'];
   description?: Maybe<Scalars['String']>;
-  color: Scalars['String'];
+  emoji: Scalars['String'];
   userId: Scalars['String'];
   user: User;
   articles: Array<Article>;
@@ -107,7 +107,7 @@ export type QueryFindArticleArgs = {
 export type UpdateJournalArgs = {
   name?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
-  color?: Maybe<Scalars['String']>;
+  emoji?: Maybe<Scalars['String']>;
 };
 
 export type User = {
@@ -124,7 +124,7 @@ export type User = {
 
 export type ArticleFragment = { __typename?: 'Article', id: string, title: string, description?: Maybe<string>, canonical?: Maybe<string>, html?: Maybe<string>, editorJSON?: Maybe<any>, isPublished: boolean, publishedAt?: Maybe<any>, journalId: string, userId: string, createdAt: any, updatedAt: any };
 
-export type JournalFragment = { __typename?: 'Journal', id: string, name: string, color: string, description?: Maybe<string>, createdAt: any, updatedAt: any };
+export type JournalFragment = { __typename?: 'Journal', id: string, name: string, emoji: string, description?: Maybe<string>, createdAt: any, updatedAt: any };
 
 export type UserFragment = { __typename?: 'User', id: string, profilePicture?: Maybe<string>, displayName: string, username: string, bio?: Maybe<string>, createdAt: any };
 
@@ -140,7 +140,7 @@ export type CreateJournalMutationVariables = Exact<{
 }>;
 
 
-export type CreateJournalMutation = { __typename?: 'Mutation', createJournal: { __typename?: 'Journal', id: string, name: string, color: string, description?: Maybe<string>, createdAt: any, updatedAt: any } };
+export type CreateJournalMutation = { __typename?: 'Mutation', createJournal: { __typename?: 'Journal', id: string, name: string, emoji: string, description?: Maybe<string>, createdAt: any, updatedAt: any } };
 
 export type FindArticleQueryVariables = Exact<{
   id: Scalars['String'];
@@ -159,7 +159,7 @@ export type FindDraftsQuery = { __typename?: 'Query', findDrafts: Array<{ __type
 export type FindJournalsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FindJournalsQuery = { __typename?: 'Query', findJournals: Array<{ __typename?: 'Journal', id: string, name: string, color: string, description?: Maybe<string>, createdAt: any, updatedAt: any }> };
+export type FindJournalsQuery = { __typename?: 'Query', findJournals: Array<{ __typename?: 'Journal', id: string, name: string, emoji: string, description?: Maybe<string>, createdAt: any, updatedAt: any }> };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -186,7 +186,7 @@ export const JournalFragmentDoc = gql`
     fragment Journal on Journal {
   id
   name
-  color
+  emoji
   description
   createdAt
   updatedAt

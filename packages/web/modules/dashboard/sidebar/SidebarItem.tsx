@@ -1,16 +1,16 @@
-import React from "react";
-import Link from "next/link";
 import {
-  EmojiEvents,
-  EmojiEventsOutlined,
-  ExploreOutlined,
-  Home,
-  Explore,
-  SettingsOutlined,
-  Settings,
-  HomeOutlined,
-} from "@material-ui/icons";
+  IconArchive,
+  IconBrandSafari,
+  IconSmartHome,
+  IconTrophy,
+} from "@tabler/icons";
 import { useRouter } from "next/dist/client/router";
+import Link from "next/link";
+import React from "react";
+import { FocusedArchiveIcon } from "../../icons/FocusedArchiveIcon";
+import { FocusedExploreIcon } from "../../icons/FocusedExploreIcon";
+import { FocusedHomeIcon } from "../../icons/FocusedHomeIcon";
+import { FocusedTrophyIcon } from "../../icons/FocusedTrophyIcon";
 
 interface SidebarItemProps {
   name: keyof typeof icons;
@@ -18,27 +18,27 @@ interface SidebarItemProps {
 
 const icons = {
   learn: {
-    focused: <Home fontSize="medium" />,
-    default: <HomeOutlined fontSize="medium" />,
+    focused: <FocusedHomeIcon />,
+    default: <IconSmartHome stroke={1.5} />,
   },
   explore: {
-    focused: <Explore fontSize="medium" />,
-    default: <ExploreOutlined fontSize="medium" />,
+    focused: <FocusedExploreIcon />,
+    default: <IconBrandSafari stroke={1.5} />,
   },
-  settings: {
-    focused: <Settings fontSize="medium" />,
-    default: <SettingsOutlined fontSize="medium" />,
+  subscriptions: {
+    focused: <FocusedArchiveIcon />,
+    default: <IconArchive stroke={1.5} />,
   },
   rewards: {
-    focused: <EmojiEvents fontSize="medium" />,
-    default: <EmojiEventsOutlined fontSize="medium" />,
+    focused: <FocusedTrophyIcon />,
+    default: <IconTrophy stroke={1.5} />,
   },
 };
 
 const routes = {
   learn: "/",
   explore: "/explore",
-  settings: "/settings",
+  subscriptions: "/subscriptions",
   rewards: "/rewards",
 };
 
@@ -48,20 +48,14 @@ export const SidebarItem: React.FC<SidebarItemProps> = ({ name }) => {
 
   return (
     <Link href={routes[name]} passHref>
-      <a className={`block px-8 ${isFocused ? "bg-gray-100" : ""} py-3 w-full`}>
-        <div
-          className={`flex items-center space-x-3.5 w-full ${
-            isFocused ? "text-gray-800" : "text-gray-500"
-          }`}
-        >
+      <a
+        className={`block px-4 py-2 w-full rounded-lg ${
+          isFocused ? "bg-[#EEEEEE]" : ""
+        }`}
+      >
+        <div className="flex items-center space-x-3 w-full text-gray-600">
           {icons[name][isFocused ? "focused" : "default"]}
-          <span
-            className={`capitalize ${
-              isFocused ? "font-semibold" : "font-medium text-gray-500"
-            }`}
-          >
-            {name}
-          </span>
+          <span className="capitalize">{name}</span>
         </div>
       </a>
     </Link>

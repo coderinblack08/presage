@@ -1,4 +1,4 @@
-const { gray } = require("tailwindcss/colors");
+const { gray, warmGray } = require("tailwindcss/colors");
 
 module.exports = {
   purge: [
@@ -52,6 +52,34 @@ module.exports = {
       white: "#FFFFFF",
       black: "#000000",
       gray,
+      warmGray,
+    },
+    extend: {
+      typography: (theme) => ({
+        DEFAULT: {
+          css: {
+            color: theme("colors.gray.600"),
+            pre: {
+              backgroundColor: theme("colors.gray.800"),
+              padding: "1.5rem",
+              borderRadius: 8,
+              code: {
+                fontWeight: "700 !important",
+              },
+              "::selection": {
+                backgroundColor: theme("colors.gray.200"),
+                color: theme("colors.gray.800"),
+              },
+            },
+            h1: {
+              fontWeight: 700,
+            },
+            h2: {
+              marginTop: "0px",
+            },
+          },
+        },
+      }),
     },
   },
   variants: {

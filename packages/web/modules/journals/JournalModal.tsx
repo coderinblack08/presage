@@ -1,14 +1,13 @@
-import { AddOutlined } from "@material-ui/icons";
-import { generateColor, journalColors } from "@presage/common";
+import { IconFolderPlus } from "@tabler/icons";
+import { generateRandomEmoji } from "@presage/common";
 import { Form, Formik } from "formik";
 import React from "react";
-import { useRef } from "react";
 import * as yup from "yup";
 import { Button } from "../../components/button";
 import { InputField, TextareaField } from "../../components/input";
 import { Modal, ModalTrigger } from "../../components/modal";
 import { useCreateJournalMutation } from "../../generated/graphql";
-import { ColorSelect } from "./ColorSelect";
+import { EmojiSelect } from "./EmojiSelect";
 
 interface JournalModalProps {}
 
@@ -19,11 +18,11 @@ export const JournalModal: React.FC<JournalModalProps> = ({}) => {
     <Modal
       trigger={
         <ModalTrigger>
-          <button className="flex items-center space-x-2 absolute bottom-0 w-full px-5 py-3 border-t">
-            <AddOutlined fontSize="small" className="text-gray-400" />
-            <span className="text-sm font-semibold text-gray-500">
-              Add Journal
-            </span>
+          <button className="flex items-center w-full p-2">
+            <div className="p-1 rounded-lg shadow border bg-white flex items-center justify-center mr-3">
+              <IconFolderPlus size={20} className="text-gray-400" />
+            </div>
+            <span className="text-gray-600">New Journal</span>
           </button>
         </ModalTrigger>
       }
@@ -35,15 +34,17 @@ export const JournalModal: React.FC<JournalModalProps> = ({}) => {
           initialValues={{
             name: "",
             description: "",
-            color: generateColor(),
+            emoji: generateRandomEmoji(),
           }}
           validationSchema={yup.object().shape({
             name: yup.string().max(25).required(),
-            description: yup.string().min(5).max(50),
-            color: yup.string().oneOf(journalColors).required(),
+            description: yup.string().min(5).max(100),
+            emoji: yup.string().required(),
           })}
           onSubmit={async (values) => {
             try {
+              console.log(values);
+
               await createJournal({
                 data: { ...values, description: values.description || null },
               });
@@ -53,7 +54,7 @@ export const JournalModal: React.FC<JournalModalProps> = ({}) => {
         >
           {({ isSubmitting }) => (
             <Form className="space-y-3">
-              <ColorSelect />
+              <EmojiSelect />
               <InputField placeholder="Name" name="name" outline />
               <TextareaField
                 placeholder="Description"

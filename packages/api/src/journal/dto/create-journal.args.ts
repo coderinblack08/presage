@@ -1,5 +1,5 @@
 import { Field, InputType } from "@nestjs/graphql";
-import { IsHexColor, IsOptional, Length } from "class-validator";
+import { IsOptional, Length, Matches } from "class-validator";
 
 @InputType()
 export class CreateJournalArgs {
@@ -9,13 +9,15 @@ export class CreateJournalArgs {
 
   @IsOptional()
   @Field({ nullable: true })
-  @Length(5, 50)
+  @Length(5, 100)
   description?: string;
 
   @IsOptional()
   @Field({ nullable: true })
-  @IsHexColor()
-  color?: string;
+  @Matches(
+    /^(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])$/
+  )
+  emoji?: string;
 
   userId: string;
 }

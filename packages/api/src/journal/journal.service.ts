@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
+import { generateRandomEmoji } from "@presage/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { generateColor } from "@presage/common";
 import { Article } from "src/article/article.entity";
 import {
   FindConditions,
@@ -40,8 +40,8 @@ export class JournalService {
   }
 
   async create(args: CreateJournalArgs) {
-    if (!args.color) {
-      args.color = generateColor();
+    if (!args.emoji) {
+      args.emoji = generateRandomEmoji();
     }
     return this.journalRepository.create(args).save();
   }

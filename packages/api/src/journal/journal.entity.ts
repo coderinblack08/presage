@@ -30,7 +30,7 @@ export class Journal extends BaseEntity {
 
   @Field()
   @Column()
-  color: string; // hex
+  emoji: string;
 
   @Field()
   @Column()
