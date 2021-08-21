@@ -31,10 +31,7 @@ export const EmojiSelect: React.FC<EmojiSelectProps> = ({}) => {
         </PopoverTrigger>
       }
     >
-      <Picker
-        set="apple"
-        onSelect={(v) => helpers.setValue((v as any).native)}
-      />
+      <Picker onSelect={(v) => helpers.setValue((v as any).native)} />
     </Popover>
   );
 };

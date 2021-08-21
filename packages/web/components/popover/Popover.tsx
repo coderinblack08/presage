@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import * as RadixPopover from "@radix-ui/react-popover";
+import { Transition } from "@headlessui/react";
 
 interface PopoverProps {
   trigger: React.ReactNode;
@@ -13,12 +14,16 @@ export const Popover: React.FC<PopoverProps> = ({
   trigger,
   children,
 }) => {
+  const [isOpen, setIsOpen] = useState(false);
   const props = open
     ? {
         open,
         onOpenChange: setOpen,
       }
-    : {};
+    : {
+        open: isOpen,
+        onOpenChange: setIsOpen,
+      };
 
   return (
     <RadixPopover.Root {...props}>

@@ -1,11 +1,10 @@
 import { useRouter } from "next/dist/client/router";
 import Link from "next/link";
-import React from "react";
-import { useMemo } from "react";
-import { Article } from "../../../../generated/graphql";
+import React, { useMemo } from "react";
+import { ArticleFragment } from "../../../../generated/graphql";
 
 interface DraftItemProps {
-  draft: Article;
+  draft: ArticleFragment;
 }
 
 export const DraftItem: React.FC<DraftItemProps> = ({ draft }) => {
@@ -22,13 +21,15 @@ export const DraftItem: React.FC<DraftItemProps> = ({ draft }) => {
   return (
     <Link key={draft.id} href={`/draft/${draft.id}`} passHref>
       <a
-        className={`flex items-center space-x-3 px-3 py-2 text-gray-500 rounded-lg ${
-          isOnPath ? "bg-gray-100" : "bg-white"
+        className={`flex items-center space-x-3 pl-4 pr-2 py-2 rounded-lg ${
+          isOnPath
+            ? "bg-[#EEEEEE] text-gray-600"
+            : "bg-warmGray-50 text-gray-500"
         }`}
       >
         <div className="rounded-lg bg-white border shadow-sm p-1">
           <svg
-            className="text-gray-400"
+            className={isOnPath ? "text-gray-500" : "text-gray-400"}
             width="18"
             height="18"
             viewBox="0 0 18 18"
@@ -45,7 +46,7 @@ export const DraftItem: React.FC<DraftItemProps> = ({ draft }) => {
             />
           </svg>
         </div>
-        <h3 className="font-semibold">{draft.title}</h3>
+        <h3 className="font-semibold text-[13px]">{draft.title}</h3>
       </a>
     </Link>
   );
