@@ -4577,6 +4577,15 @@
     prosemirror-view "^1.19.0"
     tippy.js "^6.3.1"
 
+"@tiptap/extension-bubble-menu@^2.0.0-beta.30":
+  version "2.0.0-beta.30"
+  resolved "https://registry.yarnpkg.com/@tiptap/extension-bubble-menu/-/extension-bubble-menu-2.0.0-beta.30.tgz#a5a5308a3c9ea615cc2611e34d7a74a2c4a77934"
+  integrity sha512-bbUFSokfTohpMOVRqRspRDktxaNyAiv72ZLzIxtMjv55fenyiqrTpeopO0GouG/raltJMv034GNQ2yMs0jRbww==
+  dependencies:
+    prosemirror-state "^1.3.4"
+    prosemirror-view "^1.19.3"
+    tippy.js "^6.3.1"
+
 "@tiptap/extension-bullet-list@^2.0.0-beta.15":
   version "2.0.0-beta.15"
   resolved "https://registry.yarnpkg.com/@tiptap/extension-bullet-list/-/extension-bullet-list-2.0.0-beta.15.tgz#74876851a8d227ba1a031d031631ed621c175e05"
@@ -4657,6 +4666,13 @@
   version "2.0.0-beta.15"
   resolved "https://registry.yarnpkg.com/@tiptap/extension-italic/-/extension-italic-2.0.0-beta.15.tgz#9a81f686cf221110478935596f0b47a76d4c2f45"
   integrity sha512-ZCz1vCysLdvOUrwODuyBP0BDaemCLh6ib7qTYoSDKdive9kfn0Vc5Fg3o8xgHrtrUfwKIJz/sWOknjDEGIc9cw==
+
+"@tiptap/extension-link@^2.0.0-beta.19":
+  version "2.0.0-beta.19"
+  resolved "https://registry.yarnpkg.com/@tiptap/extension-link/-/extension-link-2.0.0-beta.19.tgz#cba1bd266058fa25543d347a20fba1f9acef8538"
+  integrity sha512-XTj4w3TbkN8sGqoTr7XCtlyOojAkCWpufjLBpKmQnm2Cd8q6Gy7At0z93H0kx3vDKM8u1ELzXRsO/RiYrFK0lQ==
+  dependencies:
+    prosemirror-state "^1.3.4"
 
 "@tiptap/extension-list-item@^2.0.0-beta.14":
   version "2.0.0-beta.14"

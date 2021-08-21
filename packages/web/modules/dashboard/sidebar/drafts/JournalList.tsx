@@ -28,7 +28,7 @@ export const JournalList: React.FC<JournalListProps> = ({}) => {
         >
           <div className="px-7 py-6">
             <h4 className="font-bold text-sm">My Journals</h4>
-            <ul className="my-3">
+            <ul className="my-2">
               {journals?.findJournals.length === 0 ? (
                 <p className="text-gray-400 text-sm">
                   Create a journal to start writing

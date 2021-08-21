@@ -91,7 +91,7 @@ export class CommandsList extends React.Component<CommandsListProps> {
                 : {})}
             >
               <button
-                className={`px-4 py-2.5 cursor-pointer focus:outline-none focus:bg-gray-100 ${
+                className={`px-4 py-2.5 cursor-pointer focus:outline-none focus:bg-gray-100 hover:bg-gray-100 transition ${
                   selectedIndex === index ? "bg-gray-100" : ""
                 } w-full text-left`}
                 onClick={() => this.selectItem(index)}

@@ -25,7 +25,7 @@ const iconSizes = {
 const colors = {
   transparent: "bg-transparent",
   black: "text-gray-100 bg-gray-900 disabled:opacity-50",
-  white: "text-gray-800 bg-white shadow disabled:opacity-50",
+  white: "text-gray-800 bg-white disabled:opacity-50",
   gray: "text-gray-800 bg-gray-100 disabled:opacity-50",
 };
 
@@ -40,12 +40,14 @@ export type ButtonProps = DetailedHTMLProps<
   rounded?: boolean;
   loading?: boolean;
   outline?: boolean;
+  shadow?: boolean;
 };
 
 export const Button: React.FC<ButtonProps> = ({
   size = "regular",
   color = "white",
   icon,
+  shadow = true,
   loading,
   rounded,
   className,
@@ -66,8 +68,12 @@ export const Button: React.FC<ButtonProps> = ({
       } flex items-center justify-center transition ${
         rounded ? "!rounded-full" : ""
       } ${
-        outline ? "border shadow-sm focus:border-gray-500/50" : ""
-      } ${className}`}
+        outline
+          ? `border ${
+              shadow ? "shadow-sm" : "shadow-none"
+            } focus:border-gray-500/50`
+          : ""
+      } ${shadow ? "shadow" : "shadow-none"} ${className}`}
       {...props}
     >
       <span className={`flex items-center ${loading ? "opacity-0" : ""}`}>
