@@ -74,3 +74,8 @@
   pointer-events: none;
   height: 0;
 }
+
+[contenteditable="true"]:empty:before {
+  content: attr(data-placeholder);
+  @apply block pointer-events-none text-gray-300;
+}

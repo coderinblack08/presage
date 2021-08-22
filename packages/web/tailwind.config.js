@@ -51,8 +51,8 @@ module.exports = {
       transparent: "transparent",
       white: "#FFFFFF",
       black: "#000000",
-      gray,
       warmGray,
+      gray,
     },
     extend: {
       typography: (theme) => ({
@@ -73,9 +73,14 @@ module.exports = {
             },
             h1: {
               fontWeight: 700,
+              fontSize: theme("fontSize.3xl"),
             },
             h2: {
               marginTop: "0px",
+              fontSize: theme("fontSize.2xl"),
+            },
+            h3: {
+              fontSize: theme("fontSize.xl"),
             },
           },
         },

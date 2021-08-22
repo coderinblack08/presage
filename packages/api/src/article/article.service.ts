@@ -22,7 +22,9 @@ export class ArticleService {
   }
 
   async findOne(id: string, userId: string) {
-    const article = await this.articleRepository.findOne(id);
+    const article = await this.articleRepository.findOne(id, {
+      relations: ["journal"],
+    });
     if (!article) {
       throw new HttpException("Article not found", HttpStatus.NOT_FOUND);
     }

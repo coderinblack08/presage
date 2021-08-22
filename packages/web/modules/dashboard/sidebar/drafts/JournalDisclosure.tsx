@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import {
   JournalFragment,
+  useCreateBlankArticleMutation,
   useFindArticleQuery,
 } from "../../../../generated/graphql";
 import { DraftList } from "./DraftList";
@@ -34,6 +35,13 @@ export const JournalDisclosure: React.FC<JournalDisclosureProps> = ({
     }
   }, [draft?.findArticle?.journalId, execute, journal.id, pathname]);
 
+  const [, createArticle] = useCreateBlankArticleMutation();
+  const newDraft = async () => {
+    try {
+      await createArticle({ journalId: journal.id });
+    } catch {}
+  };
+
   return (
     <>
       <button
@@ -52,13 +60,16 @@ export const JournalDisclosure: React.FC<JournalDisclosureProps> = ({
         </div>
         <div className="flex items-center space-x-3">
           {open && (
-            <button
-              onClick={(e) => {
+            <div
+              role="button"
+              tabIndex={0}
+              onClick={async (e) => {
                 e.stopPropagation();
+                await newDraft();
               }}
             >
               <IconPlus className="text-gray-400" size={20} />
-            </button>
+            </div>
           )}
           <IconChevronRight
             className={`text-gray-400 transition ${

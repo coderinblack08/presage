@@ -147,7 +147,7 @@ export type FindArticleQueryVariables = Exact<{
 }>;
 
 
-export type FindArticleQuery = { __typename?: 'Query', findArticle?: Maybe<{ __typename?: 'Article', id: string, title: string, description?: Maybe<string>, canonical?: Maybe<string>, html?: Maybe<string>, editorJSON?: Maybe<any>, isPublished: boolean, publishedAt?: Maybe<any>, journalId: string, userId: string, createdAt: any, updatedAt: any }> };
+export type FindArticleQuery = { __typename?: 'Query', findArticle?: Maybe<{ __typename?: 'Article', id: string, title: string, description?: Maybe<string>, canonical?: Maybe<string>, html?: Maybe<string>, editorJSON?: Maybe<any>, isPublished: boolean, publishedAt?: Maybe<any>, journalId: string, userId: string, createdAt: any, updatedAt: any, journal: { __typename?: 'Journal', id: string, name: string, emoji: string, description?: Maybe<string>, createdAt: any, updatedAt: any } }> };
 
 export type FindDraftsQueryVariables = Exact<{
   journalId: Scalars['String'];
@@ -228,9 +228,13 @@ export const FindArticleDocument = gql`
     query FindArticle($id: String!) {
   findArticle(id: $id) {
     ...Article
+    journal {
+      ...Journal
+    }
   }
 }
-    ${ArticleFragmentDoc}`;
+    ${ArticleFragmentDoc}
+${JournalFragmentDoc}`;
 
 export function useFindArticleQuery(options: Omit<Urql.UseQueryArgs<FindArticleQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<FindArticleQuery>({ query: FindArticleDocument, ...options });

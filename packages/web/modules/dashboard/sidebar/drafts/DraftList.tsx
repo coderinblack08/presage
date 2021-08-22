@@ -24,7 +24,7 @@ export const DraftList: React.FC<DraftListProps> = ({ journal }) => {
   }
 
   return (
-    <ul className="mt-1 mb-3 space-y-1">
+    <ul className="mt-0 mb-2">
       {drafts?.findDrafts.map((draft) => (
         <DraftItem draft={draft} key={draft.id} />
       ))}

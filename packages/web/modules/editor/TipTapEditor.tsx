@@ -25,7 +25,7 @@ export const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
     content: "<p>Hello World! 🌎️</p>",
     editorProps: {
       attributes: {
-        class: "prose focus:outline-none",
+        class: "prose focus:outline-none max-w-full",
       },
     },
   });
