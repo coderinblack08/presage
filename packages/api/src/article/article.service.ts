@@ -38,8 +38,8 @@ export class ArticleService {
     return this.articleRepository.find({ where: { userId, journalId } });
   }
 
-  async update(id: string, data: UpdateArticleInput) {
-    return this.articleRepository.update(id, data);
+  async update(id: string, userId: string, data: UpdateArticleInput) {
+    return this.articleRepository.update({ userId, id }, data);
   }
 
   async delete(id: string) {

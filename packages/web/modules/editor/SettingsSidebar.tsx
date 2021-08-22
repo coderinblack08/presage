@@ -1,20 +1,32 @@
 import { IconCameraPlus } from "@tabler/icons";
 import React from "react";
 import { Button } from "../../components/button";
-import { Input, Textarea } from "../../components/input";
+import { InputField, TextareaField } from "../../components/input";
 
 interface SettingsSidebarProps {}
 
 export const SettingsSidebar: React.FC<SettingsSidebarProps> = ({}) => {
   return (
-    <aside className="hidden xl:block px-5 py-8 h-full w-full max-w-sm border-l bg-white space-y-3">
-      <Input placeholder="Enter your canonical..." className="w-full" outline />
-      <Input
+    <aside className="hidden xl:block px-6 py-10 h-full w-full max-w-sm border-l bg-white space-y-8 overflow-y-auto">
+      <InputField
+        name="canonical"
+        label="Canonical Link"
+        description="Link the original publishing link. Presage sets this URL as it’s canonical meta tag."
+        placeholder="Enter your canonical..."
+        className="w-full"
+        outline
+      />
+      <InputField
+        name="tags"
+        label="Tags"
+        description="Enter comma separated tags (up to five and without hashtags)"
         placeholder="star wars, movies, review"
         className="w-full"
         outline
       />
-      <Textarea
+      <TextareaField
+        label="Description"
+        name="description"
         placeholder="Enter your description..."
         className="w-full"
         outline

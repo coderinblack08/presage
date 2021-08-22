@@ -9,6 +9,7 @@ import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
 import { CurrentUser } from "src/auth/user.param";
 import { Article } from "./article.entity";
 import { ArticleService } from "./article.service";
+import { UpdateArticleInput } from "./dto/update-article.args";
 
 @Resolver()
 export class ArticleResolver {
@@ -22,6 +23,24 @@ export class ArticleResolver {
   ) {
     try {
       const article = await this.articleService.createBlank(userId, journalId);
+      return article;
+    } catch (error) {
+      throw new HttpException(
+        "Internal Server Error",
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
+    }
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Mutation(() => Article)
+  async updateArticle(
+    @CurrentUser() userId: string,
+    @Args("articleId", ParseUUIDPipe) articleId: string,
+    @Args("data") args: UpdateArticleInput
+  ) {
+    try {
+      const article = await this.articleService.update(articleId, userId, args);
       return article;
     } catch (error) {
       throw new HttpException(

@@ -1,0 +1,5 @@
+mutation UpdateArticle($articleId: String!, $data: UpdateArticleInput!) {
+  updateArticle(articleId: $articleId, data: $data) {
+    ...Article
+  }
+}

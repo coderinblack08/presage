@@ -53,7 +53,7 @@ export const InputField: React.FC<
         </label>
       )}
       {description && (
-        <p className="text-gray-600 font-normal small mb-3">{description}</p>
+        <p className="text-gray-600 font-normal text-sm mb-3">{description}</p>
       )}
       <Input
         ref={ref}

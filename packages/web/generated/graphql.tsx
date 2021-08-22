@@ -63,6 +63,7 @@ export type Mutation = {
   updateJournal?: Maybe<Journal>;
   deleteJournal: Scalars['Boolean'];
   createArticle: Article;
+  updateArticle: Article;
 };
 
 
@@ -86,6 +87,12 @@ export type MutationCreateArticleArgs = {
   journalId: Scalars['String'];
 };
 
+
+export type MutationUpdateArticleArgs = {
+  data: UpdateArticleInput;
+  articleId: Scalars['String'];
+};
+
 export type Query = {
   __typename?: 'Query';
   me?: Maybe<User>;
@@ -102,6 +109,13 @@ export type QueryFindDraftsArgs = {
 
 export type QueryFindArticleArgs = {
   id: Scalars['String'];
+};
+
+export type UpdateArticleInput = {
+  title: Scalars['String'];
+  editorJSON: Scalars['JSONObject'];
+  canonical: Scalars['String'];
+  description: Scalars['String'];
 };
 
 export type UpdateJournalArgs = {
@@ -141,6 +155,14 @@ export type CreateJournalMutationVariables = Exact<{
 
 
 export type CreateJournalMutation = { __typename?: 'Mutation', createJournal: { __typename?: 'Journal', id: string, name: string, emoji: string, description?: Maybe<string>, createdAt: any, updatedAt: any } };
+
+export type UpdateArticleMutationVariables = Exact<{
+  articleId: Scalars['String'];
+  data: UpdateArticleInput;
+}>;
+
+
+export type UpdateArticleMutation = { __typename?: 'Mutation', updateArticle: { __typename?: 'Article', id: string, title: string, description?: Maybe<string>, canonical?: Maybe<string>, html?: Maybe<string>, editorJSON?: Maybe<any>, isPublished: boolean, publishedAt?: Maybe<any>, journalId: string, userId: string, createdAt: any, updatedAt: any } };
 
 export type FindArticleQueryVariables = Exact<{
   id: Scalars['String'];
@@ -223,6 +245,17 @@ export const CreateJournalDocument = gql`
 
 export function useCreateJournalMutation() {
   return Urql.useMutation<CreateJournalMutation, CreateJournalMutationVariables>(CreateJournalDocument);
+};
+export const UpdateArticleDocument = gql`
+    mutation UpdateArticle($articleId: String!, $data: UpdateArticleInput!) {
+  updateArticle(articleId: $articleId, data: $data) {
+    ...Article
+  }
+}
+    ${ArticleFragmentDoc}`;
+
+export function useUpdateArticleMutation() {
+  return Urql.useMutation<UpdateArticleMutation, UpdateArticleMutationVariables>(UpdateArticleDocument);
 };
 export const FindArticleDocument = gql`
     query FindArticle($id: String!) {
