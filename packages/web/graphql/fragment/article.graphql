@@ -4,6 +4,7 @@ fragment Article on Article {
   description
   canonical
   html
+  tags
   editorJSON
   isPublished
   publishedAt

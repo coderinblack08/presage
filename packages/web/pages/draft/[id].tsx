@@ -37,13 +37,29 @@ const DraftPage: NextPage = () => {
           editorJSON: draft?.findArticle?.editorJSON || "",
           canonical: draft?.findArticle?.canonical || "",
           description: draft?.findArticle?.description || "",
-          tags: "",
+          tags: draft?.findArticle?.tags.join(", ") || "",
         }}
-        onSubmit={async () => {
+        onSubmit={async (values) => {
           try {
+            const data = { ...diff };
+
+            if (diff.tags !== null || diff.tags !== undefined) {
+              const tags = diff.tags.trim();
+              const tagRegex = /(^$)|(^[\w\s\-]+(,\s*[\w\s\-]+)*$)/g;
+              const areTags = tagRegex.test(tags);
+              if (areTags) {
+                data.tags = diff.tags.split(",").map((x: string) => x.trim());
+              }
+              console.log(diff.tags, values.tags);
+
+              if (tags === "") {
+                data.tags = [];
+              }
+            }
+
             await updateArticle({
               articleId: draftId,
-              data: diff,
+              data,
             });
           } catch {}
         }}
@@ -93,9 +109,21 @@ const DraftPage: NextPage = () => {
                             <HiTag className="text-gray-400 w-6 h-6" />
                           </th>
                           <td className="flex items-center space-x-2">
-                            <div className="px-4 py-1 rounded-lg bg-gray-100 text-gray-600 font-semibold text-sm">
-                              <span className="text-gray-400">#</span>stocks
-                            </div>
+                            {draft?.findArticle?.tags.length === 0 ? (
+                              <span className="text-gray-600">
+                                No Tags Found
+                              </span>
+                            ) : (
+                              draft?.findArticle?.tags.map((tag) => (
+                                <div
+                                  key={tag}
+                                  className="px-4 py-1 rounded-lg bg-gray-100 text-gray-600 font-semibold text-sm"
+                                >
+                                  <span className="text-gray-400">#</span>
+                                  {tag}
+                                </div>
+                              ))
+                            )}
                           </td>
                         </tr>
                       </tbody>
