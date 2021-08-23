@@ -63,6 +63,10 @@ export class Article extends BaseEntity {
   })
   journal: Journal;
 
+  @Field(() => [String])
+  @Column("text", { array: true, default: [] })
+  tags: string[];
+
   @Field(() => Date, { nullable: true })
   @Column("timestamp", { nullable: true })
   publishedAt: Date | null;
