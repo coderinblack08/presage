@@ -27,9 +27,9 @@ export const Sidepanel: React.FC<SidepanelProps> = ({
             className={`fixed inset-y-0 h-screen ${
               align === "right" ? "right-0" : "left-0"
             }`}
-            initial={{ x: -300 }}
+            initial={{ x: align === "right" ? 300 : -300 }}
             animate={{ x: 0 }}
-            exit={{ x: -300 }}
+            exit={{ x: align === "right" ? 300 : -300 }}
             transition={{ type: "keyframes" }}
           >
             {children}
