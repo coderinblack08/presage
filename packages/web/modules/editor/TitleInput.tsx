@@ -19,7 +19,7 @@ export const TitleInput: React.FC<TitleInputProps> = ({}) => {
   return (
     <ContentEditable
       data-placeholder="Untitled"
-      className="text-3xl font-bold focus:outline-none"
+      className="text-3xl leading-normal font-bold focus:outline-none"
       html={field.value}
       onBlur={handleBlur}
       onChange={handleChange}

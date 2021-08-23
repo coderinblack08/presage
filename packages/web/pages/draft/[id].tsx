@@ -14,7 +14,8 @@ import {
 import { createUrqlClient } from "../../lib/createUrqlClient";
 import { Layout } from "../../modules/dashboard/Layout";
 import AutoSave from "../../modules/editor/AutoSave";
-import { SettingsSidebar } from "../../modules/editor/SettingsSidebar";
+import { SettingsPanel } from "../../modules/editor/settings/SettingsPanel";
+import { SettingsSidebar } from "../../modules/editor/settings/SettingsSidebar";
 import { TipTapEditor } from "../../modules/editor/TipTapEditor";
 import { TitleInput } from "../../modules/editor/TitleInput";
 
@@ -94,6 +95,9 @@ const DraftPage: NextPage = () => {
                       size="small"
                       outline
                     />
+                    <div className="block xl:hidden">
+                      <SettingsPanel />
+                    </div>
                     <Button type="button" outline>
                       Publish
                     </Button>
@@ -142,7 +146,9 @@ const DraftPage: NextPage = () => {
                 </main>
               </div>
             </div>
-            <SettingsSidebar />
+            <div className="hidden xl:block flex-shrink-0">
+              <SettingsSidebar />
+            </div>
             <AutoSave setDiff={setDiff} />
           </Form>
         )}

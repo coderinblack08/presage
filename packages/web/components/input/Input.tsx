@@ -27,7 +27,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         )}
         {shortcut && (
           <div className="absolute inset-y-0 h-full right-0 flex items-center pointer-events-none pr-2">
-            <span className="border bg-gray-100 rounded-md px-2.5 py-0.5 text-sm">
+            <span className="border-b-2 bg-gray-100 rounded-md px-2.5 py-0.5 text-sm">
               {shortcut}
             </span>
           </div>

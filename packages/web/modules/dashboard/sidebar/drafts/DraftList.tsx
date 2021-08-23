@@ -1,3 +1,4 @@
+import { AnimateSharedLayout } from "framer-motion";
 import React from "react";
 import {
   JournalFragment,
@@ -24,10 +25,12 @@ export const DraftList: React.FC<DraftListProps> = ({ journal }) => {
   }
 
   return (
-    <ul className="mt-0 mb-2">
-      {drafts?.findDrafts.map((draft) => (
-        <DraftItem draft={draft} key={draft.id} />
-      ))}
-    </ul>
+    <div className="mt-0 mb-2">
+      <AnimateSharedLayout>
+        {drafts?.findDrafts.map((draft) => (
+          <DraftItem draft={draft} key={draft.id} />
+        ))}
+      </AnimateSharedLayout>
+    </div>
   );
 };
