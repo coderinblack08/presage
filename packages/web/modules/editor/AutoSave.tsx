@@ -26,6 +26,7 @@ const AutoSave: React.FC<{
         );
         if ("editorJSON" in diff) diff.editorJSON = formik.values.editorJSON;
         setDiff(diff);
+
         previous.current = formik.values;
 
         return formik.submitForm();

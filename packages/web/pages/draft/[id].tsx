@@ -39,11 +39,15 @@ const DraftPage: NextPage = () => {
           description: draft?.findArticle?.description || "",
           tags: draft?.findArticle?.tags.join(", ") || "",
         }}
-        onSubmit={async (values) => {
+        onSubmit={async (values, { setFieldError }) => {
           try {
             const data = { ...diff };
+            console.log(data);
 
-            if (diff.tags !== null || diff.tags !== undefined) {
+            if (
+              "tags" in diff &&
+              (diff.tags !== null || diff.tags !== undefined)
+            ) {
               const tags = diff.tags.trim();
               const tagRegex = /(^$)|(^[\w\s\-]+(,\s*[\w\s\-]+)*$)/g;
               const areTags = tagRegex.test(tags);
@@ -54,6 +58,10 @@ const DraftPage: NextPage = () => {
 
               if (tags === "") {
                 data.tags = [];
+              }
+
+              if (data.tags.length > 5) {
+                return setFieldError("tags", "Too many tags");
               }
             }
 
@@ -91,7 +99,7 @@ const DraftPage: NextPage = () => {
                     </Button>
                   </div>
                 </header>
-                <main className="mt-14">
+                <main className="py-14">
                   <div className="space-y-5">
                     <TitleInput />
                     <table>
