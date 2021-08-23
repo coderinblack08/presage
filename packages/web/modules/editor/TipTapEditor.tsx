@@ -38,18 +38,18 @@ export const TipTapEditor: React.FC<TipTapEditorProps> = ({ draft }) => {
     },
   });
 
-  // useEffect(() => {
-  //   if (editor && draft) {
-  //     !editor.isDestroyed &&
-  //       editor.commands.setContent(draft.editorJSON || null);
-  //   }
-  // }, [draft, editor]);
+  useEffect(() => {
+    if (editor && draft) {
+      !editor.isDestroyed &&
+        editor.commands.setContent(draft.editorJSON || null);
+    }
+  }, [draft, editor]);
 
-  // useEffect(() => {
-  //   return () => {
-  //     editor?.destroy();
-  //   };
-  // }, [editor]);
+  useEffect(() => {
+    return () => {
+      editor?.destroy();
+    };
+  }, [editor]);
 
   return (
     <>
