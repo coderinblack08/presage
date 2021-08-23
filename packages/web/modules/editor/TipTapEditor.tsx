@@ -1,4 +1,5 @@
 import Link from "@tiptap/extension-link";
+import Underline from "@tiptap/extension-underline";
 import Placeholder from "@tiptap/extension-placeholder";
 import { BubbleMenu, EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -25,6 +26,7 @@ export const TipTapEditor: React.FC<TipTapEditorProps> = ({ draft }) => {
       StarterKit,
       SlashCommands,
       Placeholder.configure({ placeholder: "Type '/' for commands" }),
+      Underline,
       Link,
     ],
     content: draft?.editorJSON || null,
@@ -65,13 +67,20 @@ export const TipTapEditor: React.FC<TipTapEditorProps> = ({ draft }) => {
               onClick={() => editor.chain().focus().toggleBold().run()}
               shadow={false}
               icon={<AiOutlineBold />}
+              color={editor.isActive("bold") ? "gray" : "white"}
             />
             <Button
               onClick={() => editor.chain().focus().toggleItalic().run()}
               shadow={false}
               icon={<AiOutlineItalic />}
+              color={editor.isActive("italic") ? "gray" : "white"}
             />
-            <Button shadow={false} icon={<AiOutlineUnderline />} />
+            <Button
+              onClick={() => editor.chain().focus().toggleUnderline().run()}
+              shadow={false}
+              icon={<AiOutlineUnderline />}
+              color={editor.isActive("underline") ? "gray" : "white"}
+            />
             <Button shadow={false} icon={<AiOutlineLink />} />
           </div>
         </BubbleMenu>
