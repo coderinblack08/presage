@@ -1,4 +1,5 @@
 import { useField } from "formik";
+import { decode } from "html-entities";
 import React from "react";
 import ContentEditable, { ContentEditableEvent } from "react-contenteditable";
 
@@ -8,7 +9,7 @@ export const TitleInput: React.FC<TitleInputProps> = ({}) => {
   const [field, _, helpers] = useField("title");
 
   const handleChange = (e: ContentEditableEvent) => {
-    helpers.setValue(e.target.value);
+    helpers.setValue(decode(e.target.value));
   };
 
   const handleBlur = () => {
