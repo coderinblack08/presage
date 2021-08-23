@@ -2,9 +2,12 @@ import { useFormikContext } from "formik";
 import debounce from "lodash.debounce";
 import isEqual from "lodash.isequal";
 import { useEffect, useMemo, useRef } from "react";
+import { difference } from "../../lib/diffObjects";
 
-const AutoSave: React.FC<{}> = ({}) => {
-  const formik = useFormikContext();
+const AutoSave: React.FC<{
+  setDiff: (diff: object) => void;
+}> = ({ setDiff }) => {
+  const formik = useFormikContext<any>();
   const previous = useRef<any>(null);
 
   const debouncedSubmit = useMemo(
@@ -17,10 +20,17 @@ const AutoSave: React.FC<{}> = ({}) => {
         ) {
           return false;
         }
+        const diff: any = difference(
+          formik.values,
+          previous.current || formik.initialValues
+        );
+        if ("editorJSON" in diff) diff.editorJSON = formik.values.editorJSON;
+        setDiff(diff);
         previous.current = formik.values;
+
         return formik.submitForm();
-      }, 800),
-    [formik, previous]
+      }, 300),
+    [formik, previous, setDiff]
   );
 
   useEffect(() => {

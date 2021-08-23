@@ -39,7 +39,13 @@ export class ArticleService {
   }
 
   async update(id: string, userId: string, data: UpdateArticleInput) {
-    return this.articleRepository.update({ userId, id }, data);
+    return this.articleRepository
+      .createQueryBuilder()
+      .update(Article)
+      .set(data)
+      .where({ userId, id })
+      .returning("*")
+      .execute();
   }
 
   async delete(id: string) {

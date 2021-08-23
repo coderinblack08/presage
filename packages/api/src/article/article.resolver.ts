@@ -33,7 +33,7 @@ export class ArticleResolver {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Mutation(() => Article)
+  @Mutation(() => Article, { nullable: true })
   async updateArticle(
     @CurrentUser() userId: string,
     @Args("articleId", ParseUUIDPipe) articleId: string,
@@ -41,7 +41,7 @@ export class ArticleResolver {
   ) {
     try {
       const article = await this.articleService.update(articleId, userId, args);
-      return article;
+      return article.raw[0];
     } catch (error) {
       throw new HttpException(
         "Internal Server Error",

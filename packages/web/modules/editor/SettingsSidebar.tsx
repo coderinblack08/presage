@@ -7,7 +7,7 @@ interface SettingsSidebarProps {}
 
 export const SettingsSidebar: React.FC<SettingsSidebarProps> = ({}) => {
   return (
-    <aside className="hidden xl:block px-6 py-10 h-full w-full max-w-sm border-l bg-white space-y-8 overflow-y-auto">
+    <aside className="hidden xl:block px-6 py-9 h-full w-full max-w-sm border-l bg-white space-y-8 overflow-y-auto">
       <InputField
         name="canonical"
         label="Canonical Link"
@@ -34,11 +34,10 @@ export const SettingsSidebar: React.FC<SettingsSidebarProps> = ({}) => {
       <div>
         <label className="font-bold mb-2 block">Cover Image</label>
         <Button
-          icon={<IconCameraPlus size={20} />}
-          className="text-gray-600"
+          icon={<IconCameraPlus className="text-gray-600" size={20} />}
           outline
         >
-          Insert Cover
+          <span className="text-gray-600 font-semibold">Insert Cover</span>
         </Button>
       </div>
     </aside>

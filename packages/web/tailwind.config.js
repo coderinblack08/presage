@@ -74,13 +74,16 @@ module.exports = {
             h1: {
               fontWeight: 700,
               fontSize: theme("fontSize.3xl"),
+              lineHeight: theme("lineHeight.relaxed"),
             },
             h2: {
               marginTop: "0px",
               fontSize: theme("fontSize.2xl"),
+              lineHeight: theme("lineHeight.relaxed"),
             },
             h3: {
               fontSize: theme("fontSize.xl"),
+              lineHeight: theme("lineHeight.relaxed"),
             },
           },
         },

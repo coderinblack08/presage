@@ -3,7 +3,7 @@ import Placeholder from "@tiptap/extension-placeholder";
 import { BubbleMenu, EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { useFormikContext } from "formik";
-import React from "react";
+import React, { useEffect } from "react";
 import {
   AiOutlineBold,
   AiOutlineItalic,
@@ -11,11 +11,14 @@ import {
   AiOutlineUnderline,
 } from "react-icons/ai";
 import { Button } from "../../components/button";
+import { ArticleFragment } from "../../generated/graphql";
 import { SlashCommands } from "./extensions/slash-menu/commands";
 
-interface TipTapEditorProps {}
+interface TipTapEditorProps {
+  draft: ArticleFragment | null;
+}
 
-export const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
+export const TipTapEditor: React.FC<TipTapEditorProps> = ({ draft }) => {
   const formik = useFormikContext<any>();
   const editor = useEditor({
     extensions: [
@@ -24,7 +27,7 @@ export const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
       Placeholder.configure({ placeholder: "Type '/' for commands" }),
       Link,
     ],
-    content: formik.values.editorJSON,
+    content: draft?.editorJSON || null,
     editorProps: {
       attributes: {
         class: "prose focus:outline-none max-w-full",
@@ -32,9 +35,21 @@ export const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
     },
     onUpdate: ({ editor }) => {
       formik.setFieldValue("editorJSON", editor.getJSON());
-      formik.setFieldValue("html", editor.getHTML());
     },
   });
+
+  // useEffect(() => {
+  //   if (editor && draft) {
+  //     !editor.isDestroyed &&
+  //       editor.commands.setContent(draft.editorJSON || null);
+  //   }
+  // }, [draft, editor]);
+
+  // useEffect(() => {
+  //   return () => {
+  //     editor?.destroy();
+  //   };
+  // }, [editor]);
 
   return (
     <>

@@ -46,7 +46,7 @@ export const DraftItem: React.FC<DraftItemProps> = ({ draft }) => {
             />
           </svg>
         </div>
-        <h3 className="font-semibold text-[13px]">{draft.title}</h3>
+        <h3 className="font-semibold text-[13px] truncate">{draft.title}</h3>
       </a>
     </Link>
   );

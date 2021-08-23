@@ -67,12 +67,14 @@ export const DropdownItem: React.FC<DropdownItemProps> = ({
   return (
     <DropdownMenu.Item
       disabled={disabled}
-      onSelect={onClick}
+      onSelect={(e) => {
+        if (href) window.location.href = href;
+        if (onClick) onClick(e);
+      }}
       className={`${
         icon ? "flex items-center" : "block"
       } px-4 py-2 cursor-pointer focus:outline-none focus:bg-gray-100 w-full text-left`}
-      as={href ? "a" : "button"}
-      href={href || undefined}
+      as="button"
       {...props}
     >
       {icon ? <div className="mr-2 text-gray-600">{icon}</div> : null}
