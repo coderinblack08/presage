@@ -45,7 +45,7 @@ export const TipTapEditor: React.FC<TipTapEditorProps> = ({ draft }) => {
       !editor.isDestroyed &&
         editor.commands.setContent(draft?.editorJSON || null);
     }
-  }, [draft.id, editor]);
+  }, [draft?.id, editor]);
 
   useEffect(() => {
     return () => {

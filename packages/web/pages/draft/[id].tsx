@@ -88,7 +88,7 @@ const DraftPage: NextPage = () => {
                       {draft?.findArticle?.title}
                     </span>
                   </div>
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-3">
                     <Button
                       type="button"
                       icon={<IconLink size={20} />}
