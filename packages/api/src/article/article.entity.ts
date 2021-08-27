@@ -1,5 +1,5 @@
 import { GraphQLJSONObject } from "graphql-type-json";
-import { Field, ObjectType } from "@nestjs/graphql";
+import { Field, ID, ObjectType } from "@nestjs/graphql";
 import { User } from "src/user/user.entity";
 import {
   BaseEntity,
@@ -16,7 +16,7 @@ import { Journal } from "src/journal/journal.entity";
 @Entity("articles")
 @ObjectType()
 export class Article extends BaseEntity {
-  @Field()
+  @Field(() => ID)
   @PrimaryGeneratedColumn("uuid")
   id: string;
 

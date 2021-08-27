@@ -12,6 +12,7 @@ import * as connectionOptions from "./ormconfig";
 import { UserModule } from "./user/user.module";
 import { JournalModule } from "./journal/journal.module";
 import { ArticleModule } from "./article/article.module";
+import { ApplicationModule } from './application/application.module';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { ArticleModule } from "./article/article.module";
     UserModule,
     JournalModule,
     ArticleModule,
+    ApplicationModule,
   ],
   controllers: [AppController],
   providers: [AppService],
