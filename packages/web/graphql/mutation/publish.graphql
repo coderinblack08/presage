@@ -1,0 +1,3 @@
+mutation Publish($id: String!) {
+  togglePublishStatus(id: $id)
+}

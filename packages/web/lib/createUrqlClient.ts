@@ -9,6 +9,7 @@ import {
   FindDraftsQuery,
   FindJournalsDocument,
   FindJournalsQuery,
+  PublishMutation,
 } from "../generated/graphql";
 import { isServer } from "./constants";
 import { updateCacheQuery } from "./updateCacheUtils";
@@ -60,6 +61,22 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => {
                 (old) => ({
                   ...old,
                   findDrafts: [...old.findDrafts, result.createArticle],
+                })
+              );
+            },
+            togglePublishStatus: (result, args, cache, _info) => {
+              updateCacheQuery<PublishMutation, FindArticleQuery>(
+                cache,
+                {
+                  query: FindArticleDocument,
+                  variables: args,
+                },
+                (old) => ({
+                  ...old,
+                  findArticle: {
+                    ...old.findArticle,
+                    isPublished: result.togglePublishStatus,
+                  } as any,
                 })
               );
             },

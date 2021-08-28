@@ -73,7 +73,9 @@ export const Button: React.FC<ButtonProps> = ({
               shadow ? "shadow-sm" : "shadow-none"
             } focus:border-gray-500/50`
           : ""
-      } ${shadow ? "shadow" : "shadow-none"} ${className}`}
+      } ${
+        shadow ? "shadow" : "shadow-none"
+      } disabled:cursor-not-allowed ${className}`}
       {...props}
     >
       <span className={`flex items-center ${loading ? "opacity-0" : ""}`}>

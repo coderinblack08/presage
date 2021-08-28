@@ -21,9 +21,9 @@ export class ArticleService {
       .save();
   }
 
-  async findOne(id: string, userId: string) {
+  async findOne(id: string, userId: string, relations = true) {
     const article = await this.articleRepository.findOne(id, {
-      relations: ["journal"],
+      relations: relations ? ["journal"] : [],
     });
     if (!article) {
       throw new HttpException("Article not found", HttpStatus.NOT_FOUND);
@@ -50,5 +50,16 @@ export class ArticleService {
 
   async delete(id: string) {
     return this.articleRepository.delete(id);
+  }
+
+  async publish(id: string, userId: string) {
+    return this.articleRepository.update({ id, userId }, { isPublished: true });
+  }
+
+  async unPublish(id: string, userId: string) {
+    return this.articleRepository.update(
+      { id, userId },
+      { isPublished: false }
+    );
   }
 }

@@ -14,6 +14,7 @@ import {
 import { createUrqlClient } from "../../lib/createUrqlClient";
 import { Layout } from "../../modules/dashboard/Layout";
 import AutoSave from "../../modules/editor/AutoSave";
+import { Publish } from "../../modules/editor/Publish";
 import { SettingsPanel } from "../../modules/editor/settings/SettingsPanel";
 import { SettingsSidebar } from "../../modules/editor/settings/SettingsSidebar";
 import { TipTapEditor } from "../../modules/editor/TipTapEditor";
@@ -22,6 +23,7 @@ import { TitleInput } from "../../modules/editor/TitleInput";
 const DraftPage: NextPage = () => {
   const {
     query: { id },
+    push,
   } = useRouter();
   const draftId = useMemo(() => id?.toString() || "", [id]);
   const [{ data: draft }] = useFindArticleQuery({
@@ -93,14 +95,14 @@ const DraftPage: NextPage = () => {
                       type="button"
                       icon={<IconLink size={20} />}
                       size="small"
+                      onClick={() => push(`/article/${draft?.findArticle!.id}`)}
+                      disabled={!draft?.findArticle?.isPublished}
                       outline
                     />
                     <div className="block xl:hidden">
                       <SettingsPanel />
                     </div>
-                    <Button type="button" outline>
-                      Publish
-                    </Button>
+                    <Publish draft={draft?.findArticle!} />
                   </div>
                 </header>
                 <main className="py-14">

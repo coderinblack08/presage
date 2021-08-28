@@ -20,7 +20,7 @@ export type Scalars = {
 
 export type Article = {
   __typename?: 'Article';
-  id: Scalars['String'];
+  id: Scalars['ID'];
   title: Scalars['String'];
   description?: Maybe<Scalars['String']>;
   canonical?: Maybe<Scalars['String']>;
@@ -65,6 +65,7 @@ export type Mutation = {
   deleteJournal: Scalars['Boolean'];
   createArticle: Article;
   updateArticle?: Maybe<Article>;
+  togglePublishStatus: Scalars['Boolean'];
 };
 
 
@@ -92,6 +93,11 @@ export type MutationCreateArticleArgs = {
 export type MutationUpdateArticleArgs = {
   data: UpdateArticleInput;
   articleId: Scalars['String'];
+};
+
+
+export type MutationTogglePublishStatusArgs = {
+  id: Scalars['String'];
 };
 
 export type Query = {
@@ -157,6 +163,13 @@ export type CreateJournalMutationVariables = Exact<{
 
 
 export type CreateJournalMutation = { __typename?: 'Mutation', createJournal: { __typename?: 'Journal', id: string, name: string, emoji: string, description?: Maybe<string>, createdAt: any, updatedAt: any } };
+
+export type PublishMutationVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type PublishMutation = { __typename?: 'Mutation', togglePublishStatus: boolean };
 
 export type UpdateArticleMutationVariables = Exact<{
   articleId: Scalars['String'];
@@ -248,6 +261,15 @@ export const CreateJournalDocument = gql`
 
 export function useCreateJournalMutation() {
   return Urql.useMutation<CreateJournalMutation, CreateJournalMutationVariables>(CreateJournalDocument);
+};
+export const PublishDocument = gql`
+    mutation Publish($id: String!) {
+  togglePublishStatus(id: $id)
+}
+    `;
+
+export function usePublishMutation() {
+  return Urql.useMutation<PublishMutation, PublishMutationVariables>(PublishDocument);
 };
 export const UpdateArticleDocument = gql`
     mutation UpdateArticle($articleId: String!, $data: UpdateArticleInput!) {

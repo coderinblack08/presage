@@ -79,4 +79,23 @@ export class ArticleResolver {
       throw error;
     }
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Mutation(() => Boolean)
+  async togglePublishStatus(
+    @Args("id") id: string,
+    @CurrentUser() userId: string
+  ) {
+    try {
+      const article = await this.articleService.findOne(id, userId, false);
+      if (article.isPublished) {
+        this.articleService.unPublish(id, userId);
+        return false;
+      }
+      this.articleService.publish(id, userId);
+      return true;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
