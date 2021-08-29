@@ -4,5 +4,8 @@ query FindArticle($id: String!) {
     journal {
       ...Journal
     }
+    user {
+      ...User
+    }
   }
 }

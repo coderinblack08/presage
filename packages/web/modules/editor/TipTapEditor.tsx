@@ -1,8 +1,4 @@
-import Link from "@tiptap/extension-link";
-import Underline from "@tiptap/extension-underline";
-import Placeholder from "@tiptap/extension-placeholder";
 import { BubbleMenu, EditorContent, useEditor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
 import { useFormikContext } from "formik";
 import React, { useEffect } from "react";
 import {
@@ -13,7 +9,7 @@ import {
 } from "react-icons/ai";
 import { Button } from "../../components/button";
 import { ArticleFragment } from "../../generated/graphql";
-import { SlashCommands } from "./extensions/slash-menu/commands";
+import { extensions } from "./extensions";
 
 interface TipTapEditorProps {
   draft: ArticleFragment | null;
@@ -22,13 +18,7 @@ interface TipTapEditorProps {
 export const TipTapEditor: React.FC<TipTapEditorProps> = ({ draft }) => {
   const formik = useFormikContext<any>();
   const editor = useEditor({
-    extensions: [
-      StarterKit,
-      SlashCommands,
-      Placeholder.configure({ placeholder: "Type '/' for commands" }),
-      Underline,
-      Link,
-    ],
+    extensions,
     content: draft?.editorJSON || null,
     editorProps: {
       attributes: {

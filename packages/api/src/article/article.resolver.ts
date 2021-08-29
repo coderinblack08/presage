@@ -6,6 +6,7 @@ import {
 } from "@nestjs/common";
 import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
+import { Public } from "src/auth/public.decorator";
 import { CurrentUser } from "src/auth/user.param";
 import { Article } from "./article.entity";
 import { ArticleService } from "./article.service";
@@ -67,6 +68,7 @@ export class ArticleResolver {
     }
   }
 
+  @Public()
   @UseGuards(JwtAuthGuard)
   @Query(() => Article, { nullable: true })
   async findArticle(

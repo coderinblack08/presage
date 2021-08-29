@@ -3,7 +3,7 @@ import { Button } from "../../components/button";
 import { ArticleFragment, usePublishMutation } from "../../generated/graphql";
 
 interface PublishProps {
-  draft: ArticleFragment;
+  draft: ArticleFragment | null;
 }
 
 export const Publish: React.FC<PublishProps> = ({ draft }) => {
@@ -14,12 +14,14 @@ export const Publish: React.FC<PublishProps> = ({ draft }) => {
       type="button"
       onClick={async () => {
         try {
-          await togglePublishStatus({ id: draft.id });
+          if (draft) {
+            await togglePublishStatus({ id: draft?.id });
+          }
         } catch {}
       }}
       outline
     >
-      {draft.isPublished ? "Unpublish" : "Publish"}
+      {draft?.isPublished ? "Unpublish" : "Publish"}
     </Button>
   );
 };

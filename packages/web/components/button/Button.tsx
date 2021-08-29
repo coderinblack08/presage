@@ -7,7 +7,7 @@ import React, {
 const sizes = {
   large: "py-2.5 px-7 rounded-lg",
   medium: "py-2 px-7 rounded-lg",
-  regular: "px-6 py-1.5 rounded-lg",
+  regular: "px-5 py-1.5 rounded-lg",
   small: "px-5 py-1.5 rounded-lg",
   tiny: "px-5 py-1 rounded-lg",
   none: "rounded-md",
@@ -64,14 +64,14 @@ export const Button: React.FC<ButtonProps> = ({
       } ${
         color === "transparent"
           ? ""
-          : "focus:outline-none focus:ring focus:ring-gray-300"
+          : "focus:outline-none focus-visible:ring focus-visible:ring-gray-300"
       } flex items-center justify-center transition ${
         rounded ? "!rounded-full" : ""
       } ${
         outline
           ? `border ${
               shadow ? "shadow-sm" : "shadow-none"
-            } focus:border-gray-500/50`
+            } focus-visible:border-gray-500/50`
           : ""
       } ${
         shadow ? "shadow" : "shadow-none"

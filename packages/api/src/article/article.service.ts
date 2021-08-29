@@ -1,3 +1,4 @@
+import axios from "axios";
 import {
   HttpCode,
   HttpException,
@@ -8,11 +9,13 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Article } from "./article.entity";
 import { UpdateArticleInput } from "./dto/update-article.args";
+import { ConfigService } from "@nestjs/config";
 
 @Injectable()
 export class ArticleService {
   constructor(
-    @InjectRepository(Article) private articleRepository: Repository<Article>
+    @InjectRepository(Article) private articleRepository: Repository<Article>,
+    private configService: ConfigService
   ) {}
 
   async createBlank(userId: string, journalId: string) {
@@ -23,7 +26,7 @@ export class ArticleService {
 
   async findOne(id: string, userId: string, relations = true) {
     const article = await this.articleRepository.findOne(id, {
-      relations: relations ? ["journal"] : [],
+      relations: relations ? ["journal", "user"] : [],
     });
     if (!article) {
       throw new HttpException("Article not found", HttpStatus.NOT_FOUND);
@@ -39,10 +42,14 @@ export class ArticleService {
   }
 
   async update(id: string, userId: string, data: UpdateArticleInput) {
+    const body: Record<string, any> = { ...data };
+    if (body.editorJSON) {
+      body.html = await this.generateHTML(body.editorJSON);
+    }
     return this.articleRepository
       .createQueryBuilder()
       .update(Article)
-      .set(data)
+      .set(body)
       .where({ userId, id })
       .returning("*")
       .execute();
@@ -61,5 +68,13 @@ export class ArticleService {
       { id, userId },
       { isPublished: false }
     );
+  }
+
+  async generateHTML(editorJSON: any) {
+    const { data } = await axios.post(
+      `${this.configService.get("client")}/api/generate-html`,
+      { editorJSON }
+    );
+    return data;
   }
 }

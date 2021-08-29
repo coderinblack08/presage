@@ -1,4 +1,5 @@
 export default () => ({
+  client: "http://localhost:3000",
   port: process.env.PORT || 4000,
   isDev: () => process.env.NODE_ENV === "development",
   isProd: () => process.env.NODE_ENV === "production",
