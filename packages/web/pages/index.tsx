@@ -53,7 +53,7 @@ const Home: NextPage = () => {
               </p>
             </a>
           </div>
-          <p className="mt-3 text-gray-500 text-sm leading-relaxed max-w-xl">
+          <p className="mt-4 text-gray-500 text-sm leading-relaxed max-w-xl">
             Would you like to write a guide on writing for us? Do you have any
             other questions? If so reach out to us at{" "}
             <a

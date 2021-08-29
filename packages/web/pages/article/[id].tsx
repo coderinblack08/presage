@@ -8,6 +8,7 @@ import { useFindArticleQuery } from "../../generated/graphql";
 import { createUrqlClient } from "../../lib/createUrqlClient";
 import { useScreen } from "../../lib/useScreen";
 import { Navbar } from "../../modules/articles/Navbar";
+import { Reactions } from "../../modules/articles/Reactions";
 
 const ArticlePage: NextPage = () => {
   const {
@@ -98,8 +99,9 @@ const ArticlePage: NextPage = () => {
         </div>
       </header>
       <main className="mx-auto max-w-4xl w-full px-5 py-16">
+        <Reactions />
         <article
-          className="prose max-w-full"
+          className="prose max-w-full mt-10"
           dangerouslySetInnerHTML={{ __html: article?.findArticle?.html || "" }}
         />
       </main>

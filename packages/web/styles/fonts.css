@@ -1,7 +1,7 @@
 @import url("https://rsms.me/inter/inter.css");
 
 :not(h1 > *, .font-display) {
-  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  font-feature-settings: "cv11";
 }
 
 @font-face {
