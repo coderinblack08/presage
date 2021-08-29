@@ -3,6 +3,7 @@ import { cacheExchange } from "@urql/exchange-graphcache";
 import {
   CreateBlankArticleMutation,
   CreateJournalMutation,
+  FavoriteMutation,
   FindArticleDocument,
   FindArticleQuery,
   FindDraftsDocument,
@@ -79,6 +80,29 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => {
                   } as any,
                 })
               );
+            },
+            toggleFavorite: (_result, args, cache, _info) => {
+              const previous = cache.readQuery<FindArticleQuery>({
+                query: FindArticleDocument,
+                variables: { id: args.articleId },
+              })?.findArticle;
+              if (previous) {
+                updateCacheQuery<FavoriteMutation, FindArticleQuery>(
+                  cache,
+                  {
+                    query: FindArticleDocument,
+                    variables: { id: args.articleId },
+                  },
+                  (old) => ({
+                    ...old,
+                    findArticle: {
+                      ...old.findArticle,
+                      points: previous.points + (!previous.isFavored ? 1 : -1),
+                      isFavored: !previous.isFavored,
+                    } as any,
+                  })
+                );
+              }
             },
           },
         },

@@ -31,15 +31,15 @@ const ArticlePage: NextPage = () => {
               <span className="text-gray-300 text-2xl font-bold">·</span>
               <span>2 min read</span>
             </div>
-            <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold !leading-relaxed">
+            <h1 className="text-lg xs:text-xl sm:text-2xl lg:text-3xl font-bold !leading-relaxed">
               {article?.findArticle?.title}
             </h1>
             {article?.findArticle?.tags.length !== 0 ? (
-              <div className="mt-4 flex items-center space-x-2">
+              <div className="mt-3 sm:mt-4 flex items-center space-x-2 overflow-y-auto">
                 {article?.findArticle?.tags.map((tag) => (
                   <a
                     key={tag}
-                    className="px-4 py-1 rounded-lg bg-gray-100 text-gray-600 font-semibold text-sm"
+                    className="block flex-shrink-0 px-4 py-1 rounded-lg bg-gray-100 text-gray-600 font-semibold text-xs xs:text-sm"
                   >
                     <span className="text-gray-400">#</span>
                     {tag}
@@ -48,7 +48,7 @@ const ArticlePage: NextPage = () => {
               </div>
             ) : null}
           </div>
-          <div className="mt-10 sm:mt-16 flex flex-col sm:flex-row sm:items-center sm:justify-between">
+          <div className="mt-10 sm:mt-16 flex flex-col xs:flex-row xs:items-center xs:justify-between">
             <a className="flex items-center space-x-3.5">
               <img
                 src={article?.findArticle?.user.profilePicture || ""}
@@ -59,7 +59,7 @@ const ArticlePage: NextPage = () => {
                 {article?.findArticle?.user.displayName}
               </h2>
             </a>
-            <div className="flex items-center space-x-2 mt-3 sm:mt-0">
+            <div className="flex items-center space-x-2 mt-3 xs:mt-0">
               <Button
                 outline
                 size={isSmallerThanTablet ? "small" : "regular"}
@@ -98,10 +98,10 @@ const ArticlePage: NextPage = () => {
           </div>
         </div>
       </header>
-      <main className="mx-auto max-w-4xl w-full px-5 py-16">
+      <main className="mx-auto max-w-4xl w-full px-5 py-8 md:py-16">
         <Reactions article={article?.findArticle!} />
         <article
-          className="prose max-w-full mt-10"
+          className="prose max-w-full mt-8 md:mt-10"
           dangerouslySetInnerHTML={{ __html: article?.findArticle?.html || "" }}
         />
       </main>
