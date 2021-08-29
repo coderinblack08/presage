@@ -17,7 +17,7 @@ enum ApplicationStatus {
   Accepted,
 }
 
-@Entity()
+@Entity("applications")
 @ObjectType()
 export class Application extends BaseEntity {
   @Field(() => ID)

@@ -58,7 +58,7 @@ const Home: NextPage = () => {
             other questions? If so reach out to us at{" "}
             <a
               href="mailto:help@joinpreage.com"
-              className="text-gray-600 font-bold"
+              className="text-gray-600 font-bold text-sm"
             >
               help@joinpreage.com
             </a>

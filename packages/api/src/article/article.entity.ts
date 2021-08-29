@@ -71,6 +71,13 @@ export class Article extends BaseEntity {
   @Column("timestamp", { nullable: true })
   publishedAt: Date | null;
 
+  @Field()
+  @Column("bigint", { default: 0 })
+  points: number;
+
+  @Field()
+  isFavored: boolean;
+
   @DeleteDateColumn()
   deletedAt: Date | null;
 

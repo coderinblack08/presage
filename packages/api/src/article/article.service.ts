@@ -1,21 +1,18 @@
-import axios from "axios";
-import {
-  HttpCode,
-  HttpException,
-  HttpStatus,
-  Injectable,
-} from "@nestjs/common";
+import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 import { InjectRepository } from "@nestjs/typeorm";
+import axios from "axios";
+import { FavoriteService } from "src/favorite/favorite.service";
 import { Repository } from "typeorm";
 import { Article } from "./article.entity";
 import { UpdateArticleInput } from "./dto/update-article.args";
-import { ConfigService } from "@nestjs/config";
 
 @Injectable()
 export class ArticleService {
   constructor(
     @InjectRepository(Article) private articleRepository: Repository<Article>,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private favoriteService: FavoriteService
   ) {}
 
   async createBlank(userId: string, journalId: string) {
@@ -28,13 +25,14 @@ export class ArticleService {
     const article = await this.articleRepository.findOne(id, {
       relations: relations ? ["journal", "user"] : [],
     });
+    const isFavored = await this.favoriteService.isFavored(id, userId);
     if (!article) {
       throw new HttpException("Article not found", HttpStatus.NOT_FOUND);
     }
     if (article.userId !== userId && !article?.isPublished) {
       throw new HttpException("Forbidden", HttpStatus.FORBIDDEN);
     }
-    return article;
+    return { ...article, isFavored };
   }
 
   async findDrafts(userId: string, journalId: string) {

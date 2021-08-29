@@ -35,7 +35,7 @@ const ArticlePage: NextPage = () => {
               {article?.findArticle?.title}
             </h1>
             {article?.findArticle?.tags.length !== 0 ? (
-              <div className="mt-3 flex items-center space-x-2">
+              <div className="mt-4 flex items-center space-x-2">
                 {article?.findArticle?.tags.map((tag) => (
                   <a
                     key={tag}
@@ -99,7 +99,7 @@ const ArticlePage: NextPage = () => {
         </div>
       </header>
       <main className="mx-auto max-w-4xl w-full px-5 py-16">
-        <Reactions />
+        <Reactions article={article?.findArticle!} />
         <article
           className="prose max-w-full mt-10"
           dangerouslySetInnerHTML={{ __html: article?.findArticle?.html || "" }}

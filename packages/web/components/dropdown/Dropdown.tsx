@@ -71,14 +71,18 @@ export const DropdownItem: React.FC<DropdownItemProps> = ({
         if (href) window.location.href = href;
         if (onClick) onClick(e);
       }}
-      className={`${
+      className={`group ${
         icon ? "flex items-center" : "block"
       } px-4 py-2 cursor-pointer focus:outline-none focus:bg-gray-100 w-full text-left`}
       as="button"
       {...props}
     >
-      {icon ? <div className="mr-2 text-gray-600">{icon}</div> : null}
-      <div className="text-gray-600">{children}</div>
+      {icon ? (
+        <div className="mr-2 text-gray-600 group-focus:text-gray-900">
+          {icon}
+        </div>
+      ) : null}
+      <div className="text-gray-600 group-focus:text-gray-900">{children}</div>
     </DropdownMenu.Item>
   );
 };

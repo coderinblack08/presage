@@ -12,6 +12,7 @@ import configuration from "./config/configuration";
 import { JournalModule } from "./journal/journal.module";
 import * as connectionOptions from "./ormconfig";
 import { UserModule } from "./user/user.module";
+import { FavoriteModule } from "./favorite/favorite.module";
 
 @Module({
   imports: [
@@ -35,7 +36,13 @@ import { UserModule } from "./user/user.module";
             : false,
           autoSchemaFile: true,
           cors: { credentials: true, origin: "http://localhost:3000" },
-          include: [UserModule, JournalModule, ArticleModule],
+          include: [
+            UserModule,
+            JournalModule,
+            ArticleModule,
+            ApplicationModule,
+            FavoriteModule,
+          ],
           context: ({ req, res }) => ({ req, res }),
         };
       },
@@ -46,6 +53,7 @@ import { UserModule } from "./user/user.module";
     JournalModule,
     ArticleModule,
     ApplicationModule,
+    FavoriteModule,
   ],
   controllers: [AppController],
   providers: [AppService],
