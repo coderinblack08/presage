@@ -75,8 +75,8 @@ export class Article extends BaseEntity {
   @Column("bigint", { default: 0 })
   points: number;
 
-  @Field()
-  isFavored: boolean;
+  @Field({ nullable: true })
+  isFavored?: boolean;
 
   @DeleteDateColumn()
   deletedAt: Date | null;

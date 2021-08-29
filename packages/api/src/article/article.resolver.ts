@@ -59,6 +59,7 @@ export class ArticleResolver {
   ) {
     try {
       const articles = await this.articleService.findDrafts(userId, journalId);
+      console.log(articles);
       return articles;
     } catch (error) {
       throw new HttpException(
