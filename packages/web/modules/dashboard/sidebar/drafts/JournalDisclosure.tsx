@@ -20,6 +20,7 @@ export const JournalDisclosure: React.FC<JournalDisclosureProps> = ({
   const {
     pathname,
     query: { id },
+    push,
   } = useRouter();
 
   const [{ data: draft }, execute] = useFindArticleQuery({
@@ -38,7 +39,8 @@ export const JournalDisclosure: React.FC<JournalDisclosureProps> = ({
   const [, createArticle] = useCreateBlankArticleMutation();
   const newDraft = async () => {
     try {
-      await createArticle({ journalId: journal.id });
+      const { data } = await createArticle({ journalId: journal.id });
+      push(`/draft/${data?.createArticle.id}`);
     } catch {}
   };
 

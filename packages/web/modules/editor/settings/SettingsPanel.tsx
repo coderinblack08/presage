@@ -4,9 +4,11 @@ import { Button } from "../../../components/button";
 import { Sidepanel, SidepanelTrigger } from "../../../components/sidepanel";
 import { SettingsSidebar } from "./SettingsSidebar";
 
-interface SettingsPanelProps {}
+interface SettingsPanelProps {
+  articleId: string;
+}
 
-export const SettingsPanel: React.FC<SettingsPanelProps> = ({}) => {
+export const SettingsPanel: React.FC<SettingsPanelProps> = ({ articleId }) => {
   return (
     <Sidepanel
       trigger={
@@ -21,7 +23,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({}) => {
       }
       align="right"
     >
-      <SettingsSidebar />
+      <SettingsSidebar articleId={articleId} />
     </Sidepanel>
   );
 };

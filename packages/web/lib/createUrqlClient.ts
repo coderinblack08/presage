@@ -3,6 +3,8 @@ import { cacheExchange } from "@urql/exchange-graphcache";
 import {
   CreateBlankArticleMutation,
   CreateJournalMutation,
+  DeleteArticleMutation,
+  DeleteArticleMutationVariables,
   FavoriteMutation,
   FindArticleDocument,
   FindArticleQuery,
@@ -103,6 +105,12 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => {
                   })
                 );
               }
+            },
+            deleteArticle: (_result, args, cache, _info) => {
+              cache.invalidate({
+                __typename: "Article",
+                id: (args as DeleteArticleMutationVariables).id,
+              });
             },
           },
         },

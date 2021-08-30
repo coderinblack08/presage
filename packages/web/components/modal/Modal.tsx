@@ -41,7 +41,7 @@ export const Modal: React.FC<ModalProps> = ({
               leaveTo="opacity-0"
               as={Fragment}
             >
-              <div className="fixed inset-0 h-screen w-screen bg-black/75 backdrop-blur-lg" />
+              <div className="fixed inset-0 h-screen w-screen bg-black/75" />
             </Transition.Child>
           </Dialog.Overlay>
           <Dialog.Content style={{ width: "100vw" }} forceMount>

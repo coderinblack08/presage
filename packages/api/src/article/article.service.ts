@@ -53,8 +53,8 @@ export class ArticleService {
       .execute();
   }
 
-  async delete(id: string) {
-    return this.articleRepository.delete(id);
+  async delete(id: string, userId: string) {
+    return this.articleRepository.delete({ id, userId });
   }
 
   async publish(id: string, userId: string) {

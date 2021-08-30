@@ -100,7 +100,7 @@ const DraftPage: NextPage = () => {
                       outline
                     />
                     <div className="block xl:hidden">
-                      <SettingsPanel />
+                      <SettingsPanel articleId={draftId} />
                     </div>
                     <Publish draft={draft?.findArticle!} />
                   </div>
@@ -149,7 +149,7 @@ const DraftPage: NextPage = () => {
               </div>
             </div>
             <div className="hidden xl:block flex-shrink-0">
-              <SettingsSidebar />
+              <SettingsSidebar articleId={draftId} />
             </div>
             <AutoSave setDiff={setDiff} />
           </Form>

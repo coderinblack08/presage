@@ -21,16 +21,12 @@ export const DraftItem: React.FC<DraftItemProps> = ({ draft }) => {
 
   return (
     <Link key={draft.id} href={`/draft/${draft.id}`} passHref>
-      <motion.a
-        initial={false}
-        layoutId={draft.journalId}
-        animate={{
-          backgroundColor: isOnPath ? "#EEEEEE" : "#FAFAF9",
-          color: isOnPath ? "#4B5563" : "#6B7280",
-          opacity: 1,
-          visibility: "visible",
-        }}
-        className={`flex items-center space-x-3 pl-4 pr-2 py-2 rounded-lg`}
+      <a
+        className={`flex items-center space-x-3 pl-4 pr-2 py-2 rounded-lg ${
+          isOnPath
+            ? "text-gray-600 bg-[#EEEEEE]"
+            : "text-gray-500 bg-warmGray-50"
+        }`}
       >
         <div className="rounded-lg bg-white border shadow-sm p-1">
           <svg
@@ -52,7 +48,7 @@ export const DraftItem: React.FC<DraftItemProps> = ({ draft }) => {
           </svg>
         </div>
         <h3 className="font-semibold text-[13px] truncate">{draft.title}</h3>
-      </motion.a>
+      </a>
     </Link>
   );
 };

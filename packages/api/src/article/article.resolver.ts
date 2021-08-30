@@ -59,7 +59,6 @@ export class ArticleResolver {
   ) {
     try {
       const articles = await this.articleService.findDrafts(userId, journalId);
-      console.log(articles);
       return articles;
     } catch (error) {
       throw new HttpException(
@@ -99,6 +98,20 @@ export class ArticleResolver {
       return true;
     } catch (error) {
       throw error;
+    }
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Mutation(() => Boolean)
+  async deleteArticle(@Args("id") id: string, @CurrentUser() userId: string) {
+    try {
+      await this.articleService.delete(id, userId);
+      return true;
+    } catch (error) {
+      throw new HttpException(
+        "Internal Server Error",
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
     }
   }
 }

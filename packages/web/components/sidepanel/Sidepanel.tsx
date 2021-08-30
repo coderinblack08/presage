@@ -20,7 +20,7 @@ export const Sidepanel: React.FC<SidepanelProps> = ({
       <div>{trigger}</div>
       <Portal.Root>
         <Dialog.Overlay>
-          <div className="fixed inset-0 h-screen w-screen bg-black/75 backdrop-blur-lg" />
+          <div className="fixed inset-0 h-screen w-screen bg-black/75" />
         </Dialog.Overlay>
         <Dialog.Content>
           <motion.div
