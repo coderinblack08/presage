@@ -75,8 +75,15 @@ export class Article extends BaseEntity {
   @Column("bigint", { default: 0 })
   points: number;
 
+  @Field()
+  @Column("bigint", { default: 0 })
+  bookmarks: number;
+
   @Field({ nullable: true })
   isFavored?: boolean;
+
+  @Field({ nullable: true })
+  isBookmarked?: boolean;
 
   @DeleteDateColumn()
   deletedAt: Date | null;

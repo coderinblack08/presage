@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { InjectRepository } from "@nestjs/typeorm";
 import axios from "axios";
+import { FavoriteType } from "src/favorite/favorite.entity";
 import { FavoriteService } from "src/favorite/favorite.service";
 import { Repository } from "typeorm";
 import { Article } from "./article.entity";
@@ -26,13 +27,18 @@ export class ArticleService {
       relations: relations ? ["journal", "user"] : [],
     });
     const isFavored = await this.favoriteService.isFavored(id, userId);
+    const isBookmarked = await this.favoriteService.isFavored(
+      id,
+      userId,
+      FavoriteType.Bookmark
+    );
     if (!article) {
       throw new HttpException("Article not found", HttpStatus.NOT_FOUND);
     }
     if (article.userId !== userId && !article?.isPublished) {
       throw new HttpException("Forbidden", HttpStatus.FORBIDDEN);
     }
-    return { ...article, isFavored };
+    return { ...article, isFavored, isBookmarked };
   }
 
   async findDrafts(userId: string, journalId: string) {

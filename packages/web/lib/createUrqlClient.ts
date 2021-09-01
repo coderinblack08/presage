@@ -6,6 +6,7 @@ import {
   DeleteArticleMutation,
   DeleteArticleMutationVariables,
   FavoriteMutation,
+  FavoriteType,
   FindArticleDocument,
   FindArticleQuery,
   FindDraftsDocument,
@@ -99,8 +100,19 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => {
                     ...old,
                     findArticle: {
                       ...old.findArticle,
-                      points: previous.points + (!previous.isFavored ? 1 : -1),
-                      isFavored: !previous.isFavored,
+                      ...(args.type === FavoriteType.Like ||
+                      args.type === undefined
+                        ? {
+                            points:
+                              previous.points + (!previous.isFavored ? 1 : -1),
+                            isFavored: !previous.isFavored,
+                          }
+                        : {
+                            bookmarks:
+                              previous.bookmarks +
+                              (!previous.isBookmarked ? 1 : -1),
+                            isBookmarked: !previous.isBookmarked,
+                          }),
                     } as any,
                   })
                 );

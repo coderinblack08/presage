@@ -15942,10 +15942,17 @@ prosemirror-keymap@^1.0.0, prosemirror-keymap@^1.1.3:
     prosemirror-state "^1.0.0"
     w3c-keyname "^2.2.0"
 
-prosemirror-model@1.13.1, prosemirror-model@^1.0.0, prosemirror-model@^1.1.0, prosemirror-model@^1.14.3:
+prosemirror-model@^1.0.0, prosemirror-model@^1.1.0:
   version "1.13.1"
   resolved "https://registry.yarnpkg.com/prosemirror-model/-/prosemirror-model-1.13.1.tgz#fa3dc888cf6928bd3968620588ffe6458d201f9f"
   integrity sha512-PNH+b5bilAJi1B5yJ8QzoNY3ZV+nlD0jKG3XCBk7PmE/YUTJomBkFBS005vfU+3M9yeVR8/6spAEDsfVFUhNeQ==
+  dependencies:
+    orderedmap "^1.1.0"
+
+prosemirror-model@^1.14.3:
+  version "1.14.3"
+  resolved "https://registry.yarnpkg.com/prosemirror-model/-/prosemirror-model-1.14.3.tgz#a9c250d3c4023ddf10ecb41a0a7a130e9741d37e"
+  integrity sha512-yzZlBaSxfUPIIP6U5Edh5zKxJPZ5f7bwZRhiCuH3UYkWhj+P3d8swHsbuAMOu/iDatDc5J/Qs5Mb3++mZf+CvQ==
   dependencies:
     orderedmap "^1.1.0"
 
@@ -15972,12 +15979,21 @@ prosemirror-transform@^1.0.0, prosemirror-transform@^1.1.0, prosemirror-transfor
   dependencies:
     prosemirror-model "^1.0.0"
 
-prosemirror-view@1.16.5, prosemirror-view@^1.0.0, prosemirror-view@^1.1.0, prosemirror-view@^1.19.0, prosemirror-view@^1.19.3:
+prosemirror-view@^1.0.0, prosemirror-view@^1.1.0:
   version "1.16.5"
   resolved "https://registry.yarnpkg.com/prosemirror-view/-/prosemirror-view-1.16.5.tgz#1a4646832e16c1cf116b54b9becf4b0663821125"
   integrity sha512-cFEjzhqQZIRDALEgQt8CNn+Qb+BUOvNxxaljaWoCbAYlsWGMiNNQG06I1MwbRNDcwnZKeFmOGpLEB4eorYYGig==
   dependencies:
     prosemirror-model "^1.1.0"
+    prosemirror-state "^1.0.0"
+    prosemirror-transform "^1.1.0"
+
+prosemirror-view@^1.19.0, prosemirror-view@^1.19.3:
+  version "1.19.3"
+  resolved "https://registry.yarnpkg.com/prosemirror-view/-/prosemirror-view-1.19.3.tgz#8d9bc91705bcf9cb5ae3b4de2668f73c7b93fa14"
+  integrity sha512-YP/ZzVwqPPwbHbJi97U2/CeyZ8PIHmLJt0gIhZWP8XfnuBRGG3y+jwLzUoBVmiuoUCy3R6PSB+pOATliGzLfPg==
+  dependencies:
+    prosemirror-model "^1.14.3"
     prosemirror-state "^1.0.0"
     prosemirror-transform "^1.1.0"
 
@@ -18888,10 +18904,15 @@ typeorm@^0.2.36:
     yargs "^17.0.1"
     zen-observable-ts "^1.0.0"
 
-typescript@4.3.5, typescript@^4.1.3, typescript@^4.3.5:
+typescript@4.3.5, typescript@^4.1.3:
   version "4.3.5"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.3.5.tgz#4d1c37cc16e893973c45a06886b7113234f119f4"
   integrity sha512-DqQgihaQ9cUrskJo9kIyW/+g0Vxsk8cDtZ52a3NGh0YNTfpUSArXSohyUGnvbPazEPLu398C0UxmKSOrPumUzA==
+
+typescript@^4.4.2:
+  version "4.4.2"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.4.2.tgz#6d618640d430e3569a1dfb44f7d7e600ced3ee86"
+  integrity sha512-gzP+t5W4hdy4c+68bfcv0t400HVJMMd2+H9B7gae1nQlBzCqvrXX+6GL/b3GAgyTH966pzrZ70/fRjwAtZksSQ==
 
 ua-parser-js@^0.7.18:
   version "0.7.28"

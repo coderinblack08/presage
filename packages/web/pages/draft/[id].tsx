@@ -13,6 +13,7 @@ import {
 } from "../../generated/graphql";
 import { createUrqlClient } from "../../lib/createUrqlClient";
 import { Layout } from "../../modules/dashboard/Layout";
+import { ResponsiveSidebar } from "../../modules/dashboard/sidebar/ResponsiveSidebar";
 import AutoSave from "../../modules/editor/AutoSave";
 import { Publish } from "../../modules/editor/Publish";
 import { SettingsPanel } from "../../modules/editor/settings/SettingsPanel";
@@ -82,6 +83,9 @@ const DraftPage: NextPage = () => {
               <div className="max-w-4xl w-full mx-auto px-0 sm:px-6 md:px-14 py-7 overflow-y-auto h-full">
                 <header className="flex items-center justify-between">
                   <div className="flex items-center space-x-2 max-w-sm">
+                    <div className="pr-1">
+                      <ResponsiveSidebar mobile />
+                    </div>
                     <span className="text-gray-900 font-bold max-w-[10rem] flex-shrink-0 overflow-auto whitespace-nowrap">
                       {draft?.findArticle?.journal.name}
                     </span>

@@ -1,12 +1,17 @@
 import React from "react";
 import {
+  MdBookmark,
   MdBookmarkBorder,
   MdFavorite,
   MdFavoriteBorder,
   MdShare,
 } from "react-icons/md";
 import { Button } from "../../components/button";
-import { ArticleFragment, useFavoriteMutation } from "../../generated/graphql";
+import {
+  ArticleFragment,
+  FavoriteType,
+  useFavoriteMutation,
+} from "../../generated/graphql";
 
 interface ReactionsProps {
   article: ArticleFragment;
@@ -37,12 +42,26 @@ export const Reactions: React.FC<ReactionsProps> = ({ article }) => {
         <span className="font-medium">{article.points}</span>
       </Button>
       <Button
-        icon={<MdBookmarkBorder className="w-6 h-6" />}
+        onClick={async () => {
+          try {
+            await favorite({
+              articleId: article.id,
+              type: FavoriteType.Bookmark,
+            });
+          } catch {}
+        }}
+        icon={
+          article.isBookmarked ? (
+            <MdBookmark className="w-6 h-6" />
+          ) : (
+            <MdBookmarkBorder className="w-6 h-6" />
+          )
+        }
         className="text-gray-500"
         color="transparent"
         size="none"
       >
-        <span className="font-medium">12</span>
+        <span className="font-medium">{article.bookmarks}</span>
       </Button>
       <Button
         icon={<MdShare className="w-6 h-6" />}
@@ -50,7 +69,7 @@ export const Reactions: React.FC<ReactionsProps> = ({ article }) => {
         color="transparent"
         size="none"
       >
-        <span className="font-medium">89</span>
+        <span className="font-medium">0</span>
       </Button>
     </div>
   );

@@ -11,7 +11,9 @@ fragment Article on Article {
   journalId
   userId
   points
+  bookmarks
   isFavored
+  isBookmarked
   createdAt
   updatedAt
 }

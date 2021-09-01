@@ -9,7 +9,7 @@ export const SidebarPanel: React.FC<SidebarPanelProps> = ({}) => {
     <Sidepanel
       trigger={
         <SidepanelTrigger>
-          <button>
+          <button className="flex items-center justify-center">
             <svg
               className="w-6 h-6 rotate-180"
               viewBox="0 0 24 24"

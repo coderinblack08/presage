@@ -1,8 +1,11 @@
 import { HttpException, HttpStatus, UseGuards } from "@nestjs/common";
-import { Args, Mutation, Resolver } from "@nestjs/graphql";
+import { Args, Mutation, registerEnumType, Resolver } from "@nestjs/graphql";
 import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
 import { CurrentUser } from "src/auth/user.param";
+import { FavoriteType } from "./favorite.entity";
 import { FavoriteService } from "./favorite.service";
+
+registerEnumType(FavoriteType, { name: "FavoriteType" });
 
 @Resolver()
 export class FavoriteResolver {
@@ -12,10 +15,12 @@ export class FavoriteResolver {
   @Mutation(() => Boolean)
   async toggleFavorite(
     @Args("articleId") articleId: string,
+    @Args("type", { type: () => FavoriteType, defaultValue: FavoriteType.Like })
+    type: FavoriteType,
     @CurrentUser() userId: string
   ) {
     try {
-      this.favoriteService.toggleFavorite(articleId, userId);
+      this.favoriteService.toggleFavorite(articleId, userId, type);
     } catch (error) {
       throw new HttpException(
         "Internal Server Error",

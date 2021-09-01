@@ -4,9 +4,13 @@ import { useSSRMediaQuery } from "../../../lib/useSSRMediaQuery";
 import { Sidebar } from "./Sidebar";
 import { SidebarPanel } from "./SidebarPanel";
 
-interface ResponsiveSidebarProps {}
+interface ResponsiveSidebarProps {
+  mobile?: boolean;
+}
 
-export const ResponsiveSidebar: React.FC<ResponsiveSidebarProps> = ({}) => {
+export const ResponsiveSidebar: React.FC<ResponsiveSidebarProps> = ({
+  mobile = false,
+}) => {
   const hideSidebar = useSSRMediaQuery("(max-width: 900px)");
   const hasMounted = useHasMounted();
 
@@ -14,9 +18,13 @@ export const ResponsiveSidebar: React.FC<ResponsiveSidebarProps> = ({}) => {
     return null;
   }
 
-  if (hideSidebar) {
+  if (hideSidebar && mobile) {
     return <SidebarPanel />;
   }
 
-  return <Sidebar />;
+  if (!mobile && !hideSidebar) {
+    return <Sidebar />;
+  }
+
+  return null;
 };

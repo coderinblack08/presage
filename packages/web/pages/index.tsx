@@ -6,6 +6,7 @@ import { Input } from "../components/input";
 import { useMeQuery } from "../generated/graphql";
 import { createUrqlClient } from "../lib/createUrqlClient";
 import { Layout } from "../modules/dashboard/Layout";
+import { ResponsiveSidebar } from "../modules/dashboard/sidebar/ResponsiveSidebar";
 import { LandingPage } from "../modules/landing-page/LandingPage";
 
 const Home: NextPage = () => {
@@ -14,8 +15,11 @@ const Home: NextPage = () => {
   if (user?.me) {
     return (
       <Layout>
+        <div className="mx-8 mt-8">
+          <ResponsiveSidebar mobile />
+        </div>
         <header className="border-b">
-          <div className="mx-auto max-w-5xl w-full px-8 py-24">
+          <div className="mx-auto max-w-5xl w-full px-8 pt-16 pb-24">
             <h1 className="font-display font-bold text-3xl">Getting Started</h1>
             <p className="text-gray-500 max-w-xl mt-3">
               Presage is a feature packed platform with an intuitive design. The
