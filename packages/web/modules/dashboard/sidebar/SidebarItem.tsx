@@ -11,6 +11,7 @@ import { FocusedArchiveIcon } from "../../icons/FocusedArchiveIcon";
 import { FocusedExploreIcon } from "../../icons/FocusedExploreIcon";
 import { FocusedHomeIcon } from "../../icons/FocusedHomeIcon";
 import { FocusedTrophyIcon } from "../../icons/FocusedTrophyIcon";
+import { useJumpToHandlers } from "./JumpTo";
 
 interface SidebarItemProps {
   name: keyof typeof icons;
@@ -45,6 +46,11 @@ const routes = {
 export const SidebarItem: React.FC<SidebarItemProps> = ({ name }) => {
   const router = useRouter();
   const isFocused = router.pathname === routes[name];
+  const query = useJumpToHandlers((x) => x.query);
+
+  if (!name.includes(query)) {
+    return null;
+  }
 
   return (
     <Link href={routes[name]} passHref>

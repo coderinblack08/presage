@@ -28,7 +28,7 @@
     "@tiptap/extension-placeholder": "^2.0.0-beta.28",
     "@tiptap/extension-underline": "^2.0.0-beta.16",
     "@tiptap/html": "^2.0.0-beta.101",
-    "@tiptap/react": "^2.0.0-beta.60",
+    "@tiptap/react": "^2.0.0-beta.63",
     "@tiptap/starter-kit": "^2.0.0-beta.97",
     "@tiptap/suggestion": "^2.0.0-beta.66",
     "@urql/core": "^2.2.0",
