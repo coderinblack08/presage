@@ -1,5 +1,6 @@
 import { Field, ID, ObjectType } from "@nestjs/graphql";
 import { Journal } from "src/journal/journal.entity";
+import { Reward } from "src/reward/reward.entity";
 import {
   BaseEntity,
   Column,
@@ -42,6 +43,9 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Journal, (journal) => journal.user)
   journals: Journal[];
+
+  @OneToMany(() => Reward, (reward) => reward.user)
+  rewards: Reward[];
 
   @Field(() => Date)
   @CreateDateColumn()

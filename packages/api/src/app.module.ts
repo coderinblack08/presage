@@ -13,6 +13,7 @@ import { JournalModule } from "./journal/journal.module";
 import * as connectionOptions from "./ormconfig";
 import { UserModule } from "./user/user.module";
 import { FavoriteModule } from "./favorite/favorite.module";
+import { RewardModule } from './reward/reward.module';
 
 @Module({
   imports: [
@@ -54,6 +55,7 @@ import { FavoriteModule } from "./favorite/favorite.module";
     ArticleModule,
     ApplicationModule,
     FavoriteModule,
+    RewardModule,
   ],
   controllers: [AppController],
   providers: [AppService],

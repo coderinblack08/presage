@@ -80,7 +80,7 @@ const DraftPage: NextPage = () => {
         {() => (
           <Form className="flex justify-between h-full w-full">
             <div className="w-full h-full">
-              <div className="max-w-4xl w-full mx-auto px-0 sm:px-6 md:px-14 py-7 overflow-y-auto h-full">
+              <div className="max-w-4xl w-full mx-auto px-0 sm:px-6 md:px-14 py-5 md:py-7 overflow-y-auto h-full">
                 <header className="flex items-center justify-between">
                   <div className="flex items-center space-x-2 max-w-sm">
                     <div className="pr-1">
