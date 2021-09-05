@@ -15,6 +15,18 @@ export type CommandsOption = {
   suggestion: Omit<SuggestionOptions, "editor">;
 };
 
+declare module "@tiptap/core" {
+  interface Commands<ReturnType> {
+    customExtension: {
+      toggleBold: () => ReturnType;
+      toggleItalic: () => ReturnType;
+      toggleOrderedList: () => ReturnType;
+      toggleBulletList: () => ReturnType;
+      toggleBlockquote: () => ReturnType;
+    };
+  }
+}
+
 export const Commands = Extension.create<CommandsOption>({
   name: "commands",
   defaultOptions: {
