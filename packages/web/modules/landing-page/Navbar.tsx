@@ -58,36 +58,32 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
         </DropdownItem>
       </Dropdown>
       <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
-        <ul className="flex items-center space-x-8 lg:space-x-10">
+        <ul className="flex items-center space-x-8">
           <li>
             <a className="text-gray-800">Explore</a>
           </li>
           <li>
             <a className="text-gray-800">Pricing</a>
           </li>
+          {user?.me ? (
+            <li>
+              <img
+                className="w-10 h-10 rounded-full object-cover"
+                src={user.me?.profilePicture || ""}
+                alt={user?.me?.displayName}
+              />
+            </li>
+          ) : (
+            <li>
+              <a
+                href="http://localhost:4000/auth/google"
+                className="text-gray-800"
+              >
+                Login
+              </a>
+            </li>
+          )}
         </ul>
-        <div className="h-6 w-[1px] bg-gray-300" />
-        <div className="flex items-center space-x-5">
-          <a href="https://instagram.com/joinpresage">
-            <AiOutlineInstagram className="w-6 h-6 text-gray-800" />
-          </a>
-          <a href="https://twitter.com/joinpresage">
-            <AiOutlineTwitter className="w-6 h-6 text-gray-800" />
-          </a>
-        </div>
-        {user?.me ? (
-          <div>
-            <img
-              className="w-10 h-10 rounded-full object-cover"
-              src={user.me?.profilePicture || ""}
-              alt={user?.me?.displayName}
-            />
-          </div>
-        ) : (
-          <a href="http://localhost:4000/auth/google">
-            <Button rounded>Login</Button>
-          </a>
-        )}
       </div>
     </nav>
   );

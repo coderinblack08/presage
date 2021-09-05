@@ -1,4 +1,6 @@
 import React from "react";
+import dashboard from "../../public/static/dashboard.png";
+import Image from "next/image";
 import { useScreen } from "../../lib/useScreen";
 import { ListCheck } from "../../modules/landing-page/ListCheck";
 import { Waitlist } from "../../modules/landing-page/Waitlist";
@@ -11,8 +13,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({}) => {
   return (
     <header className="relative bg-gray-100">
       <Navbar />
-      <header className="relative z-10 flex flex-col items-center max-w-3xl mx-auto pt-8 pb-24 md:pt-16 md:pb-48 px-5">
-        <h1 className="font-bold font-display text-3xl sm:text-4xl md:text-5xl xl:text-[3.5rem] text-center !leading-normal md:!leading-snug tracking-tight">
+      <header className="relative z-10 flex flex-col items-center max-w-3xl mx-auto pt-8 pb-24 md:pt-16 md:pb-8 px-5">
+        <h1 className="font-bold font-display text-3xl sm:text-4xl md:text-5xl xl:text-[3.5rem] text-center !leading-normal md:!leading-snug tracking-[-0.01em]">
           <span className="text-gray-500">Earn from publishing</span> <br />
           Reward your top readers
         </h1>
@@ -43,21 +45,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({}) => {
           </li>
         </ul>
       </header>
-      {/* <div
-        className="pt-16 md:pt-32 w-screen flex items-center absolute z-0 bottom-0"
-        style={{
-          background: "linear-gradient(180deg, #F3F4F6 0%, #AFB4BD 100%)",
-        }}
-      >
-        <div className="flex justify-end px-5 md:px-16 lg:px-10 max-w-7xl mx-auto">
-          <Image
-            src={globe}
-            alt="Paper airplanes orbiting globe"
-            quality={100}
-            priority
-          />
-        </div>
-      </div> */}
+      <div className="hidden md:flex justify-end">
+        <Image
+          src={dashboard}
+          alt="Screenshot of dashboard"
+          quality={100}
+          priority
+        />
+      </div>
     </header>
   );
 };
