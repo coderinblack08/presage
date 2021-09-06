@@ -16,7 +16,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({}) => {
 
   return (
     <header className="relative bg-gray-100">
-      <Navbar />
+      {/* <Navbar /> */}
       <header className="relative z-10 flex flex-col items-center max-w-3xl mx-auto pt-8 pb-24 md:pt-16 md:pb-32 px-5">
         <h1 className="font-bold font-display text-3xl sm:text-4xl md:text-5xl xl:text-[3.5rem] text-center !leading-normal md:!leading-snug tracking-[-0.01em]">
           <span className="text-gray-500">Earn from publishing</span> <br />

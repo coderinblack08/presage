@@ -76,4 +76,5 @@ const Home: NextPage = () => {
   return <LandingPage />;
 };
 
-export default withUrqlClient(createUrqlClient, { ssr: true })(Home);
+// export default withUrqlClient(createUrqlClient, { ssr: true })(Home);
+export default Home;
