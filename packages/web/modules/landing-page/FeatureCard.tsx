@@ -32,7 +32,7 @@ export const FeatureCard: React.FC<FeatureCardProps> = ({
   return (
     <div className="px-8 py-12 flex flex-col lg:flex-row">
       <div className="flex-shrink-0 mr-8">
-        <Image quality={100} priority alt="animal" src={animal} />
+        <Image alt="animal" src={animal} />
       </div>
       <div>
         <span className={accent}>{category}</span>

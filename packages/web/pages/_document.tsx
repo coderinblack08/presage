@@ -12,13 +12,13 @@ class MyDocument extends Document {
             type="font/woff2"
             crossOrigin="anonymous"
           />
-          <link
+          {/* <link
             rel="preload"
             href="/fonts/inter-var.woff2"
             as="font"
             type="font/woff2"
             crossOrigin="anonymous"
-          />
+          /> */}
         </Head>
         <body>
           <Main />

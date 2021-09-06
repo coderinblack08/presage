@@ -46,12 +46,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({}) => {
         </ul>
       </header>
       <div className="hidden md:flex justify-end">
-        <Image
-          src={dashboard}
-          alt="Screenshot of dashboard"
-          quality={100}
-          priority
-        />
+        <Image src={dashboard} alt="Screenshot of dashboard" quality={100} />
       </div>
     </header>
   );
