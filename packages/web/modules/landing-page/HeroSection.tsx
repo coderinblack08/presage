@@ -1,6 +1,6 @@
 import { motion, useTransform, useViewportScroll } from "framer-motion";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect } from "react";
 import { useScreen } from "../../lib/useScreen";
 import { ListCheck } from "../../modules/landing-page/ListCheck";
 import { Waitlist } from "../../modules/landing-page/Waitlist";
@@ -14,21 +14,60 @@ export const HeroSection: React.FC<HeroSectionProps> = ({}) => {
   const rotateX = useTransform(scrollY, [0, 500], [15, 0]);
   const scale = useTransform(scrollY, [0, 500], [1, 1.1]);
 
+  const headerContainer = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const headerRow = {
+    hidden: { opacity: 0, y: -12 },
+    show: { opacity: 1, y: 0 },
+  };
+
   return (
     <header className="relative bg-gray-100">
-      <Navbar />
-      <header className="relative z-10 flex flex-col items-center max-w-3xl mx-auto pt-8 pb-24 md:pt-16 md:pb-32 px-5">
-        <h1 className="font-bold font-display text-3xl sm:text-4xl md:text-5xl xl:text-[3.5rem] text-center !leading-normal md:!leading-snug tracking-[-0.01em]">
+      <motion.div
+        transition={{ duration: 0.1 }}
+        variants={headerRow}
+        initial="hidden"
+        animate="show"
+      >
+        <Navbar />
+      </motion.div>
+      <motion.header
+        variants={headerContainer}
+        initial="hidden"
+        animate="show"
+        transition={{ delay: 0.1 }}
+        className="relative z-10 flex flex-col items-center max-w-3xl mx-auto pt-8 pb-24 md:pt-16 md:pb-32 px-5"
+      >
+        <motion.h1
+          variants={headerRow}
+          className="font-bold font-display text-3xl sm:text-4xl md:text-5xl xl:text-[3.5rem] text-center !leading-normal md:!leading-snug tracking-[-0.01em]"
+        >
           <span className="text-gray-500">Earn from publishing</span> <br />
           Reward your top readers
-        </h1>
-        <p className="text-gray-500 text-center mt-4 md:mt-6 !leading-loose text-sm sm:text-base lg:text-[1.1rem] max-w-lg sm:max-w-xl lg:max-w-2xl">
+        </motion.h1>
+        <motion.p
+          variants={headerRow}
+          className="text-gray-500 text-center mt-4 md:mt-6 !leading-loose text-sm sm:text-base lg:text-[1.1rem] max-w-lg sm:max-w-xl lg:max-w-2xl"
+        >
           <strong className="text-gray-600">Quit Medium & Substack</strong> and
           publish on Presage. Brainstorm, draft, and revise without
           distractions. Reward your readers for referring your articles.
-        </p>
-        <Waitlist />
-        <ul className="flex items-center justify-between w-full max-w-sm sm:w-auto sm:max-w-none sm:space-x-10 mt-6">
+        </motion.p>
+        <motion.div className="flex justify-center w-full" variants={headerRow}>
+          <Waitlist />
+        </motion.div>
+        <motion.ul
+          variants={headerRow}
+          className="flex items-center justify-between w-full max-w-sm sm:w-auto sm:max-w-none sm:space-x-10 mt-6"
+        >
           <li className="flex items-center space-x-2 flex-shrink-0">
             <ListCheck />
             <span className="text-gray-600 font-semibold text-sm">
@@ -47,18 +86,16 @@ export const HeroSection: React.FC<HeroSectionProps> = ({}) => {
               Open Source
             </span>
           </li>
-        </ul>
-      </header>
+        </motion.ul>
+      </motion.header>
       <div className="relative z-10 hidden md:flex justify-end md:w-5/6 lg:w-3/4 mx-auto">
-        <motion.div
-          animate={{ transformPerspective: 1000 }}
-          style={{ rotateX, scale }}
-        >
+        <motion.div style={{ rotateX, scale, transformPerspective: 1000 }}>
           <Image
-            priority
             src={dashboard}
             alt="Screenshot of dashboard"
             quality={100}
+            placeholder="blur"
+            priority
           />
         </motion.div>
       </div>
