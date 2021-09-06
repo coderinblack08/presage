@@ -17,7 +17,7 @@
     scroll-behavior: smooth;
   }
 
-  html {
+  /* html {
     overflow: hidden;
     height: 100%;
   }
@@ -25,7 +25,7 @@
   body {
     height: 100%;
     overflow: auto;
-  }
+  } */
 
   p,
   div,
