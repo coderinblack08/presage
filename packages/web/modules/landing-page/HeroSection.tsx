@@ -12,7 +12,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({}) => {
   const { isSmallerThanTablet } = useScreen();
   const { scrollY } = useViewportScroll();
   const rotateX = useTransform(scrollY, [0, 500], [15, 0]);
-  const scale = useTransform(scrollY, [0, 500], [1, 1.1]);
+  const scale = useTransform(scrollY, [0, 500], [1.1, 1.2]);
 
   const headerContainer = {
     hidden: { opacity: 0 },
@@ -88,7 +88,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({}) => {
           </li>
         </motion.ul>
       </motion.header>
-      <div className="relative z-10 hidden md:flex justify-end md:w-5/6 lg:w-3/4 mx-auto">
+      <div className="relative z-10 hidden md:flex justify-end md:w-5/6 lg:w-3/4 max-w-6xl mx-auto">
         <motion.div style={{ rotateX, scale, transformPerspective: 1000 }}>
           <Image
             src={dashboard}

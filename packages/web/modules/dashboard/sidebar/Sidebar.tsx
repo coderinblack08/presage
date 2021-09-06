@@ -10,7 +10,7 @@ interface SidebarProps {}
 
 export const Sidebar: React.FC<SidebarProps> = ({}) => {
   return (
-    <div className="flex flex-col justify-between relative h-screen w-[300px] flex-shrink-0 border-r bg-warmGray-50">
+    <div className="flex flex-col justify-between relative h-screen w-[280px] flex-shrink-0 border-r bg-warmGray-50">
       <div className="h-full overflow-y-auto">
         <div className="px-3 pt-8 space-y-5">
           <Logo />
