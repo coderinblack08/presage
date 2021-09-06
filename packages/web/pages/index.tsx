@@ -76,5 +76,7 @@ const Home: NextPage = () => {
   return <LandingPage />;
 };
 
-// export default withUrqlClient(createUrqlClient, { ssr: true })(Home);
-export default Home;
+// TODO: REMOVE THE SSR THING FOR ACTUAL PRODUCTION
+export default withUrqlClient(createUrqlClient, {
+  ssr: process.env.NODE_ENV === "development",
+})(Home);
