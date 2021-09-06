@@ -13,7 +13,7 @@ import { JournalModule } from "./journal/journal.module";
 import * as connectionOptions from "./ormconfig";
 import { UserModule } from "./user/user.module";
 import { FavoriteModule } from "./favorite/favorite.module";
-import { RewardModule } from './reward/reward.module';
+import { RewardModule } from "./reward/reward.module";
 
 @Module({
   imports: [
@@ -43,6 +43,7 @@ import { RewardModule } from './reward/reward.module';
             ArticleModule,
             ApplicationModule,
             FavoriteModule,
+            RewardModule,
           ],
           context: ({ req, res }) => ({ req, res }),
         };

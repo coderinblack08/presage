@@ -17,8 +17,8 @@ export class RewardService {
     private readonly pointRepository: Repository<Point>
   ) {}
 
-  async create(data: CreateRewardInput) {
-    return this.rewardRepository.create(data).save();
+  async create(data: CreateRewardInput, userId: string) {
+    return this.rewardRepository.create({ ...data, userId }).save();
   }
 
   async claim(id: string, userId: string) {

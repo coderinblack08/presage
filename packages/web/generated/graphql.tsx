@@ -75,6 +75,13 @@ export type CreateJournalArgs = {
   emoji?: Maybe<Scalars['String']>;
 };
 
+export type CreateRewardInput = {
+  name: Scalars['String'];
+  description: Scalars['String'];
+  points: Scalars['Float'];
+  type: RewardType;
+};
+
 
 export enum FavoriteType {
   Like = 'Like',
@@ -106,6 +113,7 @@ export type Mutation = {
   deleteArticle: Scalars['Boolean'];
   toggleFavorite: Scalars['Boolean'];
   createApplication: Application;
+  createReward: Reward;
 };
 
 
@@ -156,6 +164,11 @@ export type MutationCreateApplicationArgs = {
   data: CreateApplicationInput;
 };
 
+
+export type MutationCreateRewardArgs = {
+  data: CreateRewardInput;
+};
+
 export type Query = {
   __typename?: 'Query';
   me?: Maybe<User>;
@@ -173,6 +186,25 @@ export type QueryFindDraftsArgs = {
 export type QueryFindArticleArgs = {
   id: Scalars['String'];
 };
+
+export type Reward = {
+  __typename?: 'Reward';
+  id: Scalars['String'];
+  name: Scalars['String'];
+  description: Scalars['String'];
+  points: Scalars['Float'];
+  claimCount: Scalars['Float'];
+  type: RewardType;
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
+};
+
+export enum RewardType {
+  Form = 'Form',
+  Shoutout = 'Shoutout',
+  Message = 'Message',
+  Link = 'Link'
+}
 
 export type UpdateArticleInput = {
   title?: Maybe<Scalars['String']>;
@@ -204,6 +236,8 @@ export type ArticleFragment = { __typename?: 'Article', id: string, title: strin
 
 export type JournalFragment = { __typename?: 'Journal', id: string, name: string, emoji: string, description?: Maybe<string>, createdAt: any, updatedAt: any };
 
+export type RewardFragment = { __typename?: 'Reward', id: string, name: string, description: string, points: number, claimCount: number, type: RewardType };
+
 export type UserFragment = { __typename?: 'User', id: string, profilePicture?: Maybe<string>, displayName: string, username: string, bio?: Maybe<string>, createdAt: any };
 
 export type CreateBlankArticleMutationVariables = Exact<{
@@ -219,6 +253,13 @@ export type CreateJournalMutationVariables = Exact<{
 
 
 export type CreateJournalMutation = { __typename?: 'Mutation', createJournal: { __typename?: 'Journal', id: string, name: string, emoji: string, description?: Maybe<string>, createdAt: any, updatedAt: any } };
+
+export type CreateRewardMutationVariables = Exact<{
+  data: CreateRewardInput;
+}>;
+
+
+export type CreateRewardMutation = { __typename?: 'Mutation', createReward: { __typename?: 'Reward', id: string, name: string, description: string, points: number, claimCount: number, type: RewardType } };
 
 export type DeleteArticleMutationVariables = Exact<{
   id: Scalars['String'];
@@ -305,6 +346,16 @@ export const JournalFragmentDoc = gql`
   updatedAt
 }
     `;
+export const RewardFragmentDoc = gql`
+    fragment Reward on Reward {
+  id
+  name
+  description
+  points
+  claimCount
+  type
+}
+    `;
 export const UserFragmentDoc = gql`
     fragment User on User {
   id
@@ -336,6 +387,17 @@ export const CreateJournalDocument = gql`
 
 export function useCreateJournalMutation() {
   return Urql.useMutation<CreateJournalMutation, CreateJournalMutationVariables>(CreateJournalDocument);
+};
+export const CreateRewardDocument = gql`
+    mutation CreateReward($data: CreateRewardInput!) {
+  createReward(data: $data) {
+    ...Reward
+  }
+}
+    ${RewardFragmentDoc}`;
+
+export function useCreateRewardMutation() {
+  return Urql.useMutation<CreateRewardMutation, CreateRewardMutationVariables>(CreateRewardDocument);
 };
 export const DeleteArticleDocument = gql`
     mutation DeleteArticle($id: String!) {

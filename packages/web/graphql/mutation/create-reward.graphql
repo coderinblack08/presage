@@ -1,0 +1,5 @@
+mutation CreateReward($data: CreateRewardInput!) {
+  createReward(data: $data) {
+    ...Reward
+  }
+}

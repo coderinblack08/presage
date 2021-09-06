@@ -26,10 +26,15 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           </div>
         )}
         {shortcut && (
-          <div className="absolute inset-y-0 h-full right-0 flex items-center pointer-events-none pr-2">
-            <span className="border-b-2 bg-gray-100 rounded-md px-2.5 py-0.5 text-sm">
-              {shortcut}
-            </span>
+          <div className="absolute inset-y-0 h-full right-0 flex items-center space-x-1.5 pointer-events-none pr-2">
+            {shortcut.split("").map((key, index) => (
+              <kbd
+                key={index}
+                className="border-b-2 bg-gray-50 border rounded-md px-2 py-0.5 text-sm text-gray-600"
+              >
+                {key}
+              </kbd>
+            ))}
           </div>
         )}
         <input ref={ref} className={`${styles} ${className}`} {...props} />

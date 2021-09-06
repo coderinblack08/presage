@@ -112,21 +112,21 @@ const DraftPage: NextPage = () => {
                 <main className="py-14">
                   <div className="space-y-5">
                     <TitleInput />
-                    <table>
-                      <tbody className="space-y-3">
-                        <tr className="flex items-center space-x-3">
-                          <th>
+                    <div>
+                      <div className="space-y-3">
+                        <div className="flex items-center space-x-4">
+                          <div>
                             <HiUserCircle className="text-gray-400 w-6 h-6" />
-                          </th>
-                          <td className="text-gray-600 font-semibold">
+                          </div>
+                          <div className="text-gray-600 font-semibold">
                             Published by Kevin Lu
-                          </td>
-                        </tr>
-                        <tr className="flex items-center space-x-3">
-                          <th>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-4">
+                          <div>
                             <HiTag className="text-gray-400 w-6 h-6" />
-                          </th>
-                          <td className="flex items-center space-x-2">
+                          </div>
+                          <div className="flex items-center space-x-2">
                             {draft?.findArticle?.tags.length === 0 ? (
                               <span className="text-gray-600">
                                 No Tags Found
@@ -142,10 +142,10 @@ const DraftPage: NextPage = () => {
                                 </div>
                               ))
                             )}
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                   <hr className="my-10" />
                   <TipTapEditor draft={draft?.findArticle || null} />
