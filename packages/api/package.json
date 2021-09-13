@@ -39,6 +39,7 @@
     "dotenv-safe": "^8.2.0",
     "graphql": "^15.5.1",
     "graphql-type-json": "^0.3.2",
+    "nanoid": "^3.1.25",
     "node-emoji": "^1.11.0",
     "passport": "^0.4.1",
     "passport-google-oauth2": "^0.2.0",

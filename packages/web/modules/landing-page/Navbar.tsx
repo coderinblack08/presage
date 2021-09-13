@@ -50,8 +50,12 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
         <DropdownItem>Explore</DropdownItem>
         <DropdownItem>Pricing</DropdownItem>
         <DropdownDivider />
-        <DropdownItem>Twitter</DropdownItem>
-        <DropdownItem>Instagram</DropdownItem>
+        <DropdownItem href="https://twitter.com/joinpresage">
+          Twitter
+        </DropdownItem>
+        <DropdownItem href="https://instagram.com/joinpresage">
+          Instagram
+        </DropdownItem>
         <DropdownDivider />
         <DropdownItem href="http://localhost:4000/auth/google">
           Login

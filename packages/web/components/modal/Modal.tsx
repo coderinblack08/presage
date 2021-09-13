@@ -7,11 +7,12 @@ import React, { Fragment, useState } from "react";
 interface ModalProps {
   trigger: React.ReactNode;
   title: string;
-  description: string;
+  description: React.ReactNode | string;
   children: (props: {
     open: boolean;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   }) => React.ReactNode;
+  className?: string;
 }
 
 export const Modal: React.FC<ModalProps> = ({
@@ -19,6 +20,7 @@ export const Modal: React.FC<ModalProps> = ({
   description,
   trigger,
   children,
+  className,
 }) => {
   const [open, setOpen] = useState(false);
 
@@ -66,7 +68,7 @@ export const Modal: React.FC<ModalProps> = ({
                   onClick={() => setOpen(false)}
                 >
                   <div
-                    className={`relative z-50 inline-block w-full max-w-lg overflow-hidden text-left align-middle transition-all transform bg-white rounded-xl p-6`}
+                    className={`relative z-50 inline-block w-full max-w-lg overflow-hidden text-left align-middle transition-all transform bg-white rounded-xl p-6 ${className}`}
                     onClick={stopPropagation}
                   >
                     <Dialog.Title className="text-xl font-bold" as="h1">

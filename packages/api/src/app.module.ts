@@ -14,6 +14,7 @@ import * as connectionOptions from "./ormconfig";
 import { UserModule } from "./user/user.module";
 import { FavoriteModule } from "./favorite/favorite.module";
 import { RewardModule } from "./reward/reward.module";
+import { ReferralModule } from "./referral/referral.module";
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { RewardModule } from "./reward/reward.module";
             ApplicationModule,
             FavoriteModule,
             RewardModule,
+            ReferralModule,
           ],
           context: ({ req, res }) => ({ req, res }),
         };
@@ -57,6 +59,7 @@ import { RewardModule } from "./reward/reward.module";
     ApplicationModule,
     FavoriteModule,
     RewardModule,
+    ReferralModule,
   ],
   controllers: [AppController],
   providers: [AppService],

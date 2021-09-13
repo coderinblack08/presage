@@ -1,13 +1,15 @@
 import { NextPage } from "next";
 import { withUrqlClient } from "next-urql";
 import React from "react";
-import { MdAdd } from "react-icons/md";
-import { Button } from "../../components/button";
+import { useMyRewardsQuery } from "../../generated/graphql";
 import { createUrqlClient } from "../../lib/createUrqlClient";
 import { Layout } from "../../modules/dashboard/Layout";
 import { ResponsiveSidebar } from "../../modules/dashboard/sidebar/ResponsiveSidebar";
+import { RewardModal } from "../../modules/rewards/RewardModal";
 
 const RewardDashboard: NextPage = () => {
+  const [{ data: rewards }] = useMyRewardsQuery();
+
   return (
     <Layout>
       <nav className="px-5 pt-4 border-b">
@@ -23,34 +25,40 @@ const RewardDashboard: NextPage = () => {
           Select from a variety of reward presets and customize them to your
           liking.
         </p>
-        <div className="align-middle inline-block min-w-full">
-          <table className="mt-8">
+        <div className="align-middle inline-block min-w-full w-full overflow-x-auto border shadow-sm rounded-lg mt-8">
+          <table className="shadow-none">
             <thead>
               <tr>
                 <th scope="col">Name</th>
                 <th>Description</th>
                 <th>Points</th>
-                <th>Status</th>
+                <th className="whitespace-nowrap">Claim Count</th>
               </tr>
             </thead>
-            <tr>
-              <td>
-                <span className="font-semibold text-gray-900">Shoutout</span>
-              </td>
-              <td className="truncate max-w-xl">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed
-                quasi ipsa veritatis facilis ad dolorum distinctio fugit ducimus
-                natus unde, qui minus, voluptates beatae quibusdam provident
-                eveniet, ea voluptate earum!
-              </td>
-              <td>5</td>
-              <td>78</td>
-            </tr>
+            <tbody>
+              {rewards?.myRewards.map((reward) => (
+                <tr key={reward.id}>
+                  <td>
+                    <span className="font-bold text-gray-900 whitespace-nowrap">
+                      {reward.name}{" "}
+                      <span className="font-medium text-gray-500">
+                        ({reward.type})
+                      </span>
+                    </span>
+                  </td>
+                  <td className="truncate max-w-lg">{reward.description}</td>
+                  <td>{reward.points}</td>
+                  <td>0</td>
+                </tr>
+              ))}
+              <tr>
+                <td colSpan={4} className="p-0 border-b-0">
+                  <RewardModal />
+                </td>
+              </tr>
+            </tbody>
           </table>
         </div>
-        <Button className="mt-6" icon={<MdAdd className="w-5 h-5" />} outline>
-          Add Reward
-        </Button>
       </main>
     </Layout>
   );

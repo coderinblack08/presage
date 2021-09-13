@@ -1,0 +1,5 @@
+mutation CreateReferral($articleId: String!) {
+  createReferral(articleId: $articleId) {
+    ...Referral
+  }
+}

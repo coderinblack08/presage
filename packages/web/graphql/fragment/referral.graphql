@@ -1,0 +1,7 @@
+fragment Referral on Referral {
+  userId
+  articleId
+  shareCount
+  createdAt
+  code
+}

@@ -1,8 +1,9 @@
 import { NextPage } from "next";
 import { withUrqlClient } from "next-urql";
 import { useRouter } from "next/dist/client/router";
-import React from "react";
-import { MdPersonAdd } from "react-icons/md";
+import React, { useEffect } from "react";
+import toast, { Toaster } from "react-hot-toast";
+import { MdClose, MdPersonAdd, MdShare } from "react-icons/md";
 import { Button } from "../../components/button";
 import { useFindArticleQuery } from "../../generated/graphql";
 import { createUrqlClient } from "../../lib/createUrqlClient";
@@ -20,8 +21,46 @@ const ArticlePage: NextPage = () => {
   });
   const { isSmallerThanTablet } = useScreen();
 
+  useEffect(() => {
+    const hideReferToast = window.localStorage.getItem("hide-refer-toast");
+    if (hideReferToast ? hideReferToast !== "true" : true) {
+      toast(
+        (t) => (
+          <div className="py-2">
+            <button
+              onClick={() => {
+                toast.dismiss(t.id);
+                window.localStorage.setItem("hide-refer-toast", "true");
+              }}
+              className="absolute top-4 right-4"
+            >
+              <MdClose className="w-5 h-5 text-gray-400" />
+            </button>
+            <h3 className="font-bold text-xl mb-1">Earn by sharing</h3>
+            <p className="text-gray-600 leading-normal mb-4">
+              Refer this article to earn points. You can also use the button
+              next to the bookmark icon to generate a unique shareable link.
+            </p>
+            <Button icon={<MdShare />} outline>
+              Share
+            </Button>
+          </div>
+        ),
+        {
+          duration: Infinity,
+          position: "bottom-left",
+          className: "relative border shadow",
+          style: {
+            alignItems: "start",
+          },
+        }
+      );
+    }
+  }, []);
+
   return (
     <div>
+      <Toaster />
       <Navbar />
       <header className="border-b pt-6 sm:pt-10 pb-6">
         <div className="max-w-4xl mx-auto px-5">

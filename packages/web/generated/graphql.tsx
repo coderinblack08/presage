@@ -80,6 +80,9 @@ export type CreateRewardInput = {
   description: Scalars['String'];
   points: Scalars['Float'];
   type: RewardType;
+  maxShoutouts?: Maybe<Scalars['Float']>;
+  message?: Maybe<Scalars['String']>;
+  url?: Maybe<Scalars['String']>;
 };
 
 
@@ -175,6 +178,7 @@ export type Query = {
   findJournals: Array<Journal>;
   findDrafts: Array<Article>;
   findArticle?: Maybe<Article>;
+  myRewards: Array<Reward>;
 };
 
 
@@ -192,6 +196,8 @@ export type Reward = {
   id: Scalars['String'];
   name: Scalars['String'];
   description: Scalars['String'];
+  message?: Maybe<Scalars['String']>;
+  url?: Maybe<Scalars['String']>;
   points: Scalars['Float'];
   claimCount: Scalars['Float'];
   type: RewardType;
@@ -314,6 +320,11 @@ export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type MeQuery = { __typename?: 'Query', me?: Maybe<{ __typename?: 'User', id: string, profilePicture?: Maybe<string>, displayName: string, username: string, bio?: Maybe<string>, createdAt: any }> };
+
+export type MyRewardsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MyRewardsQuery = { __typename?: 'Query', myRewards: Array<{ __typename?: 'Reward', id: string, name: string, description: string, points: number, claimCount: number, type: RewardType }> };
 
 export const ArticleFragmentDoc = gql`
     fragment Article on Article {
@@ -488,4 +499,15 @@ export const MeDocument = gql`
 
 export function useMeQuery(options: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<MeQuery>({ query: MeDocument, ...options });
+};
+export const MyRewardsDocument = gql`
+    query MyRewards {
+  myRewards {
+    ...Reward
+  }
+}
+    ${RewardFragmentDoc}`;
+
+export function useMyRewardsQuery(options: Omit<Urql.UseQueryArgs<MyRewardsQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<MyRewardsQuery>({ query: MyRewardsDocument, ...options });
 };

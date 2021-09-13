@@ -48,7 +48,7 @@ export const TextareaField: React.FC<
         {...props}
       />
       {meta.touched && !!meta.error ? (
-        <p className="mt-1 text-sm text-red">{JSON.stringify(meta.error)}</p>
+        <p className="mt-1 text-sm text-red">{meta.error}</p>
       ) : null}
     </div>
   );

@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { DeepPartial, Repository } from "typeorm";
+import { DeepPartial, FindManyOptions, Repository } from "typeorm";
 import { ClaimedReward, ClaimedStatus } from "./claimed-reward.entity";
 import { CreateRewardInput } from "./dto/create-reward.args";
 import { Point } from "./points.entity";
@@ -13,12 +13,31 @@ export class RewardService {
     private readonly rewardRepository: Repository<Reward>,
     @InjectRepository(ClaimedReward)
     private readonly claimedRewardRepository: Repository<ClaimedReward>,
-    @InjectRepository(ClaimedReward)
+    @InjectRepository(Point)
     private readonly pointRepository: Repository<Point>
   ) {}
 
+  stripData(reward: CreateRewardInput) {
+    const data = { ...reward };
+    if (data.message && data.type !== RewardType.Message) {
+      delete data.message;
+    }
+    if (data.url && data.type !== RewardType.Link) {
+      delete data.url;
+    }
+    if (data.maxShoutouts && data.type !== RewardType.Shoutout) {
+      delete data.maxShoutouts;
+    }
+    return data;
+  }
+
   async create(data: CreateRewardInput, userId: string) {
+    data = this.stripData(data);
     return this.rewardRepository.create({ ...data, userId }).save();
+  }
+
+  async find(options: FindManyOptions<Reward>) {
+    return this.rewardRepository.find(options);
   }
 
   async claim(id: string, userId: string) {

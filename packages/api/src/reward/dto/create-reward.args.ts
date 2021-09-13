@@ -1,5 +1,12 @@
 import { Field, InputType } from "@nestjs/graphql";
-import { IsEnum, IsNumber, Length, Min } from "class-validator";
+import {
+  IsEnum,
+  IsNumber,
+  IsOptional,
+  IsPositive,
+  IsUrl,
+  Length,
+} from "class-validator";
 import { RewardType } from "../reward.entity";
 
 @InputType()
@@ -14,10 +21,26 @@ export class CreateRewardInput {
 
   @Field()
   @IsNumber()
-  @Min(0)
+  @IsPositive()
   points: number;
 
   @IsEnum(RewardType)
   @Field(() => RewardType)
   type: RewardType;
+
+  @Field({ nullable: true })
+  @IsPositive()
+  @IsNumber()
+  @IsOptional()
+  maxShoutouts?: number;
+
+  @Field({ nullable: true })
+  @Length(5, 1000)
+  @IsOptional()
+  message?: string;
+
+  @Field({ nullable: true })
+  @IsUrl()
+  @IsOptional()
+  url?: string;
 }

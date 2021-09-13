@@ -89,7 +89,13 @@ export const HeroSection: React.FC<HeroSectionProps> = ({}) => {
         </motion.ul>
       </motion.header>
       <div className="relative z-10 hidden md:flex justify-end md:w-5/6 lg:w-3/4 max-w-6xl mx-auto">
-        <motion.div style={{ rotateX, scale, transformPerspective: 1000 }}>
+        <motion.div
+          style={{
+            rotateX,
+            scale,
+            transformPerspective: 1000,
+          }}
+        >
           <Image
             src={dashboard}
             alt="Screenshot of dashboard"
@@ -99,7 +105,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({}) => {
           />
         </motion.div>
       </div>
-      <div className="hidden md:block absolute bottom-0 z-0 h-96 w-full bg-gradient-to-b from-gray-100 to-gray-300" />
+      <div className="hidden md:block absolute bottom-0 z-0 h-[30rem] w-full bg-gradient-to-b from-gray-100 to-gray-300" />
     </header>
   );
 };

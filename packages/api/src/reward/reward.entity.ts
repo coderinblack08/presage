@@ -34,6 +34,14 @@ export class Reward extends BaseEntity {
   @Column()
   description: string;
 
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  message: string;
+
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  url: string;
+
   @Field()
   @Column()
   points: number;
