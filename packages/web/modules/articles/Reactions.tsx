@@ -4,7 +4,6 @@ import {
   MdBookmarkBorder,
   MdFavorite,
   MdFavoriteBorder,
-  MdShare,
 } from "react-icons/md";
 import { Button } from "../../components/button";
 import {
@@ -12,6 +11,7 @@ import {
   FavoriteType,
   useFavoriteMutation,
 } from "../../generated/graphql";
+import { Share } from "./Share";
 
 interface ReactionsProps {
   article: ArticleFragment;
@@ -63,14 +63,7 @@ export const Reactions: React.FC<ReactionsProps> = ({ article }) => {
       >
         <span className="font-medium">{article.bookmarks}</span>
       </Button>
-      <Button
-        icon={<MdShare className="w-6 h-6" />}
-        className="text-gray-500"
-        color="transparent"
-        size="none"
-      >
-        <span className="font-medium">0</span>
-      </Button>
+      <Share articleId={article.id} />
     </div>
   );
 };

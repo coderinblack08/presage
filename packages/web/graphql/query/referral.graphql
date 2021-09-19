@@ -1,0 +1,5 @@
+query FindReferral($articleId: String!) {
+  findReferral(articleId: $articleId) {
+    ...Referral
+  }
+}

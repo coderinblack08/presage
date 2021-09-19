@@ -117,6 +117,7 @@ export type Mutation = {
   toggleFavorite: Scalars['Boolean'];
   createApplication: Application;
   createReward: Reward;
+  createReferral: Referral;
 };
 
 
@@ -172,6 +173,11 @@ export type MutationCreateRewardArgs = {
   data: CreateRewardInput;
 };
 
+
+export type MutationCreateReferralArgs = {
+  articleId: Scalars['String'];
+};
+
 export type Query = {
   __typename?: 'Query';
   me?: Maybe<User>;
@@ -179,6 +185,7 @@ export type Query = {
   findDrafts: Array<Article>;
   findArticle?: Maybe<Article>;
   myRewards: Array<Reward>;
+  findReferral: Referral;
 };
 
 
@@ -189,6 +196,20 @@ export type QueryFindDraftsArgs = {
 
 export type QueryFindArticleArgs = {
   id: Scalars['String'];
+};
+
+
+export type QueryFindReferralArgs = {
+  articleId: Scalars['String'];
+};
+
+export type Referral = {
+  __typename?: 'Referral';
+  userId: Scalars['String'];
+  articleId: Scalars['String'];
+  code: Scalars['String'];
+  shareCount: Scalars['Float'];
+  createdAt: Scalars['DateTime'];
 };
 
 export type Reward = {
@@ -242,6 +263,8 @@ export type ArticleFragment = { __typename?: 'Article', id: string, title: strin
 
 export type JournalFragment = { __typename?: 'Journal', id: string, name: string, emoji: string, description?: Maybe<string>, createdAt: any, updatedAt: any };
 
+export type ReferralFragment = { __typename?: 'Referral', userId: string, articleId: string, shareCount: number, createdAt: any, code: string };
+
 export type RewardFragment = { __typename?: 'Reward', id: string, name: string, description: string, points: number, claimCount: number, type: RewardType };
 
 export type UserFragment = { __typename?: 'User', id: string, profilePicture?: Maybe<string>, displayName: string, username: string, bio?: Maybe<string>, createdAt: any };
@@ -259,6 +282,13 @@ export type CreateJournalMutationVariables = Exact<{
 
 
 export type CreateJournalMutation = { __typename?: 'Mutation', createJournal: { __typename?: 'Journal', id: string, name: string, emoji: string, description?: Maybe<string>, createdAt: any, updatedAt: any } };
+
+export type CreateReferralMutationVariables = Exact<{
+  articleId: Scalars['String'];
+}>;
+
+
+export type CreateReferralMutation = { __typename?: 'Mutation', createReferral: { __typename?: 'Referral', userId: string, articleId: string, shareCount: number, createdAt: any, code: string } };
 
 export type CreateRewardMutationVariables = Exact<{
   data: CreateRewardInput;
@@ -326,6 +356,13 @@ export type MyRewardsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type MyRewardsQuery = { __typename?: 'Query', myRewards: Array<{ __typename?: 'Reward', id: string, name: string, description: string, points: number, claimCount: number, type: RewardType }> };
 
+export type FindReferralQueryVariables = Exact<{
+  articleId: Scalars['String'];
+}>;
+
+
+export type FindReferralQuery = { __typename?: 'Query', findReferral: { __typename?: 'Referral', userId: string, articleId: string, shareCount: number, createdAt: any, code: string } };
+
 export const ArticleFragmentDoc = gql`
     fragment Article on Article {
   id
@@ -355,6 +392,15 @@ export const JournalFragmentDoc = gql`
   description
   createdAt
   updatedAt
+}
+    `;
+export const ReferralFragmentDoc = gql`
+    fragment Referral on Referral {
+  userId
+  articleId
+  shareCount
+  createdAt
+  code
 }
     `;
 export const RewardFragmentDoc = gql`
@@ -398,6 +444,17 @@ export const CreateJournalDocument = gql`
 
 export function useCreateJournalMutation() {
   return Urql.useMutation<CreateJournalMutation, CreateJournalMutationVariables>(CreateJournalDocument);
+};
+export const CreateReferralDocument = gql`
+    mutation CreateReferral($articleId: String!) {
+  createReferral(articleId: $articleId) {
+    ...Referral
+  }
+}
+    ${ReferralFragmentDoc}`;
+
+export function useCreateReferralMutation() {
+  return Urql.useMutation<CreateReferralMutation, CreateReferralMutationVariables>(CreateReferralDocument);
 };
 export const CreateRewardDocument = gql`
     mutation CreateReward($data: CreateRewardInput!) {
@@ -510,4 +567,15 @@ export const MyRewardsDocument = gql`
 
 export function useMyRewardsQuery(options: Omit<Urql.UseQueryArgs<MyRewardsQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<MyRewardsQuery>({ query: MyRewardsDocument, ...options });
+};
+export const FindReferralDocument = gql`
+    query FindReferral($articleId: String!) {
+  findReferral(articleId: $articleId) {
+    ...Referral
+  }
+}
+    ${ReferralFragmentDoc}`;
+
+export function useFindReferralQuery(options: Omit<Urql.UseQueryArgs<FindReferralQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<FindReferralQuery>({ query: FindReferralDocument, ...options });
 };

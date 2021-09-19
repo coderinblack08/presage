@@ -1,6 +1,6 @@
 import { motion, useTransform, useViewportScroll } from "framer-motion";
 import Image from "next/image";
-import React, { useEffect } from "react";
+import React from "react";
 import { useScreen } from "../../lib/useScreen";
 import { ListCheck } from "../../modules/landing-page/ListCheck";
 import { Waitlist } from "../../modules/landing-page/Waitlist";
