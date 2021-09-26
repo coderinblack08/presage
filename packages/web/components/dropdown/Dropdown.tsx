@@ -11,6 +11,7 @@ interface DropdownRootProps {
   alignOffset?: number;
   trigger: React.ReactNode;
   className?: string;
+  sideOffset?: number;
 }
 
 export const Dropdown: React.FC<DropdownRootProps> = ({
@@ -20,6 +21,7 @@ export const Dropdown: React.FC<DropdownRootProps> = ({
   side,
   className,
   alignOffset,
+  sideOffset = 8,
   children,
   ...props
 }) => {
@@ -27,7 +29,7 @@ export const Dropdown: React.FC<DropdownRootProps> = ({
     <DropdownMenu.Root open={open}>
       {trigger}
       <DropdownMenu.Content
-        sideOffset={8}
+        sideOffset={sideOffset}
         alignOffset={alignOffset}
         align={align}
         side={side}

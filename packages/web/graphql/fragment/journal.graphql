@@ -1,8 +1,0 @@
-fragment Journal on Journal {
-  id
-  name
-  emoji
-  description
-  createdAt
-  updatedAt
-}

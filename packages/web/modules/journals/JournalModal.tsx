@@ -1,24 +1,28 @@
-import { IconFolderPlus } from "@tabler/icons";
+import { collection, getFirestore, serverTimestamp } from "@firebase/firestore";
 import { generateRandomEmoji } from "@presage/common";
+import { IconFolderPlus } from "@tabler/icons";
+import { addDoc } from "firebase/firestore";
 import { Form, Formik } from "formik";
 import React from "react";
+import { useSWRConfig } from "swr";
 import * as yup from "yup";
 import { Button } from "../../components/button";
 import { InputField, TextareaField } from "../../components/input";
 import { Modal, ModalTrigger } from "../../components/modal";
-import { useCreateJournalMutation } from "../../generated/graphql";
+import { useUser } from "../auth/useUser";
 import { EmojiSelect } from "./EmojiSelect";
 
 interface JournalModalProps {}
 
 export const JournalModal: React.FC<JournalModalProps> = ({}) => {
-  const [, createJournal] = useCreateJournalMutation();
+  const { uid } = useUser();
+  const { mutate } = useSWRConfig();
 
   return (
     <Modal
       trigger={
         <ModalTrigger>
-          <button className="flex items-center w-full p-2">
+          <button className="border rounded-lg shadow-sm flex items-center justify-center w-full h-full min-h-[8rem]">
             <div className="p-1 rounded-lg shadow border bg-white flex items-center justify-center mr-3">
               <IconFolderPlus size={20} className="text-gray-400" />
             </div>
@@ -43,11 +47,19 @@ export const JournalModal: React.FC<JournalModalProps> = ({}) => {
           })}
           onSubmit={async (values) => {
             try {
-              console.log(values);
-
-              await createJournal({
-                data: { ...values, description: values.description || null },
-              });
+              const data = {
+                ...values,
+                userId: uid,
+                createdAt: serverTimestamp(),
+              };
+              const { id } = await addDoc(
+                collection(getFirestore(), "journals"),
+                data
+              );
+              mutate(["journals", uid], (old: any) => [
+                ...old,
+                { ...data, id },
+              ]);
               setOpen(false);
             } catch {}
           }}

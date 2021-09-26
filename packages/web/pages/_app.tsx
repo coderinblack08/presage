@@ -3,6 +3,8 @@ import { DefaultSeo } from "next-seo";
 import type { AppProps } from "next/app";
 import React from "react";
 import "../styles/globals.css";
+import "../lib/firebase";
+import { SWRConfig } from "swr";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -37,7 +39,9 @@ function MyApp({ Component, pageProps }: AppProps) {
         }}
       />
       <IdProvider>
-        <Component {...pageProps} />
+        <SWRConfig value={{ refreshInterval: 3000, provider: () => new Map() }}>
+          <Component {...pageProps} />
+        </SWRConfig>
       </IdProvider>
     </>
   );

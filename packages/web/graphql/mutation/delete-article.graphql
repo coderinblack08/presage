@@ -1,3 +1,0 @@
-mutation DeleteArticle($id: String!) {
-  deleteArticle(id: $id)
-}

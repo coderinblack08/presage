@@ -1,0 +1,32 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isOwner() {
+      return request.auth.uid == request.resource.data.userId;
+    }
+
+    match /users/{userId} {
+      allow write: if request.auth.uid == userId && !exists(/databases/$(database)/documents/usernames/$(request.resource.data.username));
+      allow read: if true;
+    }
+    
+    match /journals/{journalId} {
+      allow write: if isOwner();
+      allow read: if true;
+    }
+
+    match /emails/{userId} {
+      allow read, write: if request.auth.uid == userId;
+    }
+
+    match /usernames/{username} {
+      allow write: if request.auth.uid == request.resource.data.uid;
+      allow read: if true;
+    }
+
+    match /articles/{articleId} {
+      allow write: if isOwner();
+      allow read: if resource.data.userId == request.auth.uid || resource.data.published;
+    }
+  }
+}

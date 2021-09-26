@@ -1,7 +1,5 @@
-import { useRouter } from "next/dist/client/router";
 import React from "react";
-import { AiOutlineInstagram, AiOutlineTwitter } from "react-icons/ai";
-import { useMeQuery } from "../../generated/graphql";
+import { Logo } from "../../components/branding/Logo";
 import { Button } from "../../components/button";
 import {
   Dropdown,
@@ -9,15 +7,13 @@ import {
   DropdownItem,
   DropdownTrigger,
 } from "../../components/dropdown";
-import { Logo } from "../../components/branding/Logo";
 import { useScreen } from "../../lib/useScreen";
+import { login } from "../auth/login";
 
 interface NavbarProps {}
 
 export const Navbar: React.FC<NavbarProps> = ({}) => {
   const { isSmallerThanTablet } = useScreen();
-  const [{ data: user }] = useMeQuery();
-  const router = useRouter();
 
   return (
     <nav className="relative z-20 flex items-center justify-between max-w-7xl mx-auto px-5 lg:px-10 py-6">
@@ -57,9 +53,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
           Instagram
         </DropdownItem>
         <DropdownDivider />
-        <DropdownItem href="http://localhost:4000/auth/google">
-          Login
-        </DropdownItem>
+        <DropdownItem onClick={login}>Login</DropdownItem>
       </Dropdown>
       <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
         <ul className="flex items-center space-x-8">
@@ -69,24 +63,11 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
           <li>
             <a className="text-gray-800">Pricing</a>
           </li>
-          {user?.me ? (
-            <li>
-              <img
-                className="w-10 h-10 rounded-full object-cover"
-                src={user.me?.profilePicture || ""}
-                alt={user?.me?.displayName}
-              />
-            </li>
-          ) : (
-            <li>
-              <a
-                href="http://localhost:4000/auth/google"
-                className="text-gray-800"
-              >
-                Login
-              </a>
-            </li>
-          )}
+          <li>
+            <button onClick={login} className="text-gray-800">
+              Login
+            </button>
+          </li>
         </ul>
       </div>
     </nav>

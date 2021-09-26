@@ -1,5 +1,0 @@
-query FindJournals {
-  findJournals {
-    ...Journal
-  }
-}

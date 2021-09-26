@@ -1,8 +1,0 @@
-fragment User on User {
-  id
-  profilePicture
-  displayName
-  username
-  bio
-  createdAt
-}

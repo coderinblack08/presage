@@ -1,5 +1,0 @@
-mutation CreateBlankArticle($journalId: String!) {
-  createArticle(journalId: $journalId) {
-    ...Article
-  }
-}

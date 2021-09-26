@@ -1,0 +1,20 @@
+{
+  "name": "@presage/firebase",
+  "version": "0.0.1",
+  "private": true,
+  "main": "dist/src/index.js",
+  "typings": "dist/src/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w"
+  },
+  "devDependencies": {
+    "@types/react": "^17.0.24",
+    "typescript": "^4.4.3"
+  },
+  "dependencies": {
+    "firebase": "^9.1.0",
+    "react": "^17.0.2",
+    "swr": "^1.0.1"
+  }
+}

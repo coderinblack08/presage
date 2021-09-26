@@ -1,5 +1,0 @@
-query FindDrafts($journalId: String!) {
-  findDrafts(journalId: $journalId) {
-    ...Article
-  }
-}

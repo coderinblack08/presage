@@ -1,8 +1,0 @@
-fragment Reward on Reward {
-  id
-  name
-  description
-  points
-  claimCount
-  type
-}

@@ -1,5 +1,0 @@
-query MyRewards {
-  myRewards {
-    ...Reward
-  }
-}
