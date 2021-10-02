@@ -1,13 +1,12 @@
 import { doc, getDoc, getFirestore } from "firebase/firestore";
-import { getCollectionPath, mutateCollectionsWithId } from "src/mutations";
 import useSWR from "swr";
 import { Document } from "../lib/document";
+import { getCollectionPath, mutateCollectionsWithId } from "../lib/mutations";
 
 const getDocument = async <Doc extends Document = Document<any>>(
   path: string
 ) => {
-  const firestore = getFirestore();
-  const data = await getDoc(doc(firestore, path));
+  const data = await getDoc(doc(getFirestore(), path));
 
   return {
     ...(data.data({ serverTimestamps: "estimate" }) ?? {}),
@@ -18,7 +17,7 @@ const getDocument = async <Doc extends Document = Document<any>>(
   } as Doc;
 };
 
-export const useDocument = async <
+export const useDocument = <
   Data extends object = {},
   Doc extends Document = Document<Data>
 >(

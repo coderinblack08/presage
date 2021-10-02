@@ -1,22 +1,20 @@
-import { collection, getFirestore, serverTimestamp } from "@firebase/firestore";
+import { collection, getFirestore } from "firebase/firestore";
 import { generateRandomEmoji } from "@presage/common";
 import { IconFolderPlus } from "@tabler/icons";
-import { addDoc } from "firebase/firestore";
 import { Form, Formik } from "formik";
 import React from "react";
-import { useSWRConfig } from "swr";
 import * as yup from "yup";
 import { Button } from "../../components/button";
 import { InputField, TextareaField } from "../../components/input";
 import { Modal, ModalTrigger } from "../../components/modal";
 import { useUser } from "../auth/useUser";
 import { EmojiSelect } from "./EmojiSelect";
+import { setDoc } from "../../firebase";
 
 interface JournalModalProps {}
 
 export const JournalModal: React.FC<JournalModalProps> = ({}) => {
   const { uid } = useUser();
-  const { mutate } = useSWRConfig();
 
   return (
     <Modal
@@ -47,19 +45,7 @@ export const JournalModal: React.FC<JournalModalProps> = ({}) => {
           })}
           onSubmit={async (values) => {
             try {
-              const data = {
-                ...values,
-                userId: uid,
-                createdAt: serverTimestamp(),
-              };
-              const { id } = await addDoc(
-                collection(getFirestore(), "journals"),
-                data
-              );
-              mutate(["journals", uid], (old: any) => [
-                ...old,
-                { ...data, id },
-              ]);
+              await setDoc("journals", { ...values, userId: uid });
               setOpen(false);
             } catch {}
           }}

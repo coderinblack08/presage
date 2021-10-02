@@ -19,3 +19,8 @@ export const initFirebaseApp = (options: FirebaseOptions) => {
 
   return app;
 };
+
+export * from "./hooks/useCollection";
+export * from "./hooks/useDocument";
+export * from "./collectionCache";
+export * from "./lib/mutations";

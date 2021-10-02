@@ -1,20 +1,22 @@
-import { QueryConstraint } from "firebase/firestore";
+import { QueryConstraint, where } from "firebase/firestore";
 
 type Collections = {
   [path: string]: {
-    key: [string | number, string | number | undefined]; // [path, queryString]
+    key: [string | number, any]; // [path, queryString]
   }[];
 };
 
+type QueryType = QueryConstraint[] | ((...args: any[]) => QueryConstraint[]);
+
 class CollectionCache {
   private collections: Collections;
-  queryTable: { [key: string]: QueryConstraint[] } = {};
+  queryTable: { [key: string]: QueryType } = {};
 
   constructor() {
     this.collections = {};
   }
 
-  addQuery(key: string, queries: QueryConstraint[]) {
+  addQuery(key: string, queries: QueryType) {
     this.queryTable = { ...this.queryTable, [key]: queries };
   }
 
@@ -26,9 +28,12 @@ class CollectionCache {
     );
   }
 
-  addCollectionToCache(path: string, queryString?: string | number) {
+  addCollectionToCache(
+    path: string,
+    queryString?: string | [string, ...any[]]
+  ) {
     const collectionAlreadyExistsInCache = this.collections[path]?.some(
-      ({ key }) => key[0] === path && key[1] === queryString
+      ({ key }) => key[0] === path && key[1] === JSON.stringify(queryString)
     );
     if (!collectionAlreadyExistsInCache) {
       this.collections = {
@@ -36,7 +41,7 @@ class CollectionCache {
         [path]: [
           ...(this.collections[path] ?? []),
           {
-            key: [path, queryString],
+            key: [path, JSON.stringify(queryString)],
           },
         ],
       };

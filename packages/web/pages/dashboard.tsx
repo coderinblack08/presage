@@ -1,24 +1,17 @@
-import { collection, getDocs, getFirestore, query } from "@firebase/firestore";
-import { where } from "firebase/firestore";
 import { NextPage } from "next";
-import React, { useMemo } from "react";
-import useSWR from "swr";
-import { snapshotToArray } from "../lib/snapshotToArray";
+import React from "react";
+import { useCollection } from "../firebase";
 import { useUser } from "../modules/auth/useUser";
 import { JournalCard } from "../modules/dashboard/JournalCard";
 import { Navbar } from "../modules/dashboard/Navbar";
 import { JournalModal } from "../modules/journals/JournalModal";
-import { Journal } from "../types";
 
 const Dashboard: NextPage = ({}) => {
   const { uid } = useUser();
-  const firestore = useMemo(() => getFirestore(), []);
-  const { data } = useSWR<Journal[]>(["journals", uid], async () => {
-    const snapshot = await getDocs(
-      query(collection(firestore, "journals"), where("userId", "==", uid))
-    );
-    return snapshotToArray(snapshot);
-  });
+  const { data, isValidating } = useCollection("journals", [
+    "my-journals",
+    uid,
+  ]);
 
   return (
     <div>
@@ -27,9 +20,13 @@ const Dashboard: NextPage = ({}) => {
       </div>
       <header className="pt-2 pb-8 border-b">
         <div className="grid grid-cols-3 gap-4 px-5 max-w-6xl mx-auto">
-          {data?.map((journal: any) => (
-            <JournalCard key={journal.id} journal={journal} />
-          ))}
+          {isValidating ? (
+            <div className="spinner" />
+          ) : (
+            data?.map((journal: any) => (
+              <JournalCard key={journal.id} journal={journal} />
+            ))
+          )}
           <JournalModal />
         </div>
       </header>

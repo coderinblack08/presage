@@ -2,9 +2,10 @@ import { IdProvider } from "@radix-ui/react-id";
 import { DefaultSeo } from "next-seo";
 import type { AppProps } from "next/app";
 import React from "react";
-import "../styles/globals.css";
-import "../lib/firebase";
 import { SWRConfig } from "swr";
+import "../lib/firebase";
+import "../lib/queries";
+import "../styles/globals.css";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -39,7 +40,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         }}
       />
       <IdProvider>
-        <SWRConfig value={{ refreshInterval: 3000, provider: () => new Map() }}>
+        <SWRConfig>
           <Component {...pageProps} />
         </SWRConfig>
       </IdProvider>
