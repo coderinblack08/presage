@@ -4,6 +4,7 @@ import {
   getDocs,
   getFirestore,
   query,
+  where,
 } from "firebase/firestore";
 import { useEffect, useMemo } from "react";
 import useSWR, { mutate, SWRConfiguration } from "swr";
@@ -65,6 +66,7 @@ export const useCollection = <
         queryKey.slice(1)
       ) as QueryConstraint[];
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(queryKey)]);
 
   const swr = useSWR(

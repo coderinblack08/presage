@@ -4,7 +4,6 @@ import type { AppProps } from "next/app";
 import React from "react";
 import { SWRConfig } from "swr";
 import "../lib/firebase";
-import "../lib/queries";
 import "../styles/globals.css";
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -40,7 +39,15 @@ function MyApp({ Component, pageProps }: AppProps) {
         }}
       />
       <IdProvider>
-        <SWRConfig>
+        <SWRConfig
+          value={{
+            revalidateOnFocus: false,
+            revalidateOnReconnect: false,
+            refreshWhenOffline: false,
+            refreshWhenHidden: false,
+            refreshInterval: 0,
+          }}
+        >
           <Component {...pageProps} />
         </SWRConfig>
       </IdProvider>
