@@ -20,7 +20,7 @@ export const JournalModal: React.FC<JournalModalProps> = ({}) => {
     <Modal
       trigger={
         <ModalTrigger>
-          <button className="border rounded-lg shadow-sm flex items-center justify-center w-full h-full min-h-[8rem]">
+          <button className="rounded-lg flex items-center justify-center p-2">
             <div className="p-1 rounded-lg shadow border bg-white flex items-center justify-center mr-3">
               <IconFolderPlus size={20} className="text-gray-400" />
             </div>

@@ -1,36 +1,11 @@
 import { NextPage } from "next";
-import React, { useEffect } from "react";
-import useSWR from "swr";
-import { useCollection } from "../firebase";
-import { useUser } from "../modules/auth/useUser";
-import { JournalCard } from "../modules/dashboard/JournalCard";
-import { Navbar } from "../modules/dashboard/Navbar";
-import { JournalModal } from "../modules/journals/JournalModal";
+import React from "react";
+import { Sidebar } from "../modules/dashboard/sidebar/Sidebar";
 
 const Dashboard: NextPage = ({}) => {
-  const { uid } = useUser();
-  const { data, isValidating } = useCollection("journals", [
-    "my-journals",
-    uid,
-  ]);
-
   return (
-    <div>
-      <div className="max-w-6xl mx-auto">
-        <Navbar />
-      </div>
-      <header className="pt-2 pb-8 border-b">
-        <div className="grid grid-cols-3 gap-4 px-5 max-w-6xl mx-auto">
-          {isValidating ? (
-            <div className="spinner" />
-          ) : (
-            data?.map((journal: any) => (
-              <JournalCard key={journal.id} journal={journal} />
-            ))
-          )}
-          <JournalModal />
-        </div>
-      </header>
+    <div className="flex">
+      <Sidebar />
       <main className="max-w-6xl px-8 py-10 w-full mx-auto">
         <h2 className="font-bold font-display mb-3">Guides & Tutorials</h2>
         <div className="grid grid-cols-2 gap-4">

@@ -33,7 +33,7 @@ export const Dropdown: React.FC<DropdownRootProps> = ({
         alignOffset={alignOffset}
         align={align}
         side={side}
-        className={`bg-white border rounded-lg shadow w-56 overflow-hidden py-2 ${className}`}
+        className={`bg-white border rounded-lg shadow-lg w-56 overflow-hidden py-1.5 ${className}`}
         initial={{ y: -12, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         as={motion.div}
@@ -48,7 +48,7 @@ export const Dropdown: React.FC<DropdownRootProps> = ({
 interface DropdownDividerProps {}
 
 export const DropdownDivider: React.FC<DropdownDividerProps> = ({}) => {
-  return <DropdownMenu.Separator className="border-b my-2" />;
+  return <DropdownMenu.Separator className="border-b my-1.5" />;
 };
 
 interface DropdownItemProps {
@@ -75,7 +75,7 @@ export const DropdownItem: React.FC<DropdownItemProps> = ({
       }}
       className={`group ${
         icon ? "flex items-center" : "block"
-      } px-4 py-2 cursor-pointer focus:outline-none focus:bg-gray-100 w-full text-left`}
+      } px-4 py-1.5 cursor-pointer focus:outline-none focus:bg-gray-100 w-full text-left`}
       as="button"
       {...props}
     >

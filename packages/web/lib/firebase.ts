@@ -14,4 +14,9 @@ collectionCache.addQuery("my-journals", ([uid]) => [
   where("userId", "==", uid),
 ]);
 
+collectionCache.addQuery("drafts", ([journalId, uid]) => [
+  where("journalId", "==", journalId),
+  where("userId", "==", uid),
+]);
+
 initFirebaseApp(firebaseConfig);

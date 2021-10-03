@@ -18,3 +18,14 @@ export interface Journal {
   drafts: string[];
   createdAt: FieldValue;
 }
+
+export interface Article {
+  id: string;
+  title: string;
+  description?: string;
+  isPublished: boolean;
+  tags: string[];
+  userId: string;
+  journalId: string;
+  createdAt: FieldValue;
+}
