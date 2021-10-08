@@ -1,7 +1,7 @@
 import { motion, useTransform, useViewportScroll } from "framer-motion";
 import Image from "next/image";
 import React from "react";
-import { useScreen } from "../../lib/useScreen";
+import { useScreen } from "../../lib/hooks/useScreen";
 import { ListCheck } from "../../modules/landing-page/ListCheck";
 import { Waitlist } from "../../modules/landing-page/Waitlist";
 import dashboard from "../../public/static/dashboard-2.png";

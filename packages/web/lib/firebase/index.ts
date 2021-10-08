@@ -1,5 +1,3 @@
-/* Most of the code in this folder is a port of swr-firestore */
-
 import { FirebaseOptions, initializeApp } from "firebase/app";
 import { getFirestore, connectFirestoreEmulator } from "firebase/firestore";
 import { getStorage, connectStorageEmulator } from "firebase/storage";
@@ -23,4 +21,4 @@ export const initFirebaseApp = (options: FirebaseOptions) => {
 export * from "./hooks/useCollection";
 export * from "./hooks/useDocument";
 export * from "./collectionCache";
-export * from "./lib/mutations";
+export * from "./utils/mutations";

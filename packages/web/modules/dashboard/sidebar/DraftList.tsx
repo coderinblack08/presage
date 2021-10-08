@@ -1,7 +1,6 @@
 import React from "react";
-import { useCollection } from "../../../firebase";
+import useSWR from "swr";
 import { Article } from "../../../types";
-import { useUser } from "../../auth/useUser";
 import { DraftItem } from "./DraftItem";
 
 interface DraftListProps {
@@ -9,12 +8,9 @@ interface DraftListProps {
 }
 
 export const DraftList: React.FC<DraftListProps> = ({ journalId }) => {
-  const { uid } = useUser();
-  const { data } = useCollection<Article>("articles", [
-    "drafts",
-    journalId,
-    uid,
-  ]);
+  const { data } = useSWR<Article[]>(
+    `/api/journals/drafts?journalId=${journalId}`
+  );
 
   return (
     <ul className={data?.length ? "mb-2" : ""}>

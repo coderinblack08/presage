@@ -3,7 +3,8 @@ import { DefaultSeo } from "next-seo";
 import type { AppProps } from "next/app";
 import React from "react";
 import { SWRConfig } from "swr";
-import "../lib/firebase";
+import { fetcher } from "../lib/fetcher";
+import "../lib/firebase/firebase";
 import "../styles/globals.css";
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -39,15 +40,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         }}
       />
       <IdProvider>
-        <SWRConfig
-          value={{
-            revalidateOnFocus: false,
-            revalidateOnReconnect: false,
-            refreshWhenOffline: false,
-            refreshWhenHidden: false,
-            refreshInterval: 0,
-          }}
-        >
+        <SWRConfig value={{ fetcher, fallback: pageProps.fallback }}>
           <Component {...pageProps} />
         </SWRConfig>
       </IdProvider>

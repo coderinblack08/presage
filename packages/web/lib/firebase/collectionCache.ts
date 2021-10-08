@@ -9,7 +9,7 @@ type Collections = {
 type QueryType = QueryConstraint[] | ((...args: any[]) => QueryConstraint[]);
 
 class CollectionCache {
-  private collections: Collections;
+  collections: Collections;
   queryTable: { [key: string]: QueryType } = {};
 
   constructor() {

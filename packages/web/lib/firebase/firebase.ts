@@ -1,5 +1,4 @@
-import { where } from "firebase/firestore";
-import { collectionCache, initFirebaseApp } from "../firebase";
+import { initFirebaseApp } from ".";
 
 export const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_API_KEY,
@@ -9,14 +8,5 @@ export const firebaseConfig = {
   messagingSenderId: process.env.NEXT_PUBLIC_MESSAGING_SENDER_ID,
   appId: process.env.NEXT_PUBLIC_APP_ID,
 };
-
-collectionCache.addQuery("my-journals", ([uid]) => [
-  where("userId", "==", uid),
-]);
-
-collectionCache.addQuery("drafts", ([journalId, uid]) => [
-  where("journalId", "==", journalId),
-  where("userId", "==", uid),
-]);
 
 initFirebaseApp(firebaseConfig);

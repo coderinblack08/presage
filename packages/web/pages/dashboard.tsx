@@ -1,5 +1,7 @@
-import { NextPage } from "next";
+import { GetServerSideProps, NextPage } from "next";
 import React from "react";
+import { baseURL } from "../lib/constants";
+import { fetcher } from "../lib/fetcher";
 import { Sidebar } from "../modules/dashboard/sidebar/Sidebar";
 
 const Dashboard: NextPage = ({}) => {
@@ -36,6 +38,21 @@ const Dashboard: NextPage = ({}) => {
       </main>
     </div>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const account = await fetcher(
+    `${baseURL}/api/account`,
+    context.req.headers.cookie
+  );
+
+  return {
+    props: {
+      fallback: {
+        "/api/account": account,
+      },
+    },
+  };
 };
 
 export default Dashboard;

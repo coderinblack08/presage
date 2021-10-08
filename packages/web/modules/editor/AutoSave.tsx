@@ -2,7 +2,7 @@ import { useFormikContext } from "formik";
 import debounce from "lodash.debounce";
 import isEqual from "lodash.isequal";
 import { useEffect, useMemo, useRef } from "react";
-import { difference } from "../../lib/diffObjects";
+import { difference } from "../../lib/utils/diffObjects";
 
 const AutoSave: React.FC<{
   setDiff: (diff: object) => void;

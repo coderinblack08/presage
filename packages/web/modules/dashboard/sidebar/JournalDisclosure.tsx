@@ -1,7 +1,8 @@
-import { serverTimestamp } from "@firebase/firestore";
-import { IconPlus, IconChevronRight } from "@tabler/icons";
+import { addDoc, getFirestore, serverTimestamp } from "@firebase/firestore";
+import { IconChevronRight, IconPlus } from "@tabler/icons";
+import { collection } from "firebase/firestore";
 import React, { useState } from "react";
-import { setDoc } from "../../../firebase";
+import { mutate } from "swr";
 import { Article, Journal } from "../../../types";
 import { useUser } from "../../auth/useUser";
 import { DraftList } from "./DraftList";
@@ -40,14 +41,31 @@ export const JournalDisclosure: React.FC<JournalDisclosureProps> = ({
             tabIndex={0}
             className={open ? "block" : "hidden"}
             onClick={async (e) => {
-              e.stopPropagation();
-              await setDoc("articles", {
-                userId: uid,
-                journalId: journal.id,
-                title: "Untitled",
-                createdAt: serverTimestamp(),
-                isPublished: false,
-              } as Article);
+              try {
+                e.stopPropagation();
+                const data = {
+                  userId: uid,
+                  journalId: journal.id,
+                  title: "Untitled",
+                  createdAt: serverTimestamp(),
+                  isPublished: false,
+                } as Article;
+                const firestore = getFirestore();
+                const { id } = await addDoc(
+                  collection(firestore, "articles"),
+                  data
+                );
+                mutate(
+                  `/api/journals/drafts?journalId=${journal.id}`,
+                  (old: Article[]) => [
+                    ...old,
+                    {
+                      ...data,
+                      id,
+                    },
+                  ]
+                );
+              } catch (error) {}
             }}
           >
             <IconPlus className="text-gray-400" size={20} />

@@ -1,7 +1,7 @@
 import { doc, getDoc, getFirestore } from "firebase/firestore";
 import useSWR from "swr";
-import { Document } from "../lib/document";
-import { getCollectionPath, mutateCollectionsWithId } from "../lib/mutations";
+import { Document } from "../utils/document";
+import { getCollectionPath, mutateCollectionsWithId } from "../utils/mutations";
 
 const getDocument = async <Doc extends Document = Document<any>>(
   path: string

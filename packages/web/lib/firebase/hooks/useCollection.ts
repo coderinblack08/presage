@@ -9,7 +9,7 @@ import {
 import { useEffect, useMemo } from "react";
 import useSWR, { mutate, SWRConfiguration } from "swr";
 import { collectionCache } from "../collectionCache";
-import { Document } from "../lib/document";
+import { Document } from "../utils/document";
 
 export type CollectionSWROptions<
   Doc extends Document = Document
@@ -39,15 +39,6 @@ export const getCollection = async <Doc extends Document = Document>(
   return array;
 };
 
-type Fn = (...args: unknown[]) => unknown;
-
-function getValue<
-  Provided,
-  T = Provided extends Fn ? ReturnType<Provided> : Provided
->(valueOrFn: Provided, ...params: any[]): T {
-  return typeof valueOrFn === "function" ? valueOrFn(...params) : valueOrFn;
-}
-
 export const useCollection = <
   Data extends object = {},
   Doc extends Document = Document<Data>
@@ -61,8 +52,8 @@ export const useCollection = <
       return collectionCache.queryTable[queryKey] as QueryConstraint[];
     }
     if (typeof collectionCache.queryTable[queryKey[0]] === "function") {
-      return getValue(
-        collectionCache.queryTable[queryKey[0]],
+      // @ts-ignore
+      return collectionCache.queryTable[queryKey[0]](
         queryKey.slice(1)
       ) as QueryConstraint[];
     }
@@ -72,13 +63,15 @@ export const useCollection = <
   const swr = useSWR(
     [path, JSON.stringify(queryKey)],
     async (path: string) => {
-      return getCollection<Doc>(path, actualQuery || []);
+      const result = await getCollection<Doc>(path, actualQuery || []);
+      return result;
     },
     swrOptions
   );
 
   useEffect(() => {
     if (path) {
+      console.log(collectionCache.collections);
       collectionCache.addCollectionToCache(path, queryKey);
     }
   }, [path, queryKey]);

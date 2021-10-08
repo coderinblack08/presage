@@ -1,3 +1,4 @@
+import axios from "axios";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { doc, getFirestore, serverTimestamp, setDoc } from "firebase/firestore";
 import { User } from "../../types";
@@ -22,5 +23,9 @@ export const login = async () => {
     } as User);
     await setDoc(doc(firestore, "emails", user.uid), { email: user.email });
     await setDoc(doc(firestore, "usernames", username), { uid: user.uid });
+  }
+  const token = await getAuth().currentUser?.getIdToken();
+  if (token) {
+    await axios.post("/api/login", {}, { headers: { Authorization: token } });
   }
 };

@@ -2,7 +2,7 @@ import Cors from "cors";
 import { NextApiRequest, NextApiResponse } from "next";
 import { generateHTML } from "@tiptap/html";
 import { extensions } from "../../modules/editor/extensions";
-import { runMiddleware } from "../../lib/runMiddleware";
+import { runMiddleware } from "../../lib/utils/runMiddleware";
 
 export const config = {
   api: {

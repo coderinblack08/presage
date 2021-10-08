@@ -14,8 +14,8 @@ import {
   FindJournalsDocument,
   FindJournalsQuery,
   PublishMutation,
-} from "../generated/graphql";
-import { isServer } from "./constants";
+} from "../../generated/graphql";
+import { isServer } from "../constants";
 import { updateCacheQuery } from "./updateCacheUtils";
 
 export const createUrqlClient = (ssrExchange: any, ctx: any) => {

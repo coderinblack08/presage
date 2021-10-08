@@ -1,5 +1,6 @@
 import { getAuth, signOut } from "@firebase/auth";
 import { IconLockOpen, IconSelector, IconUser } from "@tabler/icons";
+import axios from "axios";
 import { useRouter } from "next/dist/client/router";
 import React from "react";
 import {
@@ -52,6 +53,7 @@ export const AccountDropdown: React.FC<AccountDropdownProps> = ({}) => {
       <DropdownItem
         onClick={async () => {
           await signOut(getAuth());
+          await axios.post("/api/logout", {});
           router.push("/");
         }}
         icon={<IconLockOpen className="w-5 h-5" />}

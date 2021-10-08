@@ -1,20 +1,13 @@
-// Get it, JournalList?? Journalist?? Nevermind that wasn't funny.
-
 import React from "react";
-import { useCollection } from "../../../firebase";
+import useSWR from "swr";
 import { Journal } from "../../../types";
-import { useUser } from "../../auth/useUser";
 import { JournalModal } from "../../journals/JournalModal";
 import { JournalDisclosure } from "./JournalDisclosure";
 
 interface JournalListProps {}
 
 export const JournalList: React.FC<JournalListProps> = ({}) => {
-  const { uid } = useUser();
-  const { data, isValidating } = useCollection<Journal>("journals", [
-    "my-journals",
-    uid,
-  ]);
+  const { data } = useSWR<Journal[]>("/api/journals");
 
   return (
     <div className="px-3 py-4">

@@ -25,8 +25,9 @@ export const mutateCollectionsWithId = (
     mutate(
       key,
       (currentState: Document[] = []) => {
+        data = { ...data, id: docId };
         if (!currentState.some((doc) => doc.id === docId)) {
-          return [...currentState, data];
+          return currentState;
         }
         return currentState.map((document = {} as Document) => {
           if (document.id === docId) {
@@ -72,6 +73,8 @@ export const setDoc = async <Data = any>(
     collection(getFirestore(), collectionPath) as any,
     data as any
   );
+
+  console.log({ newDoc, docId, generateId });
 
   if (docId && !generateId) {
     mutateCollectionsWithId(collectionPath, docId, data);

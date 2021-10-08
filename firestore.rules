@@ -26,7 +26,9 @@ service cloud.firestore {
 
     match /articles/{articleId} {
       allow write: if isOwner();
-      allow read: if resource.data.userId == request.auth.uid || resource.data.published;
+      allow read: if true;
+      // allow read: if resource.data.userId == request.auth.uid;
+      // allow read: if resource.data.userId == request.auth.uid || resource.data.isPublished;
     }
   }
 }
