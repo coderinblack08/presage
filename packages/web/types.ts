@@ -28,6 +28,7 @@ export interface Article {
   editorJSON?: Content;
   editorHTML?: string;
   tags: string[];
+  canonical?: string;
   journal?: Journal;
   userId: string;
   journalId: string;

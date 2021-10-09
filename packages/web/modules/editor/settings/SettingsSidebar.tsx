@@ -1,5 +1,5 @@
 import { deleteDoc, doc, getFirestore } from "@firebase/firestore";
-import { IconCameraPlus, IconTrash } from "@tabler/icons";
+import { IconTrash } from "@tabler/icons";
 import { useRouter } from "next/dist/client/router";
 import React from "react";
 import { mutate } from "swr";
@@ -39,15 +39,6 @@ export const SettingsSidebar: React.FC<SettingsSidebarProps> = ({ draft }) => {
         className="w-full"
         outline
       />
-      <div>
-        <label className="font-bold mb-2 block">Cover Image</label>
-        <Button
-          icon={<IconCameraPlus className="text-gray-600" size={20} />}
-          outline
-        >
-          <span className="text-gray-600 font-semibold">Insert Cover</span>
-        </Button>
-      </div>
       <div>
         <label className="font-bold mb-2 block">Actions</label>
         <Button

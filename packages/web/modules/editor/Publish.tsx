@@ -1,21 +1,28 @@
+import { doc, getFirestore, updateDoc } from "@firebase/firestore";
 import React from "react";
+import { mutate } from "swr";
 import { Button } from "../../components/button";
-import { ArticleFragment, usePublishMutation } from "../../generated/graphql";
+import { ArticleFragment } from "../../generated/graphql";
+import { Article } from "../../types";
 
 interface PublishProps {
   draft: ArticleFragment | null;
 }
 
 export const Publish: React.FC<PublishProps> = ({ draft }) => {
-  const [, togglePublishStatus] = usePublishMutation();
-
   return (
     <Button
       type="button"
       onClick={async () => {
         try {
           if (draft) {
-            await togglePublishStatus({ id: draft?.id });
+            await updateDoc(doc(getFirestore(), "articles", draft.id), {
+              isPublished: !draft.isPublished,
+            } as Partial<Article>);
+            mutate(`/api/draft/${draft.id}`, (old: Article) => ({
+              ...old,
+              isPublished: !old.isPublished,
+            }));
           }
         } catch {}
       }}

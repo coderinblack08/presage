@@ -74,7 +74,7 @@ export const Button: React.FC<ButtonProps> = ({
             } focus-visible:border-gray-500/50`
           : ""
       } ${
-        shadow && color !== "transparent" ? "shadow" : "shadow-none"
+        shadow && color !== "transparent" ? "shadow-sm" : "shadow-none"
       } disabled:cursor-not-allowed ${className}`}
       {...props}
     >

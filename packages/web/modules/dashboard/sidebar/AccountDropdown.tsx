@@ -1,13 +1,14 @@
 import { getAuth, signOut } from "@firebase/auth";
-import { IconLockOpen, IconSelector, IconUser } from "@tabler/icons";
+import { IconSelector } from "@tabler/icons";
 import axios from "axios";
 import { useRouter } from "next/dist/client/router";
 import React from "react";
+import { HiLockClosed, HiUserCircle } from "react-icons/hi";
 import {
   Dropdown,
-  DropdownTrigger,
   DropdownDivider,
   DropdownItem,
+  DropdownTrigger,
 } from "../../../components/dropdown";
 import { useUser } from "../../authentication/useUser";
 
@@ -47,7 +48,7 @@ export const AccountDropdown: React.FC<AccountDropdownProps> = ({}) => {
         <p className="text-gray-500 text-sm truncate">@{user?.username}</p>
       </div>
       <DropdownDivider />
-      <DropdownItem icon={<IconUser className="w-5 h-5" />}>
+      <DropdownItem icon={<HiUserCircle className="w-5 h-5 text-gray-500" />}>
         Account
       </DropdownItem>
       <DropdownItem
@@ -56,7 +57,7 @@ export const AccountDropdown: React.FC<AccountDropdownProps> = ({}) => {
           await axios.post("/api/logout", {});
           router.push("/");
         }}
-        icon={<IconLockOpen className="w-5 h-5" />}
+        icon={<HiLockClosed className="w-5 h-5 text-gray-500" />}
       >
         Sign Out
       </DropdownItem>

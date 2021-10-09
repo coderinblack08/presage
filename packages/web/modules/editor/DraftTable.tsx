@@ -13,7 +13,7 @@ export const DraftTable: React.FC<DraftTableProps> = ({ draft }) => {
         <div>
           <HiUserCircle className="text-gray-400 w-6 h-6" />
         </div>
-        <div className="text-gray-400 font-semibold">Published by Kevin Lu</div>
+        <div className="text-gray-500 font-semibold">Published by Kevin Lu</div>
       </div>
       <div className="flex items-center space-x-4">
         <div>
@@ -26,7 +26,7 @@ export const DraftTable: React.FC<DraftTableProps> = ({ draft }) => {
             draft?.tags?.map((tag) => (
               <div
                 key={tag}
-                className="px-4 py-1 rounded-lg bg-gray-100 text-gray-400 font-semibold text-sm"
+                className="px-4 py-1 rounded-lg bg-gray-100 text-gray-500 font-semibold text-sm"
               >
                 <span className="text-gray-400">#</span>
                 {tag}
