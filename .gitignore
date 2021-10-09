@@ -1,6 +1,9 @@
 node_modules/
 .DS_Store
 
+firebase-debug.log
+firestore-debug.log
+
 # .yarn/*
 # !.yarn/releases
 # !.yarn/plugins
