@@ -4,7 +4,7 @@ import { collection } from "firebase/firestore";
 import React, { useState } from "react";
 import { mutate } from "swr";
 import { Article, Journal } from "../../../types";
-import { useUser } from "../../auth/useUser";
+import { useUser } from "../../authentication/useUser";
 import { DraftList } from "./DraftList";
 
 interface JournalDisclosureProps {

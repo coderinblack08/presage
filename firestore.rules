@@ -1,17 +1,13 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    function isOwner() {
-      return request.auth.uid == request.resource.data.userId;
-    }
-
     match /users/{userId} {
       allow write: if request.auth.uid == userId && !exists(/databases/$(database)/documents/usernames/$(request.resource.data.username));
       allow read: if true;
     }
     
     match /journals/{journalId} {
-      allow write: if isOwner();
+      allow write: if willBeOwner();
       allow read: if true;
     }
 
@@ -25,10 +21,33 @@ service cloud.firestore {
     }
 
     match /articles/{articleId} {
-      allow write: if isOwner();
-      allow read: if true;
-      // allow read: if resource.data.userId == request.auth.uid;
-      // allow read: if resource.data.userId == request.auth.uid || resource.data.isPublished;
+      allow write: if willBeOwner();
+      allow delete: if isOwner();
+      allow read: if isOwner() || resource.data.isPublished == true;
     }
   }
+}
+
+function isUser(uid) {
+  return isSignedIn() && request.auth.uid == uid;
+}
+
+function isSignedIn() {
+  return request.auth.uid != null;
+}
+
+function isOwner(){
+  return isUser(currentData().userId);
+}
+
+function willBeOwner(){
+  return isUser(incomingData().userId);
+}
+
+function currentData() {
+  return resource.data;
+}
+
+function incomingData() {
+  return request.resource.data;
 }

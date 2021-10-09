@@ -8,11 +8,11 @@ import {
   AiOutlineUnderline,
 } from "react-icons/ai";
 import { Button } from "../../components/button";
-import { ArticleFragment } from "../../generated/graphql";
+import { Article } from "../../types";
 import { extensions } from "./extensions";
 
 interface TipTapEditorProps {
-  draft: ArticleFragment | null;
+  draft: Article | undefined;
 }
 
 export const TipTapEditor: React.FC<TipTapEditorProps> = ({ draft }) => {
@@ -35,6 +35,7 @@ export const TipTapEditor: React.FC<TipTapEditorProps> = ({ draft }) => {
       !editor.isDestroyed &&
         editor.commands.setContent(draft?.editorJSON || null);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [draft?.id, editor]);
 
   useEffect(() => {
@@ -49,7 +50,7 @@ export const TipTapEditor: React.FC<TipTapEditorProps> = ({ draft }) => {
         <BubbleMenu
           shouldShow={null}
           pluginKey="bubble-menu"
-          className="flex items-center bg-white divide-x divide-gray-200 shadow px-1.5 py-1 rounded-lg"
+          className="flex items-center bg-white border divide-x divide-gray-200 shadow-md px-1.5 py-1 rounded-lg"
           editor={editor}
         >
           <div className="flex items-center space-x-1">

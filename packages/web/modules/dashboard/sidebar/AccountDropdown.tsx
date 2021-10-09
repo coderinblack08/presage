@@ -9,7 +9,7 @@ import {
   DropdownDivider,
   DropdownItem,
 } from "../../../components/dropdown";
-import { useUser } from "../../auth/useUser";
+import { useUser } from "../../authentication/useUser";
 
 interface AccountDropdownProps {}
 

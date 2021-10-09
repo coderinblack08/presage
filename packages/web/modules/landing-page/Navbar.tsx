@@ -8,7 +8,7 @@ import {
   DropdownTrigger,
 } from "../../components/dropdown";
 import { useScreen } from "../../lib/hooks/useScreen";
-import { login } from "../auth/authenticate";
+import { login } from "../authentication/authenticate";
 
 interface NavbarProps {}
 

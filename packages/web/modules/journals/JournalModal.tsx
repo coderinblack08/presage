@@ -10,7 +10,7 @@ import { Button } from "../../components/button";
 import { InputField, TextareaField } from "../../components/input";
 import { Modal, ModalTrigger } from "../../components/modal";
 import { Journal } from "../../types";
-import { useUser } from "../auth/useUser";
+import { useUser } from "../authentication/useUser";
 import { EmojiSelect } from "./EmojiSelect";
 
 interface JournalModalProps {}

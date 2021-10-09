@@ -30,7 +30,7 @@ const AutoSave: React.FC<{
         previous.current = formik.values;
 
         return formik.submitForm();
-      }, 300),
+      }, 800),
     [formik, previous, setDiff]
   );
 

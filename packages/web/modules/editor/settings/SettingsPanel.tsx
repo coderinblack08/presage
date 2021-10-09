@@ -2,13 +2,14 @@ import { IconDots } from "@tabler/icons";
 import React from "react";
 import { Button } from "../../../components/button";
 import { Sidepanel, SidepanelTrigger } from "../../../components/sidepanel";
+import { Article } from "../../../types";
 import { SettingsSidebar } from "./SettingsSidebar";
 
 interface SettingsPanelProps {
-  articleId: string;
+  draft: Article;
 }
 
-export const SettingsPanel: React.FC<SettingsPanelProps> = ({ articleId }) => {
+export const SettingsPanel: React.FC<SettingsPanelProps> = ({ draft }) => {
   return (
     <Sidepanel
       trigger={
@@ -23,7 +24,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ articleId }) => {
       }
       align="right"
     >
-      <SettingsSidebar articleId={articleId} />
+      <SettingsSidebar draft={draft} />
     </Sidepanel>
   );
 };

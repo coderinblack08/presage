@@ -1,3 +1,4 @@
+import { Content } from "@tiptap/core/dist/packages/core/src/types";
 import { FieldValue } from "firebase/firestore";
 
 export interface User {
@@ -24,7 +25,10 @@ export interface Article {
   title: string;
   description?: string;
   isPublished: boolean;
+  editorJSON?: Content;
+  editorHTML?: string;
   tags: string[];
+  journal?: Journal;
   userId: string;
   journalId: string;
   createdAt: FieldValue;

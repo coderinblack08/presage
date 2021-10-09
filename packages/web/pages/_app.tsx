@@ -40,7 +40,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         }}
       />
       <IdProvider>
-        <SWRConfig value={{ fetcher, fallback: pageProps.fallback }}>
+        <SWRConfig value={{ fetcher, fallback: pageProps.fallback || {} }}>
           <Component {...pageProps} />
         </SWRConfig>
       </IdProvider>

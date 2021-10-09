@@ -1,22 +1,21 @@
+import { deleteDoc, doc, getFirestore } from "@firebase/firestore";
 import { IconCameraPlus, IconTrash } from "@tabler/icons";
 import { useRouter } from "next/dist/client/router";
 import React from "react";
+import { mutate } from "swr";
 import { Button } from "../../../components/button";
 import { InputField, TextareaField } from "../../../components/input";
-import { useDeleteArticleMutation } from "../../../generated/graphql";
+import { Article } from "../../../types";
 
 interface SettingsSidebarProps {
-  articleId: string;
+  draft: Article;
 }
 
-export const SettingsSidebar: React.FC<SettingsSidebarProps> = ({
-  articleId,
-}) => {
-  const [, deleteArticle] = useDeleteArticleMutation();
+export const SettingsSidebar: React.FC<SettingsSidebarProps> = ({ draft }) => {
   const router = useRouter();
 
   return (
-    <aside className="px-6 py-9 h-full w-full max-w-sm border-l bg-white space-y-8 overflow-y-auto">
+    <aside className="p-6 h-screen w-full max-w-sm border-l bg-white space-y-8 overflow-y-auto">
       <InputField
         name="canonical"
         label="Canonical Link"
@@ -58,8 +57,13 @@ export const SettingsSidebar: React.FC<SettingsSidebarProps> = ({
                 "Are you sure you want to delete this article?"
               );
               if (confirmed) {
-                await deleteArticle({ id: articleId });
-                router.push("/");
+                await deleteDoc(doc(getFirestore(), "articles", draft.id));
+                mutate(
+                  `/api/journals/drafts?journalId=${draft.journalId}`,
+                  (old: Article[]) =>
+                    (old || []).filter((x) => x.id !== draft.id)
+                );
+                router.push("/dashboard");
               }
             } catch {}
           }}

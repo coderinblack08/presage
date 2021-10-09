@@ -40,7 +40,7 @@ export const links = [
 
 export const MenuLinks: React.FC<MenuLinksProps> = ({}) => {
   return (
-    <ul className="space-y-1.5">
+    <ul className="space-y-2">
       {links.map((link) => (
         <MenuItem link={link} key={link.name} />
       ))}
