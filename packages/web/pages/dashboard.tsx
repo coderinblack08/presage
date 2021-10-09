@@ -4,12 +4,11 @@ import React from "react";
 import { Input } from "../components/input";
 import { baseURL } from "../lib/constants";
 import { fetcher } from "../lib/fetcher";
-import { Sidebar } from "../modules/dashboard/sidebar/Sidebar";
+import { Layout } from "../modules/dashboard/Layout";
 
 const Dashboard: NextPage = ({}) => {
   return (
-    <div className="flex">
-      <Sidebar />
+    <Layout>
       <div className="w-full">
         <header className="border-b">
           <div className="mx-auto max-w-5xl w-full px-8 pt-16 pb-24">
@@ -63,7 +62,7 @@ const Dashboard: NextPage = ({}) => {
           </p>
         </main>
       </div>
-    </div>
+    </Layout>
   );
 };
 

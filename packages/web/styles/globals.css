@@ -81,18 +81,17 @@
 }
 
 table {
-  @apply border-collapse shadow overflow-hidden rounded-lg w-full text-left;
+  @apply border-collapse overflow-hidden rounded-lg w-full text-left;
 }
 
 td {
-  @apply px-6 py-4 text-gray-600;
+  @apply px-6 py-3 text-gray-600;
 }
 
 th {
-  @apply bg-gray-50 py-2 px-6 text-gray-500 font-medium;
+  @apply bg-gray-50 py-2 px-6 text-gray-600 font-semibold;
 }
 
-td,
-th {
-  @apply border-b;
+input[type="checkbox"] {
+  @apply form-checkbox rounded border-gray-300 shadow-sm focus:ring-0 focus:ring-offset-0 text-black;
 }
