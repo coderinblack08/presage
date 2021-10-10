@@ -93,5 +93,5 @@ th {
 }
 
 input[type="checkbox"] {
-  @apply form-checkbox rounded border-gray-300 shadow-sm focus:ring-0 focus:ring-offset-0 text-black;
+  @apply form-checkbox cursor-pointer rounded border-gray-300 shadow-sm focus:ring-0 focus:ring-offset-0 text-black;
 }

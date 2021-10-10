@@ -1,11 +1,13 @@
 import { addDoc, getFirestore, serverTimestamp } from "@firebase/firestore";
 import { IconChevronRight, IconPlus } from "@tabler/icons";
 import { collection } from "firebase/firestore";
-import React, { useState } from "react";
+import React, { useMemo } from "react";
 import { mutate } from "swr";
+import shallow from "zustand/shallow";
 import { Article, Journal } from "../../../types";
 import { useUser } from "../../authentication/useUser";
 import { DraftList } from "./DraftList";
+import { useOpenListsStore } from "./useOpenListsStore";
 
 interface JournalDisclosureProps {
   journal: Journal;
@@ -15,12 +17,19 @@ export const JournalDisclosure: React.FC<JournalDisclosureProps> = ({
   journal,
 }) => {
   const { uid } = useUser();
-  const [open, setOpen] = useState(false);
+  const [openLists, setOpen] = useOpenListsStore(
+    (x) => [x.open, x.setOpen],
+    shallow
+  );
+  const open = useMemo(() => openLists.includes(journal.id), [
+    openLists,
+    journal.id,
+  ]);
 
   return (
     <div>
       <button
-        onClick={() => setOpen(!open)}
+        onClick={() => setOpen(journal.id, !open)}
         className="flex items-center justify-between p-2 w-full text-left"
       >
         <div className="flex items-center min-w-0">
@@ -57,13 +66,7 @@ export const JournalDisclosure: React.FC<JournalDisclosureProps> = ({
                 );
                 mutate(
                   `/api/journals/drafts?journalId=${journal.id}`,
-                  (old: Article[]) => [
-                    ...old,
-                    {
-                      ...data,
-                      id,
-                    },
-                  ]
+                  (old: Article[]) => [...old, { ...data, id }]
                 );
               } catch (error) {}
             }}

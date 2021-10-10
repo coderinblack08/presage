@@ -1,3 +1,11 @@
+import {
+  addDoc,
+  collection,
+  getFirestore,
+  serverTimestamp,
+  setDoc,
+  doc,
+} from "@firebase/firestore";
 import { Form, Formik, validateYupSchema, yupToFormErrors } from "formik";
 import React from "react";
 import { MdAdd } from "react-icons/md";
@@ -6,8 +14,9 @@ import { Button } from "../../components/button";
 import { LocalhostAutoSave } from "../../components/formik/LocalhostAutoSave";
 import { InputField, TextareaField } from "../../components/input";
 import { Modal, ModalTrigger } from "../../components/modal";
-import { RewardType, useCreateRewardMutation } from "../../generated/graphql";
 import { isServer } from "../../lib/constants";
+import { RewardType } from "../../types";
+import { useUser } from "../authentication/useUser";
 
 interface RewardModalProps {}
 
@@ -22,7 +31,7 @@ const defaultValues = {
 };
 
 export const RewardModal: React.FC<RewardModalProps> = ({}) => {
-  const [, createReward] = useCreateRewardMutation();
+  const { uid } = useUser();
 
   return (
     <Modal
@@ -30,10 +39,10 @@ export const RewardModal: React.FC<RewardModalProps> = ({}) => {
       trigger={
         <ModalTrigger>
           <Button
-            className="w-full shadow-none bg-gray-50 rounded-none"
-            icon={<MdAdd className="w-6 h-6 text-gray-600" />}
+            className="w-full !rounded-t-none border-t"
+            icon={<MdAdd className="w-6 h-6" />}
           >
-            <span className="font-semibold text-gray-600">Add Reward</span>
+            <span className="font-semibold">New Reward</span>
           </Button>
         </ModalTrigger>
       }
@@ -70,13 +79,6 @@ export const RewardModal: React.FC<RewardModalProps> = ({}) => {
                     ? "required"
                     : "notRequired"
                 ](),
-              url: yup
-                .string()
-                .url()
-                .max(500)
-                [
-                  values.type === RewardType.Link ? "required" : "notRequired"
-                ](),
               message: yup
                 .string()
                 .min(5)
@@ -101,7 +103,21 @@ export const RewardModal: React.FC<RewardModalProps> = ({}) => {
                   delete values[key];
                 }
               }
-              await createReward({ data: values });
+              const data = {
+                ...values,
+                userId: uid,
+                createdAt: serverTimestamp(),
+              };
+              const { id } = await addDoc(
+                collection(getFirestore(), "rewards"),
+                data
+              );
+              if (values.type === RewardType.Message) {
+                await setDoc(doc(getFirestore(), "reward_messages", id), {
+                  message: values.message,
+                  userId: uid,
+                });
+              }
               window.localStorage.removeItem("autosave-reward");
               setOpen(false);
             } catch {}
@@ -115,7 +131,6 @@ export const RewardModal: React.FC<RewardModalProps> = ({}) => {
                 className="form-select rounded-lg border-gray-200 shadow-sm font-medium focus:ring focus:ring-gray-300 focus:border-gray-500/50 w-40"
               >
                 <option value={RewardType.Form}>Form</option>
-                <option value={RewardType.Link}>Link</option>
                 <option value={RewardType.Message}>Message</option>
                 <option value={RewardType.Shoutout}>Shoutout</option>
               </select>
@@ -144,17 +159,9 @@ export const RewardModal: React.FC<RewardModalProps> = ({}) => {
                     outline
                   />
                 ),
-                [RewardType.Link]: (
-                  <InputField
-                    label="Additional Information"
-                    name="url"
-                    placeholder="Your link..."
-                    outline
-                  />
-                ),
                 [RewardType.Shoutout]: (
                   <InputField
-                    label="Shoutouts Per Article"
+                    label="Max Shoutouts Per Article"
                     name="maxShoutouts"
                     type="number"
                     outline

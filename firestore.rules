@@ -25,6 +25,16 @@ service cloud.firestore {
       allow delete: if isOwner();
       allow read: if isOwner() || resource.data.isPublished == true;
     }
+
+    match /rewards/{rewardId} {
+      allow write: if willBeOwner() && (request.resource.data.type in ["Form", "Shoutout", "Message", "Link"]);
+      allow read: if true;
+    }
+
+    match /reward_messages/{id} {
+      allow write: if willBeOwner() && exists(/databases/$(database)/documents/rewards/$(id));
+      allow read: if false;
+    }
   }
 }
 

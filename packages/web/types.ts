@@ -34,3 +34,19 @@ export interface Article {
   journalId: string;
   createdAt: FieldValue;
 }
+
+export interface Reward {
+  id: string;
+  type: RewardType;
+  points: number;
+  name: string;
+  description?: string;
+  claimedCount?: number;
+  createdAt: FieldValue;
+}
+
+export enum RewardType {
+  Form = "Form",
+  Shoutout = "Shoutout",
+  Message = "Message",
+}
