@@ -1,6 +1,7 @@
 import { addDoc, getFirestore, serverTimestamp } from "@firebase/firestore";
 import { IconChevronRight, IconPlus } from "@tabler/icons";
 import { collection } from "firebase/firestore";
+import { useRouter } from "next/router";
 import React, { useMemo } from "react";
 import { mutate } from "swr";
 import shallow from "zustand/shallow";
@@ -17,6 +18,7 @@ export const JournalDisclosure: React.FC<JournalDisclosureProps> = ({
   journal,
 }) => {
   const { uid } = useUser();
+  const router = useRouter();
   const [openLists, setOpen] = useOpenListsStore(
     (x) => [x.open, x.setOpen],
     shallow
@@ -66,8 +68,9 @@ export const JournalDisclosure: React.FC<JournalDisclosureProps> = ({
                 );
                 mutate(
                   `/api/journals/drafts?journalId=${journal.id}`,
-                  (old: Article[]) => [...old, { ...data, id }]
+                  (old: Article[]) => [...(old || []), { ...data, id }]
                 );
+                router.push(`/draft/${id}`);
               } catch (error) {}
             }}
           >

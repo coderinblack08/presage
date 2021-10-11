@@ -1,8 +1,10 @@
-import { NextPage } from "next";
+import { GetServerSideProps, NextPage } from "next";
 import React from "react";
 import { MdDelete, MdEdit } from "react-icons/md";
 import useSWR from "swr";
 import { Button } from "../components/button";
+import { baseURL } from "../lib/constants";
+import { fetcher } from "../lib/fetcher";
 import { Layout } from "../modules/dashboard/Layout";
 import { RewardModal } from "../modules/rewards/RewardModal";
 import { Reward } from "../types";
@@ -84,6 +86,20 @@ const RewardsPage: NextPage = () => {
       </div>
     </Layout>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+  const rewards = await fetcher(`${baseURL}/api/rewards`, req.headers.cookie);
+  const account = await fetcher(`${baseURL}/api/account`, req.headers.cookie);
+
+  return {
+    props: {
+      fallback: {
+        "/api/rewards": rewards,
+        "/api/account": account,
+      },
+    },
+  };
 };
 
 export default RewardsPage;

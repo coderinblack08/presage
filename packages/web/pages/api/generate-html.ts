@@ -7,7 +7,7 @@ import { runMiddleware } from "../../lib/utils/runMiddleware";
 export const config = {
   api: {
     bodyParser: {
-      sizeLimit: "1mb",
+      sizeLimit: "5mb",
     },
   },
 };

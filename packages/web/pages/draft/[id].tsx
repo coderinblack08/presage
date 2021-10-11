@@ -31,7 +31,7 @@ const DraftPage: NextPage<
 
   return (
     <div className="flex">
-      <div className="hidden md:block flex-shrink-0">
+      <div className="hidden lg:block flex-shrink-0">
         <Sidebar />
       </div>
       <Formik
@@ -53,7 +53,6 @@ const DraftPage: NextPage<
         onSubmit={async (values, { setFieldError }) => {
           try {
             const data = { ...diff };
-            console.log(data);
 
             if (
               "tags" in diff &&
@@ -65,7 +64,7 @@ const DraftPage: NextPage<
               if (areTags) {
                 data.tags = diff.tags.split(",").map((x: string) => x.trim());
               } else {
-                setFieldError(
+                return setFieldError(
                   "tags",
                   "Tags must be alphanumeric and comma separated"
                 );
@@ -81,7 +80,13 @@ const DraftPage: NextPage<
               }
             }
 
-            await updateDoc(doc(getFirestore(), "articles", id), data);
+            try {
+              console.log(data);
+              await updateDoc(doc(getFirestore(), "articles", id), data);
+            } catch (error) {
+              console.error(error);
+            }
+            console.log("successful");
             mutate(`/api/draft/${id}`, (old: Article) => ({
               ...old,
               ...data,

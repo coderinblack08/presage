@@ -7,7 +7,7 @@ import {
   DropdownItem,
   DropdownTrigger,
 } from "../../components/dropdown";
-import { useScreen } from "../../lib/useScreen";
+import { useScreen } from "../../lib/hooks/useScreen";
 
 interface NavbarProps {}
 

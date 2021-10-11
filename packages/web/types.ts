@@ -30,6 +30,7 @@ export interface Article {
   tags: string[];
   canonical?: string;
   journal?: Journal;
+  user?: User;
   userId: string;
   journalId: string;
   createdAt: FieldValue;
