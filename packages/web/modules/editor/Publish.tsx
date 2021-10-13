@@ -19,10 +19,14 @@ export const Publish: React.FC<PublishProps> = ({ draft }) => {
             await updateDoc(doc(getFirestore(), "articles", draft.id), {
               isPublished: !draft.isPublished,
             } as Partial<Article>);
-            mutate(`/api/draft/${draft.id}`, (old: Article) => ({
-              ...old,
-              isPublished: !old.isPublished,
-            }));
+            mutate(
+              `/api/draft/${draft.id}`,
+              (old: Article) => ({
+                ...old,
+                isPublished: !old.isPublished,
+              }),
+              false
+            );
           }
         } catch {}
       }}

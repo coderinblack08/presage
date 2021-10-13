@@ -33,6 +33,8 @@ export interface Article {
   user?: User;
   userId: string;
   journalId: string;
+  likeCount: number;
+  bookmarkCount: number;
   createdAt: FieldValue;
 }
 
@@ -50,4 +52,9 @@ export enum RewardType {
   Form = "Form",
   Shoutout = "Shoutout",
   Message = "Message",
+}
+
+export enum ReactionType {
+  Like = "Like",
+  Bookmark = "Bookmark",
 }

@@ -113,10 +113,12 @@ export const RewardModal: React.FC<RewardModalProps> = ({}) => {
                 data
               );
               if (values.type === RewardType.Message) {
-                await setDoc(doc(getFirestore(), "reward_messages", id), {
-                  message: values.message,
-                  userId: uid,
-                });
+                await setDoc(
+                  doc(getFirestore(), "rewards", id, "secret", "message"),
+                  {
+                    message: values.message,
+                  }
+                );
               }
               window.localStorage.removeItem("autosave-reward");
               setOpen(false);

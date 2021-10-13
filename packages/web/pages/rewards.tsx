@@ -28,7 +28,7 @@ const RewardsPage: NextPage = () => {
             liking.
           </p>
           <div className="mt-8">
-            <div className="align-middle inline-block min-w-full w-full border border-gray-200/75 rounded-lg">
+            <div className="flex flex-col align-middle min-w-full w-full border border-gray-200/75 rounded-lg">
               <div className="overflow-x-auto">
                 <table className="min-w-full">
                   <thead className="border-b border-200/75">

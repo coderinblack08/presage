@@ -71,18 +71,20 @@ export const Modal: React.FC<ModalProps> = ({
                     className={`relative z-50 inline-block w-full max-w-lg overflow-hidden text-left align-middle transition-all transform bg-white rounded-xl p-6 ${className}`}
                     onClick={stopPropagation}
                   >
-                    <Dialog.Title className="text-xl font-bold" as="h1">
-                      {title}
+                    <Dialog.Title className="text-xl font-bold" asChild>
+                      <h1>{title}</h1>
                     </Dialog.Title>
                     <Dialog.Description className="text-gray-500 mt-1">
                       {description}
                     </Dialog.Description>
                     <div className="mt-6">{children({ open, setOpen })}</div>
                     <Dialog.Close
-                      as="button"
+                      asChild
                       className="absolute top-0 right-0 m-3"
                     >
-                      <Close className="text-gray-400" fontSize="small" />
+                      <button>
+                        <Close className="text-gray-400" fontSize="small" />
+                      </button>
                     </Dialog.Close>
                   </div>
                 </div>
@@ -100,7 +102,7 @@ export const ModalTrigger: React.FC<{ className?: string }> = ({
   children,
 }) => {
   return (
-    <Dialog.Trigger className={className} as="div">
+    <Dialog.Trigger className={className} asChild>
       {children}
     </Dialog.Trigger>
   );

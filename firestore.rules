@@ -20,15 +20,35 @@ service cloud.firestore {
       allow read: if true;
     }
 
-    function validateArticleFields() {
-      return !request.resource.data.diff(resource.data).affectedKeys().hasAny(["editorHTML"]);
+    function canCreateArticle() {
+      let isOwner = isSignedIn() && request.auth.uid == request.resource.data.userId;
+      let isNow = request.time == request.resource.data.createdAt;
+      let isValidContent = !request.resource.data.keys().hasAny(["editorHTML"]) && request.resource.data.likeCount == 0 && request.resource.data.bookmarkCount == 0;
+      
+      return isValidContent && isNow && isOwner;
+    }
+
+    function canUpdateArticle() {
+      let isOwner = isSignedIn() && request.auth.uid == request.resource.data.userId;
+      let doesNotUpdateForbidden = !request.resource.data.diff(resource.data).affectedKeys().hasAny(["likeCount", "bookmarkCount", "createdAt", "editorHTML"]);
+
+      return isOwner && doesNotUpdateForbidden;
     }
 
     match /articles/{articleId} {
-      allow create: if willBeOwner() && validateArticleFields();
-      allow update: if isOwner() && validateArticleFields();
-      allow delete: if isOwner();
+      allow create: if canCreateArticle();
+      allow update: if canUpdateArticle();
+      // allow delete: if isOwner();
       allow read: if isOwner() || resource.data.isPublished == true;
+    }
+
+    function canCreateReaction() {
+      return request.auth.uid == request.resource.data.userId && request.resource.data.articleId != null && request.resource.data.keys().hasAny(["liked", "bookmarked", "userId", "articleId"]);
+    }
+
+    match /reactions/{reactionId} {
+      allow write: if canCreateReaction() && request.resource.data.keys().hasAny(["liked", "bookmarked"]);
+      allow read;
     }
 
     match /rewards/{rewardId} {
@@ -36,8 +56,8 @@ service cloud.firestore {
       allow read: if true;
     }
 
-    match /reward_messages/{id} {
-      allow write: if willBeOwner() && exists(/databases/$(database)/documents/rewards/$(id));
+    match /rewards/{rewardId}/secret/message {
+      allow write: if get(/databases/$(database)/documents/rewards/$(rewardId)).data.userId == request.auth.uid;
       allow read: if false;
     }
   }

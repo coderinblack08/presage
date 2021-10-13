@@ -8,11 +8,16 @@ import { baseURL } from "../../lib/constants";
 import { fetcher } from "../../lib/fetcher";
 import { useScreen } from "../../lib/hooks/useScreen";
 import { Navbar } from "../../modules/articles/Navbar";
+import { Reactions } from "../../modules/articles/Reactions";
 import { Article } from "../../types";
 
 const ArticlePage: NextPage<{ id: string }> = ({ id }) => {
   const { isSmallerThanTablet } = useScreen();
   const { data: article } = useSWR<Article>(`/api/article/${id}`);
+
+  useEffect(() => {
+    console.log(article?.likeCount);
+  }, [article?.likeCount]);
 
   useEffect(() => {
     const hideReferToast = window.localStorage.getItem("hide-refer-toast");
@@ -66,7 +71,7 @@ const ArticlePage: NextPage<{ id: string }> = ({ id }) => {
             <h1 className="text-lg xs:text-xl sm:text-2xl lg:text-3xl font-bold !leading-relaxed">
               {article?.title}
             </h1>
-            {article?.tags.length !== 0 ? (
+            {(article?.tags || []).length !== 0 ? (
               <div className="mt-3 sm:mt-4 flex items-center space-x-2 overflow-y-auto">
                 {article?.tags.map((tag) => (
                   <a
@@ -135,7 +140,7 @@ const ArticlePage: NextPage<{ id: string }> = ({ id }) => {
         </div>
       </header>
       <main className="mx-auto max-w-4xl w-full px-5 py-8 md:py-16">
-        {/* <Reactions article={article} /> */}
+        <Reactions article={article} />
         <article
           className="prose max-w-full mt-8 md:mt-10"
           dangerouslySetInnerHTML={{ __html: article?.editorHTML || "" }}

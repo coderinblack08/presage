@@ -4,9 +4,9 @@ import { motion } from "framer-motion";
 
 interface DropdownRootProps {
   open?: boolean;
-  onOpenChange?: RadixDropdownTypes.DropdownMenuOwnProps["onOpenChange"];
-  side?: RadixDropdownTypes.DropdownMenuContentOwnProps["side"];
-  align?: RadixDropdownTypes.DropdownMenuContentOwnProps["align"];
+  onOpenChange?: RadixDropdownTypes.DropdownMenuProps["onOpenChange"];
+  side?: RadixDropdownTypes.DropdownMenuContentProps["side"];
+  align?: RadixDropdownTypes.DropdownMenuContentProps["align"];
   children?: React.ReactNode;
   alignOffset?: number;
   trigger: React.ReactNode;
@@ -33,13 +33,16 @@ export const Dropdown: React.FC<DropdownRootProps> = ({
         alignOffset={alignOffset}
         align={align}
         side={side}
-        className={`bg-white border rounded-lg shadow-lg w-56 overflow-hidden py-1.5 ${className}`}
-        initial={{ y: -12, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        as={motion.div}
+        asChild
         {...props}
       >
-        {children}
+        <motion.div
+          className={`bg-white border rounded-lg shadow-lg w-56 overflow-hidden py-1.5 ${className}`}
+          initial={{ y: -12, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+        >
+          {children}
+        </motion.div>
       </DropdownMenu.Content>
     </DropdownMenu.Root>
   );
@@ -76,15 +79,20 @@ export const DropdownItem: React.FC<DropdownItemProps> = ({
       className={`group ${
         icon ? "flex items-center" : "block"
       } px-4 py-1.5 cursor-pointer focus:outline-none focus:bg-gray-100 w-full text-left`}
-      as="button"
+      asChild
       {...props}
     >
-      {icon ? (
-        <div className="mr-2 text-gray-600 group-focus:text-gray-900">
-          {icon}
+      <button>
+        {" "}
+        {icon ? (
+          <div className="mr-2 text-gray-600 group-focus:text-gray-900">
+            {icon}
+          </div>
+        ) : null}
+        <div className="text-gray-600 group-focus:text-gray-900">
+          {children}
         </div>
-      ) : null}
-      <div className="text-gray-600 group-focus:text-gray-900">{children}</div>
+      </button>
     </DropdownMenu.Item>
   );
 };
@@ -98,7 +106,7 @@ export const DropdownTrigger: React.FC<DropdownTriggerProps> = ({
   children,
 }) => {
   return (
-    <DropdownMenu.Trigger className={className} as="div">
+    <DropdownMenu.Trigger className={className}>
       {children}
     </DropdownMenu.Trigger>
   );

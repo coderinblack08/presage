@@ -87,10 +87,25 @@ const DraftPage: NextPage<
               console.error(error);
             }
             console.log("successful");
-            mutate(`/api/draft/${id}`, (old: Article) => ({
-              ...old,
-              ...data,
-            }));
+            mutate(
+              `/api/draft/${id}`,
+              (old: Article) => ({
+                ...old,
+                ...data,
+              }),
+              false
+            );
+            mutate(
+              `/api/journals/drafts?journalId=${draft?.journalId}`,
+              (old: Article[]) => {
+                const index = old.findIndex((x) => x.id === id);
+                if (index) {
+                  old[index] = { ...old[index], ...data };
+                }
+                return old;
+              },
+              false
+            );
           } catch {}
         }}
       >

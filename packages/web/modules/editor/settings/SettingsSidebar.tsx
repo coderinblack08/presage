@@ -52,7 +52,8 @@ export const SettingsSidebar: React.FC<SettingsSidebarProps> = ({ draft }) => {
                 mutate(
                   `/api/journals/drafts?journalId=${draft.journalId}`,
                   (old: Article[]) =>
-                    (old || []).filter((x) => x.id !== draft.id)
+                    (old || []).filter((x) => x.id !== draft.id),
+                  false
                 );
                 router.push("/dashboard");
               }

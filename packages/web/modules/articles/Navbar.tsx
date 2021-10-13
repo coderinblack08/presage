@@ -48,7 +48,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
         <Link href="/explore" passHref>
           <DropdownItem>Explore</DropdownItem>
         </Link>
-        <Link href="/" passHref>
+        <Link href="/dashboard" passHref>
           <DropdownItem>Publish</DropdownItem>
         </Link>
         <DropdownDivider />

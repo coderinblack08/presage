@@ -29,4 +29,5 @@ exports.helloWorld = functions.https.onRequest((request, response) => {
     response.send("Hello from Firebase!");
 });
 __exportStar(require("./generate-html"), exports);
+__exportStar(require("./reactions"), exports);
 //# sourceMappingURL=index.js.map

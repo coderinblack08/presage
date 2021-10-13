@@ -60,17 +60,24 @@ export const JournalDisclosure: React.FC<JournalDisclosureProps> = ({
                   title: "Untitled",
                   createdAt: serverTimestamp(),
                   isPublished: false,
+                  likeCount: 0,
+                  bookmarkCount: 0,
                 } as Article;
                 const firestore = getFirestore();
-                const { id } = await addDoc(
-                  collection(firestore, "articles"),
-                  data
-                );
-                mutate(
-                  `/api/journals/drafts?journalId=${journal.id}`,
-                  (old: Article[]) => [...(old || []), { ...data, id }]
-                );
-                router.push(`/draft/${id}`);
+                try {
+                  const { id } = await addDoc(
+                    collection(firestore, "articles"),
+                    data
+                  );
+                  mutate(
+                    `/api/journals/drafts?journalId=${journal.id}`,
+                    (old: Article[]) => [...(old || []), { ...data, id }],
+                    false
+                  );
+                  router.push(`/draft/${id}`);
+                } catch (error) {
+                  console.error(error);
+                }
               } catch (error) {}
             }}
           >

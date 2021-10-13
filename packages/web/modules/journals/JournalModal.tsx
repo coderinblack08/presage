@@ -53,10 +53,11 @@ export const JournalModal: React.FC<JournalModalProps> = ({}) => {
                 collection(firestore, "journals"),
                 data
               );
-              mutate("/api/journals", (old: Journal[]) => [
-                ...old,
-                { ...data, id },
-              ]);
+              mutate(
+                "/api/journals",
+                (old: Journal[]) => [...old, { ...data, id }],
+                false
+              );
               setOpen(false);
             } catch {}
           }}
