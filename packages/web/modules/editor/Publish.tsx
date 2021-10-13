@@ -2,11 +2,10 @@ import { doc, getFirestore, updateDoc } from "@firebase/firestore";
 import React from "react";
 import { mutate } from "swr";
 import { Button } from "../../components/button";
-import { ArticleFragment } from "../../generated/graphql";
 import { Article } from "../../types";
 
 interface PublishProps {
-  draft: ArticleFragment | null;
+  draft: Article | undefined;
 }
 
 export const Publish: React.FC<PublishProps> = ({ draft }) => {

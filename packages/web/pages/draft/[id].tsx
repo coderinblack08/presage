@@ -131,8 +131,8 @@ const DraftPage: NextPage<
                     disabled={!draft?.isPublished}
                     outline
                   />
-                  <SettingsPanel draft={draft as any} />
-                  <Publish draft={draft as any} />
+                  <SettingsPanel draft={draft!} />
+                  <Publish draft={draft} />
                 </div>
               </header>
               <div className="py-12 w-full mx-auto">

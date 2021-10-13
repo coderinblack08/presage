@@ -1,13 +1,7 @@
 import React, { useState } from "react";
 import { MdShare } from "react-icons/md";
-import { useEffect } from "react";
 import { Button } from "../../components/button";
-import { CopyInput } from "../../components/input";
 import { Modal, ModalTrigger } from "../../components/modal";
-import {
-  useCreateReferralMutation,
-  useFindReferralQuery,
-} from "../../generated/graphql";
 import { ListCheck } from "../landing-page/ListCheck";
 
 interface ShareProps {
@@ -15,18 +9,7 @@ interface ShareProps {
 }
 
 export const Share: React.FC<ShareProps> = ({ articleId }) => {
-  const [, createReferral] = useCreateReferralMutation();
   const [opened, setOpened] = useState(false);
-  const [{ data: referral, error, fetching }, execute] = useFindReferralQuery({
-    pause: true,
-    variables: { articleId },
-  });
-
-  useEffect(() => {
-    if (!referral?.findReferral && !fetching && opened) {
-      createReferral({ articleId });
-    }
-  }, [createReferral, articleId, referral, fetching, opened]);
 
   return (
     <>
@@ -41,7 +24,6 @@ export const Share: React.FC<ShareProps> = ({ articleId }) => {
               color="transparent"
               size="none"
               onClick={async () => {
-                execute();
                 setOpened(true);
               }}
             >
@@ -74,10 +56,9 @@ export const Share: React.FC<ShareProps> = ({ articleId }) => {
               </li>
             </ul>
             <div className="mt-6">
-              <pre>{JSON.stringify(error)}</pre>
-              <CopyInput
+              {/* <CopyInput
                 url={`https://joinpresage.com/referral/${referral?.findReferral.code}`}
-              />
+              /> */}
             </div>
           </div>
         )}
