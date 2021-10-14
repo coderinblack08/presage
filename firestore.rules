@@ -42,6 +42,11 @@ service cloud.firestore {
       allow read: if isOwner() || resource.data.isPublished == true;
     }
 
+    match /{path=**}/comments/{id} {
+      allow create: if request.resource.data.replyCount == 0 || willBeOwner() && request.resource.data.message != null && request.resource.data.message is string;
+      allow read;
+    }
+
     function canCreateReaction() {
       return request.auth.uid == request.resource.data.userId && request.resource.data.articleId != null && request.resource.data.keys().hasAny(["liked", "bookmarked", "userId", "articleId"]);
     }

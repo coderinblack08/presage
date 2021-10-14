@@ -7,3 +7,4 @@ export const helloWorld = functions.https.onRequest((request, response) => {
 
 export * from "./generate-html";
 export * from "./reactions";
+export * from "./comments";

@@ -2,6 +2,7 @@ import { Content } from "@tiptap/core/dist/packages/core/src/types";
 import { FieldValue } from "firebase/firestore";
 
 export interface User {
+  uid?: string;
   username: string;
   displayName: string;
   email?: string;
@@ -57,4 +58,16 @@ export enum RewardType {
 export enum ReactionType {
   Like = "Like",
   Bookmark = "Bookmark",
+}
+
+export interface Comment {
+  id: string;
+  userId: string;
+  message: string;
+  user: {
+    profilePicture: string;
+    displayName: string;
+    username: string;
+  };
+  replyCount: number;
 }

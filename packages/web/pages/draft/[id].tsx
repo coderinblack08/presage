@@ -98,6 +98,7 @@ const DraftPage: NextPage<
             mutate(
               `/api/journals/drafts?journalId=${draft?.journalId}`,
               (old: Article[]) => {
+                old = old || [];
                 const index = old.findIndex((x) => x.id === id);
                 if (index) {
                   old[index] = { ...old[index], ...data };

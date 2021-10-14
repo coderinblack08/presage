@@ -9,6 +9,7 @@ import { fetcher } from "../../lib/fetcher";
 import { useScreen } from "../../lib/hooks/useScreen";
 import { Navbar } from "../../modules/articles/Navbar";
 import { Reactions } from "../../modules/articles/Reactions";
+import { CommentSection } from "../../modules/comments/CommentSection";
 import { Article } from "../../types";
 
 const ArticlePage: NextPage<{ id: string }> = ({ id }) => {
@@ -142,9 +143,10 @@ const ArticlePage: NextPage<{ id: string }> = ({ id }) => {
       <main className="mx-auto max-w-4xl w-full px-5 py-8 md:py-16">
         <Reactions article={article} />
         <article
-          className="prose max-w-full mt-8 md:mt-10"
+          className="prose max-w-full mt-8 md:mt-10 mb-12 md:mb-14"
           dangerouslySetInnerHTML={{ __html: article?.editorHTML || "" }}
         />
+        <CommentSection article={article} />
       </main>
     </div>
   );

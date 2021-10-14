@@ -1,4 +1,5 @@
 import useSWR from "swr";
+import { User } from "../../types";
 
 export const useUser = () => {
   // const [user, loading, error] = useAuthState(getAuth());
@@ -16,6 +17,6 @@ export const useUser = () => {
   // }, [firestore, user]);
 
   // return { uid: user?.uid, user: userInfo, loading, error };
-  const { data, isValidating, error } = useSWR("/api/account");
+  const { data, isValidating, error } = useSWR<User>("/api/account");
   return { uid: data?.uid, user: data, loading: isValidating, error };
 };

@@ -30,4 +30,5 @@ exports.helloWorld = functions.https.onRequest((request, response) => {
 });
 __exportStar(require("./generate-html"), exports);
 __exportStar(require("./reactions"), exports);
+__exportStar(require("./comments"), exports);
 //# sourceMappingURL=index.js.map
