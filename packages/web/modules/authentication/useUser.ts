@@ -1,8 +1,12 @@
-import useSWR from "swr";
+import { getAuth } from "firebase/auth";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { useQuery } from "react-query";
+import { useHasMounted } from "../../lib/hooks/useHasMounted";
 import { User } from "../../types";
 
 export const useUser = () => {
-  // const [user, loading, error] = useAuthState(getAuth());
+  const [authUser, loading] = useAuthState(getAuth());
+  const mounted = useHasMounted();
   // const firestore = getFirestore();
   // const [userInfo, setUserInfo] = useState<User | null>(null);
 
@@ -16,7 +20,10 @@ export const useUser = () => {
   //   }
   // }, [firestore, user]);
 
-  // return { uid: user?.uid, user: userInfo, loading, error };
-  const { data, isValidating, error } = useSWR<User>("/api/account");
-  return { uid: data?.uid, user: data, loading: isValidating, error };
+  const { data, isFetching, error } = useQuery<User>("/api/account");
+  return {
+    ...(mounted && authUser && !loading ? { uid: data?.uid, user: data } : {}),
+    loading: isFetching,
+    error,
+  };
 };

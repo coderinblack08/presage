@@ -1,5 +1,6 @@
 import { doc, getFirestore, updateDoc } from "@firebase/firestore";
 import React from "react";
+import { useQueryClient } from "react-query";
 import { mutate } from "swr";
 import { Button } from "../../components/button";
 import { Article } from "../../types";
@@ -9,6 +10,8 @@ interface PublishProps {
 }
 
 export const Publish: React.FC<PublishProps> = ({ draft }) => {
+  const queryClient = useQueryClient();
+
   return (
     <Button
       type="button"
@@ -18,14 +21,17 @@ export const Publish: React.FC<PublishProps> = ({ draft }) => {
             await updateDoc(doc(getFirestore(), "articles", draft.id), {
               isPublished: !draft.isPublished,
             } as Partial<Article>);
-            mutate(
-              `/api/draft/${draft.id}`,
-              (old: Article) => ({
-                ...old,
-                isPublished: !old.isPublished,
-              }),
-              false
-            );
+            const key = `/api/draft/${draft.id}`;
+            if (queryClient.getQueryData<Article>(key)) {
+              queryClient.setQueryData<Article>(
+                key,
+                (old) =>
+                  ({
+                    ...old,
+                    isPublished: !old?.isPublished,
+                  } as any)
+              );
+            }
           }
         } catch {}
       }}

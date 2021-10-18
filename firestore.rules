@@ -23,7 +23,7 @@ service cloud.firestore {
     function canCreateArticle() {
       let isOwner = isSignedIn() && request.auth.uid == request.resource.data.userId;
       let isNow = request.time == request.resource.data.createdAt;
-      let isValidContent = !request.resource.data.keys().hasAny(["editorHTML"]) && request.resource.data.likeCount == 0 && request.resource.data.bookmarkCount == 0;
+      let isValidContent = !request.resource.data.keys().hasAny(["editorHTML"]) && request.resource.data.likeCount == 0 && request.resource.data.bookmarkCount == 0 && request.resource.data.shareCount == 0;
       
       return isValidContent && isNow && isOwner;
     }
@@ -38,12 +38,12 @@ service cloud.firestore {
     match /articles/{articleId} {
       allow create: if canCreateArticle();
       allow update: if canUpdateArticle();
-      // allow delete: if isOwner();
+      allow delete: if isOwner();
       allow read: if isOwner() || resource.data.isPublished == true;
     }
 
     match /{path=**}/comments/{id} {
-      allow create: if request.resource.data.replyCount == 0 || willBeOwner() && request.resource.data.message != null && request.resource.data.message is string;
+      allow create: if request.resource.data.replyCount == 0 && willBeOwner() && request.resource.data.message != null && request.resource.data.message is string && request.resource.data.message.trim().size() > 0;
       allow read;
     }
 
@@ -52,7 +52,7 @@ service cloud.firestore {
     }
 
     match /reactions/{reactionId} {
-      allow write: if canCreateReaction() && request.resource.data.keys().hasAny(["liked", "bookmarked"]);
+      allow write: if canCreateReaction() && request.resource.data.keys().hasAny(["liked", "bookmarked", "shared"]);
       allow read;
     }
 
@@ -64,6 +64,11 @@ service cloud.firestore {
     match /rewards/{rewardId}/secret/message {
       allow write: if get(/databases/$(database)/documents/rewards/$(rewardId)).data.userId == request.auth.uid;
       allow read: if false;
+    }
+
+    match /referrals/{referalId} {
+      allow write: if willBeOwner() && request.resource.data.claimCount == 0;
+      allow read;
     }
   }
 }

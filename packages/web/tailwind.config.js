@@ -67,6 +67,7 @@ module.exports = {
         DEFAULT: {
           css: {
             color: theme("colors.gray.600"),
+            lineHeight: "2rem",
             pre: {
               backgroundColor: theme("colors.gray.800"),
               padding: "1.5rem",

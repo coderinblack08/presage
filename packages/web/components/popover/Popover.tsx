@@ -1,6 +1,5 @@
-import React, { useState } from "react";
 import * as RadixPopover from "@radix-ui/react-popover";
-import { Transition } from "@headlessui/react";
+import React, { useState } from "react";
 
 interface PopoverProps {
   trigger: React.ReactNode;
@@ -38,7 +37,7 @@ export const PopoverTrigger: React.FC<{ className?: string }> = ({
   children,
 }) => {
   return (
-    <RadixPopover.Trigger className={className} as="div">
+    <RadixPopover.Trigger className={className}>
       {children}
     </RadixPopover.Trigger>
   );

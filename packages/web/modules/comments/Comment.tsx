@@ -1,11 +1,11 @@
-import React, { useMemo, useState } from "react";
-import useSWR from "swr";
-import { fetcher } from "../../lib/fetcher";
+import React, { useEffect, useMemo, useState } from "react";
+import { useQuery } from "react-query";
+import shallow from "zustand/shallow";
 import { Comment as IComment } from "../../types";
+import { useMutationEventStore } from "./useMutationEventStore";
 
 interface CommentProps {
   comment: IComment;
-  layer?: number;
   existingPath: string;
   articleId: string;
   setCommentPath: React.Dispatch<React.SetStateAction<string>>;
@@ -14,20 +14,33 @@ interface CommentProps {
 
 export const Comment: React.FC<CommentProps> = ({
   comment,
-  layer = 1,
   setCommentPath,
   setReplyingComment,
   existingPath,
   articleId,
 }) => {
-  const path = useMemo(
-    () => `${existingPath}/${comment.id}${"/comments".repeat(layer)}`,
-    [comment.id, existingPath, layer]
-  );
+  const path = useMemo(() => `${existingPath}/${comment.id}/comments`, [
+    comment.id,
+    existingPath,
+  ]);
   const [showReplies, setShowReplies] = useState(false);
-  const { data: comments } = useSWR<IComment[]>(
-    showReplies ? `/api/comments?path=${path}` : null
+  const [hasEvent, removeEvent] = useMutationEventStore(
+    (x) => [x.has, x.remove],
+    shallow
   );
+  const { data: comments, refetch } = useQuery<IComment[]>(
+    `/api/comments?path=${path}`,
+    { enabled: showReplies }
+  );
+
+  useEffect(() => {
+    if (!showReplies && comments && hasEvent(path)) {
+      refetch();
+      setShowReplies(true);
+      removeEvent(path);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showReplies, JSON.stringify(comments)]);
 
   return (
     <div>

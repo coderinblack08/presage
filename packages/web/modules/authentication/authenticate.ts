@@ -1,6 +1,7 @@
 import axios from "axios";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { doc, getFirestore, serverTimestamp, setDoc } from "firebase/firestore";
+import Router from "next/router";
 import { User } from "../../types";
 import { generateUsername } from "./generateUsername";
 
@@ -28,4 +29,5 @@ export const login = async () => {
   if (token) {
     await axios.post("/api/login", {}, { headers: { Authorization: token } });
   }
+  Router.push("/dashboard");
 };

@@ -2,7 +2,7 @@ import { GetServerSideProps, NextPage } from "next";
 import React, { useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { MdClose, MdPersonAdd, MdShare } from "react-icons/md";
-import useSWR from "swr";
+import { dehydrate, QueryClient, useQuery, useQueryClient } from "react-query";
 import { Button } from "../../components/button";
 import { baseURL } from "../../lib/constants";
 import { fetcher } from "../../lib/fetcher";
@@ -14,11 +14,7 @@ import { Article } from "../../types";
 
 const ArticlePage: NextPage<{ id: string }> = ({ id }) => {
   const { isSmallerThanTablet } = useScreen();
-  const { data: article } = useSWR<Article>(`/api/article/${id}`);
-
-  useEffect(() => {
-    console.log(article?.likeCount);
-  }, [article?.likeCount]);
+  const { data: article } = useQuery<Article>(`/api/article/${id}`);
 
   useEffect(() => {
     const hideReferToast = window.localStorage.getItem("hide-refer-toast");
@@ -140,7 +136,7 @@ const ArticlePage: NextPage<{ id: string }> = ({ id }) => {
           </div>
         </div>
       </header>
-      <main className="mx-auto max-w-4xl w-full px-5 py-8 md:py-16">
+      <main className="mx-auto max-w-4xl w-full px-5 pt-8 pb-16 md:py-16 md:pb-20">
         <Reactions article={article} />
         <article
           className="prose max-w-full mt-8 md:mt-10 mb-12 md:mb-14"
@@ -157,21 +153,16 @@ export const getServerSideProps: GetServerSideProps = async ({
   req,
 }) => {
   const id = query.id?.toString();
-  const draft = await fetcher(
-    `${baseURL}/api/article/${id}`,
-    req.headers.cookie
+  const queryClient = new QueryClient();
+  const fn = fetcher(req.headers.cookie);
+  await queryClient.prefetchQuery(`/api/article/${id}`, fn);
+  await queryClient.prefetchQuery(`/api/account`, fn);
+  await queryClient.prefetchQuery(
+    `/api/comments?path=/articles/${id}/comments`,
+    fn
   );
-  const account = await fetcher(`${baseURL}/api/account`, req.headers.cookie);
 
-  return {
-    props: {
-      id,
-      fallback: {
-        [`/api/article/${id}`]: draft,
-        "/api/account": account,
-      },
-    },
-  };
+  return { props: { id, dehydratedState: dehydrate(queryClient) } };
 };
 
 export default ArticlePage;

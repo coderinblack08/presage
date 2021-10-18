@@ -34,6 +34,9 @@ exports.incrementReactionCount = functions.firestore
     if (data.liked) {
         updates.likeCount = firebase_admin_1.default.firestore.FieldValue.increment(1);
     }
+    if (data.shared) {
+        updates.shareCount = firebase_admin_1.default.firestore.FieldValue.increment(1);
+    }
     if (data.bookmarked) {
         updates.bookmarkCount = firebase_admin_1.default.firestore.FieldValue.increment(1);
     }
@@ -48,8 +51,9 @@ exports.updateReactionCount = functions.firestore
     const keyDict = {
         like: "liked",
         bookmark: "bookmarked",
+        share: "shared",
     };
-    for (const key of ["bookmark", "like"]) {
+    for (const key of ["bookmark", "like", "share"]) {
         if (before[keyDict[key]] && after[keyDict[key]] === false) {
             updates[`${key}Count`] =
                 firebase_admin_1.default.firestore.FieldValue.increment(-1);

@@ -3,7 +3,7 @@ import { IconChevronRight, IconPlus } from "@tabler/icons";
 import { collection } from "firebase/firestore";
 import { useRouter } from "next/router";
 import React, { useMemo } from "react";
-import { mutate } from "swr";
+import { useQueryClient } from "react-query";
 import shallow from "zustand/shallow";
 import { Article, Journal } from "../../../types";
 import { useUser } from "../../authentication/useUser";
@@ -19,6 +19,7 @@ export const JournalDisclosure: React.FC<JournalDisclosureProps> = ({
 }) => {
   const { uid } = useUser();
   const router = useRouter();
+  const queryClient = useQueryClient();
   const [openLists, setOpen] = useOpenListsStore(
     (x) => [x.open, x.setOpen],
     shallow
@@ -52,33 +53,31 @@ export const JournalDisclosure: React.FC<JournalDisclosureProps> = ({
             tabIndex={0}
             className={open ? "block" : "hidden"}
             onClick={async (e) => {
+              e.stopPropagation();
+              const data = {
+                userId: uid,
+                journalId: journal.id,
+                title: "Untitled",
+                createdAt: serverTimestamp(),
+                isPublished: false,
+                likeCount: 0,
+                bookmarkCount: 0,
+                shareCount: 0,
+              } as Article;
+              const firestore = getFirestore();
               try {
-                e.stopPropagation();
-                const data = {
-                  userId: uid,
-                  journalId: journal.id,
-                  title: "Untitled",
-                  createdAt: serverTimestamp(),
-                  isPublished: false,
-                  likeCount: 0,
-                  bookmarkCount: 0,
-                } as Article;
-                const firestore = getFirestore();
-                try {
-                  const { id } = await addDoc(
-                    collection(firestore, "articles"),
-                    data
-                  );
-                  mutate(
-                    `/api/journals/drafts?journalId=${journal.id}`,
-                    (old: Article[]) => [...(old || []), { ...data, id }],
-                    false
-                  );
-                  router.push(`/draft/${id}`);
-                } catch (error) {
-                  console.error(error);
-                }
-              } catch (error) {}
+                const { id } = await addDoc(
+                  collection(firestore, "articles"),
+                  data
+                );
+                queryClient.setQueryData<Article[]>(
+                  `/api/journals/drafts?journalId=${journal.id}`,
+                  (old) => [...(old || []), { ...data, id }]
+                );
+                router.push(`/draft/${id}`);
+              } catch (error) {
+                console.error(error);
+              }
             }}
           >
             <IconPlus className="text-gray-400" size={20} />

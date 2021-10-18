@@ -29,6 +29,5 @@ export default async function handler(
     return res.status(422).json({ message: "Draft id is required" });
   }
   const result = await getArticle(req.query.id as string);
-  console.log(result);
   res.json(result);
 }

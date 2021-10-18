@@ -17,7 +17,7 @@ export const Sidepanel: React.FC<SidepanelProps> = ({
 
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
-      <div>{trigger}</div>
+      {trigger}
       <Portal.Root>
         <Dialog.Overlay>
           <div className="fixed inset-0 h-screen w-screen bg-black/75" />
@@ -49,7 +49,7 @@ export const SidepanelTrigger: React.FC<SidepanelTriggerProps> = ({
   children,
 }) => {
   return (
-    <Dialog.Trigger className={className} as="div">
+    <Dialog.Trigger className={className} asChild>
       {children}
     </Dialog.Trigger>
   );

@@ -1,5 +1,4 @@
 import { doc, getFirestore, updateDoc } from "@firebase/firestore";
-import * as yup from "yup";
 import { IconLink } from "@tabler/icons";
 import { Form, Formik } from "formik";
 import {
@@ -8,12 +7,13 @@ import {
   NextPage,
 } from "next";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
-import useSWR, { mutate } from "swr";
+import React, { useEffect, useState } from "react";
+import { dehydrate, QueryClient, useQuery, useQueryClient } from "react-query";
+import * as yup from "yup";
 import { Button } from "../../components/button";
-import { baseURL } from "../../lib/constants";
 import { fetcher } from "../../lib/fetcher";
 import { Sidebar } from "../../modules/dashboard/sidebar/Sidebar";
+import { useOpenListsStore } from "../../modules/dashboard/sidebar/useOpenListsStore";
 import AutoSave from "../../modules/editor/AutoSave";
 import { DraftTable } from "../../modules/editor/DraftTable";
 import { Publish } from "../../modules/editor/Publish";
@@ -25,9 +25,41 @@ import { Article } from "../../types";
 const DraftPage: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = ({ id }) => {
-  const { data: draft } = useSWR<Article>(`/api/draft/${id}`);
+  const { data: draft } = useQuery<Article>(`/api/draft/${id}`);
   const [diff, setDiff] = useState<any | null>(null);
+  const [initial, setInitial] = useState(true);
+  const setOpen = useOpenListsStore((x) => x.setOpen);
   const { push } = useRouter();
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    if (draft?.journalId && initial) {
+      setOpen(draft.journalId, true);
+      setInitial(true);
+    }
+  }, [draft?.journalId, initial, setOpen]);
+
+  function mutateDraft(updates: Partial<Article>) {
+    queryClient.setQueryData<Article>(
+      `/api/draft/${id}`,
+      (old) =>
+        ({
+          ...old,
+          ...updates,
+        } as Article)
+    );
+    queryClient.setQueryData<Article[]>(
+      `/api/journals/drafts?journalId=${draft?.journalId}`,
+      (old) => {
+        return (old || []).map((article) => {
+          if (article.id === id) {
+            return { ...article, ...updates };
+          }
+          return article;
+        });
+      }
+    );
+  }
 
   return (
     <div className="flex">
@@ -53,7 +85,6 @@ const DraftPage: NextPage<
         onSubmit={async (values, { setFieldError }) => {
           try {
             const data = { ...diff };
-
             if (
               "tags" in diff &&
               (diff.tags !== null || diff.tags !== undefined)
@@ -69,44 +100,21 @@ const DraftPage: NextPage<
                   "Tags must be alphanumeric and comma separated"
                 );
               }
-              console.log(diff.tags, values.tags);
-
               if (tags === "") {
                 data.tags = [];
               }
-
               if (data.tags.length > 5) {
                 return setFieldError("tags", "Too many tags");
               }
             }
-
             try {
               console.log(data);
               await updateDoc(doc(getFirestore(), "articles", id), data);
             } catch (error) {
               console.error(error);
             }
-            console.log("successful");
-            mutate(
-              `/api/draft/${id}`,
-              (old: Article) => ({
-                ...old,
-                ...data,
-              }),
-              false
-            );
-            mutate(
-              `/api/journals/drafts?journalId=${draft?.journalId}`,
-              (old: Article[]) => {
-                old = old || [];
-                const index = old.findIndex((x) => x.id === id);
-                if (index) {
-                  old[index] = { ...old[index], ...data };
-                }
-                return old;
-              },
-              false
-            );
+            console.log("Saved successful");
+            mutateDraft(data);
           } catch {}
         }}
       >
@@ -161,18 +169,14 @@ export const getServerSideProps: GetServerSideProps = async ({
   req,
 }) => {
   const id = query.id?.toString();
-  const draft = await fetcher(`${baseURL}/api/draft/${id}`, req.headers.cookie);
-  const account = await fetcher(`${baseURL}/api/account`, req.headers.cookie);
+  const queryClient = new QueryClient();
+  await queryClient.prefetchQuery(
+    `/api/draft/${id}`,
+    fetcher(req.headers.cookie)
+  );
+  await queryClient.prefetchQuery(`/api/account`, fetcher(req.headers.cookie));
 
-  return {
-    props: {
-      id,
-      fallback: {
-        [`/api/draft/${id}`]: draft,
-        "/api/account": account,
-      },
-    },
-  };
+  return { props: { id, dehydratedState: dehydrate(queryClient) } };
 };
 
 export default DraftPage;

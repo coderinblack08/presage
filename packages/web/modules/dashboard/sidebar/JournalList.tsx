@@ -1,5 +1,5 @@
 import React from "react";
-import useSWR from "swr";
+import { useQuery } from "react-query";
 import { Journal } from "../../../types";
 import { JournalModal } from "../../journals/JournalModal";
 import { JournalDisclosure } from "./JournalDisclosure";
@@ -7,7 +7,7 @@ import { JournalDisclosure } from "./JournalDisclosure";
 interface JournalListProps {}
 
 export const JournalList: React.FC<JournalListProps> = ({}) => {
-  const { data } = useSWR<Journal[]>("/api/journals");
+  const { data } = useQuery<Journal[]>("/api/journals");
 
   return (
     <div className="px-3 py-4">

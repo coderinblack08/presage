@@ -1,15 +1,32 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MdShare } from "react-icons/md";
+import { useQuery } from "react-query";
 import { Button } from "../../components/button";
+import { CopyInput } from "../../components/input";
 import { Modal, ModalTrigger } from "../../components/modal";
+import { Article, Referral } from "../../types";
+import { useUser } from "../authentication/useUser";
 import { ListCheck } from "../landing-page/ListCheck";
+import { useShareMutation } from "./useShareMutation";
 
 interface ShareProps {
-  articleId: string;
+  article: Article | undefined;
 }
 
-export const Share: React.FC<ShareProps> = ({ articleId }) => {
-  const [opened, setOpened] = useState(false);
+export const Share: React.FC<ShareProps> = ({ article }) => {
+  const { uid } = useUser();
+  const [enabled, setEnabled] = useState(false);
+  const { mutate } = useShareMutation();
+  const { data: referral, isFetching } = useQuery<Referral>(
+    `/api/referrals/${article?.id}`,
+    { enabled }
+  );
+
+  useEffect(() => {
+    if (!referral && !isFetching && enabled) {
+      mutate(article?.id || "");
+    }
+  }, [article?.id, enabled, isFetching, mutate, referral]);
 
   return (
     <>
@@ -19,15 +36,14 @@ export const Share: React.FC<ShareProps> = ({ articleId }) => {
         trigger={
           <ModalTrigger>
             <Button
+              disabled={!uid}
               icon={<MdShare className="w-6 h-6" />}
               className="text-gray-500"
               color="transparent"
               size="none"
-              onClick={async () => {
-                setOpened(true);
-              }}
+              onClick={() => setEnabled(true)}
             >
-              <span className="font-medium">0</span>
+              <span className="font-medium">{article?.shareCount}</span>
             </Button>
           </ModalTrigger>
         }
@@ -39,7 +55,7 @@ export const Share: React.FC<ShareProps> = ({ articleId }) => {
               <li className="flex items-center space-x-3">
                 <ListCheck />
                 <span className="text-gray-600">
-                  You can earn up to 5 points per a unique referral link.
+                  You can earn up to 20 points per a unique referral link.
                 </span>
               </li>
               <li className="flex items-center space-x-3">
@@ -55,11 +71,15 @@ export const Share: React.FC<ShareProps> = ({ articleId }) => {
                 </span>
               </li>
             </ul>
-            <div className="mt-6">
-              {/* <CopyInput
-                url={`https://joinpresage.com/referral/${referral?.findReferral.code}`}
-              /> */}
-            </div>
+            {isFetching ? (
+              <div className="spinner mt-8" />
+            ) : (
+              <div className="mt-6">
+                <CopyInput
+                  url={`https://joinpresage.com/referral/${referral?.id}`}
+                />
+              </div>
+            )}
           </div>
         )}
       </Modal>

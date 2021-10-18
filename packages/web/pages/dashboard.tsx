@@ -1,8 +1,8 @@
 import { IconSearch } from "@tabler/icons";
 import { GetServerSideProps, NextPage } from "next";
 import React from "react";
+import { dehydrate, QueryClient } from "react-query";
 import { Input } from "../components/input";
-import { baseURL } from "../lib/constants";
 import { fetcher } from "../lib/fetcher";
 import { Layout } from "../modules/dashboard/Layout";
 
@@ -67,18 +67,13 @@ const Dashboard: NextPage = ({}) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const account = await fetcher(
-    `${baseURL}/api/account`,
-    context.req.headers.cookie
+  const queryClient = new QueryClient();
+  await queryClient.prefetchQuery(
+    "/api/account",
+    fetcher(context.req.headers.cookie)
   );
 
-  return {
-    props: {
-      fallback: {
-        "/api/account": account,
-      },
-    },
-  };
+  return { props: { dehydratedState: dehydrate(queryClient) } };
 };
 
 export default Dashboard;

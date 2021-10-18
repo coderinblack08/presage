@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { admin } from "../../../lib/firebase/admin";
-import { snapshotToArray } from "../../../lib/firebase/utils/snapshotToArray";
-import { verifySessionCookie } from "../../../lib/firebase/utils/verifySessionCookie";
+import { snapshotToArray } from "../../../lib/firebase/snapshotToArray";
+import { verifySessionCookie } from "../../../lib/firebase/verifySessionCookie";
 
 export default async function drafts(
   req: NextApiRequest,
@@ -16,6 +16,7 @@ export default async function drafts(
       .collection("articles")
       .where("userId", "==", uid)
       .where("journalId", "==", req.query.journalId)
+      .select("id", "title", "createdAt")
       .get();
     res.json(snapshotToArray(drafts));
   } catch (error) {

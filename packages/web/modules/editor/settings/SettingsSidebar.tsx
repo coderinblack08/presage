@@ -2,7 +2,7 @@ import { deleteDoc, doc, getFirestore } from "@firebase/firestore";
 import { IconTrash } from "@tabler/icons";
 import { useRouter } from "next/dist/client/router";
 import React from "react";
-import { mutate } from "swr";
+import { useQueryClient } from "react-query";
 import { Button } from "../../../components/button";
 import { InputField, TextareaField } from "../../../components/input";
 import { Article } from "../../../types";
@@ -13,6 +13,7 @@ interface SettingsSidebarProps {
 
 export const SettingsSidebar: React.FC<SettingsSidebarProps> = ({ draft }) => {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   return (
     <aside className="p-6 h-screen w-full max-w-sm border-l bg-white space-y-8 overflow-y-auto">
@@ -49,12 +50,13 @@ export const SettingsSidebar: React.FC<SettingsSidebarProps> = ({ draft }) => {
               );
               if (confirmed) {
                 await deleteDoc(doc(getFirestore(), "articles", draft.id));
-                mutate(
+                queryClient.setQueryData<Article[]>(
                   `/api/journals/drafts?journalId=${draft.journalId}`,
-                  (old: Article[]) =>
-                    (old || []).filter((x) => x.id !== draft.id),
-                  false
+                  (old) => (old || []).filter((x) => x.id !== draft.id)
                 );
+                queryClient.removeQueries(`/api/draft/${draft.id}`, {
+                  exact: true,
+                });
                 router.push("/dashboard");
               }
             } catch {}

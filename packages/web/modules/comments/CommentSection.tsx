@@ -1,24 +1,19 @@
-import {
-  addDoc,
-  collection,
-  getFirestore,
-  serverTimestamp,
-} from "@firebase/firestore";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { MdClose, MdSend } from "react-icons/md";
-import useSWR, { mutate } from "swr";
+import { useQuery } from "react-query";
 import { Button } from "../../components/button";
 import { Input } from "../../components/input";
 import { Article, Comment as IComment } from "../../types";
 import { useUser } from "../authentication/useUser";
 import { Comment } from "./Comment";
+import { useCommentMutation } from "./useCommentMutation";
 
 interface CommentSectionProps {
   article: Article | undefined;
 }
 
 export const CommentSection: React.FC<CommentSectionProps> = ({ article }) => {
-  const { uid, user } = useUser();
+  const { user } = useUser();
   const [comment, setComment] = useState("");
   const defaultCommentPath = useMemo(
     () => `/articles/${article?.id}/comments`,
@@ -27,9 +22,10 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ article }) => {
   const [commentPath, setCommentPath] = useState(defaultCommentPath);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [replyingComment, setReplyingComment] = useState<IComment | null>(null);
-  const { data: comments } = useSWR<IComment[]>(
+  const { data: comments } = useQuery<IComment[]>(
     `/api/comments?path=/articles/${article?.id}/comments`
   );
+  const { mutateAsync, isLoading } = useCommentMutation();
 
   useEffect(() => {
     if (replyingComment) {
@@ -40,7 +36,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ article }) => {
   return (
     <div>
       {replyingComment && (
-        <div className="inline-flex items-center space-x-4 bg-gray-100 rounded-lg py-2 px-4 border text-sm text-gray-600 mb-2">
+        <div className="inline-flex items-center space-x-4 bg-gray-100 rounded-lg py-2 px-4 border text-sm text-gray-600 mb-4">
           <span>
             Replying to <strong>@{replyingComment.user.username}</strong>
           </span>
@@ -58,24 +54,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ article }) => {
         className="flex items-center space-x-4"
         onSubmit={async (e) => {
           e.preventDefault();
-          const ref = collection(getFirestore(), commentPath);
-          const data = {
-            userId: uid,
-            user: {
-              profilePicture: user?.profilePicture,
-              displayName: user?.displayName,
-              username: user?.username,
-            },
-            message: comment,
-            replyCount: 0,
-            createdAt: serverTimestamp(),
-          };
-          const { id } = await addDoc(ref, data);
-          mutate(
-            `/api/comments?path=${commentPath}`,
-            (old: IComment[]) => [{ id, ...data }, ...(old || [])],
-            false
-          );
+          await mutateAsync({ comment, commentPath });
           setComment("");
           setReplyingComment(null);
           setCommentPath(defaultCommentPath);
@@ -100,6 +79,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ article }) => {
           color="black"
           size="large"
           className="h-full"
+          loading={isLoading}
         >
           Send
         </Button>

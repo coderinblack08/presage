@@ -1,8 +1,8 @@
 import to from "await-to-js";
 import { NextApiRequest, NextApiResponse } from "next";
 import { admin } from "../../../lib/firebase/admin";
-import { snapshotToArray } from "../../../lib/firebase/utils/snapshotToArray";
-import { verifySessionCookie } from "../../../lib/firebase/utils/verifySessionCookie";
+import { snapshotToArray } from "../../../lib/firebase/snapshotToArray";
+import { verifySessionCookie } from "../../../lib/firebase/verifySessionCookie";
 
 async function findJournals(req: NextApiRequest, res: NextApiResponse) {
   try {

@@ -1,5 +1,5 @@
 import React from "react";
-import useSWR from "swr";
+import { useQuery } from "react-query";
 import { Article } from "../../../types";
 import { DraftItem } from "./DraftItem";
 
@@ -8,7 +8,7 @@ interface DraftListProps {
 }
 
 export const DraftList: React.FC<DraftListProps> = ({ journalId }) => {
-  const { data } = useSWR<Article[]>(
+  const { data } = useQuery<Article[]>(
     `/api/journals/drafts?journalId=${journalId}`
   );
 

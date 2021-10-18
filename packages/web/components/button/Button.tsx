@@ -43,20 +43,23 @@ export type ButtonProps = DetailedHTMLProps<
   shadow?: boolean;
 };
 
-export const Button: React.FC<ButtonProps> = ({
-  size = "regular",
-  color = "white",
-  icon,
-  shadow = true,
-  loading,
-  rounded,
-  className,
-  children,
-  disabled,
-  outline,
-  ...props
-}) => {
-  return (
+export const Button = React.forwardRef(
+  (
+    {
+      size = "regular",
+      color = "white",
+      icon,
+      shadow = true,
+      loading,
+      rounded,
+      className,
+      children,
+      disabled,
+      outline,
+      ...props
+    }: ButtonProps,
+    ref
+  ) => (
     <button
       disabled={disabled || loading}
       className={`${icon && !children ? iconSizes[size] : sizes[size]} ${
@@ -98,5 +101,5 @@ export const Button: React.FC<ButtonProps> = ({
         </span>
       ) : null}
     </button>
-  );
-};
+  )
+);

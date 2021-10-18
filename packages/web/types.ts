@@ -35,6 +35,7 @@ export interface Article {
   userId: string;
   journalId: string;
   likeCount: number;
+  shareCount: number;
   bookmarkCount: number;
   createdAt: FieldValue;
 }
@@ -64,10 +65,14 @@ export interface Comment {
   id: string;
   userId: string;
   message: string;
-  user: {
-    profilePicture: string;
-    displayName: string;
-    username: string;
-  };
+  user: User;
   replyCount: number;
+}
+
+export interface Referral {
+  id: string;
+  userId: string;
+  articleId: string;
+  claimCount: number;
+  createdAt: FieldValue;
 }

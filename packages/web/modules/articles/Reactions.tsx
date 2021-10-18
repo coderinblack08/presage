@@ -6,10 +6,12 @@ import {
   MdFavorite,
   MdFavoriteBorder,
 } from "react-icons/md";
-import useSWR, { mutate } from "swr";
+import { useQuery, useQueryClient } from "react-query";
 import { Button } from "../../components/button";
 import { Article } from "../../types";
 import { useUser } from "../authentication/useUser";
+import { Share } from "./Share";
+import { useReactionMutation } from "./useReactionMutation";
 
 interface ReactionsProps {
   article: Article | undefined;
@@ -17,34 +19,22 @@ interface ReactionsProps {
 
 export const Reactions: React.FC<ReactionsProps> = ({ article }) => {
   const { uid } = useUser();
-  const { data: liked, mutate: mutateLiked } = useSWR(
+  const queryClient = useQueryClient();
+  const { data: liked } = useQuery(
     `/api/article/${article?.id}/is-reaction?type=liked`
   );
-  const { data: bookmarked, mutate: mutateBookmarked } = useSWR(
+  const { data: bookmarked } = useQuery(
     `/api/article/${article?.id}/is-reaction?type=bookmarked`
   );
   const values = { userId: uid, articleId: article?.id };
+  const { mutateAsync } = useReactionMutation();
 
   return (
     <div className="flex items-center space-x-8">
       <Button
+        disabled={!uid}
         onClick={async () => {
-          const ref = doc(getFirestore(), "reactions", `${uid}-${article?.id}`);
-          mutate(
-            `/api/article/${article?.id}`,
-            (old: Article) => ({
-              ...old,
-              likeCount: old.likeCount + (liked ? -1 : 1),
-            }),
-            false
-          );
-          mutateLiked(!liked, false);
-          console.log(liked);
-          if (liked) {
-            await setDoc(ref, { ...values, liked: false }, { merge: true });
-          } else {
-            await setDoc(ref, { ...values, liked: true }, { merge: true });
-          }
+          await mutateAsync({ values, type: "like" });
         }}
         icon={
           liked ? (
@@ -60,6 +50,7 @@ export const Reactions: React.FC<ReactionsProps> = ({ article }) => {
         <span className="font-medium">{article?.likeCount}</span>
       </Button>
       <Button
+        disabled={!uid}
         icon={
           bookmarked ? (
             <MdBookmark className="w-6 h-6" />
@@ -68,25 +59,7 @@ export const Reactions: React.FC<ReactionsProps> = ({ article }) => {
           )
         }
         onClick={async () => {
-          const ref = doc(getFirestore(), "reactions", `${uid}-${article?.id}`);
-          mutate(
-            `/api/article/${article?.id}`,
-            (old: Article) => ({
-              ...old,
-              bookmarkCount: old.bookmarkCount + (bookmarked ? -1 : 1),
-            }),
-            false
-          );
-          mutateBookmarked(!bookmarked, false);
-          if (bookmarked) {
-            await setDoc(
-              ref,
-              { ...values, bookmarked: false },
-              { merge: true }
-            );
-          } else {
-            await setDoc(ref, { ...values, bookmarked: true }, { merge: true });
-          }
+          await mutateAsync({ values, type: "bookmark" });
         }}
         className="text-gray-500"
         color="transparent"
@@ -94,6 +67,7 @@ export const Reactions: React.FC<ReactionsProps> = ({ article }) => {
       >
         <span className="font-medium">{article?.bookmarkCount}</span>
       </Button>
+      <Share article={article} />
     </div>
   );
 };

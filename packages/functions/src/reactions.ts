@@ -12,6 +12,10 @@ export const incrementReactionCount = functions.firestore
       updates.likeCount = firebaseAdmin.firestore.FieldValue.increment(1);
     }
 
+    if (data.shared) {
+      updates.shareCount = firebaseAdmin.firestore.FieldValue.increment(1);
+    }
+
     if (data.bookmarked) {
       updates.bookmarkCount = firebaseAdmin.firestore.FieldValue.increment(1);
     }
@@ -29,9 +33,10 @@ export const updateReactionCount = functions.firestore
     const keyDict: Record<string, string> = {
       like: "liked",
       bookmark: "bookmarked",
+      share: "shared",
     };
 
-    for (const key of ["bookmark", "like"]) {
+    for (const key of ["bookmark", "like", "share"]) {
       if (before[keyDict[key]] && after[keyDict[key]] === false) {
         updates[`${key}Count`] =
           firebaseAdmin.firestore.FieldValue.increment(-1);

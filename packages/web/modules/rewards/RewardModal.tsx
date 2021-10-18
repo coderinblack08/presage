@@ -1,11 +1,3 @@
-import {
-  addDoc,
-  collection,
-  getFirestore,
-  serverTimestamp,
-  setDoc,
-  doc,
-} from "@firebase/firestore";
 import { Form, Formik, validateYupSchema, yupToFormErrors } from "formik";
 import React from "react";
 import { MdAdd } from "react-icons/md";
@@ -17,6 +9,7 @@ import { Modal, ModalTrigger } from "../../components/modal";
 import { isServer } from "../../lib/constants";
 import { RewardType } from "../../types";
 import { useUser } from "../authentication/useUser";
+import { useRewardMutation } from "./useRewardMutation";
 
 interface RewardModalProps {}
 
@@ -32,6 +25,7 @@ const defaultValues = {
 
 export const RewardModal: React.FC<RewardModalProps> = ({}) => {
   const { uid } = useUser();
+  const { mutateAsync } = useRewardMutation();
 
   return (
     <Modal
@@ -97,32 +91,8 @@ export const RewardModal: React.FC<RewardModalProps> = ({}) => {
             return {};
           }}
           onSubmit={async (values) => {
-            try {
-              for (const key of Object.keys(values)) {
-                if (!values[key]) {
-                  delete values[key];
-                }
-              }
-              const data = {
-                ...values,
-                userId: uid,
-                createdAt: serverTimestamp(),
-              };
-              const { id } = await addDoc(
-                collection(getFirestore(), "rewards"),
-                data
-              );
-              if (values.type === RewardType.Message) {
-                await setDoc(
-                  doc(getFirestore(), "rewards", id, "secret", "message"),
-                  {
-                    message: values.message,
-                  }
-                );
-              }
-              window.localStorage.removeItem("autosave-reward");
-              setOpen(false);
-            } catch {}
+            await mutateAsync(values);
+            setOpen(false);
           }}
         >
           {({ isSubmitting, values, setFieldValue }) => (

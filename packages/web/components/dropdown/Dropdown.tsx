@@ -106,7 +106,7 @@ export const DropdownTrigger: React.FC<DropdownTriggerProps> = ({
   children,
 }) => {
   return (
-    <DropdownMenu.Trigger className={className}>
+    <DropdownMenu.Trigger className={className} asChild>
       {children}
     </DropdownMenu.Trigger>
   );

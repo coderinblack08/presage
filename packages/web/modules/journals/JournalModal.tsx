@@ -1,28 +1,24 @@
-import { collection, getFirestore } from "@firebase/firestore";
 import { generateRandomEmoji } from "@presage/common";
 import { IconFolderPlus } from "@tabler/icons";
-import { addDoc } from "firebase/firestore";
 import { Form, Formik } from "formik";
 import React from "react";
-import { mutate } from "swr";
 import * as yup from "yup";
 import { Button } from "../../components/button";
 import { InputField, TextareaField } from "../../components/input";
 import { Modal, ModalTrigger } from "../../components/modal";
-import { Journal } from "../../types";
-import { useUser } from "../authentication/useUser";
 import { EmojiSelect } from "./EmojiSelect";
+import { useCreateJournalMutation } from "./useJournalMutation";
 
 interface JournalModalProps {}
 
 export const JournalModal: React.FC<JournalModalProps> = ({}) => {
-  const { uid } = useUser();
+  const { mutateAsync } = useCreateJournalMutation();
 
   return (
     <Modal
       trigger={
         <ModalTrigger>
-          <button className="rounded-lg flex items-center justify-center p-2">
+          <button className="rounded-lg flex items-center p-2 w-full">
             <div className="p-1 rounded-lg shadow border bg-white flex items-center justify-center mr-3">
               <IconFolderPlus size={20} className="text-gray-400" />
             </div>
@@ -46,20 +42,8 @@ export const JournalModal: React.FC<JournalModalProps> = ({}) => {
             emoji: yup.string().required(),
           })}
           onSubmit={async (values) => {
-            try {
-              const firestore = getFirestore();
-              const data = { ...values, userId: uid };
-              const { id } = await addDoc(
-                collection(firestore, "journals"),
-                data
-              );
-              mutate(
-                "/api/journals",
-                (old: Journal[]) => [...old, { ...data, id }],
-                false
-              );
-              setOpen(false);
-            } catch {}
+            await mutateAsync(values);
+            setOpen(false);
           }}
         >
           {({ isSubmitting }) => (

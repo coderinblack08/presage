@@ -2,10 +2,20 @@ import { IdProvider } from "@radix-ui/react-id";
 import { DefaultSeo } from "next-seo";
 import type { AppProps } from "next/app";
 import React from "react";
-import { SWRConfig } from "swr";
+import { Hydrate, QueryClient, QueryClientProvider } from "react-query";
 import { fetcher } from "../lib/fetcher";
 import "../lib/firebase/firebase";
 import "../styles/globals.css";
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+      staleTime: 1000 * 60 * 5,
+      queryFn: fetcher(),
+    },
+  },
+});
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -40,9 +50,11 @@ function MyApp({ Component, pageProps }: AppProps) {
         }}
       />
       <IdProvider>
-        <SWRConfig value={{ fetcher, fallback: pageProps.fallback || {} }}>
-          <Component {...pageProps} />
-        </SWRConfig>
+        <QueryClientProvider client={queryClient}>
+          <Hydrate state={pageProps.dehydratedState}>
+            <Component {...pageProps} />
+          </Hydrate>
+        </QueryClientProvider>
       </IdProvider>
     </>
   );
