@@ -7,18 +7,19 @@ import {
   setDoc,
 } from "@firebase/firestore";
 import { useMutation, useQueryClient } from "react-query";
-import { Referral } from "../../types";
+import { Article, Referral } from "../../types";
 import { useUser } from "../authentication/useUser";
 
 export const useShareMutation = () => {
   const { uid } = useUser();
   const queryClient = useQueryClient();
   const mutation = useMutation(
-    async (articleId: string) => {
+    async (article: Article) => {
       const ref = collection(getFirestore(), "referrals");
       const data = {
         userId: uid,
-        articleId,
+        articleId: article.id,
+        authorId: article.userId,
         claimCount: 0,
         createdAt: serverTimestamp(),
       };
@@ -26,9 +27,9 @@ export const useShareMutation = () => {
       const reactionRef = doc(
         getFirestore(),
         "reactions",
-        `${uid}-${articleId}`
+        `${uid}-${article.id}`
       );
-      const values = { userId: uid, articleId };
+      const values = { userId: uid, articleId: article.id };
       await setDoc(reactionRef, { ...values, shared: true }, { merge: true });
       return { ...data, id } as Referral;
     },

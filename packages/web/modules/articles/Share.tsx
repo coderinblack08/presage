@@ -4,6 +4,7 @@ import { useQuery } from "react-query";
 import { Button } from "../../components/button";
 import { CopyInput } from "../../components/input";
 import { Modal, ModalTrigger } from "../../components/modal";
+import { baseURL } from "../../lib/constants";
 import { Article, Referral } from "../../types";
 import { useUser } from "../authentication/useUser";
 import { ListCheck } from "../landing-page/ListCheck";
@@ -23,10 +24,10 @@ export const Share: React.FC<ShareProps> = ({ article }) => {
   );
 
   useEffect(() => {
-    if (!referral && !isFetching && enabled) {
-      mutate(article?.id || "");
+    if (!referral && !isFetching && enabled && article) {
+      mutate(article);
     }
-  }, [article?.id, enabled, isFetching, mutate, referral]);
+  }, [enabled, isFetching, mutate, referral, JSON.stringify(article)]);
 
   return (
     <>
@@ -52,32 +53,41 @@ export const Share: React.FC<ShareProps> = ({ article }) => {
           <div>
             <hr />
             <ul className="mt-6 space-y-3">
-              <li className="flex items-center space-x-3">
-                <ListCheck />
+              <li className="flex space-x-3">
+                <div className="mt-1">
+                  <ListCheck />
+                </div>
                 <span className="text-gray-600">
                   You can earn up to 20 points per a unique referral link.
                 </span>
               </li>
-              <li className="flex items-center space-x-3">
-                <ListCheck />
+              <li className="flex space-x-3">
+                <div className="mt-1">
+                  <ListCheck />
+                </div>
                 <span className="text-gray-600">
-                  Every time you refer a friend, you will earn 1 point.
+                  Every time you refer a friend (they have to be logged in), you
+                  will earn 1 point.
                 </span>
               </li>
-              <li className="flex items-center space-x-3">
-                <ListCheck />
+              <li className="flex space-x-3">
+                <div className="mt-1">
+                  <ListCheck />
+                </div>
                 <span className="text-gray-600">
                   Use points you earn to claim rewards.
                 </span>
               </li>
             </ul>
             {isFetching ? (
-              <div className="spinner mt-8" />
+              <div className="spinner py-8" />
             ) : (
-              <div className="mt-6">
-                <CopyInput
-                  url={`https://joinpresage.com/referral/${referral?.id}`}
-                />
+              <div className="mt-8">
+                <p className="mb-1 font-bold">
+                  {referral?.claimCount} reader
+                  {referral?.claimCount === 1 ? " has" : "s have"} been referred
+                </p>
+                <CopyInput url={`${baseURL}/referral/${referral?.id}`} />
               </div>
             )}
           </div>

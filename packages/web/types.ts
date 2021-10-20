@@ -73,6 +73,12 @@ export interface Referral {
   id: string;
   userId: string;
   articleId: string;
+  authorId: string;
   claimCount: number;
+  referredUsers?: string[];
   createdAt: FieldValue;
+}
+
+export interface Points {
+  count: number;
 }

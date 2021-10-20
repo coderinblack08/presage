@@ -67,7 +67,7 @@ service cloud.firestore {
     }
 
     match /referrals/{referalId} {
-      allow write: if willBeOwner() && request.resource.data.claimCount == 0;
+      allow create: if willBeOwner() && request.resource.data.claimCount == 0;
       allow read;
     }
   }

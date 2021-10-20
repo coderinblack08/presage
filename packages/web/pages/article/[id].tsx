@@ -2,19 +2,19 @@ import { GetServerSideProps, NextPage } from "next";
 import React, { useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { MdClose, MdPersonAdd, MdShare } from "react-icons/md";
-import { dehydrate, QueryClient, useQuery, useQueryClient } from "react-query";
+import { dehydrate, QueryClient, useQuery } from "react-query";
 import { Button } from "../../components/button";
-import { baseURL } from "../../lib/constants";
 import { fetcher } from "../../lib/fetcher";
 import { useScreen } from "../../lib/hooks/useScreen";
 import { Navbar } from "../../modules/articles/Navbar";
 import { Reactions } from "../../modules/articles/Reactions";
 import { CommentSection } from "../../modules/comments/CommentSection";
-import { Article } from "../../types";
+import { Article, Points } from "../../types";
 
 const ArticlePage: NextPage<{ id: string }> = ({ id }) => {
   const { isSmallerThanTablet } = useScreen();
   const { data: article } = useQuery<Article>(`/api/article/${id}`);
+  const { data: points } = useQuery<Points>(`/api/points/${article?.userId}`);
 
   useEffect(() => {
     const hideReferToast = window.localStorage.getItem("hide-refer-toast");
@@ -83,9 +83,9 @@ const ArticlePage: NextPage<{ id: string }> = ({ id }) => {
             ) : null}
           </div>
           <div className="mt-10 sm:mt-16 flex flex-col xs:flex-row xs:items-center xs:justify-between">
-            <a className="flex items-center space-x-3.5">
+            <a className="flex items-center space-x-2 sm:space-x-3.5">
               <img
-                className={`object-cover w-8 h-8 sm:w-10 sm:h-10 rounded-xl ${
+                className={`object-cover w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl ${
                   !article?.user?.profilePicture ? "border shadow-sm" : ""
                 }`}
                 src={
@@ -119,7 +119,7 @@ const ArticlePage: NextPage<{ id: string }> = ({ id }) => {
                   </svg>
                 }
               >
-                0 Points
+                {points?.count} Points
               </Button>
               <Button
                 size={isSmallerThanTablet ? "small" : "regular"}
