@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useQuery } from "react-query";
 import shallow from "zustand/shallow";
 import { Comment as IComment } from "../../types";
+import { ProfilePicture } from "../authentication/ProfilePicture";
 import { useMutationEventStore } from "./useMutationEventStore";
 
 interface CommentProps {
@@ -46,13 +47,7 @@ export const Comment: React.FC<CommentProps> = ({
     <div>
       <div className="flex space-x-5">
         <div className="flex flex-col items-center">
-          <img
-            className={`object-cover w-12 h-12 rounded-xl ${
-              !comment.user?.profilePicture ? "border shadow-sm" : ""
-            }`}
-            src={comment.user?.profilePicture || "/static/default-picture.svg"}
-            alt={comment.user?.displayName}
-          />
+          <ProfilePicture user={comment.user} size="large" />
           {showReplies ? <div className="h-full w-[2px] bg-gray-100" /> : null}
         </div>
         <div>

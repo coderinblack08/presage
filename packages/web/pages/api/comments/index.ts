@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import * as firebaseAdmin from "firebase-admin";
 import { admin } from "../../../lib/firebase/admin";
 import { snapshotToArray } from "../../../lib/firebase/snapshotToArray";
+import { innerJoin } from "../../../lib/firebase/innerJoin";
 
 async function findComments(req: NextApiRequest, res: NextApiResponse) {
   const { path } = req.query;
@@ -23,14 +24,9 @@ async function findComments(req: NextApiRequest, res: NextApiResponse) {
           .get()
       )
     : [];
-  const idToIndex = users.reduce(
-    (acc, cur, idx) => ({ ...acc, [cur.id]: idx }),
-    {}
+  res.json(
+    innerJoin(comments, users, { joinKey: "userId", fieldName: "user" })
   );
-  comments.forEach((comment, index) => {
-    comments[index].user = users[idToIndex[comment.userId]];
-  });
-  res.json(comments);
 }
 
 export default async function handler(

@@ -57,7 +57,7 @@ service cloud.firestore {
     }
 
     match /rewards/{rewardId} {
-      allow write: if willBeOwner() && (request.resource.data.type in ["Form", "Shoutout", "Message"]);
+      allow write: if willBeOwner() && (request.resource.data.type in ["Form", "Shoutout", "Message"]) && request.resource.data.points > 0;
       allow read: if true;
     }
 
@@ -68,6 +68,17 @@ service cloud.firestore {
 
     match /referrals/{referalId} {
       allow create: if willBeOwner() && request.resource.data.claimCount == 0;
+      allow read;
+    }
+
+    function canClaimReward(userId) {
+      let reward = get(/databases/$(database)/documents/rewards/$(request.resource.data.rewardId)).data;
+      let points = get(/databases/$(database)/documents/users/$(userId)/points/$(reward.userId)).data;
+      return reward.points <= points.count && userId == request.auth.uid;
+    }
+
+    match /users/{userId}/claimedRewards/{id} {
+      allow write: if canClaimReward(userId);
       allow read;
     }
   }

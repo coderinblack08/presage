@@ -13,7 +13,7 @@ export const DraftList: React.FC<DraftListProps> = ({ journalId }) => {
   );
 
   return (
-    <ul className={`space-y-1 ${data?.length ? "mb-2" : ""}`}>
+    <ul className={`space-y-1 ${data?.length ? "mb-1" : ""}`}>
       {data?.map((draft) => (
         <li key={draft.id}>
           <DraftItem draft={draft} />

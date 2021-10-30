@@ -1,6 +1,7 @@
 import { IconSelector } from "@tabler/icons";
 import React from "react";
 import { HiLockClosed, HiUserCircle } from "react-icons/hi";
+import { useQueryClient } from "react-query";
 import {
   Dropdown,
   DropdownDivider,
@@ -8,12 +9,14 @@ import {
   DropdownTrigger,
 } from "../../../components/dropdown";
 import { logout } from "../../authentication/logout";
+import { ProfilePicture } from "../../authentication/ProfilePicture";
 import { useUser } from "../../authentication/useUser";
 
 interface AccountDropdownProps {}
 
 export const AccountDropdown: React.FC<AccountDropdownProps> = ({}) => {
   const { user } = useUser();
+  const queryClient = useQueryClient();
 
   return (
     <Dropdown
@@ -23,12 +26,9 @@ export const AccountDropdown: React.FC<AccountDropdownProps> = ({}) => {
         <DropdownTrigger>
           <button className="cursor-pointer flex items-center justify-between px-3 py-5 border-t text-left w-full">
             <div className="flex space-x-4 items-center">
-              <img
-                className={`w-12 h-12 rounded-xl ${
-                  !user?.profilePicture ? "border shadow-sm" : ""
-                }`}
-                src={user?.profilePicture || "/static/default-picture.svg"}
-                alt={user?.displayName}
+              <ProfilePicture
+                className="flex-shrink-0 !w-12 !h-12"
+                user={user!}
               />
               <div>
                 <h6 className="font-bold">{user?.displayName}</h6>
@@ -49,7 +49,10 @@ export const AccountDropdown: React.FC<AccountDropdownProps> = ({}) => {
         Account
       </DropdownItem>
       <DropdownItem
-        onClick={logout}
+        onClick={async () => {
+          await logout();
+          queryClient.clear();
+        }}
         icon={<HiLockClosed className="w-5 h-5 text-gray-500" />}
       >
         Sign Out

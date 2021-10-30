@@ -10,7 +10,7 @@ interface SidebarProps {}
 
 export const Sidebar: React.FC<SidebarProps> = ({}) => {
   return (
-    <nav className="flex flex-col justify-between bg-[#FAFAF9] max-w-xs h-screen overflow-y-scroll w-full border-r border-[#EEEEEE]">
+    <nav className="flex flex-col justify-between bg-[#FAFAF9] max-w-xs h-screen overflow-y-scroll w-full border-r">
       <div>
         <div className="px-3 pt-6">
           <Logo />

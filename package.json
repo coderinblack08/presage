@@ -11,7 +11,8 @@
   },
   "scripts": {
     "diff": "lerna diff",
-    "new-version": "lerna version --conventional-commits --yes"
+    "new-version": "lerna version --conventional-commits --yes",
+    "stop": "npx kill-port 4000 8080 9099 9199 5001"
   },
   "devDependencies": {
     "lerna": "^4.0.0"

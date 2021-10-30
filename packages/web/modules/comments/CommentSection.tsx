@@ -4,6 +4,7 @@ import { useQuery } from "react-query";
 import { Button } from "../../components/button";
 import { Input } from "../../components/input";
 import { Article, Comment as IComment } from "../../types";
+import { ProfilePicture } from "../authentication/ProfilePicture";
 import { useUser } from "../authentication/useUser";
 import { Comment } from "./Comment";
 import { useCommentMutation } from "./useCommentMutation";
@@ -60,13 +61,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ article }) => {
           setCommentPath(defaultCommentPath);
         }}
       >
-        <img
-          className={`object-cover w-12 h-12 rounded-xl ${
-            !user?.profilePicture ? "border shadow-sm" : ""
-          }`}
-          src={user?.profilePicture || "/static/default-picture.svg"}
-          alt={user?.displayName}
-        />
+        <ProfilePicture user={user!} size="large" />
         <Input
           ref={inputRef}
           value={comment}

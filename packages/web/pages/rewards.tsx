@@ -6,6 +6,7 @@ import { Button } from "../components/button";
 import { fetcher } from "../lib/fetcher";
 import { Layout } from "../modules/dashboard/Layout";
 import { RewardModal } from "../modules/rewards/RewardModal";
+import { RewardTabs } from "../modules/rewards/RewardTabs";
 import { Reward } from "../types";
 
 const RewardsPage: NextPage = () => {
@@ -14,12 +15,7 @@ const RewardsPage: NextPage = () => {
   return (
     <Layout>
       <div className="w-full">
-        <nav className="px-5 pt-4 border-b">
-          <div className="flex space-x-8 lg:space-x-12 max-w-5xl mx-auto w-full">
-            <a className="font-bold border-b-2 border-gray-600 pb-3">Claimed</a>
-            <a className="text-gray-500">Created</a>
-          </div>
-        </nav>
+        <RewardTabs />
         <main className="px-5 py-16 max-w-5xl w-full mx-auto">
           <h1 className="text-2xl font-bold">Manage Rewards</h1>
           <p className="text-gray-500 mt-1">
@@ -50,7 +46,9 @@ const RewardsPage: NextPage = () => {
                           <input type="checkbox" />
                         </td>
                         <td>{reward.name}</td>
-                        <td className="truncate">{reward.description}</td>
+                        <td className="truncate max-w-md">
+                          {reward.description}
+                        </td>
                         <td>{reward.points}</td>
                         <td className="flex items-center pr-0 space-x-1">
                           <Button

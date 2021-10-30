@@ -125,7 +125,8 @@ export const RewardModal: React.FC<RewardModalProps> = ({}) => {
               {({
                 [RewardType.Message]: (
                   <TextareaField
-                    label="Additional Information"
+                    label="Reward Information"
+                    description="Only shown to those who claim the reward"
                     name="message"
                     placeholder="Your message..."
                     outline

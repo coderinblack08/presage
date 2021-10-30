@@ -80,5 +80,21 @@ export interface Referral {
 }
 
 export interface Points {
+  id: string;
   count: number;
+  user?: User;
+}
+
+export enum ClaimedRewardStatus {
+  Pending = "Pending",
+  Successful = "Successful",
+  Failed = "Failed",
+}
+
+export interface ClaimedReward {
+  id: string;
+  rewardId: string;
+  reward?: Reward;
+  status: ClaimedRewardStatus;
+  createdAt: FieldValue;
 }
