@@ -22,7 +22,11 @@ export const ClaimedRewardRow: React.FC<ClaimedRewardRowProps> = ({ cr }) => {
         <td>{cr.reward?.name}</td>
         <td className="truncate max-w-md">{cr.reward?.description}</td>
         <td>{cr.reward?.points}</td>
-        <td>{cr.status}</td>
+        <td>
+          <span className="bg-gray-200 text-gray-600 px-3 py-1.5 font-bold text-sm rounded-lg">
+            {cr.status}
+          </span>
+        </td>
       </tr>
       <Modal
         visible={open}
