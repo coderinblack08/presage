@@ -1,17 +1,15 @@
 import { Transition } from "@headlessui/react";
-import * as Portal from "@radix-ui/react-portal";
 import { Close } from "@material-ui/icons";
 import * as Dialog from "@radix-ui/react-dialog";
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 
 interface ModalProps {
-  trigger: React.ReactNode;
+  trigger?: React.ReactNode;
   title: string;
   description: React.ReactNode | string;
-  children: (props: {
-    open: boolean;
-    setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  }) => React.ReactNode;
+  children: (props: { open: boolean; setOpen: any }) => React.ReactNode;
+  visible?: boolean;
+  onCancel?: any;
   className?: string;
 }
 
@@ -21,17 +19,32 @@ export const Modal: React.FC<ModalProps> = ({
   trigger,
   children,
   className,
+  visible,
+  onCancel,
 }) => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(visible ? visible : false);
+
+  useEffect(() => {
+    if (visible !== undefined) {
+      setOpen(visible);
+    }
+  }, [visible]);
 
   function stopPropagation(e: React.MouseEvent) {
     e.stopPropagation();
   }
 
+  function handleOpenChange(open: boolean) {
+    if (visible !== undefined && !open) {
+      onCancel();
+    } else {
+      setOpen(open);
+    }
+  }
+
   return (
-    <Dialog.Root open={open} onOpenChange={setOpen}>
+    <Dialog.Root open={open} onOpenChange={handleOpenChange}>
       {trigger}
-      {/* <Portal.Root> */}
       <Transition show={open}>
         <Dialog.Overlay forceMount>
           <Transition.Child
@@ -64,8 +77,8 @@ export const Modal: React.FC<ModalProps> = ({
           >
             <div className="fixed z-50 inset-0">
               <div
-                className="flex items-center justify-center min-h-screen pt-4 px-6 pb-20 text-center"
-                onClick={() => setOpen(false)}
+                className="flex items-center justify-center min-h-screen p-4 text-center"
+                onClick={() => handleOpenChange(false)}
               >
                 <div
                   className={`relative z-50 inline-block w-full max-w-lg overflow-hidden text-left align-middle transition-all transform bg-white rounded-xl p-6 ${className}`}
@@ -78,18 +91,18 @@ export const Modal: React.FC<ModalProps> = ({
                     {description}
                   </Dialog.Description>
                   <div className="mt-6">{children({ open, setOpen })}</div>
-                  <Dialog.Close asChild className="absolute top-0 right-0 m-3">
-                    <button>
-                      <Close className="text-gray-400" fontSize="small" />
-                    </button>
-                  </Dialog.Close>
+                  <button
+                    className="absolute top-0 right-0 m-3"
+                    onClick={() => handleOpenChange(false)}
+                  >
+                    <Close className="text-gray-400" fontSize="small" />
+                  </button>
                 </div>
               </div>
             </div>
           </Transition.Child>
         </Dialog.Content>
       </Transition>
-      {/* </Portal.Root> */}
     </Dialog.Root>
   );
 };

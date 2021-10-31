@@ -1,10 +1,11 @@
-import { NextPage } from "next";
+import { GetServerSideProps, NextPage } from "next";
 import React from "react";
-import { MdLocalActivity } from "react-icons/md";
-import { useQuery } from "react-query";
+import { dehydrate, QueryClient, useQuery } from "react-query";
+import { fetcher } from "../lib/fetcher";
 import { useScreen } from "../lib/hooks/useScreen";
 import { ProfilePicture } from "../modules/authentication/ProfilePicture";
 import { Layout } from "../modules/dashboard/Layout";
+import { ClaimedRewardRow } from "../modules/rewards/ClaimedRewardRow";
 import { RewardTabs } from "../modules/rewards/RewardTabs";
 import { ClaimedReward, Points } from "../types";
 
@@ -16,8 +17,10 @@ const ClaimedRewardsPage: NextPage = () => {
   return (
     <Layout>
       <div className="w-full">
-        <RewardTabs />
-        <main className="px-5 py-16 max-w-5xl w-full mx-auto">
+        <div className="sticky top-0">
+          <RewardTabs />
+        </div>
+        <main className="px-5 py-16 max-w-5xl w-full mx-auto overflow-y-auto">
           <h1 className="text-xl font-bold">Claimed Rewards</h1>
           <p className="text-gray-500 mt-1">
             View all your claimed rewards and points here.{" "}
@@ -40,17 +43,7 @@ const ClaimedRewardsPage: NextPage = () => {
                   </thead>
                   <tbody className="divide-y divide-gray-200/75">
                     {data?.map((cr) => (
-                      <tr key={cr.id}>
-                        <td className="pl-5 pr-2">
-                          <input type="checkbox" />
-                        </td>
-                        <td>{cr.reward?.name}</td>
-                        <td className="truncate max-w-md">
-                          {cr.reward?.description}
-                        </td>
-                        <td>{cr.reward?.points}</td>
-                        <td>{cr.status}</td>
-                      </tr>
+                      <ClaimedRewardRow key={cr.id} cr={cr} />
                     ))}
                   </tbody>
                 </table>
@@ -117,6 +110,18 @@ const ClaimedRewardsPage: NextPage = () => {
       </div>
     </Layout>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+  const queryClient = new QueryClient();
+  await queryClient.prefetchQuery(
+    "/api/rewards/claimed",
+    fetcher(req.headers.cookie)
+  );
+  await queryClient.prefetchQuery("/api/points", fetcher(req.headers.cookie));
+  await queryClient.prefetchQuery("/api/account", fetcher(req.headers.cookie));
+
+  return { props: { dehydratedState: dehydrate(queryClient) } };
 };
 
 export default ClaimedRewardsPage;

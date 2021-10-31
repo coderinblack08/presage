@@ -6,7 +6,7 @@ interface LayoutProps {}
 export const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <div className="flex">
-      <div className="hidden lg:block flex-shrink-0">
+      <div className="sticky top-0 h-screen hidden lg:block flex-shrink-0">
         <Sidebar />
       </div>
       {children}

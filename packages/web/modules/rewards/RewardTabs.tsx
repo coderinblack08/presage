@@ -12,7 +12,7 @@ export const RewardTabs: React.FC<RewardTabsProps> = ({}) => {
     pathname === path ? focusedStyles : unfocusedStyles;
 
   return (
-    <nav className="px-5 pt-4 border-b">
+    <nav className="px-5 pt-4 border-b bg-white">
       <div className="flex space-x-8 lg:space-x-12 max-w-5xl mx-auto w-full">
         <Link href="/claimed-rewards">
           <a className={getClassNames("/claimed-rewards")}>Claimed</a>
