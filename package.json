@@ -3,16 +3,16 @@
   "private": true,
   "workspaces": {
     "packages": [
-      "packages/**"
+      "packages/*"
     ],
     "nohoist": [
-      "**/**"
+      "**/functions",
+      "**/functions/**"
     ]
   },
   "scripts": {
     "diff": "lerna diff",
-    "new-version": "lerna version --conventional-commits --yes",
-    "stop": "npx kill-port 4000 8080 9099 9199 5001"
+    "new-version": "lerna version --conventional-commits --yes"
   },
   "devDependencies": {
     "lerna": "^4.0.0"

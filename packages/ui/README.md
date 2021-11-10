@@ -1,90 +1,46 @@
+# Getting Started with Create React App
 
-<p align="center">
-  <a href="https://www.chromatic.com/">
-    <img alt="Chromatic" src="https://avatars2.githubusercontent.com/u/24584319?s=200&v=4" width="60" />
-  </a>
-</p>
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-<h1 align="center">
-  Chromatic's Intro to Storybook React template
-</h1>
+## Available Scripts
 
-This template ships with the main React and Storybook configuration files you'll need to get up and running fast.
+In the project directory, you can run:
 
-## 🚅  Quick start
+### `yarn start`
 
-1.  **Create the application.**
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-    Use [degit](https://github.com/Rich-Harris/degit) to get this template.
+The page will reload if you make edits.\
+You will also see any lint errors in the console.
 
-    ```shell
-    # Clone the template
-    npx degit chromaui/intro-storybook-react-template taskbox
-    ```
+### `yarn test`
 
-1.  **Install the dependencies.**
+Launches the test runner in the interactive watch mode.\
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-    Navigate into your new site’s directory and install the necessary dependencies.
+### `yarn build`
 
-    ```shell
-    # Navigate to the directory
-    cd taskbox/
+Builds the app for production to the `build` folder.\
+It correctly bundles React in production mode and optimizes the build for the best performance.
 
-    # Install the dependencies
-    yarn
-    ```
+The build is minified and the filenames include the hashes.\
+Your app is ready to be deployed!
 
-1.  **Open the source code and start editing!**
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-    Open the `taskbox` directory in your code editor of choice and building your first component!
+### `yarn eject`
 
-1.  **Browse your stories!**
+**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
 
-    Run `yarn storybook` to see your component's stories at `http://localhost:6006`
+If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-## 🔎 What's inside?
+Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
-A quick look at the top-level files and directories included with this template.
+You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-    .
-    ├── .storybook
-    ├── node_modules
-    ├── public
-    ├── src
-    ├── .env
-    ├── .gitignore
-    ├── LICENSE
-    ├── package.json
-    ├── yarn.lock
-    └── README.md
+## Learn More
 
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-1.  **`.storybook`**: This directory contains Storybook's [configuration](https://storybook.js.org/docs/react/configure/overview) files.
-
-2.  **`node_modules`**: This directory contains all of the modules of code that your project depends on (npm packages).
-
-3.  **`public`**: This directory will contain the development and production build of the site.
-
-4.  **`src`**: This directory will contain all of the code related to what you will see on your application.
-
-5.  **`.env`**: Simple text configuration file for controlling the application's environment constants.
-
-6.  **`.gitignore`**: This file tells git which files it should not track or maintain during the development process of your project.
-
-7. **`LICENSE`**: The template is licensed under the MIT licence.
-
-8. **`package.json`**: Standard manifest file for Node.js projects, which typically includes project specific metadata (such as the project's name, the author among other information). It's based on this file that npm will know which packages are necessary to the project.
-
-9. **`yarn.lock`**: This is an automatically generated file based on the exact versions of your npm dependencies that were installed for your project. **(Do not change it manually).**
-
-10. **`README.md`**: A text file containing useful reference information about the project.
-
-## Contribute
-
-If you encounter an issue with the template, we encourage you to open an issue in this template's repository.
-
-## Learning Storybook
-
-1. Read our introductory tutorial at [Learn Storybook](https://storybook.js.org/tutorials/intro-to-storybook/react/en/get-started/).
-2. Learn how to transform your component libraries into design systems in our [Design Systems for Developers](https://storybook.js.org/tutorials/design-systems-for-developers/) tutorial.
-2. See our official documentation at [Storybook](https://storybook.js.org/).
+To learn React, check out the [React documentation](https://reactjs.org/).
