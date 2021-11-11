@@ -3,7 +3,7 @@ module.exports = {
   addons: [
     "@storybook/addon-links",
     "@storybook/addon-essentials",
-    "@storybook/addon-postcss",
+    // "@storybook/addon-postcss",
   ],
   webpackFinal: async (config, { configType }) => {
     const cssRule = config.module.rules.find((rule) =>

@@ -16,5 +16,8 @@
   },
   "devDependencies": {
     "lerna": "^4.0.0"
+  },
+  "dependencies": {
+    "postcss": "^8.3.11"
   }
 }

@@ -6,18 +6,19 @@ import React, {
 
 const variants = {
   size: {
-    sm: "py-1.5 px-5 rounded-lg text-base",
-    md: "py-2 px-6 rounded-lg text-base",
-    lg: "py-2 px-7 rounded-lg text-lg",
+    sm: "py-1.5 px-5 rounded-xl text-base",
+    md: "py-2 px-6 rounded-xl text-base",
+    lg: "py-2 px-7 rounded-xl text-lg",
   },
   color: {
     primary: {
       filled: "bg-purple-500 hover:bg-purple-400 text-white",
-      outline: "bg-purple-500/20 text-purple-500",
+      outline: "bg-purple-500/10 text-purple-500",
     },
     secondary: {
       filled: "bg-gray-800 hover:bg-gray-700 text-gray-100",
-      outline: "bg-transparent border-2 border-white/10 hover:border-white/20",
+      outline:
+        "bg-transparent border-2 border-gray-100/5 hover:border-gray-100/10",
     },
   },
 };
