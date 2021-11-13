@@ -12,7 +12,7 @@ interface MenuLinksProps {}
 
 export const links = [
   {
-    name: "Home",
+    name: "Editor",
     icon: <IconSmartHome size={22} stroke={1.5} />,
     href: "/dashboard",
   },

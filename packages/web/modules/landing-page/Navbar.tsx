@@ -2,13 +2,14 @@ import { Avatar, Menu, MenuDivider, MenuItem } from "@presage/ui";
 import Image from "next/image";
 import React from "react";
 import { useQuery } from "react-query";
+import { User } from "../../lib/types";
 import logo from "../../public/static/logo.svg";
 import { LoginButton } from "./LoginButton";
 
 interface NavbarProps {}
 
 export const Navbar: React.FC<NavbarProps> = ({}) => {
-  const { data: me } = useQuery("/auth/me");
+  const { data: me } = useQuery<User>("/auth/me");
 
   return (
     <nav className="relative z-20 flex items-center justify-between max-w-7xl mx-auto px-5 lg:px-10 py-5">
@@ -27,7 +28,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
                 align="end"
                 trigger={
                   <button>
-                    <Avatar src={me?.profilePicture} name={me?.displayName} />
+                    <Avatar src={me?.profilePicture!} name={me?.displayName!} />
                   </button>
                 }
               >

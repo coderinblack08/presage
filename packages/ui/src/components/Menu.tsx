@@ -11,6 +11,7 @@ export interface MenuProps {
   alignOffset?: number;
   trigger: React.ReactNode;
   className?: string;
+  subMenu?: boolean;
   sideOffset?: number;
 }
 
@@ -23,11 +24,16 @@ export const Menu: React.FC<MenuProps> = ({
   alignOffset,
   sideOffset = 12,
   children,
+  subMenu = false,
   ...props
 }) => {
   return (
     <DropdownMenu.Root open={open}>
-      <DropdownMenu.Trigger asChild>{trigger}</DropdownMenu.Trigger>
+      {subMenu ? (
+        trigger
+      ) : (
+        <DropdownMenu.Trigger asChild>{trigger}</DropdownMenu.Trigger>
+      )}
       <DropdownMenu.Content
         sideOffset={sideOffset}
         alignOffset={alignOffset}
@@ -37,7 +43,7 @@ export const Menu: React.FC<MenuProps> = ({
         {...props}
       >
         <div
-          className={`border border-gray-700/50 rounded-xl w-60 overflow-hidden py-1.5 ${className}`}
+          className={`bg-gray-900 border border-gray-700/50 rounded-xl w-60 overflow-hidden py-1.5 ${className}`}
         >
           {children}
         </div>
@@ -54,6 +60,7 @@ interface MenuItemProps {
   icon?: React.ReactNode;
   disabled?: boolean;
   href?: string;
+  trigger?: boolean;
   onClick?: (event: Event) => void;
 }
 
@@ -62,15 +69,18 @@ export const MenuItem: React.FC<MenuItemProps> = ({
   children,
   onClick,
   disabled,
+  trigger = false,
   href,
   ...props
 }) => {
+  const T = !trigger ? DropdownMenu.Item : DropdownMenu.TriggerItem;
+
   return (
-    <DropdownMenu.Item
+    <T
       disabled={disabled}
       onSelect={(e) => {
         if (href) window.location.href = href;
-        if (onClick) onClick(e);
+        if (onClick) onClick(e as any);
       }}
       className={`group ${
         icon ? "flex items-center" : "block"
@@ -88,6 +98,6 @@ export const MenuItem: React.FC<MenuItemProps> = ({
           {children}
         </div>
       </button>
-    </DropdownMenu.Item>
+    </T>
   );
 };
