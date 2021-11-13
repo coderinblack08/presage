@@ -1,12 +1,12 @@
 import { Button } from "@presage/ui";
 import React from "react";
-import { baseURL } from "../../lib/constants";
+import { apiBaseURL } from "../../lib/constants";
 
 interface LoginButtonProps {}
 
 export const LoginButton: React.FC<LoginButtonProps> = ({}) => {
   return (
-    <a href={`${baseURL}/auth/google`}>
+    <a href={`${apiBaseURL}/auth/google`}>
       <Button
         size="sm"
         color="secondary"

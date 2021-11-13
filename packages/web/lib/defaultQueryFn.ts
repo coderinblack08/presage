@@ -1,12 +1,12 @@
 import axios from "axios";
 import { QueryFunctionContext } from "react-query";
-import { baseURL } from "./constants";
+import { apiBaseURL } from "./constants";
 
 export const defaultQueryFn = (cookies?: any) => async ({
   queryKey,
 }: QueryFunctionContext<any>) => {
-  console.log(`${baseURL}${queryKey[0]}`);
-  const result = await axios.get(`${baseURL}${queryKey[0]}`, {
+  console.log(`${apiBaseURL}${queryKey[0]}`);
+  const result = await axios.get(`${apiBaseURL}${queryKey[0]}`, {
     headers: cookies ? { cookie: cookies } : undefined,
     withCredentials: true,
   });

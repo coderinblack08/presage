@@ -1,9 +1,9 @@
 import { Menu, MenuDivider, MenuItem as UiMenuItem } from "@presage/ui";
-import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import { IconFolderPlus, IconSelector } from "@tabler/icons";
 import { useRouter } from "next/dist/client/router";
 import Link from "next/link";
 import React from "react";
+import { useCreateJournalMutation } from "../journals/useCreateJournalMutation";
 
 interface MenuItemProps {
   link: {
@@ -16,6 +16,7 @@ interface MenuItemProps {
 export const MenuItem: React.FC<MenuItemProps> = ({ link }) => {
   const router = useRouter();
   const isFocused = router.pathname === link.href;
+  const { mutateAsync } = useCreateJournalMutation();
 
   const opener = (
     <a

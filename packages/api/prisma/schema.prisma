@@ -8,12 +8,49 @@ datasource db {
 }
 
 model User {
-  id             String   @id @default(cuid())
-  email          String   @unique
+  id             String    @id @default(cuid())
+  email          String    @unique
   profilePicture String?
-  displayName    String   @db.VarChar(64)
-  username       String   @unique @db.VarChar(64)
+  displayName    String    @db.VarChar(64)
+  username       String    @unique @db.VarChar(64)
   bio            String?
   googleId       String
-  createdAt      DateTime @default(now())
+  createdAt      DateTime  @default(now())
+  Journal        Journal[]
+  Article        Article[]
+}
+
+model Journal {
+  id          String    @id @default(cuid())
+  icon        String
+  name        String    @db.VarChar(64)
+  description String?   @db.VarChar(512)
+  userId      String
+  user        User      @relation(fields: [userId], references: [id])
+  createdAt   DateTime  @default(now())
+  Article     Article[]
+}
+
+enum ViewAccess {
+  PUBLIC
+  PRIVATE
+}
+
+model Article {
+  id          String     @id @default(cuid())
+  title       String
+  canonical   String?
+  tags        String[]
+  access      ViewAccess @default(PUBLIC)
+  isPublished Boolean    @default(false)
+  description String?
+  editorJSON  Json?
+  editorHTML  String?
+  journalId   String
+  journal     Journal    @relation(fields: [journalId], references: [id])
+  userId      String
+  user        User       @relation(fields: [userId], references: [id])
+  updatedAt   DateTime   @updatedAt
+  createdAt   DateTime   @default(now())
+  publishedAt DateTime?
 }
