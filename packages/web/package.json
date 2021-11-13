@@ -4,12 +4,14 @@
   "version": "0.1.0",
   "scripts": {
     "dev": "next dev",
+    "migrate:dev": "dotenv -e .env -- bash -c 'DATABASE_URL=\"$MIGRATION_DATABASE_URL\" prisma migrate dev'",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
     "@radix-ui/colors": "^0.1.7",
+    "axios": "^0.24.0",
     "next": "^12.0.3",
     "react": "17.0.2",
     "react-dom": "17.0.2"
@@ -18,9 +20,11 @@
     "@types/node": "16.11.6",
     "@types/react": "17.0.34",
     "autoprefixer": "^10.4.0",
+    "dotenv-cli": "^4.1.0",
     "eslint": "7.32.0",
     "eslint-config-next": "12.0.3",
     "postcss": "^8.3.11",
+    "prisma": "^3.4.2",
     "tailwindcss": "^2.2.19",
     "typescript": "4.4.4"
   }
