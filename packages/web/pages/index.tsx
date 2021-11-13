@@ -61,7 +61,7 @@ const Home: NextPage = () => {
             Join Waitlist
           </Button>
         </form>
-        <ul className="flex items-center justify-between w-full md:max-w-xl sm:space-x-10">
+        <ul className="flex items-center justify-between w-full sm:max-w-xl sm:space-x-10">
           <CheckListItem>Generous Free Plan</CheckListItem>
           <CheckListItem>Grow with Referrals</CheckListItem>
           <CheckListItem>Open Source</CheckListItem>

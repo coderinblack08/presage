@@ -23,7 +23,18 @@ export class UsersService {
     });
   }
 
-  async findOne(params: { where: Prisma.UserWhereInput }) {
+  async findOne(params: {
+    where?: Prisma.UserWhereInput;
+    select?: Prisma.UserSelect;
+  }) {
+    params.select ||= {
+      id: true,
+      bio: true,
+      createdAt: true,
+      displayName: true,
+      profilePicture: true,
+      username: true,
+    };
     return this.prisma.user.findFirst(params);
   }
 

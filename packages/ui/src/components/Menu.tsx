@@ -37,7 +37,7 @@ export const Menu: React.FC<MenuProps> = ({
         {...props}
       >
         <div
-          className={`bg-gray-800 rounded-lg shadow-lg w-56 overflow-hidden py-1.5 ${className}`}
+          className={`bg-gray-800 rounded-lg w-56 overflow-hidden py-1.5 ${className}`}
         >
           {children}
         </div>
@@ -74,7 +74,7 @@ export const MenuItem: React.FC<MenuItemProps> = ({
       }}
       className={`group ${
         icon ? "flex items-center" : "block"
-      } select-none px-4 py-1 cursor-pointer focus:outline-none focus:bg-gray-700 w-full text-left`}
+      } select-none px-4 py-1.5 cursor-pointer focus:outline-none focus:bg-gray-700 w-full text-left`}
       {...props}
       asChild
     >
