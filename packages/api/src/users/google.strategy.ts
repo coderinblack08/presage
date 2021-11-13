@@ -7,7 +7,7 @@ import {
   Strategy,
   StrategyOptions,
   VerifyCallback,
-} from "passport-google-oauth2";
+} from "passport-google-oauth20";
 import { UsersService } from "./users.service";
 
 @Injectable()
@@ -45,11 +45,6 @@ export class GoogleStrategy extends PassportStrategy(Strategy, "google") {
           displayName,
           profilePicture: photo,
           googleId,
-        });
-        await this.journalService.create({
-          name: "Blog",
-          description: `${displayName}'s blog`,
-          userId: user.id,
         });
       }
       done(null, user);

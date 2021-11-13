@@ -51,7 +51,7 @@ const Home: NextPage = () => {
           publish on Presage. Brainstorm, draft, and revise without
           distractions. Reward your readers for referring your articles.
         </p>
-        <form className="flex flex-col sm:flex-row items-center space-y-3 sm:space-y-0 sm:space-x-3 max-w-xl xl:max-w-[40rem] w-full mt-4 sm:mt-6">
+        <form className="flex flex-col sm:flex-row items-center space-y-3 sm:space-y-0 sm:space-x-3 max-w-[40rem] w-full mt-4 sm:mt-6">
           <Input placeholder="Enter your email..." type="email" />
           <Button
             size="lg"
@@ -61,7 +61,7 @@ const Home: NextPage = () => {
             Join Waitlist
           </Button>
         </form>
-        <ul className="flex items-center justify-between w-full max-w-sm sm:w-auto sm:max-w-none sm:space-x-10">
+        <ul className="flex items-center justify-between w-full md:max-w-xl sm:space-x-10">
           <CheckListItem>Generous Free Plan</CheckListItem>
           <CheckListItem>Grow with Referrals</CheckListItem>
           <CheckListItem>Open Source</CheckListItem>
