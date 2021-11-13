@@ -1,4 +1,4 @@
-const { trueGray, purple } = require("tailwindcss/colors");
+const { trueGray, purple, gray, warmGray } = require("tailwindcss/colors");
 
 module.exports = {
   purge: [

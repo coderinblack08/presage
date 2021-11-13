@@ -27,7 +27,7 @@ const RadialGradient = () => {
             gradientUnits="userSpaceOnUse"
             gradientTransform="translate(501.5) rotate(90) scale(499 501.5)"
           >
-            <stop stopColor="#2B205A" stopOpacity="0.5" />
+            <stop stopColor="#2B205A" stopOpacity="0.75" />
             <stop offset="1" stopColor="#3B2F70" stopOpacity="0" />
           </radialGradient>
         </defs>

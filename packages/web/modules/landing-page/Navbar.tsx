@@ -24,6 +24,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
           {me ? (
             <li>
               <Menu
+                align="end"
                 trigger={
                   <button>
                     <Avatar src={me?.profilePicture} name={me?.displayName} />

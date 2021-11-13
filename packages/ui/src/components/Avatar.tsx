@@ -2,6 +2,7 @@ import React from "react";
 
 interface AvatarProps {
   size: "sm" | "md" | "lg";
+  circle?: boolean;
   name: string;
   src: string;
 }
@@ -12,6 +13,17 @@ const sizes = {
   lg: "w-12 h-12",
 };
 
-export const Avatar: React.FC<AvatarProps> = ({ size = "md", name, src }) => {
-  return <img src={src} alt={name} className={`${sizes[size]} rounded-full`} />;
+export const Avatar: React.FC<AvatarProps> = ({
+  circle = true,
+  size = "md",
+  name,
+  src,
+}) => {
+  return (
+    <img
+      src={src}
+      alt={name}
+      className={`${sizes[size]} ${circle ? "rounded-full" : "rounded-xl"}`}
+    />
+  );
 };

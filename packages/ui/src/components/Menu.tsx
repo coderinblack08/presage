@@ -37,7 +37,7 @@ export const Menu: React.FC<MenuProps> = ({
         {...props}
       >
         <div
-          className={`bg-gray-800 rounded-lg w-56 overflow-hidden py-1.5 ${className}`}
+          className={`border border-gray-700/50 rounded-xl w-60 overflow-hidden py-1.5 ${className}`}
         >
           {children}
         </div>
@@ -47,7 +47,7 @@ export const Menu: React.FC<MenuProps> = ({
 };
 
 export const MenuDivider: React.FC = () => (
-  <DropdownMenu.Separator className="border-b border-gray-700 my-1.5" />
+  <DropdownMenu.Separator className="border-b border-gray-700/50 my-1.5" />
 );
 
 interface MenuItemProps {
@@ -74,17 +74,17 @@ export const MenuItem: React.FC<MenuItemProps> = ({
       }}
       className={`group ${
         icon ? "flex items-center" : "block"
-      } select-none px-4 py-1.5 cursor-pointer focus:outline-none focus:bg-gray-700 w-full text-left`}
+      } select-none px-4 py-1.5 cursor-pointer focus:outline-none focus:bg-gray-800 w-full text-left`}
       {...props}
       asChild
     >
       <button>
         {icon ? (
-          <div className="text-gray-400 mr-2 group-focus:text-gray-100">
+          <div className="text-gray-500 mr-2 group-focus:text-gray-100">
             {icon}
           </div>
         ) : null}
-        <div className="text-gray-400 group-focus:text-gray-100">
+        <div className="text-gray-300 group-focus:text-gray-100">
           {children}
         </div>
       </button>

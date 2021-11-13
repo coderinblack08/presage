@@ -4566,6 +4566,11 @@
     "@svgr/plugin-svgo" "^5.5.0"
     loader-utils "^2.0.0"
 
+"@tabler/icons@^1.42.0":
+  version "1.42.0"
+  resolved "https://registry.yarnpkg.com/@tabler/icons/-/icons-1.42.0.tgz#fa4ba35a96075ad8c80273d385498a64280827aa"
+  integrity sha512-GpTiG+TmvgtO2IJFM6Q36fzptgI0aNqmJIP9sr5IcXP4yLDEpTRTXTG94YxenlHARPUk3obsruMPPHO8v/UE4g==
+
 "@tailwindcss/forms@^0.3.4":
   version "0.3.4"
   resolved "https://registry.yarnpkg.com/@tailwindcss/forms/-/forms-0.3.4.tgz#e4939dc16450eccf4fd2029770096f38cbb556d4"
