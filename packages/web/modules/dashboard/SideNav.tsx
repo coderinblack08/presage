@@ -10,12 +10,14 @@ interface SideNavProps {}
 
 export const SideNav: React.FC<SideNavProps> = ({}) => {
   return (
-    <nav className="flex flex-col justify-between max-w-xs h-screen w-full border-r border-gray-700/50">
+    <nav className="flex flex-col justify-between max-w-xs h-screen w-full border-r">
       <div className="px-3 py-8">
-        <Image src={logo} alt="Presage Logo" />
+        <div className="select-none">
+          <Image src={logo} alt="Presage Logo" />
+        </div>
         <IconInput
-          icon={<IconSearch size={16} className="text-gray-500" />}
-          className="mt-2"
+          icon={<IconSearch size={18} className="text-gray-400" />}
+          className="mt-3"
           placeholder="Jump To..."
         />
         <div className="mt-4">

@@ -1,4 +1,4 @@
-const { trueGray, purple, gray, warmGray } = require("tailwindcss/colors");
+const { trueGray, purple } = require("tailwindcss/colors");
 
 module.exports = {
   purge: [
@@ -34,6 +34,9 @@ module.exports = {
       ],
     },
     colors: {
+      black: "#000",
+      white: "#fff",
+      transparent: "transparent",
       gray: trueGray,
       purple: purple,
     },
@@ -41,5 +44,5 @@ module.exports = {
   variants: {
     extend: {},
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/forms")({ strategy: "class" })],
 };

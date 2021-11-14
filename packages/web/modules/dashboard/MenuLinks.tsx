@@ -13,27 +13,27 @@ interface MenuLinksProps {}
 export const links = [
   {
     name: "Editor",
-    icon: <IconSmartHome size={22} stroke={1.5} />,
+    icon: (f: boolean) => <IconSmartHome size={22} stroke={1.5} />,
     href: "/dashboard",
   },
   {
     name: "Explore",
-    icon: <IconBrandSafari size={22} stroke={1.5} />,
+    icon: (f: boolean) => <IconBrandSafari size={22} stroke={1.5} />,
     href: "/explore",
   },
   {
     name: "Subscriptions",
-    icon: <IconArchive size={22} stroke={1.5} />,
+    icon: (f: boolean) => <IconArchive size={22} stroke={1.5} />,
     href: "/subscriptions",
   },
   {
     name: "Rewards",
-    icon: <IconTrophy size={22} stroke={1.5} />,
+    icon: (f: boolean) => <IconTrophy size={22} stroke={1.5} />,
     href: "/rewards",
   },
   {
     name: "Settings",
-    icon: <IconSettings size={22} stroke={1.5} />,
+    icon: (f: boolean) => <IconSettings size={22} stroke={1.5} />,
     href: "/settings",
   },
 ];

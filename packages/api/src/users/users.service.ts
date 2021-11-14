@@ -39,7 +39,11 @@ export class UsersService {
   }
 
   async create(data: Prisma.UserCreateInput) {
-    data.username ||= this.generateUsername();
-    return this.prisma.user.create({ data });
+    return this.prisma.user.create({
+      data: {
+        username: this.generateUsername(),
+        ...data,
+      },
+    });
   }
 }

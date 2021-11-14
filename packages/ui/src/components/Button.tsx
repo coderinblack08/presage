@@ -17,8 +17,7 @@ const variants = {
     },
     secondary: {
       filled: "bg-gray-800 hover:bg-gray-700 text-gray-100",
-      outline:
-        "bg-transparent border-2 border-gray-100/5 hover:border-gray-100/10 focus-visible:border-purple-500",
+      outline: "bg-white text-gray-900 border shadow-sm",
     },
   },
 };
@@ -31,6 +30,7 @@ export type ButtonProps = DetailedHTMLProps<
   variant?: "filled" | "outline";
   color?: keyof typeof variants["color"];
   loading?: boolean;
+  icon?: React.ReactNode;
   ref?: any;
 };
 
@@ -44,6 +44,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       loading,
       children,
       className,
+      icon,
       ...props
     },
     ref
@@ -52,13 +53,14 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         ref={ref}
         disabled={disabled || loading}
-        className={`flex items-center transition justify-center font-bold select-none focus-visible:ring focus-visible:ring-purple-500/50 focus:outline-none ${
+        className={`flex items-center transition justify-center font-bold select-none focus-visible:ring focus-visible:ring-purple-500 focus:outline-none ${
           (disabled || loading) && "opacity-50 cursor-not-allowed"
         } ${variants.size[size]} ${
           variants.color[color][variant]
         } ${className}`}
         {...props}
       >
+        {icon && <span className="mr-2">{icon}</span>}
         {children}
       </button>
     );

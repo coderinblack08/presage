@@ -1,3 +1,17 @@
+@import url("https://rsms.me/inter/inter.css");
+
+@font-face {
+  font-family: "Eudoxus Sans";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: optional;
+  src: url(/fonts/eudoxus-sans-var.woff2) format("woff2");
+}
+
+:not(h1 > *, .font-display) {
+  font-feature-settings: "cv11";
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -6,11 +20,19 @@
   :root {
     font-size: 14px;
     line-height: 1.6em;
-    @apply antialiased font-medium text-gray-100;
+    @apply antialiased text-gray-900;
+  }
+
+  span:not(h1 > *),
+  div,
+  p,
+  a,
+  button {
+    @apply font-medium;
   }
 
   html,
   body {
-    @apply bg-gray-900;
+    @apply bg-white;
   }
 }

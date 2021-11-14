@@ -6,6 +6,8 @@ import "../styles/globals.css";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
+      retry: false,
+      staleTime: 60 * 1000 * 5,
       queryFn: defaultQueryFn(),
     },
   },

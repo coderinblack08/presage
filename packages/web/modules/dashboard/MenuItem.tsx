@@ -1,14 +1,18 @@
 import { Menu, MenuDivider, MenuItem as UiMenuItem } from "@presage/ui";
-import { IconFolderPlus, IconSelector } from "@tabler/icons";
-import { useRouter } from "next/dist/client/router";
+import { IconChevronDown, IconFolderPlus, IconPlus } from "@tabler/icons";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React from "react";
-import { useCreateJournalMutation } from "../journals/useCreateJournalMutation";
+import shallow from "zustand/shallow";
+import {
+  useJournalModalState,
+  CreateJournalModal,
+} from "../journals/CreateJournalModal";
 
 interface MenuItemProps {
   link: {
     name: string;
-    icon: JSX.Element;
+    icon: (f: boolean) => JSX.Element;
     href: string;
   };
 }
@@ -16,61 +20,64 @@ interface MenuItemProps {
 export const MenuItem: React.FC<MenuItemProps> = ({ link }) => {
   const router = useRouter();
   const isFocused = router.pathname === link.href;
-  const { mutateAsync } = useCreateJournalMutation();
+  const openModal = useJournalModalState((x) => x.open, shallow);
 
   const opener = (
-    <a
+    <button
       className={`flex items-center justify-between px-4 py-2 w-full rounded-xl ${
-        isFocused ? "bg-gray-800" : ""
+        isFocused ? "bg-purple-500/10" : ""
       }`}
     >
       <div
-        className={`flex items-center space-x-3 w-full ${
-          isFocused ? "text-gray-100" : "text-gray-500"
+        className={`flex items-center space-x-2.5 w-full ${
+          isFocused ? "text-purple-500" : "text-gray-500"
         }`}
       >
-        {link.icon}
-        <span className="capitalize">{link.name}</span>
+        {link.icon(isFocused)}
+        <div className={`capitalize`}>{link.name}</div>
       </div>
       {link.name === "Editor" && (
-        <IconSelector size={20} className="text-gray-500" />
+        <IconChevronDown
+          size={20}
+          className={isFocused ? "text-purple-500" : "text-gray-400"}
+        />
       )}
-    </a>
+    </button>
   );
 
   if (link.name === "Editor") {
     return (
-      <Menu trigger={opener} className="w-[18.5rem]">
+      <>
         <Menu
-          subMenu
-          alignOffset={-5}
-          sideOffset={8}
-          trigger={
-            <UiMenuItem
-              trigger
-              icon={
-                <div className="w-9 h-9 rounded-lg shadow border border-gray-700/50 bg-white flex items-center justify-center mr-1">
-                  <span className="text-xl leading-none">🎓</span>
-                </div>
-              }
-            >
-              School Anecdotes
-            </UiMenuItem>
-          }
+          trigger={opener}
+          className="w-64"
+          align="start"
+          alignOffset={129.5}
         >
-          hi
+          <Menu
+            subMenu
+            alignOffset={-5}
+            trigger={
+              <UiMenuItem
+                trigger
+                icon={<span className="text-xl leading-none w-6 h-6">🎓</span>}
+              >
+                School Anecdotes
+              </UiMenuItem>
+            }
+          >
+            <UiMenuItem icon={<IconPlus size={20} />}>New Draft</UiMenuItem>
+          </Menu>
+          <MenuDivider />
+          <UiMenuItem
+            onClick={(e) => openModal()}
+            icon={<IconFolderPlus size={20} />}
+          >
+            New Journal
+          </UiMenuItem>
         </Menu>
-        <MenuDivider />
-        <UiMenuItem
-          icon={
-            <div className="flex items-center justify-center w-9 h-9 bg-purple-500/10 rounded-lg mr-1">
-              <IconFolderPlus className="text-purple-500 w-6 h-6" />
-            </div>
-          }
-        >
-          New Journal
-        </UiMenuItem>
-      </Menu>
+        <CreateJournalModal />
+      </>
     );
   }
 
