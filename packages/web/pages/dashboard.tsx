@@ -4,8 +4,9 @@ import { SideNav } from "../modules/dashboard/SideNav";
 
 const Dashboard: NextPage = () => {
   return (
-    <div>
+    <div className="flex">
       <SideNav />
+      <main className="w-full h-screen"></main>
     </div>
   );
 };

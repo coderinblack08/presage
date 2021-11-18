@@ -10,7 +10,7 @@ interface SideNavProps {}
 
 export const SideNav: React.FC<SideNavProps> = ({}) => {
   return (
-    <nav className="flex flex-col justify-between max-w-xs h-screen w-full border-r">
+    <nav className="flex flex-shrink-0 flex-col justify-between max-w-xs h-screen w-full border-r">
       <div className="px-3 py-8">
         <div className="select-none">
           <Image src={logo} alt="Presage Logo" />

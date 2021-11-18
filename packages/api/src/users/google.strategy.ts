@@ -18,11 +18,15 @@ export class GoogleStrategy extends PassportStrategy(Strategy, "google") {
     private userService: UsersService
   ) {
     super({
-      clientID: config.get("google.clientID"),
-      clientSecret: config.get("google.clientSecret"),
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       callbackURL: "http://localhost:4000/auth/google/callback",
       scope: ["profile", "email"],
     } as StrategyOptions);
+    // const agent = new HttpsProxyAgent(
+    //   parse(process.env.HTTP_PROXY || "http://192.168.23.4:999")
+    // );
+    // super._oauth2.setAgent(agent);
   }
 
   async validate(
@@ -47,6 +51,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, "google") {
           googleId,
         });
       }
+
       done(null, user);
     } catch (error) {
       done(error, undefined);

@@ -1,15 +1,13 @@
-import { Menu, MenuDivider, MenuItem as UiMenuItem } from "@presage/ui";
-import { IconChevronDown, IconFolderPlus, IconPlus } from "@tabler/icons";
+import { IconChevronDown, IconFolderPlus } from "@tabler/icons";
+import { MenuItem as UiMenuItem } from "@presage/ui";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
-import shallow from "zustand/shallow";
-import {
-  useJournalModalState,
-  CreateJournalModal,
-} from "../journals/CreateJournalModal";
+import { useHoistedPopover } from "../../components/HoistedPopover";
+import { CreateJournalModal } from "../journals/CreateJournalModal";
+import { JournalDropdown } from "./JournalDropdown";
 
-interface MenuItemProps {
+export interface MenuItemProps {
   link: {
     name: string;
     icon: (f: boolean) => JSX.Element;
@@ -17,13 +15,12 @@ interface MenuItemProps {
   };
 }
 
-export const MenuItem: React.FC<MenuItemProps> = ({ link }) => {
+export const MenuItemLink: React.FC<MenuItemProps> = ({ link }) => {
   const router = useRouter();
   const isFocused = router.pathname === link.href;
-  const openModal = useJournalModalState((x) => x.open, shallow);
 
-  const opener = (
-    <button
+  return (
+    <div
       className={`flex items-center justify-between px-4 py-2 w-full rounded-xl ${
         isFocused ? "bg-purple-500/10" : ""
       }`}
@@ -42,48 +39,40 @@ export const MenuItem: React.FC<MenuItemProps> = ({ link }) => {
           className={isFocused ? "text-purple-500" : "text-gray-400"}
         />
       )}
-    </button>
+    </div>
+  );
+};
+
+export const MenuItem: React.FC<MenuItemProps> = ({ link }) => {
+  const [trigger, popover] = useHoistedPopover(
+    (setVisible) => (
+      <UiMenuItem
+        onClick={() => setVisible(true)}
+        closeOnSelect={false}
+        icon={<IconFolderPlus size={20} />}
+      >
+        New Journal
+      </UiMenuItem>
+    ),
+    (props) => <CreateJournalModal {...props} />
   );
 
   if (link.name === "Editor") {
     return (
       <>
-        <Menu
-          trigger={opener}
-          className="w-64"
-          align="start"
-          alignOffset={129.5}
-        >
-          <Menu
-            subMenu
-            alignOffset={-5}
-            trigger={
-              <UiMenuItem
-                trigger
-                icon={<span className="text-xl leading-none w-6 h-6">🎓</span>}
-              >
-                School Anecdotes
-              </UiMenuItem>
-            }
-          >
-            <UiMenuItem icon={<IconPlus size={20} />}>New Draft</UiMenuItem>
-          </Menu>
-          <MenuDivider />
-          <UiMenuItem
-            onClick={(e) => openModal()}
-            icon={<IconFolderPlus size={20} />}
-          >
-            New Journal
-          </UiMenuItem>
-        </Menu>
-        <CreateJournalModal />
+        {popover}
+        <div className="mb-2">
+          <JournalDropdown trigger={trigger} link={link} />
+        </div>
       </>
     );
   }
 
   return (
     <Link href={link.href} passHref>
-      {opener}
+      <a className="w-full block mb-2">
+        <MenuItemLink link={link} />
+      </a>
     </Link>
   );
 };

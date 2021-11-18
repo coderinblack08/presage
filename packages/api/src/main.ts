@@ -10,11 +10,7 @@ async function bootstrap() {
       credentials: true,
     },
   });
-  app.useGlobalPipes(
-    new ValidationPipe({
-      disableErrorMessages: true,
-    })
-  );
+  app.useGlobalPipes(new ValidationPipe({}));
   await app.listen(4000);
   const prismaService: PrismaService = app.get(PrismaService);
   prismaService.enableShutdownHooks(app);

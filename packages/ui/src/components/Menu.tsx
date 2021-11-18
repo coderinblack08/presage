@@ -60,7 +60,9 @@ interface MenuItemProps {
   icon?: React.ReactNode;
   disabled?: boolean;
   href?: string;
+  className?: string;
   trigger?: boolean;
+  closeOnSelect?: boolean;
   onClick?: (event: Event) => void;
 }
 
@@ -70,7 +72,9 @@ export const MenuItem: React.FC<MenuItemProps> = ({
   onClick,
   disabled,
   trigger = false,
+  closeOnSelect = true,
   href,
+  className,
   ...props
 }) => {
   const T = !trigger ? DropdownMenu.Item : DropdownMenu.TriggerItem;
@@ -79,6 +83,9 @@ export const MenuItem: React.FC<MenuItemProps> = ({
     <T
       disabled={disabled}
       onSelect={(e) => {
+        if (!closeOnSelect) {
+          e.preventDefault();
+        }
         if (href) {
           window.location.href = href;
         }
@@ -88,7 +95,7 @@ export const MenuItem: React.FC<MenuItemProps> = ({
       }}
       className={`group ${
         icon ? "flex items-center" : "block"
-      } select-none px-4 py-1.5 w-full cursor-pointer focus:outline-none focus:bg-gray-100 text-left`}
+      } select-none px-4 py-1.5 w-full cursor-pointer focus:outline-none focus:bg-gray-100 text-left ${className}`}
       {...props}
       asChild
     >

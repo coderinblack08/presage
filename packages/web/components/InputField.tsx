@@ -9,7 +9,7 @@ export const InputField = React.forwardRef<
   const [field, meta] = useField(props as any);
 
   return (
-    <div className="w-full">
+    <div className="w-full h-full">
       {label && (
         <label htmlFor={props.name} className="font-bold mb-1 inline-block">
           {label}

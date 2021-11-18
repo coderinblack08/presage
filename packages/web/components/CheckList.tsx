@@ -12,7 +12,7 @@ export const CheckListItem: React.FC<CheckListItemProps> = ({ children }) => {
           viewBox="0 0 18 18"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          className="text-gray-200"
+          className="text-gray-300/50"
         >
           <rect width="18" height="18" rx="9" fill="currentColor" />
           <path

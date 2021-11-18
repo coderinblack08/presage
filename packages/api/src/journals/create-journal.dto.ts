@@ -1,10 +1,15 @@
-import { Max } from "class-validator";
+import { IsNotEmpty, MaxLength } from "class-validator";
 
 export class CreateJournalDto {
-  @Max(64)
+  @MaxLength(64)
+  @IsNotEmpty()
   name: string;
-  @Max(512)
+
+  @MaxLength(512)
+  @IsNotEmpty()
   description: string;
-  @Max(1)
+
+  @MaxLength(1)
+  @IsNotEmpty()
   icon: string;
 }

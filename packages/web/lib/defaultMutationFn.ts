@@ -6,15 +6,20 @@ export const defaultMutationFn = async ([path, body, method = "post"]: [
   any,
   "post" | "put" | "delete"
 ]) => {
-  const r = await axios[method](apiBaseURL + path, body, {
-    headers: {
-      "content-type": "application/json",
-    },
-  });
+  try {
+    const r = await axios[method](apiBaseURL + path, body, {
+      headers: {
+        "content-type": "application/json",
+      },
+      withCredentials: true,
+    });
 
-  if (r.status !== 200) {
-    throw new Error(await r.data);
+    if (r.status !== 200) {
+      throw new Error(r.data);
+    }
+
+    return r.data;
+  } catch (error) {
+    console.error(error);
   }
-
-  return r.data;
 };
