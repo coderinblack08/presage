@@ -18,12 +18,35 @@ export const theme = extendTheme(
       },
     },
     styles: {
-      global: {
+      global: (props) => ({
         body: {
           fontSize: "14px",
-          fontWeight: "medium",
         },
-      },
+        ".ProseMirror": {
+          lineHeight: "taller",
+          color: "gray.600",
+          fontSize: "md",
+          h1: {
+            color: "gray.900",
+            fontSize: "3xl",
+            fontWeight: "bold",
+          },
+          h2: {
+            color: "gray.900",
+            fontSize: "2xl",
+            fontWeight: "bold",
+          },
+          h3: {
+            color: "gray.900",
+            fontSize: "xl",
+            fontWeight: "bold",
+          },
+        },
+        ".tiptap-editor": {
+          py: 4,
+          outline: "none",
+        },
+      }),
     },
   },
   withDefaultColorScheme({ colorScheme: "gray" })

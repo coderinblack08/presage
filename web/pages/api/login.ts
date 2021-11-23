@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import nookies from "nookies";
 import { admin } from "../../lib/admin";
 import { RouteController } from "../../lib/RouteController";
 
@@ -14,13 +15,12 @@ class LoginController extends RouteController {
       const cookie = await admin.auth.createSessionCookie(token.toString(), {
         expiresIn: this.EXPIRES_IN,
       });
-      console.log(cookie);
-      // nookies.set({ res }, "jid", cookie, {
-      //   path: "/",
-      //   maxAge: this.EXPIRES_IN,
-      //   httpOnly: true,
-      //   secure: process.env.NODE_ENV === "production",
-      // });
+      nookies.set({ res }, "jid", cookie, {
+        path: "/",
+        maxAge: this.EXPIRES_IN,
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+      });
       res.status(200).end();
     } catch (error) {
       console.error(error);

@@ -5,3 +5,11 @@
   font-display: optional;
   src: url(/fonts/eudoxus-sans-var.woff2) format("woff2");
 }
+
+.ProseMirror .is-empty::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: var(--chakra-colors-gray-400);
+  pointer-events: none;
+  height: 0;
+}

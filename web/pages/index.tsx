@@ -1,4 +1,4 @@
-import { CheckCircleIcon, CheckIcon } from "@chakra-ui/icons";
+import { CheckIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -13,7 +13,7 @@ import {
 } from "@chakra-ui/react";
 import type { NextPage } from "next";
 import React from "react";
-import { Navbar } from "../components/landing-page/Navbar";
+import { Navbar } from "../components/marketing/Navbar";
 
 const Home: NextPage = () => {
   return (
