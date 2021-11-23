@@ -7,8 +7,8 @@
       "functions"
     ],
     "nohoist": [
-      "**/functions",
-      "**/functions/**"
+      "functions",
+      "functions/**"
     ]
   },
   "scripts": {

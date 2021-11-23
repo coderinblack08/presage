@@ -1,19 +1,13 @@
 import { extendTheme, withDefaultColorScheme } from "@chakra-ui/react";
-import { createBreakpoints } from "@chakra-ui/theme-tools";
 
-const breakpoints = createBreakpoints({
-  sm: "30em",
-  md: "48em",
-  lg: "62em",
-  xl: "80em",
-  "2xl": "96em",
-});
+const FALLBACK_FONTS =
+  "system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji";
 
 export const theme = extendTheme(
   {
-    breakpoints,
     fonts: {
-      body: "Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji",
+      body: `Inter, ${FALLBACK_FONTS}`,
+      heading: `Eudoxus Sans, ${FALLBACK_FONTS}`,
     },
     components: {
       Button: {
@@ -21,6 +15,14 @@ export const theme = extendTheme(
         //   _focus: { dropShadow: "none" },
         //   _focusVisible: { boxShadow: "outline" },
         // },
+      },
+    },
+    styles: {
+      global: {
+        body: {
+          fontSize: "14px",
+          fontWeight: "medium",
+        },
       },
     },
   },
