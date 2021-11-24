@@ -48,7 +48,7 @@ export const Navbar: React.FC<NavbarProps> = ({ showActions = false }) => {
       py={3}
     >
       <Image src={logo} alt="logo" />
-      <HStack align="center" spacing={4}>
+      <HStack align="center" spacing={3}>
         {showActions && (
           <>
             <Button colorScheme="purple" leftIcon={<MdPublic size={20} />}>

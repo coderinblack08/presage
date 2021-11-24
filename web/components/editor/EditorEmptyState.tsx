@@ -27,7 +27,7 @@ export const EditorEmptyState: React.FC<EditorEmptyStateProps> = ({}) => {
       </List>
       <SimpleGrid columns={2} mt={12}>
         <Box>
-          <Text as="h6" color="gray.600" fontWeight="bold" mb={4}>
+          <Text as="h6" color="gray.500" fontWeight="bold" mb={4}>
             Get Started
           </Text>
           <List spacing={4}>
@@ -50,7 +50,7 @@ export const EditorEmptyState: React.FC<EditorEmptyStateProps> = ({}) => {
           </List>
         </Box>
         <Box>
-          <Text as="h6" color="gray.600" fontWeight="bold" mb={4}>
+          <Text as="h6" color="gray.500" fontWeight="bold" mb={4}>
             Writing Guides
           </Text>
           <List spacing={4}>

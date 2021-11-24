@@ -26,6 +26,16 @@ export const theme = extendTheme(
           lineHeight: "taller",
           color: "gray.600",
           fontSize: "md",
+          "&:focus": {
+            outline: "none",
+          },
+          ".is-empty::before": {
+            content: "attr(data-placeholder)",
+            color: "gray.400",
+            float: "left",
+            pointerEvents: "none",
+            height: 0,
+          },
           h1: {
             color: "gray.900",
             fontSize: "3xl",
@@ -40,6 +50,28 @@ export const theme = extendTheme(
             color: "gray.900",
             fontSize: "xl",
             fontWeight: "bold",
+          },
+          "ul, ol": {
+            padding: "0 1.2rem",
+          },
+          hr: {
+            borderColor: "gray.200",
+            my: 5,
+          },
+          "blockquote p:first-of-type::before": {
+            content: "open-quote",
+          },
+          "blockquote p:last-of-type::after": {
+            content: "close-quote",
+          },
+          blockquote: {
+            fontWeight: "500",
+            fontStyle: "italic",
+            borderLeft: "4px",
+            borderColor: "gray.100",
+            pl: 5,
+            my: 2,
+            quotes: '"\\201C""\\201D""\\2018""\\2019"',
           },
         },
         ".tiptap-editor": {

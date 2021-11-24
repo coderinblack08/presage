@@ -11,9 +11,10 @@ const Dashboard: NextPage = () => {
       <Box my={20} px={8} maxW="3xl" mx="auto">
         <chakra.input
           _focus={{ outline: "none" }}
+          placeholder="Untitled"
           fontWeight="bold"
           fontSize="4xl"
-          placeholder="Untitled"
+          w="full"
         />
         <TipTapEditor />
       </Box>
