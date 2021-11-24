@@ -36,6 +36,9 @@ export const theme = extendTheme(
             pointerEvents: "none",
             height: 0,
           },
+          "> * + *": {
+            marginTop: "0.75em",
+          },
           h1: {
             color: "gray.900",
             fontSize: "3xl",
@@ -54,6 +57,10 @@ export const theme = extendTheme(
           "ul, ol": {
             padding: "0 1.2rem",
           },
+          a: {
+            textDecoration: "underline",
+            color: "blue.500",
+          },
           hr: {
             borderColor: "gray.200",
             my: 5,
@@ -70,7 +77,6 @@ export const theme = extendTheme(
             borderLeft: "4px",
             borderColor: "gray.100",
             pl: 5,
-            my: 2,
             quotes: '"\\201C""\\201D""\\2018""\\2019"',
           },
         },

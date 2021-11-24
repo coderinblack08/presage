@@ -1,33 +1,19 @@
-import {
-  Box,
-  Button,
-  chakra,
-  Fade,
-  Icon,
-  IconButton,
-  Input,
-  InputGroup,
-  InputRightElement,
-  Popover,
-  PopoverArrow,
-  PopoverBody,
-  PopoverCloseButton,
-  PopoverContent,
-  PopoverHeader,
-  PopoverTrigger,
-  Portal,
-} from "@chakra-ui/react";
-import { IconBold, IconItalic, IconLink, IconUnderline } from "@tabler/icons";
+import { Box, chakra, Fade, Icon, IconButton } from "@chakra-ui/react";
+import { IconBold, IconItalic, IconUnderline } from "@tabler/icons";
+import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
 import { BubbleMenu, EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import { useField } from "formik";
 import React from "react";
 import { SlashCommands } from "./commands/CommandsExtension";
 import { EditorEmptyState } from "./EditorEmptyState";
+import { InsertLinkPopover } from "./InsertLinkPopover";
 
 interface TipTapEditorProps {}
 
 export const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
+  const [_, __, { setValue }] = useField("editorJSON");
   const editor = useEditor({
     extensions: [
       StarterKit.configure(),
@@ -40,12 +26,14 @@ export const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
         },
       }),
       SlashCommands,
+      Link,
     ],
     editorProps: {
       attributes: {
         class: "tiptap-editor",
       },
     },
+    onUpdate: ({ editor }) => setValue(editor.getJSON()),
   });
 
   return (
@@ -103,50 +91,7 @@ export const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
               />
             }
           />
-          <Popover gutter={16}>
-            <PopoverTrigger>
-              <IconButton
-                size="sm"
-                variant="ghost"
-                aria-label="link"
-                icon={
-                  <Icon
-                    as={IconLink}
-                    color="gray.600"
-                    size={20}
-                    w="auto"
-                    h="auto"
-                  />
-                }
-              />
-            </PopoverTrigger>
-            <Portal>
-              <PopoverContent
-                shadow="sm"
-                _focus={{ outline: "none" }}
-                zIndex={9999}
-              >
-                <PopoverArrow />
-                <PopoverCloseButton />
-                <PopoverHeader>Insert Link</PopoverHeader>
-                <PopoverBody>
-                  <InputGroup size="sm">
-                    <Input
-                      size="sm"
-                      rounded="md"
-                      type="url"
-                      placeholder="Enter url..."
-                    />
-                    <InputRightElement width="3.5rem">
-                      <Button size="xs" flexShrink="0">
-                        Insert
-                      </Button>
-                    </InputRightElement>
-                  </InputGroup>
-                </PopoverBody>
-              </PopoverContent>
-            </Portal>
-          </Popover>
+          <InsertLinkPopover editor={editor} />
         </Box>
       )}
       <EditorContent editor={editor} />

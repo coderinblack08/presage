@@ -1,6 +1,7 @@
 import { CheckIcon } from "@chakra-ui/icons";
 import {
   Box,
+  Link,
   Text,
   List,
   ListItem,
@@ -33,19 +34,19 @@ export const EditorEmptyState: React.FC<EditorEmptyStateProps> = ({}) => {
           <List spacing={4}>
             <ListItem color="gray.500">
               <ListIcon color="gray.300" as={CheckIcon} />
-              Create your first article
+              <Link>Create your first article</Link>
             </ListItem>
             <ListItem color="gray.500">
               <ListIcon color="gray.300" as={CheckIcon} />
-              Earning revenue from your audience
+              <Link>Earning revenue from your audience</Link>
             </ListItem>
             <ListItem color="gray.500">
               <ListIcon color="gray.300" as={CheckIcon} />
-              Blog &amp; Help Center
+              <Link>Blog &amp; Help Center</Link>
             </ListItem>
             <ListItem color="gray.500">
               <ListIcon color="gray.300" as={CheckIcon} />
-              Upgrade to Pro
+              <Link>Upgrade to Pro</Link>
             </ListItem>
           </List>
         </Box>
@@ -56,19 +57,19 @@ export const EditorEmptyState: React.FC<EditorEmptyStateProps> = ({}) => {
           <List spacing={4}>
             <ListItem color="gray.500">
               <ListIcon color="gray.300" as={CheckIcon} />
-              Bullet journalism
+              <Link>Bullet journalism</Link>
             </ListItem>
             <ListItem color="gray.500">
               <ListIcon color="gray.300" as={CheckIcon} />
-              Fighting writer's block
+              <Link>Fighting writer's block</Link>
             </ListItem>
             <ListItem color="gray.500">
               <ListIcon color="gray.300" as={CheckIcon} />
-              Storytelling for beginners
+              <Link>Storytelling for beginners</Link>
             </ListItem>
             <ListItem color="gray.500">
               <ListIcon color="gray.300" as={CheckIcon} />
-              More Coming Soon...
+              <Link>More Coming Soon...</Link>
             </ListItem>
           </List>
         </Box>

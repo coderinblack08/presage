@@ -1,4 +1,4 @@
-import { List, ListItem } from "@chakra-ui/react";
+import { Text, List, ListItem } from "@chakra-ui/react";
 import React from "react";
 
 interface CommandsListProps {
@@ -66,10 +66,7 @@ export class CommandsList extends React.Component<CommandsListProps> {
     }
   }
 
-  componentDidUpdate(
-    prevProps: CommandsListProps,
-    prevState: CommandsListProps
-  ) {
+  componentDidUpdate(prevProps: CommandsListProps) {
     if (prevProps.items.length !== this.props.items.length) {
       this.setState({ selectedIndex: 0 });
     }
@@ -81,17 +78,19 @@ export class CommandsList extends React.Component<CommandsListProps> {
 
     return (
       <List
-        shadow="lg"
         w={56}
+        shadow="sm"
         rounded="lg"
         border="1px"
         borderColor="gray.200"
         py={2}
       >
         {items.length === 0 ? (
-          <p className="text-gray-500 px-4 py-2">No commands found</p>
+          <Text py={2} px={4} color="gray.500">
+            No commands found
+          </Text>
         ) : (
-          items.map(({ title, description }, index) => (
+          items.map(({ title }, index) => (
             <ListItem
               as="button"
               display="block"

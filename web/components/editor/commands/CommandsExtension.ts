@@ -38,7 +38,6 @@ export const Commands = Extension.create<CommandsOption>({
 
 const textItemHelper = (type: "heading" | "paragraph", level?: number) => ({
   title: type === "heading" ? `Heading ${level}` : "Paragraph",
-  description: level ? "Big section heading" : "Plain text",
   shortcut: level ? `h${level}` : "p",
   command: ({ editor, range }: { editor: Editor; range: Range }) => {
     editor.chain().focus().deleteRange(range).setNode(type, { level }).run();
@@ -52,21 +51,20 @@ const commands = [
   textItemHelper("heading", 3),
   {
     title: "Ordered List",
-    description: "Create a list with numberings",
+    shortcut: "ol",
     command: ({ editor, range }: { editor: Editor; range: Range }) => {
       editor.chain().focus().deleteRange(range).toggleOrderedList().run();
     },
   },
   {
     title: "Bulleted List",
-    description: "Create a bulleted list",
+    shortcut: "ul",
     command: ({ editor, range }: { editor: Editor; range: Range }) => {
       editor.chain().focus().deleteRange(range).toggleBulletList().run();
     },
   },
   {
     title: "Quote",
-    description: "Create a quote",
     command: ({ editor, range }: { editor: Editor; range: Range }) => {
       editor.chain().focus().deleteRange(range).toggleBlockquote().run();
     },
