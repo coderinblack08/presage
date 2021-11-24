@@ -98,16 +98,18 @@ export const InsertLinkPopover: React.FC<InsertLinkPopoverProps> = ({
               </InputRightElement>
             </InputGroup>
           </PopoverBody>
-          <PopoverFooter>
-            <Button
-              onClick={unsetLink}
-              size="xs"
-              colorScheme="red"
-              leftIcon={<MdDelete />}
-            >
-              Delete
-            </Button>
-          </PopoverFooter>
+          {editor.isActive("link") ? (
+            <PopoverFooter>
+              <Button
+                onClick={unsetLink}
+                size="xs"
+                colorScheme="red"
+                leftIcon={<MdDelete />}
+              >
+                Delete
+              </Button>
+            </PopoverFooter>
+          ) : null}
         </PopoverContent>
       </Portal>
     </Popover>

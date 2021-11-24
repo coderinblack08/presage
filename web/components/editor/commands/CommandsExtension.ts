@@ -16,15 +16,17 @@ export type CommandsOption = {
 };
 
 export const Commands = Extension.create<CommandsOption>({
-  name: "commands",
-  defaultOptions: {
-    suggestion: {
-      char: "/",
-      startOfLine: false,
-      command: ({ editor, range, props }) => {
-        props.command({ editor, range });
+  name: "slash-commands",
+  addOptions() {
+    return {
+      suggestion: {
+        char: "/",
+        startOfLine: false,
+        command: ({ editor, range, props }) => {
+          props.command({ editor, range });
+        },
       },
-    },
+    };
   },
   addProseMirrorPlugins() {
     return [
@@ -91,7 +93,7 @@ export const SlashCommands = Commands.configure({
 
           popup = tippy("body", {
             getReferenceClientRect: props.clientRect,
-            appendTo: () => document.body,
+            appendTo: document.body,
             content: component.element,
             showOnCreate: true,
             interactive: true,

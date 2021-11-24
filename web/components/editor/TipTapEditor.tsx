@@ -5,14 +5,17 @@ import Placeholder from "@tiptap/extension-placeholder";
 import { BubbleMenu, EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { useField } from "formik";
-import React from "react";
+import React, { useEffect } from "react";
+import { Article } from "../../types";
 import { SlashCommands } from "./commands/CommandsExtension";
 import { EditorEmptyState } from "./EditorEmptyState";
 import { InsertLinkPopover } from "./InsertLinkPopover";
 
-interface TipTapEditorProps {}
+interface TipTapEditorProps {
+  draft: Article | undefined;
+}
 
-export const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
+export const TipTapEditor: React.FC<TipTapEditorProps> = ({ draft }) => {
   const [_, __, { setValue }] = useField("editorJSON");
   const editor = useEditor({
     extensions: [
@@ -33,8 +36,23 @@ export const TipTapEditor: React.FC<TipTapEditorProps> = ({}) => {
         class: "tiptap-editor",
       },
     },
+    content: draft?.editorJSON || null,
     onUpdate: ({ editor }) => setValue(editor.getJSON()),
   });
+
+  useEffect(() => {
+    if (editor) {
+      !editor.isDestroyed &&
+        editor.commands.setContent(draft?.editorJSON || null);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [draft?.id, editor]);
+
+  useEffect(() => {
+    return () => {
+      editor?.destroy();
+    };
+  }, [editor]);
 
   return (
     <>

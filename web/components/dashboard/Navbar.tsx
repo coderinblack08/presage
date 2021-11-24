@@ -1,7 +1,7 @@
 import { HamburgerIcon } from "@chakra-ui/icons";
+import NextLink from "next/link";
 import {
   Avatar,
-  Button,
   chakra,
   Flex,
   HStack,
@@ -13,28 +13,19 @@ import {
   MenuGroup,
   MenuItem,
   MenuList,
+  Link,
 } from "@chakra-ui/react";
 import Image from "next/image";
-import Link from "next/link";
 import React from "react";
-import {
-  MdApps,
-  MdLogout,
-  MdPerson,
-  MdPublic,
-  MdSearch,
-  MdUpdate,
-} from "react-icons/md";
+import { MdApps, MdLogout, MdPerson, MdSearch, MdUpdate } from "react-icons/md";
 import { useQuery } from "react-query";
 import logo from "../../public/logo.svg";
 import { Article, User } from "../../types";
 import { NewDraft } from "./NewDraft";
 
-interface NavbarProps {
-  showActions?: boolean;
-}
+interface NavbarProps {}
 
-export const Navbar: React.FC<NavbarProps> = ({ showActions = false }) => {
+export const Navbar: React.FC<NavbarProps> = ({}) => {
   const { data: drafts } = useQuery<Article[]>("/api/drafts");
   const { data: me } = useQuery<User>("/api/me");
 
@@ -43,21 +34,22 @@ export const Navbar: React.FC<NavbarProps> = ({ showActions = false }) => {
       align="center"
       justify="space-between"
       maxW="5xl"
+      bg="white"
+      position="sticky"
+      top={0}
       mx="auto"
       px={5}
       py={3}
     >
-      <Image src={logo} alt="logo" />
-      <HStack align="center" spacing={3}>
-        {showActions && (
-          <>
-            <Button colorScheme="purple" leftIcon={<MdPublic size={20} />}>
-              Publish
-            </Button>
-          </>
-        )}
+      <NextLink href="/" passHref>
+        <Link>
+          <Image src={logo} alt="logo" />
+        </Link>
+      </NextLink>
+      <HStack align="center" spacing={4}>
         <Menu placement="bottom-end">
           <MenuButton
+            size="lg"
             as={IconButton}
             icon={<HamburgerIcon w={5} h={5} />}
             variant="outline"
@@ -96,7 +88,11 @@ export const Navbar: React.FC<NavbarProps> = ({ showActions = false }) => {
               <>
                 <MenuGroup>
                   {drafts?.map((draft) => (
-                    <Link href={`/draft/${draft.id}`} key={draft.id} passHref>
+                    <NextLink
+                      href={`/draft/${draft.id}`}
+                      key={draft.id}
+                      passHref
+                    >
                       <MenuItem
                         as="a"
                         icon={
@@ -121,7 +117,7 @@ export const Navbar: React.FC<NavbarProps> = ({ showActions = false }) => {
                       >
                         {draft.title}
                       </MenuItem>
-                    </Link>
+                    </NextLink>
                   ))}
                 </MenuGroup>
                 <MenuDivider />

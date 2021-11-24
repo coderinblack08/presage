@@ -4,7 +4,7 @@ import { RouteController } from "../../lib/RouteController";
 import { snapshotToArray } from "../../lib/utils/snapshotToArray";
 import { verifySessionCookie } from "../../lib/utils/verifySessionCookie";
 
-class DraftController extends RouteController {
+class DraftsController extends RouteController {
   async get(req: NextApiRequest, res: NextApiResponse) {
     const { uid = "" } = await verifySessionCookie(req);
     console.log(uid);
@@ -19,4 +19,4 @@ class DraftController extends RouteController {
   }
 }
 
-export default new DraftController().handleRoutes();
+export default new DraftsController().handleRoutes();

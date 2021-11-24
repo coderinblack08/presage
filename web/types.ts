@@ -1,3 +1,4 @@
+import { JSONContent } from "@tiptap/react";
 import { FieldValue } from "firebase/firestore";
 
 export interface User {
@@ -15,8 +16,7 @@ export interface Article {
   title: string;
   description?: string;
   isPublished: boolean;
-  // editorJSON?: Content;
-  editorHTML?: string;
+  editorJSON?: JSONContent;
   tags: string[];
   canonical?: string;
   user?: User;
