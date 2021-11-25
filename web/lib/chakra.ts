@@ -23,6 +23,8 @@ export const theme = extendTheme(
           fontSize: "14px",
         },
         ".ProseMirror": {
+          position: "relative",
+          zIndex: 0,
           lineHeight: "taller",
           color: "gray.600",
           fontSize: "md",

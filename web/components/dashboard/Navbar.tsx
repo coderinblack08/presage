@@ -14,6 +14,7 @@ import {
   MenuItem,
   MenuList,
   Link,
+  Portal,
 } from "@chakra-ui/react";
 import Image from "next/image";
 import React from "react";
@@ -54,92 +55,94 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
             icon={<HamburgerIcon w={5} h={5} />}
             variant="outline"
           />
-          <MenuList>
-            <MenuGroup>
-              <MenuItem
-                icon={
-                  <Icon
-                    as={MdApps}
-                    color="gray.400"
-                    size={18}
-                    w="auto"
-                    h="auto"
-                  />
-                }
-              >
-                Dashboard
-              </MenuItem>
-              <MenuItem
-                icon={
-                  <Icon
-                    as={MdSearch}
-                    color="gray.400"
-                    size={18}
-                    w="auto"
-                    h="auto"
-                  />
-                }
-              >
-                Explore
-              </MenuItem>
-            </MenuGroup>
-            <MenuDivider />
-            {(drafts || [])?.length > 0 && (
-              <>
-                <MenuGroup>
-                  {drafts?.map((draft) => (
-                    <NextLink
-                      href={`/draft/${draft.id}`}
-                      key={draft.id}
-                      passHref
-                    >
-                      <MenuItem
-                        as="a"
-                        icon={
-                          <chakra.svg
-                            color="gray.400"
-                            width="18"
-                            height="18"
-                            viewBox="0 0 18 18"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M14.25 3.75003V14.25H3.75V3.75003H14.25ZM14.25 2.25003H3.75C2.925 2.25003 2.25 2.92503 2.25 3.75003V14.25C2.25 15.075 2.925 15.75 3.75 15.75H14.25C15.075 15.75 15.75 15.075 15.75 14.25V3.75003C15.75 2.92503 15.075 2.25003 14.25 2.25003Z"
-                              fill="currentColor"
-                            />
-                            <path
-                              d="M10.5 11.25H5.25V9.75003H10.5V11.25ZM12.75 8.25003H5.25V6.75003H12.75V8.25003Z"
-                              fill="currentColor"
-                            />
-                          </chakra.svg>
-                        }
+          <Portal>
+            <MenuList>
+              <MenuGroup>
+                <MenuItem
+                  icon={
+                    <Icon
+                      as={MdApps}
+                      color="gray.400"
+                      size={18}
+                      w="auto"
+                      h="auto"
+                    />
+                  }
+                >
+                  Dashboard
+                </MenuItem>
+                <MenuItem
+                  icon={
+                    <Icon
+                      as={MdSearch}
+                      color="gray.400"
+                      size={18}
+                      w="auto"
+                      h="auto"
+                    />
+                  }
+                >
+                  Explore
+                </MenuItem>
+              </MenuGroup>
+              <MenuDivider />
+              {(drafts || [])?.length > 0 && (
+                <>
+                  <MenuGroup>
+                    {drafts?.map((draft) => (
+                      <NextLink
+                        href={`/draft/${draft.id}`}
+                        key={draft.id}
+                        passHref
                       >
-                        {draft.title}
-                      </MenuItem>
-                    </NextLink>
-                  ))}
-                </MenuGroup>
-                <MenuDivider />
-              </>
-            )}
-            <MenuGroup>
-              <MenuItem
-                icon={
-                  <Icon
-                    as={MdUpdate}
-                    color="gray.400"
-                    size={18}
-                    w="auto"
-                    h="auto"
-                  />
-                }
-              >
-                Upgrade
-              </MenuItem>
-              <NewDraft />
-            </MenuGroup>
-          </MenuList>
+                        <MenuItem
+                          as="a"
+                          icon={
+                            <chakra.svg
+                              color="gray.400"
+                              width="18"
+                              height="18"
+                              viewBox="0 0 18 18"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                d="M14.25 3.75003V14.25H3.75V3.75003H14.25ZM14.25 2.25003H3.75C2.925 2.25003 2.25 2.92503 2.25 3.75003V14.25C2.25 15.075 2.925 15.75 3.75 15.75H14.25C15.075 15.75 15.75 15.075 15.75 14.25V3.75003C15.75 2.92503 15.075 2.25003 14.25 2.25003Z"
+                                fill="currentColor"
+                              />
+                              <path
+                                d="M10.5 11.25H5.25V9.75003H10.5V11.25ZM12.75 8.25003H5.25V6.75003H12.75V8.25003Z"
+                                fill="currentColor"
+                              />
+                            </chakra.svg>
+                          }
+                        >
+                          {draft.title}
+                        </MenuItem>
+                      </NextLink>
+                    ))}
+                  </MenuGroup>
+                  <MenuDivider />
+                </>
+              )}
+              <MenuGroup>
+                <MenuItem
+                  icon={
+                    <Icon
+                      as={MdUpdate}
+                      color="gray.400"
+                      size={18}
+                      w="auto"
+                      h="auto"
+                    />
+                  }
+                >
+                  Upgrade
+                </MenuItem>
+                <NewDraft />
+              </MenuGroup>
+            </MenuList>
+          </Portal>
         </Menu>
         <Menu placement="bottom-end">
           <MenuButton>
@@ -150,34 +153,36 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
               src={me?.profilePicture}
             />
           </MenuButton>
-          <MenuList>
-            <MenuItem
-              icon={
-                <Icon
-                  as={MdPerson}
-                  color="gray.400"
-                  size={18}
-                  w="auto"
-                  h="auto"
-                />
-              }
-            >
-              Profile
-            </MenuItem>
-            <MenuItem
-              icon={
-                <Icon
-                  as={MdLogout}
-                  color="gray.400"
-                  size={18}
-                  w="auto"
-                  h="auto"
-                />
-              }
-            >
-              Logout
-            </MenuItem>
-          </MenuList>
+          <Portal>
+            <MenuList>
+              <MenuItem
+                icon={
+                  <Icon
+                    as={MdPerson}
+                    color="gray.400"
+                    size={18}
+                    w="auto"
+                    h="auto"
+                  />
+                }
+              >
+                Profile
+              </MenuItem>
+              <MenuItem
+                icon={
+                  <Icon
+                    as={MdLogout}
+                    color="gray.400"
+                    size={18}
+                    w="auto"
+                    h="auto"
+                  />
+                }
+              >
+                Logout
+              </MenuItem>
+            </MenuList>
+          </Portal>
         </Menu>
       </HStack>
     </Flex>
