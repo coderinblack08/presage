@@ -16,7 +16,7 @@ import type {
   NextPage,
 } from "next";
 import React, { useState } from "react";
-import { MdPublic, MdSettings } from "react-icons/md";
+import { MdPublic } from "react-icons/md";
 import { dehydrate, QueryClient, useQuery } from "react-query";
 import { Navbar } from "../../components/dashboard/Navbar";
 import { SettingsDrawer } from "../../components/drafts/SettingsDrawer";
@@ -43,6 +43,7 @@ const Dashboard: NextPage<
         editorJSON: draft?.editorJSON || null,
         description: draft?.description || "",
         canonical: draft?.canonical || "",
+        tags: (draft?.tags || []).join(", "),
       }}
       onSubmit={async () => {
         await mutateAsync({ id, values: diff });
@@ -91,7 +92,9 @@ const Dashboard: NextPage<
                   <BreadcrumbLink href="#">Drafts</BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbItem isCurrentPage>
-                  <BreadcrumbLink href="#">Article 1</BreadcrumbLink>
+                  <BreadcrumbLink href="#" isTruncated>
+                    {draft?.title}
+                  </BreadcrumbLink>
                 </BreadcrumbItem>
               </Breadcrumb>
               <HStack align="center" spacing={2}>

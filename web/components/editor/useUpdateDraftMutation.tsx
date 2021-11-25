@@ -1,20 +1,13 @@
 import { doc, updateDoc } from "@firebase/firestore";
-import { JSONContent } from "@tiptap/react";
 import { useMutation } from "react-query";
+import { commaSeparatedToList } from "../../lib/commaSeparatedToList";
 import { firebase } from "../../lib/firebase";
 
 export const useUpdateDraftMutation = () => {
-  return useMutation(
-    async ({
-      id,
-      values,
-    }: {
-      id: string;
-      values: { title: string; editorJSON: JSONContent | null };
-    }) => {
-      console.log(id);
-
-      await updateDoc(doc(firebase.db, "articles", id), values);
+  return useMutation(async ({ id, values }: { id: string; values: any }) => {
+    if ("tags" in values) {
+      values.tags = commaSeparatedToList(values.tags);
     }
-  );
+    await updateDoc(doc(firebase.db, "articles", id), values);
+  });
 };
