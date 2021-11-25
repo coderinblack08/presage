@@ -6,6 +6,7 @@ import { BubbleMenu, EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { useField } from "formik";
 import React, { useEffect } from "react";
+import Underline from "@tiptap/extension-underline";
 import { Article } from "../../types";
 import { SlashCommands } from "./commands/CommandsExtension";
 import { EditorEmptyState } from "./EditorEmptyState";
@@ -19,7 +20,7 @@ export const TipTapEditor: React.FC<TipTapEditorProps> = ({ draft }) => {
   const [_, __, { setValue }] = useField("editorJSON");
   const editor = useEditor({
     extensions: [
-      StarterKit.configure(),
+      StarterKit,
       Placeholder.configure({
         placeholder: ({ node }) => {
           if (node.type.name === "heading") {
@@ -29,6 +30,7 @@ export const TipTapEditor: React.FC<TipTapEditorProps> = ({ draft }) => {
         },
       }),
       SlashCommands,
+      Underline,
       Link,
     ],
     editorProps: {
@@ -69,6 +71,7 @@ export const TipTapEditor: React.FC<TipTapEditorProps> = ({ draft }) => {
         >
           <IconButton
             size="sm"
+            onClick={() => editor.chain().focus().toggleBold().run()}
             variant="ghost"
             aria-label="bold"
             icon={
@@ -84,6 +87,7 @@ export const TipTapEditor: React.FC<TipTapEditorProps> = ({ draft }) => {
           <IconButton
             size="sm"
             variant="ghost"
+            onClick={() => editor.chain().focus().toggleItalic().run()}
             aria-label="italic"
             icon={
               <Icon
@@ -98,6 +102,7 @@ export const TipTapEditor: React.FC<TipTapEditorProps> = ({ draft }) => {
           <IconButton
             size="sm"
             variant="ghost"
+            onClick={() => editor.chain().focus().toggleUnderline().run()}
             aria-label="underline"
             icon={
               <Icon

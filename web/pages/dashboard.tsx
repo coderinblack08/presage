@@ -1,7 +1,7 @@
 import { Box } from "@chakra-ui/react";
 import { NextPage } from "next";
 import React from "react";
-import { Navbar } from "../components/dashboard/Navbar";
+import { Navbar } from "../modules/dashboard/Navbar";
 
 const Dashboard: NextPage = () => {
   return (

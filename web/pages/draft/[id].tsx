@@ -18,12 +18,12 @@ import type {
 import React, { useState } from "react";
 import { MdPublic } from "react-icons/md";
 import { dehydrate, QueryClient, useQuery } from "react-query";
-import { Navbar } from "../../components/dashboard/Navbar";
-import { SettingsDrawer } from "../../components/drafts/SettingsDrawer";
-import { usePublishMutation } from "../../components/drafts/usePublishMutation";
-import { FormikAutoSave } from "../../components/editor/FormikAutoSave";
-import { TipTapEditor } from "../../components/editor/TipTapEditor";
-import { useUpdateDraftMutation } from "../../components/editor/useUpdateDraftMutation";
+import { Navbar } from "../../modules/dashboard/Navbar";
+import { SettingsDrawer } from "../../modules/drafts/SettingsDrawer";
+import { usePublishMutation } from "../../modules/drafts/usePublishMutation";
+import { FormikAutoSave } from "../../modules/editor/FormikAutoSave";
+import { TipTapEditor } from "../../modules/editor/TipTapEditor";
+import { useUpdateDraftMutation } from "../../modules/editor/useUpdateDraftMutation";
 import { defaultQueryFn } from "../../lib/utils/defaultQueryFn";
 import { Article } from "../../types";
 

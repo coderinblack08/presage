@@ -13,7 +13,7 @@ import {
 } from "@chakra-ui/react";
 import type { NextPage } from "next";
 import React from "react";
-import { Navbar } from "../components/marketing/Navbar";
+import { Navbar } from "../modules/marketing/Navbar";
 
 const Home: NextPage = () => {
   return (
