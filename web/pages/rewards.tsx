@@ -1,5 +1,6 @@
 import {
   Box,
+  Text,
   Center,
   Flex,
   Heading,
@@ -11,17 +12,21 @@ import {
   TabPanels,
   Tabs,
   Tbody,
-  Text,
+  Td,
   Th,
   Thead,
   Tr,
 } from "@chakra-ui/react";
 import { NextPage } from "next";
 import React from "react";
+import { useQuery } from "react-query";
 import { Navbar } from "../modules/dashboard/Navbar";
 import { CreateRewardModal } from "../modules/rewards/CreateRewardModal";
+import { Reward } from "../types";
 
 const RewardsPage: NextPage = () => {
+  const { data } = useQuery<Reward[]>("/rewards");
+
   return (
     <Box>
       <Navbar />
@@ -51,17 +56,16 @@ const RewardsPage: NextPage = () => {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {/* <Tr onClick={() => alert("hi")}>
-                    <Td>Message</Td>
-                    <Td>QNA Webinar</Td>
-                    <Td>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Aliquid dolor, porro dignissimos repellendus quo et
-                      eligendi quis ratione ducimus impedit ad dolores facere
-                      eos, distinctio officiis repudiandae totam soluta eaque.
-                    </Td>
-                    <Td isNumeric>25</Td>
-                  </Tr> */}
+                  {data?.map((reward) => (
+                    <Tr key={reward.id} onClick={() => alert("hi")}>
+                      <Td>
+                        <Text textTransform="capitalize">{reward.type}</Text>
+                      </Td>
+                      <Td>{reward.name}</Td>
+                      <Td>{reward.description}</Td>
+                      <Td isNumeric>{reward.cost}</Td>
+                    </Tr>
+                  ))}
                 </Tbody>
               </Table>
               <Center w="full" h={8}>

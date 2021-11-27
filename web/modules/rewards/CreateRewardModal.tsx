@@ -67,7 +67,7 @@ export const CreateRewardModal: React.FC<CreateRewardModalProps> = ({}) => {
             }}
             validationSchema={yup.object().shape({
               type: yup.string().required(),
-              name: yup.string().max(256).required(),
+              name: yup.string().max(128).required(),
               description: yup.string().max(1024).required(),
               cost: yup.number().moreThan(-1).required(),
               message: yup.string().when("type", {
@@ -83,9 +83,16 @@ export const CreateRewardModal: React.FC<CreateRewardModalProps> = ({}) => {
             })}
             onSubmit={async (values) => {
               await mutateAsync(values);
+              onClose();
             }}
           >
-            {({ values, handleChange, setFieldValue, handleBlur }) => (
+            {({
+              values,
+              isSubmitting,
+              handleChange,
+              setFieldValue,
+              handleBlur,
+            }) => (
               <Form>
                 <ModalHeader>Reward</ModalHeader>
                 <ModalCloseButton />
@@ -177,7 +184,12 @@ export const CreateRewardModal: React.FC<CreateRewardModalProps> = ({}) => {
                   </Tabs>
                 </ModalBody>
                 <ModalFooter>
-                  <Button type="submit" colorScheme="blue" mr={2}>
+                  <Button
+                    isLoading={isSubmitting}
+                    type="submit"
+                    colorScheme="blue"
+                    mr={2}
+                  >
                     Create Reward
                   </Button>
                   <Button type="button" onClick={onClose}>

@@ -1,13 +1,13 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { KnexModule } from "nestjs-knex";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { ArticlesModule } from "./articles/articles.module";
 import configuration from "./configuration";
 import * as connectionOptions from "./ormconfig";
 import { UsersModule } from "./users/users.module";
+import { RewardsModule } from './rewards/rewards.module';
 
 @Module({
   imports: [
@@ -17,14 +17,9 @@ import { UsersModule } from "./users/users.module";
       isGlobal: true,
     }),
     TypeOrmModule.forRoot(connectionOptions),
-    KnexModule.forRoot({
-      config: {
-        client: "pg",
-        connection: process.env.DATABASE_URL,
-      },
-    }),
     UsersModule,
     ArticlesModule,
+    RewardsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

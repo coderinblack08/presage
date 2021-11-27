@@ -1,4 +1,5 @@
 import { Article } from "src/articles/article.entity";
+import { Reward } from "src/rewards/rewards.entity";
 import {
   BaseEntity,
   Column,
@@ -34,6 +35,9 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Article, (a) => a.user)
   articles: Article[];
+
+  @OneToMany(() => Reward, (r) => r.user)
+  rewards: Reward[];
 
   @CreateDateColumn()
   createdAt: Date;

@@ -26,3 +26,21 @@ export interface Article {
   bookmarkCount: number;
   createdAt: FieldValue;
 }
+
+export enum RewardType {
+  Shoutout = "shoutout",
+  Message = "message",
+}
+
+export interface Reward {
+  id: string;
+  type: RewardType;
+  name: string;
+  description: string;
+  cost: number;
+  message?: string;
+  userId: string;
+  user: User;
+  createdAt: Date;
+  updatedAt: Date;
+}
