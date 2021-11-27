@@ -1,6 +1,7 @@
 import {
   FormControl,
   FormErrorMessage,
+  FormHelperText,
   FormLabel,
   Input,
   Textarea,
@@ -17,20 +18,22 @@ type InputFieldProps = TextareaHTMLAttributes<HTMLTextAreaElement> &
     name: string;
     label: string;
     textarea?: boolean;
+    helperText?: string;
   };
 
 export const InputField = forwardRef<any, InputFieldProps>(
-  ({ label, size: _, textarea, ...props }, ref) => {
+  ({ label, size: _, textarea, helperText, ...props }, ref) => {
     let InputOrTextarea: any = Input;
     if (textarea) {
       InputOrTextarea = Textarea;
     }
-    const [field, { error }] = useField(props);
+    const [field, { error, touched }] = useField(props);
     return (
-      <FormControl isInvalid={!!error}>
+      <FormControl isInvalid={!!error && touched}>
         <FormLabel htmlFor={field.name}>{label}</FormLabel>
         <InputOrTextarea {...field} {...props} ref={ref} id={field.name} />
-        {error ? <FormErrorMessage>{error}</FormErrorMessage> : null}
+        {helperText ? <FormHelperText>{helperText}</FormHelperText> : null}
+        {error && touched ? <FormErrorMessage>{error}</FormErrorMessage> : null}
       </FormControl>
     );
   }

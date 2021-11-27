@@ -32,7 +32,7 @@ export const firebaseConfig = {
 };
 
 if (getApps().length === 0) {
-  initFirebaseApp(firebaseConfig);
+  initFirebaseApp(firebaseConfig, true);
 }
 
 export const firebase = {

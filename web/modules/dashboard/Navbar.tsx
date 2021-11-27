@@ -27,16 +27,17 @@ import { NewDraft } from "./NewDraft";
 interface NavbarProps {}
 
 export const Navbar: React.FC<NavbarProps> = ({}) => {
-  const { data: drafts } = useQuery<Article[]>("/api/drafts");
-  const { data: me } = useQuery<User>("/api/me");
+  const { data: drafts } = useQuery<Article[]>("/articles/drafts");
+  const { data: me } = useQuery<User>("/auth/me");
 
   return (
     <Flex
       align="center"
       justify="space-between"
       maxW="5xl"
-      bg="white"
+      bgColor="white"
       position="sticky"
+      zIndex={50}
       top={0}
       mx="auto"
       px={5}
@@ -56,7 +57,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
             variant="outline"
           />
           <Portal>
-            <MenuList>
+            <MenuList position="relative" zIndex={50}>
               <MenuGroup>
                 <MenuItem
                   icon={
@@ -154,7 +155,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
             />
           </MenuButton>
           <Portal>
-            <MenuList>
+            <MenuList position="relative" zIndex={50}>
               <MenuItem
                 icon={
                   <Icon

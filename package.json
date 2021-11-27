@@ -4,6 +4,7 @@
   "workspaces": {
     "packages": [
       "web",
+      "api",
       "functions"
     ],
     "nohoist": [

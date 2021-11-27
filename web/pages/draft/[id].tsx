@@ -31,7 +31,7 @@ const Dashboard: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = ({ id }) => {
   const [diff, setDiff] = useState<any>(null);
-  const { data: draft } = useQuery<Article>(`/api/draft/${id}`);
+  const { data: draft } = useQuery<Article>(`/articles/${id}`);
   const { mutateAsync } = useUpdateDraftMutation();
   const { mutateAsync: publish, isLoading: isPublishLoading } =
     usePublishMutation();
@@ -45,15 +45,17 @@ const Dashboard: NextPage<
         canonical: draft?.canonical || "",
         tags: (draft?.tags || []).join(", "),
       }}
-      onSubmit={async () => {
-        await mutateAsync({ id, values: diff });
+      onSubmit={async (_, { setFieldError }) => {
+        try {
+          await mutateAsync({ id, values: diff, setFieldError });
+        } catch (error) {}
       }}
       enableReinitialize
     >
       {({ handleChange, handleBlur, values }) => (
         <Box height="100vh">
           <Navbar />
-          <Box as={Form} my={20} px={8} maxW="3xl" mx="auto">
+          <Box as={Form} pt={20} pb={40} px={8} maxW="3xl" mx="auto">
             <chakra.input
               _focus={{ outline: "none" }}
               placeholder="Untitled"
@@ -101,9 +103,9 @@ const Dashboard: NextPage<
                 <SettingsDrawer />
                 <Button
                   type="button"
+                  colorScheme="blue"
                   onClick={() => publish(id)}
                   isLoading={isPublishLoading}
-                  colorScheme="purple"
                   leftIcon={<MdPublic size={20} />}
                 >
                   {draft?.isPublished ? "Unpublish" : "Publish"}
@@ -121,7 +123,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const id = ctx.query.id?.toString();
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery(
-    `/api/draft/${id}`,
+    `/articles/${id}`,
     defaultQueryFn(ctx.req.headers.cookie)
   );
 

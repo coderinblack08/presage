@@ -118,7 +118,7 @@ export const TipTapEditor: React.FC<TipTapEditorProps> = ({ draft }) => {
         </Box>
       )}
       <EditorContent editor={editor} />
-      <Fade in={editor?.isEmpty}>
+      <Fade in={editor?.isEmpty} unmountOnExit>
         <chakra.hr mt={4} borderColor="gray.100" />
         <EditorEmptyState />
       </Fade>

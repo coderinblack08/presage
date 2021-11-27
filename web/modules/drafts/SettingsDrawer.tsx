@@ -46,16 +46,19 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({}) => {
               label="Canonical URL"
               name="canonical"
               placeholder="Enter url..."
+              helperText="Improve your site's SEO by providing a canonical link to your original post"
             />
             <InputField
               label="Tags"
               name="tags"
               placeholder="Enter comma separated tags..."
+              helperText="Provide up to 5 tags related to your article"
             />
             <InputField
               label="Description"
               name="description"
               placeholder="Enter description..."
+              helperText="Summarize your article in 500 characters or less"
               rows={6}
               textarea
             />

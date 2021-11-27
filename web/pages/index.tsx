@@ -2,6 +2,7 @@ import { CheckIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
+  Flex,
   Heading,
   HStack,
   Input,
@@ -22,15 +23,27 @@ const Home: NextPage = () => {
     // h="100vh"
     >
       <Navbar />
-      <VStack as="header" spacing={5} px={5} py={24} maxW="2xl" mx="auto">
-        <Heading as="h1" fontSize={40} lineHeight="shorter" textAlign="center">
+      <VStack
+        as="header"
+        spacing={[4, 5]}
+        px={5}
+        py={[14, 24]}
+        maxW="2xl"
+        mx="auto"
+      >
+        <Heading
+          as="h1"
+          fontSize={[26, "4xl", 40]}
+          lineHeight="short"
+          textAlign="center"
+        >
           <Text as="span" color="gray.500">
             Earn from publishing
           </Text>{" "}
           <br /> Reward your top readers
         </Heading>
         <Text
-          fontSize="md"
+          fontSize={["xs", "sm", "md"]}
           color="gray.500"
           lineHeight="taller"
           textAlign="center"
@@ -39,22 +52,22 @@ const Home: NextPage = () => {
           Presage. Brainstorm, draft, and revise without distractions. Reward
           your readers for referring your articles.
         </Text>
-        <HStack w="full" maxW="xl" spacing={2}>
-          <Input placeholder="Enter your email" />
-          <Button colorScheme="gray" px={6} flexShrink="0">
+        <Flex direction={["column", "row"]} w="full" maxW="xl" spacing={2}>
+          <Input placeholder="Enter your email" mb={[2, 0]} mr={[0, 2]} />
+          <Button px={[4, 6]} flexShrink="0">
             Join Waitlist
           </Button>
-        </HStack>
+        </Flex>
         <HStack as={List} justify="space-between" w="full" maxW="lg">
-          <ListItem color="gray.600" fontSize="sm">
+          <ListItem color="gray.600" fontSize={["xs", "sm"]}>
             <ListIcon as={CheckIcon} color="gray.400" />
             Generous Free Plan
           </ListItem>
-          <ListItem color="gray.600" fontSize="sm">
+          <ListItem color="gray.600" fontSize={["xs", "sm"]}>
             <ListIcon as={CheckIcon} color="gray.400" />
             Grow with Referrals
           </ListItem>
-          <ListItem color="gray.600" fontSize="sm">
+          <ListItem color="gray.600" fontSize={["xs", "sm"]}>
             <ListIcon as={CheckIcon} color="gray.400" />
             Open Source
           </ListItem>

@@ -8,7 +8,7 @@ class LoginController extends RouteController {
 
   async post(req: NextApiRequest, res: NextApiResponse) {
     try {
-      const { token } = req.headers;
+      const token = req.headers.authorization;
       if (!token) {
         return res.status(401).json(new Error("Invalid token"));
       }

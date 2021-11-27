@@ -5,3 +5,6 @@ export const IS_DEV = process.env.NODE_ENV === "development";
 export const BASE_URL = IS_DEV
   ? "http://localhost:3000"
   : "https://joinpresage.com";
+export const API_URL = IS_DEV
+  ? "http://localhost:4000"
+  : "https://api.joinpresage.com";

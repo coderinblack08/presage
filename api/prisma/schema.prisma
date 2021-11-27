@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String    @id @default(cuid())
+  email          String    @unique
+  profilePicture String?
+  displayName    String    @db.VarChar(64)
+  username       String    @unique @db.VarChar(64)
+  bio            String?
+  googleId       String
+  createdAt      DateTime  @default(now())
+  Article        Article[]
+}
+
+enum ViewAccess {
+  PUBLIC
+  PRIVATE
+}
+
+model Article {
+  id            String     @id @default(cuid())
+  title         String
+  canonical     String?
+  tags          String[]
+  access        ViewAccess @default(PUBLIC)
+  isPublished   Boolean    @default(false)
+  description   String?
+  likeCount     Int        @default(0)
+  bookmarkCount Int        @default(0)
+  shareCount    Int        @default(0)
+  editorJSON    Json?
+  // editorHTML  String?
+  userId        String
+  user          User       @relation(fields: [userId], references: [id])
+  updatedAt     DateTime   @updatedAt
+  createdAt     DateTime   @default(now())
+  publishedAt   DateTime?
+}

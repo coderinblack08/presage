@@ -9,6 +9,7 @@ import {
   uniqueNamesGenerator,
 } from "unique-names-generator";
 import { User } from "../types";
+import { firebase } from "./firebase";
 
 export const generateUsername = () => {
   return uniqueNamesGenerator({
@@ -37,9 +38,9 @@ export const login = async () => {
     await setDoc(doc(firestore, "emails", user.uid), { email: user.email });
     await setDoc(doc(firestore, "usernames", username), { uid: user.uid });
   }
-  const token = await getAuth().currentUser?.getIdToken();
+  const token = await firebase.auth.currentUser?.getIdToken();
   if (token) {
-    await axios.post("/api/login", {}, { headers: { token } });
+    await axios.post("/api/login", {}, { headers: { Authorization: token } });
   }
   Router.push("/dashboard");
 };
