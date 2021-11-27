@@ -4,6 +4,7 @@ import {
   Get,
   HttpException,
   HttpStatus,
+  InternalServerErrorException,
   Param,
   Patch,
   Post,
@@ -25,10 +26,7 @@ export class ArticlesController {
     try {
       return this.articlesService.create(userId);
     } catch (error) {
-      throw new HttpException(
-        "Internal Server Error",
-        HttpStatus.INTERNAL_SERVER_ERROR
-      );
+      throw new InternalServerErrorException();
     }
   }
 
@@ -38,10 +36,7 @@ export class ArticlesController {
     try {
       return this.articlesService.findDrafts(userId);
     } catch (error) {
-      throw new HttpException(
-        "Internal Server Error",
-        HttpStatus.INTERNAL_SERVER_ERROR
-      );
+      throw new InternalServerErrorException();
     }
   }
 
@@ -52,10 +47,7 @@ export class ArticlesController {
     try {
       return this.articlesService.findOne(id, userId);
     } catch (error) {
-      throw new HttpException(
-        "Internal Server Error",
-        HttpStatus.INTERNAL_SERVER_ERROR
-      );
+      throw new InternalServerErrorException();
     }
   }
 
@@ -70,10 +62,7 @@ export class ArticlesController {
       const article = await this.articlesService.update(id, userId, data);
       return article.raw[0];
     } catch (error) {
-      throw new HttpException(
-        "Internal Server Error",
-        HttpStatus.INTERNAL_SERVER_ERROR
-      );
+      throw new InternalServerErrorException();
     }
   }
 
@@ -86,10 +75,7 @@ export class ArticlesController {
     } catch (error) {
       console.log(error);
 
-      throw new HttpException(
-        "Internal Server Error",
-        HttpStatus.INTERNAL_SERVER_ERROR
-      );
+      throw new InternalServerErrorException();
     }
   }
 }

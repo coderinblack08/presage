@@ -78,8 +78,8 @@ export const theme = extendTheme(
             fontStyle: "italic",
             borderLeft: "4px",
             borderColor: "gray.100",
-            pl: 5,
             quotes: '"\\201C""\\201D""\\2018""\\2019"',
+            pl: 5,
           },
         },
         ".tiptap-editor": {

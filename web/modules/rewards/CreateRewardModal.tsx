@@ -3,6 +3,7 @@ import {
   FormControl,
   FormLabel,
   Icon,
+  MenuItem,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -27,27 +28,38 @@ import {
 import { Form, Formik } from "formik";
 import React, { useRef, useState } from "react";
 import { MdAdd } from "react-icons/md";
+import { useMutation, useQueryClient } from "react-query";
 import * as yup from "yup";
+import { defaultMutationFn } from "../../lib/utils/defaultMutationFn";
+import { Reward } from "../../types";
 import { InputField } from "../InputField";
-import { useCreateRewardMutation } from "./useCreateRewardMutation";
 
-interface CreateRewardModalProps {}
+interface CreateRewardModalProps {
+  existingReward?: Reward;
+}
 
-export const CreateRewardModal: React.FC<CreateRewardModalProps> = ({}) => {
+export const CreateRewardModal: React.FC<CreateRewardModalProps> = ({
+  existingReward,
+}) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [tabIndex, setTabIndex] = useState(0);
-  const { mutateAsync } = useCreateRewardMutation();
+  const { mutateAsync } = useMutation(defaultMutationFn);
   const firstFocus = useRef<any>(null);
+  const queryClient = useQueryClient();
 
   return (
     <>
-      <Button
-        onClick={onOpen}
-        leftIcon={<Icon as={MdAdd} w={5} h={5} />}
-        colorScheme="blue"
-      >
-        New Reward
-      </Button>
+      {existingReward ? (
+        <MenuItem onClick={onOpen}>Edit</MenuItem>
+      ) : (
+        <Button
+          onClick={onOpen}
+          leftIcon={<Icon as={MdAdd} w={5} h={5} />}
+          colorScheme="blue"
+        >
+          New Reward
+        </Button>
+      )}
       <Modal
         size="lg"
         initialFocusRef={firstFocus}
@@ -58,12 +70,12 @@ export const CreateRewardModal: React.FC<CreateRewardModalProps> = ({}) => {
         <ModalContent>
           <Formik
             initialValues={{
-              type: "message",
-              name: "",
-              description: "",
-              cost: 0,
-              message: "",
-              maxShoutouts: 10,
+              type: existingReward?.type || "message",
+              name: existingReward?.name || "",
+              description: existingReward?.description || "",
+              cost: existingReward?.cost || 0,
+              message: existingReward?.message || "",
+              maxShoutouts: existingReward?.maxShoutouts || 10,
             }}
             validationSchema={yup.object().shape({
               type: yup.string().required(),
@@ -82,7 +94,32 @@ export const CreateRewardModal: React.FC<CreateRewardModalProps> = ({}) => {
               }),
             })}
             onSubmit={async (values) => {
-              await mutateAsync(values);
+              if (existingReward) {
+                await mutateAsync(
+                  [`/rewards/${existingReward.id}`, values, "PUT"],
+                  {
+                    onSuccess: (data) => {
+                      console.log(data);
+
+                      queryClient.setQueryData<Reward[]>("/rewards", (old) => {
+                        return (
+                          old?.map((r) =>
+                            r.id === existingReward.id ? data : r
+                          ) || []
+                        );
+                      });
+                    },
+                  }
+                );
+              } else {
+                await mutateAsync(["/rewards", values, "POST"], {
+                  onSuccess: (data) => {
+                    queryClient.setQueryData<Reward[]>("/rewards", (old) => {
+                      return [...(old || []), data];
+                    });
+                  },
+                });
+              }
               onClose();
             }}
           >
@@ -94,7 +131,9 @@ export const CreateRewardModal: React.FC<CreateRewardModalProps> = ({}) => {
               handleBlur,
             }) => (
               <Form>
-                <ModalHeader>Reward</ModalHeader>
+                <ModalHeader>
+                  {existingReward ? "Edit Reward" : "New Reward"}
+                </ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
                   <Tabs
@@ -190,7 +229,7 @@ export const CreateRewardModal: React.FC<CreateRewardModalProps> = ({}) => {
                     colorScheme="blue"
                     mr={2}
                   >
-                    Create Reward
+                    {existingReward ? "Update Reward" : "Create Reward"}
                   </Button>
                   <Button type="button" onClick={onClose}>
                     Close

@@ -1,9 +1,9 @@
 import {
   Box,
-  Text,
   Center,
   Flex,
   Heading,
+  Icon,
   Link,
   Tab,
   Table,
@@ -13,25 +13,28 @@ import {
   Tabs,
   Tbody,
   Td,
+  Text,
   Th,
   Thead,
   Tr,
 } from "@chakra-ui/react";
 import { NextPage } from "next";
 import React from "react";
+import { MdMoreVert } from "react-icons/md";
 import { useQuery } from "react-query";
 import { Navbar } from "../modules/dashboard/Navbar";
 import { CreateRewardModal } from "../modules/rewards/CreateRewardModal";
+import { RewardTableRowModal } from "../modules/rewards/RewardTableRowModal";
 import { Reward } from "../types";
 
 const RewardsPage: NextPage = () => {
   const { data } = useQuery<Reward[]>("/rewards");
 
   return (
-    <Box>
+    <Box minH="100vh">
       <Navbar />
-      <Box my={20} px={8} maxW="5xl" mx="auto">
-        <Flex align="center" justify="space-between" mb={4}>
+      <Box my={20} px={5} maxW="5xl" mx="auto">
+        <Flex align="center" justify="space-between" mb={6}>
           <Heading fontFamily="body" as="h1" size="lg">
             Rewards
           </Heading>
@@ -53,26 +56,22 @@ const RewardsPage: NextPage = () => {
                     <Th fontFamily="body" isNumeric>
                       Cost
                     </Th>
+                    <Th></Th>
                   </Tr>
                 </Thead>
                 <Tbody>
                   {data?.map((reward) => (
-                    <Tr key={reward.id} onClick={() => alert("hi")}>
-                      <Td>
-                        <Text textTransform="capitalize">{reward.type}</Text>
-                      </Td>
-                      <Td>{reward.name}</Td>
-                      <Td>{reward.description}</Td>
-                      <Td isNumeric>{reward.cost}</Td>
-                    </Tr>
+                    <RewardTableRowModal key={reward.id} reward={reward} />
                   ))}
                 </Tbody>
               </Table>
-              <Center w="full" h={8}>
-                <Text color="gray.400">
-                  No Rewards Found (<Link color="gray.600">Learn more</Link>)
-                </Text>
-              </Center>
+              {data?.length === 0 && (
+                <Center w="full" h={8}>
+                  <Text color="gray.400">
+                    No Rewards Found (<Link color="gray.600">Learn more</Link>)
+                  </Text>
+                </Center>
+              )}
             </TabPanel>
             <TabPanel></TabPanel>
           </TabPanels>

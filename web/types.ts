@@ -39,6 +39,7 @@ export interface Reward {
   description: string;
   cost: number;
   message?: string;
+  maxShoutouts?: number;
   userId: string;
   user: User;
   createdAt: Date;

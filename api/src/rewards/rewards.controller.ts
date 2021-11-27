@@ -1,10 +1,15 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpException,
   HttpStatus,
+  InternalServerErrorException,
+  Param,
+  Patch,
   Post,
+  Put,
   UseGuards,
 } from "@nestjs/common";
 import { JwtAuthGuard } from "src/users/jwt-auth.guard";
@@ -22,10 +27,7 @@ export class RewardsController {
     try {
       return this.rewardsService.create(userId, data);
     } catch (error) {
-      throw new HttpException(
-        "Internal Server Error",
-        HttpStatus.INTERNAL_SERVER_ERROR
-      );
+      throw new InternalServerErrorException();
     }
   }
 
@@ -35,10 +37,31 @@ export class RewardsController {
     try {
       return this.rewardsService.findAll(userId);
     } catch (error) {
-      throw new HttpException(
-        "Internal Server Error",
-        HttpStatus.INTERNAL_SERVER_ERROR
-      );
+      throw new InternalServerErrorException();
+    }
+  }
+
+  @Put(":id")
+  @UseGuards(JwtAuthGuard)
+  async update(
+    @CurrentUser() userId: string,
+    @Body() data: Partial<CreateRewardDto>,
+    @Param("id") id: string
+  ) {
+    try {
+      return this.rewardsService.update(id, userId, data);
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
+  }
+
+  @Delete(":id")
+  @UseGuards(JwtAuthGuard)
+  async delete(@CurrentUser() userId: string, @Param("id") id: string) {
+    try {
+      return this.rewardsService.delete(id, userId);
+    } catch (error) {
+      throw new InternalServerErrorException();
     }
   }
 }

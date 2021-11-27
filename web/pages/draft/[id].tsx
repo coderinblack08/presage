@@ -55,14 +55,7 @@ const Dashboard: NextPage<
       {({ handleChange, handleBlur, values }) => (
         <Box height="100vh">
           <Navbar />
-          <Box
-            as={Form}
-            pt={{ base: 12, sm: 16, lg: 20 }}
-            pb={40}
-            px={8}
-            maxW="3xl"
-            mx="auto"
-          >
+          <Box as={Form} pt={20} pb={40} px={8} maxW="3xl" mx="auto">
             <chakra.input
               _focus={{ outline: "none" }}
               placeholder="Untitled"

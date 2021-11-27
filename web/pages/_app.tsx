@@ -3,8 +3,8 @@ import "@fontsource/inter";
 import type { AppProps } from "next/app";
 import { Hydrate, QueryClient, QueryClientProvider } from "react-query";
 import { theme } from "../lib/chakra";
-import { defaultQueryFn } from "../lib/utils/defaultQueryFn";
 import "../lib/firebase";
+import { defaultQueryFn } from "../lib/utils/defaultQueryFn";
 import "../styles/globals.css";
 
 const queryClient = new QueryClient({

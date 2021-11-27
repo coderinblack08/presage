@@ -3,6 +3,7 @@ import {
   BaseEntity,
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
@@ -10,8 +11,8 @@ import {
 } from "typeorm";
 
 export enum RewardType {
-  Shoutout = "shoutout",
-  Message = "message",
+  SHOUTOUT = "shoutout",
+  MESSAGE = "message",
 }
 
 @Entity()
@@ -31,6 +32,9 @@ export class Reward extends BaseEntity {
   @Column({ default: 0 })
   cost: number;
 
+  @Column({ nullable: true })
+  maxShoutouts?: number;
+
   @Column({ nullable: true, select: false })
   message?: string;
 
@@ -45,4 +49,7 @@ export class Reward extends BaseEntity {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @DeleteDateColumn()
+  deletedAt: Date;
 }

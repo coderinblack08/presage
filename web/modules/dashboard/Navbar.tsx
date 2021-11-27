@@ -51,7 +51,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
       py={3}
     >
       <NextLink href="/" passHref>
-        <Link>
+        <Link _focus={{ outline: "none" }}>
           <Image src={logo} alt="logo" />
         </Link>
       </NextLink>
