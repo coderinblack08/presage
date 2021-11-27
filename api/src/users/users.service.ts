@@ -1,16 +1,20 @@
-import { Prisma } from ".prisma/client";
 import { Injectable } from "@nestjs/common";
-import { PrismaService } from "src/prisma.service";
+import { InjectRepository } from "@nestjs/typeorm";
+import { DeepPartial, FindOneOptions, Repository } from "typeorm";
 import {
   adjectives,
   animals,
   NumberDictionary,
   uniqueNamesGenerator,
 } from "unique-names-generator";
+import { User } from "./user.entity";
 
 @Injectable()
 export class UsersService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    @InjectRepository(User)
+    private usersRepository: Repository<User>
+  ) {}
 
   public generateUsername() {
     return uniqueNamesGenerator({
@@ -23,27 +27,16 @@ export class UsersService {
     });
   }
 
-  async findOne(params: {
-    where?: Prisma.UserWhereInput;
-    select?: Prisma.UserSelect;
-  }) {
-    params.select ||= {
-      id: true,
-      bio: true,
-      createdAt: true,
-      displayName: true,
-      profilePicture: true,
-      username: true,
-    };
-    return this.prisma.user.findFirst(params);
+  async findOne(params: FindOneOptions) {
+    return this.usersRepository.findOne(params);
   }
 
-  async create(data: Prisma.UserCreateInput) {
-    return this.prisma.user.create({
-      data: {
+  async create(data: DeepPartial<User>) {
+    return this.usersRepository
+      .create({
         username: this.generateUsername(),
         ...data,
-      },
-    });
+      })
+      .save();
   }
 }

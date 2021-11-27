@@ -13,7 +13,7 @@ export const defaultMutationFn = async ([path, body, method = "POST"]: [
     },
     credentials: "include",
   });
-  if (r.status !== 200) {
+  if (r.status !== 201 && r.status !== 200) {
     throw new Error(await r.text());
   }
   return await r.json();

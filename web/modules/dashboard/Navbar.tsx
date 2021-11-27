@@ -18,7 +18,14 @@ import {
 } from "@chakra-ui/react";
 import Image from "next/image";
 import React from "react";
-import { MdApps, MdLogout, MdPerson, MdSearch, MdUpdate } from "react-icons/md";
+import {
+  MdApps,
+  MdEmojiEvents,
+  MdLogout,
+  MdPerson,
+  MdSearch,
+  MdUpdate,
+} from "react-icons/md";
 import { useQuery } from "react-query";
 import logo from "../../public/logo.svg";
 import { Article, User } from "../../types";
@@ -59,32 +66,52 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
           <Portal>
             <MenuList position="relative" zIndex={50}>
               <MenuGroup>
-                <MenuItem
-                  icon={
-                    <Icon
-                      as={MdApps}
-                      color="gray.400"
-                      size={18}
-                      w="auto"
-                      h="auto"
-                    />
-                  }
-                >
-                  Dashboard
-                </MenuItem>
-                <MenuItem
-                  icon={
-                    <Icon
-                      as={MdSearch}
-                      color="gray.400"
-                      size={18}
-                      w="auto"
-                      h="auto"
-                    />
-                  }
-                >
-                  Explore
-                </MenuItem>
+                <NextLink href="/dashboard" passHref>
+                  <MenuItem
+                    icon={
+                      <Icon
+                        as={MdApps}
+                        color="gray.400"
+                        size={18}
+                        w="auto"
+                        h="auto"
+                      />
+                    }
+                  >
+                    Dashboard
+                  </MenuItem>
+                </NextLink>
+                <NextLink href="/explore" passHref>
+                  <MenuItem
+                    icon={
+                      <Icon
+                        as={MdSearch}
+                        color="gray.400"
+                        size={18}
+                        w="auto"
+                        h="auto"
+                      />
+                    }
+                  >
+                    Explore
+                  </MenuItem>
+                </NextLink>
+                <NextLink href="/rewards" passHref>
+                  <MenuItem
+                    as="a"
+                    icon={
+                      <Icon
+                        as={MdEmojiEvents}
+                        color="gray.400"
+                        size={18}
+                        w="auto"
+                        h="auto"
+                      />
+                    }
+                  >
+                    Rewards
+                  </MenuItem>
+                </NextLink>
               </MenuGroup>
               <MenuDivider />
               {(drafts || [])?.length > 0 && (

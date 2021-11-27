@@ -27,7 +27,7 @@
     "@nestjs/jwt": "^8.0.0",
     "@nestjs/passport": "^8.0.1",
     "@nestjs/platform-express": "^8.0.0",
-    "@prisma/client": "^3.4.2",
+    "@nestjs/typeorm": "^8.0.2",
     "@radix-ui/react-popover": "^0.1.1",
     "class-transformer": "0.4.0",
     "class-validator": "^0.13.1",
@@ -43,6 +43,7 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
+    "typeorm": "^0.2.41",
     "unique-names-generator": "^4.6.0"
   },
   "devDependencies": {

@@ -67,8 +67,25 @@ export class ArticlesController {
     @Body() data: Partial<UpdateArticleDto>
   ) {
     try {
-      return this.articlesService.update(id, userId, data);
+      const article = await this.articlesService.update(id, userId, data);
+      return article.raw[0];
     } catch (error) {
+      throw new HttpException(
+        "Internal Server Error",
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
+    }
+  }
+
+  @Post(":id/publish")
+  @UseGuards(JwtAuthGuard)
+  async publish(@CurrentUser() userId: string, @Param("id") id: string) {
+    try {
+      await this.articlesService.publish(id, userId);
+      return true;
+    } catch (error) {
+      console.log(error);
+
       throw new HttpException(
         "Internal Server Error",
         HttpStatus.INTERNAL_SERVER_ERROR

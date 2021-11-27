@@ -79,6 +79,7 @@ export class CommandsList extends React.Component<CommandsListProps> {
     return (
       <List
         w={56}
+        bgColor="white"
         shadow="sm"
         rounded="lg"
         border="1px"
