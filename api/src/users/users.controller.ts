@@ -1,4 +1,12 @@
-import { Controller, Get, Redirect, Req, Res, UseGuards } from "@nestjs/common";
+import {
+  Controller,
+  Get,
+  Post,
+  Redirect,
+  Req,
+  Res,
+  UseGuards,
+} from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { CookieOptions, Request, Response } from "express";
 import { GoogleStrategy } from "./google.strategy";
@@ -37,6 +45,12 @@ export class AuthController {
     const { accessToken } = await this.googleStrategy.login(req.user);
     res.cookie("jid", accessToken, this.options);
     return { url: "http://localhost:3000" };
+  }
+
+  @Post("/logout")
+  async logout(@Res() res: Response) {
+    res.clearCookie("jid", this.options);
+    res.status(200).end();
   }
 
   @Public()

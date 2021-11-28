@@ -26,26 +26,27 @@ import {
   MdSearch,
   MdUpdate,
 } from "react-icons/md";
-import { useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import logo from "../../public/logo.svg";
 import { Article, User } from "../../types";
 import { NewDraft } from "./NewDraft";
+import { defaultMutationFn } from "../../lib/utils/defaultMutationFn";
+import { useRouter } from "next/router";
 
 interface NavbarProps {}
 
 export const Navbar: React.FC<NavbarProps> = ({}) => {
   const { data: drafts } = useQuery<Article[]>("/articles/drafts");
   const { data: me } = useQuery<User>("/auth/me");
+  const { mutateAsync } = useMutation(defaultMutationFn);
+  const queryClient = useQueryClient();
+  const router = useRouter();
 
   return (
     <Flex
       align="center"
       justify="space-between"
       maxW="5xl"
-      bgColor="white"
-      position="sticky"
-      zIndex={50}
-      top={0}
       mx="auto"
       px={5}
       py={3}
@@ -197,6 +198,14 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
                 Profile
               </MenuItem>
               <MenuItem
+                onClick={async () => {
+                  await mutateAsync(["/auth/logout", {}, "POST"], {
+                    onSuccess: () => {
+                      queryClient.clear();
+                      router.push("/");
+                    },
+                  });
+                }}
                 icon={
                   <Icon
                     as={MdLogout}
