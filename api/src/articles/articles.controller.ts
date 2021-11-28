@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpException,
   HttpStatus,
@@ -75,6 +76,17 @@ export class ArticlesController {
     } catch (error) {
       console.log(error);
 
+      throw new InternalServerErrorException();
+    }
+  }
+
+  @Delete(":id")
+  @UseGuards(JwtAuthGuard)
+  async delete(@CurrentUser() userId: string, @Param("id") id: string) {
+    try {
+      await this.articlesService.delete(id, userId);
+      return true;
+    } catch (error) {
       throw new InternalServerErrorException();
     }
   }

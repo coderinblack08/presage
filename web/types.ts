@@ -24,7 +24,8 @@ export interface Article {
   likeCount: number;
   shareCount: number;
   bookmarkCount: number;
-  createdAt: FieldValue;
+  publishedAt?: Date;
+  createdAt: Date;
 }
 
 export enum RewardType {

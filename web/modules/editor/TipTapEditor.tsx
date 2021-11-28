@@ -16,26 +16,28 @@ interface TipTapEditorProps {
   draft: Article | undefined;
 }
 
+export const extensions = [
+  StarterKit,
+  Placeholder.configure({
+    placeholder: ({ node }) => {
+      if (node.type.name === "heading") {
+        return "Heading";
+      }
+      return "Type '/' for commands";
+    },
+  }),
+  SlashCommands,
+  Underline,
+  Link,
+];
+
 export const TipTapEditor: React.FC<TipTapEditorProps> = ({ draft }) => {
   const [_, __, { setValue }] = useField("editorJSON");
   const editor = useEditor({
-    extensions: [
-      StarterKit,
-      Placeholder.configure({
-        placeholder: ({ node }) => {
-          if (node.type.name === "heading") {
-            return "Heading";
-          }
-          return "Type '/' for commands";
-        },
-      }),
-      SlashCommands,
-      Underline,
-      Link,
-    ],
+    extensions,
     editorProps: {
       attributes: {
-        class: "tiptap-editor",
+        class: "typography tiptap-editor",
       },
     },
     content: draft?.editorJSON || null,

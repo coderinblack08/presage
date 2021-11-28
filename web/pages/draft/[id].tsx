@@ -8,6 +8,8 @@ import {
   chakra,
   Flex,
   HStack,
+  Icon,
+  IconButton,
 } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import type {
@@ -16,7 +18,7 @@ import type {
   NextPage,
 } from "next";
 import React, { useState } from "react";
-import { MdPublic } from "react-icons/md";
+import { MdLink, MdPublic } from "react-icons/md";
 import { dehydrate, QueryClient, useQuery } from "react-query";
 import { Navbar } from "../../modules/dashboard/Navbar";
 import { SettingsDrawer } from "../../modules/drafts/SettingsDrawer";
@@ -26,6 +28,7 @@ import { TipTapEditor } from "../../modules/editor/TipTapEditor";
 import { useUpdateDraftMutation } from "../../modules/editor/useUpdateDraftMutation";
 import { defaultQueryFn } from "../../lib/utils/defaultQueryFn";
 import { Article } from "../../types";
+import Link from "next/link";
 
 const Dashboard: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
@@ -100,7 +103,17 @@ const Dashboard: NextPage<
                 </BreadcrumbItem>
               </Breadcrumb>
               <HStack align="center" spacing={2}>
-                <SettingsDrawer />
+                {draft?.isPublished && (
+                  <Link href={`/article/${draft.id}`} passHref>
+                    <IconButton
+                      as="a"
+                      variant="outline"
+                      aria-label="view"
+                      icon={<Icon as={MdLink} w={6} h={6} />}
+                    />
+                  </Link>
+                )}
+                <SettingsDrawer article={draft!} />
                 <Button
                   type="button"
                   colorScheme="blue"

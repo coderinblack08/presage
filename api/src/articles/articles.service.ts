@@ -27,7 +27,10 @@ export class ArticlesService {
   }
 
   async findOne(id: string, userId: string) {
-    const article = await this.articlesRepository.findOne({ where: { id } });
+    const article = await this.articlesRepository.findOne({
+      where: { id },
+      relations: ["user"],
+    });
     if (article.userId !== userId && !article.isPublished) {
       throw new Error("Not Authorized");
     }
@@ -45,11 +48,22 @@ export class ArticlesService {
   }
 
   async publish(id: string, userId: string) {
-    return this.connection
+    const result = await this.connection
       .createQueryBuilder()
       .update(Article)
       .set({ isPublished: () => 'not article."isPublished"' } as any)
       .where('article.id = :id and article."userId" = :userId', { id, userId })
+      .returning("*")
       .execute();
+    if (result.raw[0].isPublished === true) {
+      await this.articlesRepository.update(
+        { id, userId },
+        { publishedAt: () => "CURRENT_TIMESTAMP" }
+      );
+    }
+  }
+
+  async delete(id: string, userId: string) {
+    return this.articlesRepository.delete({ id, userId });
   }
 }

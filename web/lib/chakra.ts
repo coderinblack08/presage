@@ -22,7 +22,7 @@ export const theme = extendTheme(
         body: {
           fontSize: "14px",
         },
-        ".ProseMirror": {
+        ".typography": {
           position: "relative",
           zIndex: 0,
           lineHeight: "taller",

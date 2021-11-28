@@ -4,19 +4,29 @@ import {
   DrawerBody,
   DrawerCloseButton,
   DrawerContent,
+  DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
   useDisclosure,
   VStack,
 } from "@chakra-ui/react";
+import router, { useRouter } from "next/router";
 import React, { useRef } from "react";
-import { MdSettings } from "react-icons/md";
+import { MdDelete, MdSettings } from "react-icons/md";
+import { useMutation, useQueryClient } from "react-query";
+import { defaultMutationFn } from "../../lib/utils/defaultMutationFn";
+import { Article } from "../../types";
 import { InputField } from "../InputField";
 
-interface SettingsDrawerProps {}
+interface SettingsDrawerProps {
+  article: Article;
+}
 
-export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({}) => {
+export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({ article }) => {
+  const router = useRouter();
+  const queryClient = useQueryClient();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { mutateAsync, isLoading } = useMutation(defaultMutationFn);
   const firstFocus = useRef<HTMLInputElement>(null);
 
   return (
@@ -63,6 +73,26 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({}) => {
               textarea
             />
           </VStack>
+          <DrawerFooter>
+            <Button
+              isLoading={isLoading}
+              onClick={async () => {
+                await mutateAsync([`/articles/${article.id}`, {}, "DELETE"], {
+                  onSuccess: () => {
+                    queryClient.setQueryData<Article[]>(
+                      "/articles/drafts",
+                      (old) => old?.filter((a) => a.id !== article.id) || []
+                    );
+                  },
+                });
+                router.push("/dashboard");
+              }}
+              colorScheme="red"
+              leftIcon={<MdDelete size={20} />}
+            >
+              Remove
+            </Button>
+          </DrawerFooter>
         </DrawerContent>
       </Drawer>
     </>
