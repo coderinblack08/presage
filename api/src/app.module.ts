@@ -8,6 +8,7 @@ import configuration from "./configuration";
 import * as connectionOptions from "./ormconfig";
 import { UsersModule } from "./users/users.module";
 import { RewardsModule } from './rewards/rewards.module';
+import { ReactionsModule } from './reactions/reactions.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { RewardsModule } from './rewards/rewards.module';
     UsersModule,
     ArticlesModule,
     RewardsModule,
+    ReactionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

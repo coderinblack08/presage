@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { InjectConnection, InjectRepository } from "@nestjs/typeorm";
-import { User } from "src/users/user.entity";
-import { Connection, Raw, Repository } from "typeorm";
-import { Article } from "./article.entity";
+import { ReactionsService } from "src/reactions/reactions.service";
+import { Connection, Repository } from "typeorm";
+import { Article } from "./articles.entity";
 import { UpdateArticleDto } from "./update-article.dto";
 
 @Injectable()
@@ -10,7 +10,8 @@ export class ArticlesService {
   constructor(
     @InjectRepository(Article)
     private articlesRepository: Repository<Article>,
-    @InjectConnection() private connection: Connection
+    @InjectConnection() private connection: Connection,
+    private reactionsService: ReactionsService
   ) {}
 
   async create(userId: string) {
@@ -33,6 +34,8 @@ export class ArticlesService {
     });
     if (article.userId !== userId && !article.isPublished) {
       throw new Error("Not Authorized");
+    }
+    if (article.isPublished) {
     }
     return article;
   }

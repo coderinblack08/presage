@@ -8,10 +8,8 @@ import { Reward } from "./rewards.entity";
 @Injectable()
 export class RewardsService {
   constructor(
-    @InjectRepository(Reward)
-    private rewardsRepository: Repository<Reward>,
-    @InjectConnection()
-    private connection: Connection
+    @InjectRepository(Reward) private rewardsRepository: Repository<Reward>,
+    @InjectConnection() private connection: Connection
   ) {}
 
   async create(userId: string, data: CreateRewardDto) {

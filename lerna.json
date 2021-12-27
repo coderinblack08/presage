@@ -1,4 +1,0 @@
-{
-  "packages": ["web", "api", "functions"],
-  "version": "0.0.1"
-}

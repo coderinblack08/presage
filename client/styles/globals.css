@@ -1,0 +1,41 @@
+@import url("https://rsms.me/inter/inter.css");
+
+@tailwind base;
+@tailwind utilities;
+@tailwind components;
+
+@font-face {
+  font-family: "Eudoxus Sans";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: optional;
+  src: url(/fonts/eudoxus-sans-var.woff2) format("woff2");
+}
+
+:not(h1 > *, .font-display) {
+  font-feature-settings: "cv11";
+}
+
+@layer base {
+  :root {
+    font-size: 14px;
+    @apply antialiased font-medium;
+  }
+
+  p,
+  div,
+  li,
+  a,
+  button {
+    font-size: 1rem;
+    font-weight: 500;
+  }
+
+  .ProseMirror p.is-empty::before {
+    color: theme("colors.gray.300");
+    content: attr(data-placeholder);
+    float: left;
+    height: 0;
+    pointer-events: none;
+  }
+}

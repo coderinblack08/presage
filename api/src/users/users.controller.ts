@@ -25,6 +25,7 @@ export class AuthController {
   options: CookieOptions = {
     httpOnly: true,
     sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
     domain:
       process.env.NODE_ENV === "production" ? ".joinpresage.com" : undefined,
   };
@@ -44,7 +45,7 @@ export class AuthController {
   ) {
     const { accessToken } = await this.googleStrategy.login(req.user);
     res.cookie("jid", accessToken, this.options);
-    return { url: "http://localhost:3000" };
+    return { url: "http://localhost:3000/dashboard" };
   }
 
   @Post("/logout")
