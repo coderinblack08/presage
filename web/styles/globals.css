@@ -1,16 +1,13 @@
-html,
-body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-}
+@import url("https://rsms.me/inter/inter.css");
+@import url("https://stijndv.com/fonts/Eudoxus-Sans.css");
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
+@tailwind base;
+@tailwind utilities;
+@tailwind components;
 
-* {
-  box-sizing: border-box;
+@layer base {
+  :root {
+    font-size: 14px;
+    @apply antialiased font-medium;
+  }
 }
