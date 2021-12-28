@@ -34,7 +34,7 @@ export const Sidebar: React.FC = () => {
         </div>
         <SidebarMenuLinks />
         <div className="px-3 py-5">
-          <h2 className="font-bold px-4 text-sm mb-1">Drafts</h2>
+          <h2 className="font-bold px-4 text-sm mb-1.5">Drafts</h2>
           <SidebarDraftList />
         </div>
       </div>

@@ -34,7 +34,7 @@ export const TipTapEditor: React.FC<TipTapEditorProps> = ({ draft }) => {
     extensions,
     editorProps: {
       attributes: {
-        class: "prose focus:outline-none prose-neutral py-8",
+        class: "prose !max-w-full focus:outline-none prose-neutral py-10",
       },
     },
     content: draft?.editorJSON || null,
