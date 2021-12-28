@@ -5,9 +5,24 @@
 @tailwind utilities;
 @tailwind components;
 
+:not(h1 > *, .font-display) {
+  font-feature-settings: "cv11";
+}
+
 @layer base {
   :root {
     font-size: 14px;
-    @apply antialiased font-medium;
   }
+
+  *:not(h1 > *):not(h2 > *):not(h3 > *):not(h4 > *):not(h5 > *):not(h6 > *) {
+    @apply font-medium text-base antialiased;
+  }
+}
+
+.ProseMirror p.is-empty::before {
+  color: theme("colors.gray.300");
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
 }

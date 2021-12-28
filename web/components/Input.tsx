@@ -24,8 +24,8 @@ export const Input: React.FC<
         className: `mt-0 w-full resize-none select-none focus:outline-none ${
           icon
             ? "pl-2"
-            : "border px-4 py-2 focus:ring focus:ring-gray-200 rounded-lg placeholder-gray-400"
-        } ${className}`,
+            : "border px-4 py-2 focus:ring focus:ring-gray-200 rounded-lg placeholder-gray-400 font-normal"
+        } font-normal ${className}`,
         ...props,
       })}
       {shortcut && (

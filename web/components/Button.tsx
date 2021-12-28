@@ -43,7 +43,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         ref={ref}
         disabled={isDisabled || isLoading}
-        className={`flex items-center ${ButtonVariants.size[size]} ${ButtonVariants.color[colorScheme]} rounded-lg font-bold select-none transition-all transform duration-100 ease-in hover:scale-[0.98] active:scale-[0.95] focus:outline-none focus-visible:ring-gray-300 focus-visible:ring ${className}`}
+        className={`flex items-center justify-center ${ButtonVariants.size[size]} ${ButtonVariants.color[colorScheme]} rounded-lg font-bold select-none transition-all transform duration-100 ease-in hover:scale-[0.98] active:scale-[0.95] focus:outline-none focus-visible:ring-gray-300 focus-visible:ring ${className}`}
         {...props}
       >
         {icon && <span className="mr-2">{icon}</span>}

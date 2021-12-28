@@ -31,6 +31,9 @@ export class Article extends BaseEntity {
   @Column("bool", { default: false })
   isPublished: boolean;
 
+  @Column("bool", { default: false })
+  isStarred: boolean;
+
   @Column()
   userId: string;
 
