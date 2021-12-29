@@ -1,18 +1,19 @@
-import { Extension } from "@tiptap/core";
-import Fuse from "fuse.js";
-import { Editor, Range, ReactRenderer } from "@tiptap/react";
-import Suggestion, { SuggestionOptions } from "@tiptap/suggestion";
-import { Node as ProseMirrorNode } from "prosemirror-model";
-import tippy, { Instance } from "tippy.js";
-import { CommandsList } from "./CommandsList";
-import React from "react";
 import {
   IconCursorText,
   IconHeading,
   IconList,
   IconListNumbers,
+  IconPhoto,
   IconQuote,
 } from "@tabler/icons";
+import { Extension } from "@tiptap/core";
+import { Editor, Range, ReactRenderer } from "@tiptap/react";
+import Suggestion, { SuggestionOptions } from "@tiptap/suggestion";
+import Fuse from "fuse.js";
+import { Node as ProseMirrorNode } from "prosemirror-model";
+import React from "react";
+import tippy, { Instance } from "tippy.js";
+import { CommandsList } from "./CommandsList";
 
 export type CommandsOption = {
   HTMLAttributes?: Record<string, any>;
@@ -31,7 +32,7 @@ export const Commands = Extension.create<CommandsOption>({
         char: "/",
         startOfLine: false,
         command: ({ editor, range, props }) => {
-          props.command({ editor, range });
+          props.command({ editor, range }, props.file);
         },
       },
     };
@@ -54,6 +55,9 @@ const textItemHelper = (
   icon,
   title: type === "heading" ? `Heading ${level}` : "Paragraph",
   shortcut: level ? `h${level}` : "p",
+  description: level
+    ? `Create a ${["large", "medium", "small"][level - 1]} heading`
+    : "Create a paragraph",
   command: ({ editor, range }: { editor: Editor; range: Range }) => {
     editor.chain().focus().deleteRange(range).setNode(type, { level }).run();
   },
@@ -67,6 +71,7 @@ const commands = [
   {
     title: "Ordered List",
     shortcut: "ol",
+    description: "Create a numbered list",
     icon: <IconListNumbers />,
     command: ({ editor, range }: { editor: Editor; range: Range }) => {
       editor.chain().focus().deleteRange(range).toggleOrderedList().run();
@@ -74,6 +79,7 @@ const commands = [
   },
   {
     title: "Bulleted List",
+    description: "Create a bulleted list",
     icon: <IconList />,
     shortcut: "ul",
     command: ({ editor, range }: { editor: Editor; range: Range }) => {
@@ -82,9 +88,23 @@ const commands = [
   },
   {
     title: "Quote",
+    description: " Insert a quote",
     icon: <IconQuote />,
     command: ({ editor, range }: { editor: Editor; range: Range }) => {
       editor.chain().focus().deleteRange(range).toggleBlockquote().run();
+    },
+  },
+  {
+    title: "Image",
+    shortcut: "img",
+    description: "Insert an uploaded image",
+    icon: <IconPhoto />,
+    command: (
+      { editor, range }: { editor: Editor; range: Range },
+      file: File
+    ) => {
+      const url = URL.createObjectURL(file);
+      editor.chain().focus().setImage({ src: url, alt: file.name }).run();
     },
   },
 ];

@@ -1,32 +1,36 @@
-import { useState } from "react";
 import {
-  NextPage,
+  IconCalendarEvent,
+  IconDotsVertical,
+  IconExternalLink,
+  IconFile,
+  IconList,
+  IconStar,
+} from "@tabler/icons";
+import { format } from "date-fns";
+import { Form, Formik } from "formik";
+import {
   GetServerSideProps,
   InferGetServerSidePropsType,
+  NextPage,
 } from "next";
+import Link from "next/link";
+import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { Article } from "../../lib/types";
-import { Sidebar } from "../../modules/dashboard/Sidebar";
-import {
-  IconFile,
-  IconExternalLink,
-  IconStar,
-  IconDotsVertical,
-  IconX,
-  IconCalendarEvent,
-  IconList,
-} from "@tabler/icons";
-import { Formik, Form } from "formik";
 import { Button } from "../../components/Button";
-import { FormikAutoSave } from "../../modules/editor/FormikAutoSave";
-import { TipTapEditor } from "../../modules/editor/TipTapEditor";
 import { defaultMutationFn } from "../../lib/defaultMutationFn";
+import { Article, User } from "../../lib/types";
+import { Sidebar } from "../../modules/dashboard/Sidebar";
+import { FormikAutoSave } from "../../modules/editor/FormikAutoSave";
+import { TagInput } from "../../modules/editor/TagInput";
+import { TipTapEditor } from "../../modules/editor/TipTapEditor";
+import { TitleInput } from "../../modules/editor/TitleInput";
 
 const Dashboard: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = ({ id }) => {
   const [diff, setDiff] = useState<any>(null);
   const { data: draft } = useQuery<Article>(`/articles/${id}`);
+  const { data: me } = useQuery<User>(`/auth/me`);
   const { mutateAsync } = useMutation(defaultMutationFn);
   const cache = useQueryClient();
 
@@ -63,11 +67,20 @@ const Dashboard: NextPage<
               >
                 {draft?.isPublished ? "Unpublish" : "Publish"}
               </Button>
+              <Link href={`/${me?.username}/${draft?.slug}`} passHref>
+                <a>
+                  <IconExternalLink className="text-gray-400 w-6 h-6" />
+                </a>
+              </Link>
               <button>
-                <IconExternalLink className="text-gray-400 w-6 h-6" />
-              </button>
-              <button>
-                <IconStar className="text-gray-400 w-6 h-6" />
+                {draft?.isStarred ? (
+                  <IconStar
+                    className="text-yellow-400 w-6 h-6"
+                    fill="currentColor"
+                  />
+                ) : (
+                  <IconStar className="text-gray-400 w-6 h-6" />
+                )}
               </button>
               <button>
                 <IconDotsVertical className="text-gray-400 w-6 h-6" />
@@ -87,7 +100,10 @@ const Dashboard: NextPage<
             onSubmit={async (_, { setFieldError }) => {
               try {
                 if ("tags" in diff) {
-                  diff.tags = diff.tags.split(",").map((s) => s.trim());
+                  diff.tags = diff.tags
+                    .split(",")
+                    .map((s: string) => s.trim())
+                    .filter(Boolean);
                   if (diff.tags.length > 5) {
                     setFieldError("tags", "Max of 5 tags");
                     throw new Error();
@@ -118,63 +134,36 @@ const Dashboard: NextPage<
             }}
             enableReinitialize
           >
-            {({ handleChange, handleBlur, values }) => (
-              <Form className="px-8 mx-auto">
-                <h1
-                  contentEditable
-                  suppressContentEditableWarning
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      e.preventDefault();
-                      return false;
-                    }
-                  }}
-                  className="focus:outline-none w-full font-bold text-3xl leading-relaxed"
-                  onPaste={(e) => {
-                    e.preventDefault();
-                    return false;
-                  }}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                >
-                  {values.title}
-                </h1>
-                <table className="mt-4">
-                  <tbody>
-                    <tr>
-                      <th className="flex items-center space-x-1.5 w-24 py-2">
-                        <IconCalendarEvent className="text-gray-400 w-5 h-5" />
-                        <span className="text-gray-500 font-medium">Date</span>
-                      </th>
-                      <td className="text-gray-500 py-1">August 23, 2020</td>
-                    </tr>
-                    <tr>
-                      <th className="flex items-center space-x-1.5 w-24 py-2">
-                        <IconList className="text-gray-400 w-5 h-5" />
-                        <span className="text-gray-500 font-medium">Tags</span>
-                      </th>
-                      <td className="py-1 space-x-1.5">
-                        <div className="inline-flex items-center px-2.5 rounded-md bg-yellow-100 text-yellow-900 space-x-2">
-                          <span>Pioneer</span>
-                          <button>
-                            <IconX className="w-4 h-4 text-yellow-900/50" />
-                          </button>
-                        </div>
-                        <div className="inline-flex items-center px-2.5 rounded-md bg-red-100 text-red-900 space-x-2">
-                          <span>Presage</span>
-                          <button>
-                            <IconX className="w-4 h-4 text-red-900/50" />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-                <hr className="mt-10 border-gray-100" />
-                <TipTapEditor draft={draft} />
-                <FormikAutoSave setDiff={setDiff} />
-              </Form>
-            )}
+            <Form className="px-8 mx-auto">
+              <TitleInput />
+              <table className="mt-4">
+                <tbody>
+                  <tr>
+                    <th className="flex items-center space-x-1.5 w-24 py-2">
+                      <IconCalendarEvent className="text-gray-400 w-5 h-5" />
+                      <span className="text-gray-500 font-medium">Date</span>
+                    </th>
+                    <td className="text-gray-500 py-1">
+                      {draft?.publishedAt
+                        ? format(new Date(draft?.publishedAt), "MMMM dd, yyyy")
+                        : "Not published"}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th className="flex items-center space-x-1.5 w-24 py-2">
+                      <IconList className="text-gray-400 w-5 h-5" />
+                      <span className="text-gray-500 font-medium">Tags</span>
+                    </th>
+                    <td className="py-1">
+                      <TagInput tags={draft?.tags} />
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <hr className="mt-10 border-gray-100" />
+              <TipTapEditor draft={draft} />
+              <FormikAutoSave setDiff={setDiff} />
+            </Form>
           </Formik>
         </div>
       </main>

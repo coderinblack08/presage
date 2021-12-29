@@ -68,7 +68,7 @@ export const MenuItem: React.FC<MenuItemProps> = ({
   children,
   className,
   isDisabled = false,
-  closeOnSelect,
+  closeOnSelect = true,
   onClick,
 }) => {
   return (
@@ -85,9 +85,11 @@ export const MenuItem: React.FC<MenuItemProps> = ({
       asChild
     >
       <button
-        className={`flex cursor-pointer items-center space-x-2 select-none py-1.5 px-4 text-gray-600 w-full rounded-lg-border focus:bg-gray-100 focus:outline-none ${className}`}
+        className={`flex cursor-pointer items-center select-none py-1.5 px-4 text-gray-600 w-full rounded-lg-border focus:bg-gray-100 focus:outline-none ${className}`}
       >
-        {icon && <div className="flex-shrink-0 text-gray-400 mr-2">{icon}</div>}
+        {icon && (
+          <div className="flex-shrink-0 text-gray-400 mr-2.5">{icon}</div>
+        )}
         {children}
       </button>
     </DropdownMenu.Item>

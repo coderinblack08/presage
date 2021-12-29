@@ -36,6 +36,7 @@
     "emojilib": "^3.0.4",
     "https-proxy-agent": "^5.0.0",
     "knex": "^0.95.14",
+    "nanoid": "^3.1.30",
     "nestjs-knex": "^2.0.0",
     "passport": "^0.5.0",
     "passport-google-oauth20": "^2.0.0",

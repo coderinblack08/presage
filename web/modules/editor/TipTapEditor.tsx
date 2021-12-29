@@ -1,6 +1,8 @@
 import Link from "@tiptap/extension-link";
+import Dropcursor from "@tiptap/extension-dropcursor";
 import Placeholder from "@tiptap/extension-placeholder";
 import Underline from "@tiptap/extension-underline";
+import Image from "@tiptap/extension-image";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { useField } from "formik";
@@ -14,7 +16,7 @@ interface TipTapEditorProps {
 }
 
 export const extensions = [
-  StarterKit,
+  StarterKit.configure({ dropcursor: false }),
   Placeholder.configure({
     placeholder: ({ node }) => {
       if (node.type.name === "heading") {
@@ -23,8 +25,13 @@ export const extensions = [
       return "Type '/' for commands";
     },
   }),
+  Dropcursor.configure({
+    color: "#f5f5f5",
+    width: 2,
+  }),
   SlashCommands,
   Underline,
+  Image,
   Link,
 ];
 
@@ -34,7 +41,8 @@ export const TipTapEditor: React.FC<TipTapEditorProps> = ({ draft }) => {
     extensions,
     editorProps: {
       attributes: {
-        class: "prose !max-w-full focus:outline-none prose-neutral py-10",
+        class:
+          "prose prose-neutral prose-img:rounded-lg prose-img:mx-auto !max-w-full focus:outline-none py-10",
       },
     },
     content: draft?.editorJSON || null,

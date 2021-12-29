@@ -1,4 +1,4 @@
-import { IconLogout, IconSelector, IconUser } from "@tabler/icons";
+import { IconLogout, IconMoon, IconSelector, IconUser } from "@tabler/icons";
 import React from "react";
 import { useQuery, useQueryClient } from "react-query";
 import { Menu, MenuDivider, MenuItem } from "../../components/Menu";
@@ -40,6 +40,9 @@ export const AccountDropdown: React.FC<AccountDropdownProps> = ({}) => {
       <MenuDivider />
       <MenuItem icon={<IconUser className="w-5 h-5 text-gray-400" />}>
         Account
+      </MenuItem>
+      <MenuItem icon={<IconMoon className="w-5 h-5 text-gray-400" />}>
+        Enable Dark Mode
       </MenuItem>
       <MenuItem
         onClick={async () => {

@@ -11,8 +11,10 @@ export interface User {
 export interface Article {
   id: string;
   title: string;
+  slug: string;
   description?: string;
   isPublished: boolean;
+  isStarred: boolean;
   editorJSON?: any;
   tags: string[];
   canonical?: string;

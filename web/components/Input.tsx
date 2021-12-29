@@ -1,4 +1,4 @@
-import React from "react";
+import React, { forwardRef } from "react";
 
 interface InputProps {
   icon?: React.ReactNode;
@@ -6,9 +6,10 @@ interface InputProps {
   isTextarea?: boolean;
 }
 
-export const Input: React.FC<
+export const Input = forwardRef<
+  HTMLInputElement,
   InputProps & React.InputHTMLAttributes<HTMLInputElement>
-> = ({ isTextarea, icon, className, shortcut, ...props }) => {
+>(({ isTextarea, icon, className, shortcut, ...props }, ref) => {
   return (
     <div
       className={`relative items-center flex w-full ${
@@ -21,6 +22,7 @@ export const Input: React.FC<
         </span>
       )}
       {React.createElement(isTextarea ? "textarea" : "input", {
+        ref,
         className: `mt-0 w-full resize-none select-none focus:outline-none ${
           icon
             ? "pl-2"
@@ -42,4 +44,6 @@ export const Input: React.FC<
       )}
     </div>
   );
-};
+});
+
+Input.displayName = "Input";

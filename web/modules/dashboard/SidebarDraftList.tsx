@@ -1,11 +1,17 @@
-import { IconFile, IconFilePlus } from "@tabler/icons";
-import React from "react";
-import { useMutation, useQuery, useQueryClient } from "react-query";
-import { Article } from "../../lib/types";
-import { defaultMutationFn } from "../../lib/defaultMutationFn";
-import toast, { Toaster } from "react-hot-toast";
+import {
+  IconFile,
+  IconFilePlus,
+  IconFolderPlus,
+  IconHeadphones,
+} from "@tabler/icons";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import React from "react";
+import toast, { Toaster } from "react-hot-toast";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { Menu, MenuItem } from "../../components/Menu";
+import { defaultMutationFn } from "../../lib/defaultMutationFn";
+import { Article } from "../../lib/types";
 
 interface SidebarDraftListProps {}
 
@@ -49,28 +55,51 @@ export const SidebarDraftList: React.FC<SidebarDraftListProps> = ({}) => {
           </Link>
         ))}
       </div>
-      <button
-        onClick={async () => {
-          await mutateAsync(["/articles", {}, "POST"], {
-            onSuccess: (data) => {
-              cache.setQueryData<Article[]>("/articles/drafts", (old) => {
-                return [...(old || []), data];
-              });
-              toast.success("New draft created!");
-              push("/draft/[id]", `/draft/${data.id}`);
-            },
-            onError: () => {
-              toast.error("Failed to create new draft!");
-            },
-          });
-        }}
-        className="flex items-center space-x-3 px-4 py-2 rounded-xl w-full"
+      <Menu
+        sideOffset={4}
+        className="origin-top w-[250px]"
+        trigger={
+          <button className="flex items-center space-x-3 px-4 py-2 rounded-xl w-full">
+            <div className="p-1.5 bg-white inline-flex items-center justify-center rounded-xl shadow border">
+              <IconFilePlus className="w-[19px] h-[19px] text-gray-400" />
+            </div>
+            <p className="text-gray-500 truncate text-[13px]">New Entry</p>
+          </button>
+        }
       >
-        <div className="p-1.5 bg-white inline-flex items-center justify-center rounded-xl shadow border">
-          <IconFilePlus className="w-[19px] h-[19px] text-gray-400" />
-        </div>
-        <p className="text-gray-500 truncate text-[13px]">New Entry</p>
-      </button>
+        <MenuItem
+          icon={<IconFilePlus className="w-5 h-5 text-gray-400" />}
+          className="text-[13px]"
+          onClick={async () => {
+            await mutateAsync(["/articles", {}, "POST"], {
+              onSuccess: (data) => {
+                cache.setQueryData<Article[]>("/articles/drafts", (old) => {
+                  return [...(old || []), data];
+                });
+                toast.success("New draft created!");
+                push("/draft/[id]", `/draft/${data.id}`);
+              },
+              onError: () => {
+                toast.error("Failed to create new draft!");
+              },
+            });
+          }}
+        >
+          New Draft
+        </MenuItem>
+        <MenuItem
+          icon={<IconHeadphones className="w-5 h-5 text-gray-400" />}
+          className="text-[13px]"
+        >
+          New Podcast
+        </MenuItem>
+        <MenuItem
+          icon={<IconFolderPlus className="w-5 h-5 text-gray-400" />}
+          className="text-[13px]"
+        >
+          New Publication
+        </MenuItem>
+      </Menu>
     </div>
   );
 };

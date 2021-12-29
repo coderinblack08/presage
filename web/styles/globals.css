@@ -26,3 +26,14 @@
   height: 0;
   pointer-events: none;
 }
+
+.ProseMirror > * + * {
+  margin-top: 0.75em;
+}
+.ProseMirror img {
+  max-width: 100%;
+  height: auto;
+}
+.ProseMirror img.ProseMirror-selectednode {
+  @apply ring;
+}

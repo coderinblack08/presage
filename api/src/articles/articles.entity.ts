@@ -19,6 +19,9 @@ export class Article extends BaseEntity {
   @Column()
   title: string;
 
+  @Column()
+  slug: string;
+
   @Column({ nullable: true })
   description?: string;
 

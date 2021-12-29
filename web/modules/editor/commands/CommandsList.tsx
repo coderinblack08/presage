@@ -1,4 +1,3 @@
-import { IconCursorText } from "@tabler/icons";
 import React from "react";
 
 interface CommandsListProps {
@@ -8,11 +7,13 @@ interface CommandsListProps {
 
 export class CommandsList extends React.Component<CommandsListProps> {
   focusedRef: React.RefObject<HTMLElement>;
+  fileInputRef: React.RefObject<HTMLInputElement>;
 
   constructor(props: CommandsListProps) {
     super(props);
     this.selectItem = this.selectItem.bind(this);
     this.focusedRef = React.createRef();
+    this.fileInputRef = React.createRef();
   }
 
   state = {
@@ -60,9 +61,14 @@ export class CommandsList extends React.Component<CommandsListProps> {
 
   selectItem(index: number) {
     const item = this.props.items[index];
+    this.setState({ selectedIndex: index });
 
     if (item) {
-      this.props.command(item);
+      if (item.title == "Image") {
+        this.fileInputRef.current?.click();
+      } else {
+        this.props.command({ ...item });
+      }
     }
   }
 
@@ -77,15 +83,28 @@ export class CommandsList extends React.Component<CommandsListProps> {
     const { selectedIndex } = this.state;
 
     return (
-      <div className="rounded-lg bg-white border shadow py-2 w-72">
+      <div className="rounded-lg bg-white border shadow py-2 w-80">
+        <input
+          type="file"
+          accept="image/*"
+          multiple={false}
+          ref={this.fileInputRef}
+          className="hidden"
+          onChange={() => {
+            this.props.command({
+              ...this.props.items[selectedIndex],
+              file: (this.fileInputRef.current?.files || [])[0],
+            });
+          }}
+        />
         {items.length === 0 ? (
           <p className="py-2 px-4 text-gray-500">No commands found</p>
         ) : (
-          items.map(({ title, icon }, index) => (
+          items.map(({ title, icon, description }, index) => (
             <button
               key={index}
               onClick={() => this.selectItem(index)}
-              className={`flex items-center space-x-4 w-full p-2 text-left ${
+              className={`flex items-center space-x-4 w-full px-4 py-3 text-left transition ease-in-out ${
                 selectedIndex === index
                   ? "bg-gray-100"
                   : "bg-white hover:bg-gray-50"
@@ -99,9 +118,7 @@ export class CommandsList extends React.Component<CommandsListProps> {
               </div>
               <div>
                 <span className="font-semibold text-gray-600">{title}</span>
-                <p className="text-gray-400 text-sm mt-1">
-                  Start writing with plain text
-                </p>
+                <p className="text-gray-400 text-sm mt-1">{description}</p>
               </div>
             </button>
           ))

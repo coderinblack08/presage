@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -72,8 +73,6 @@ export class ArticlesController {
       await this.articlesService.publish(id, userId);
       return true;
     } catch (error) {
-      console.log(error);
-
       throw new InternalServerErrorException();
     }
   }
