@@ -20,15 +20,37 @@
   :root {
     font-size: 14px;
     line-height: 1.6em;
-    @apply antialiased text-gray-900;
+    @apply antialiased text-gray-900 font-medium;
   }
 
-  span:not(h1 > *),
-  div,
-  p,
-  a,
-  button {
-    @apply font-medium;
+  .grid-border > * {
+    border-left: 1px dashed theme("colors.gray.200");
+  }
+
+  .grid-border > *:not(:nth-child(2n)) {
+    border-left: none;
+  }
+
+  .grid-border > *:not(:nth-child(-n + 2)) {
+    border-top: 1px dashed theme("colors.gray.200");
+  }
+
+  @media (max-width: 639px) {
+    .not-sm-grid-border {
+      @apply grid-border;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .feature-grid {
+      @apply divide-dashed divide-y;
+    }
+  }
+
+  @screen md {
+    .feature-grid {
+      @apply grid-border;
+    }
   }
 
   html,

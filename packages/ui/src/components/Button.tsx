@@ -11,11 +11,11 @@ const variants = {
     lg: "py-2 px-7 rounded-xl text-lg",
   },
   color: {
-    primary: {
+    purple: {
       filled: "bg-purple-500 hover:bg-purple-400 text-white",
       outline: "bg-purple-500/10 hover:bg-purple-500/20 text-purple-500",
     },
-    secondary: {
+    primary: {
       filled: "bg-gray-800 hover:bg-gray-700 text-gray-100",
       outline: "bg-white text-gray-900 border shadow-sm",
     },
@@ -53,7 +53,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         ref={ref}
         disabled={disabled || loading}
-        className={`flex items-center transition justify-center font-bold select-none focus-visible:ring focus-visible:ring-purple-500 focus:outline-none ${
+        className={`flex items-center transition justify-center font-bold select-none focus:outline-none ${
           (disabled || loading) && "opacity-50 cursor-not-allowed"
         } ${variants.size[size]} ${
           variants.color[color][variant]
