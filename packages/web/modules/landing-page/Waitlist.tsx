@@ -34,7 +34,6 @@ export const Waitlist: React.FC<WaitlistProps> = ({}) => {
       />
       <Button
         size="md"
-        color="primary"
         type="submit"
         className="w-full sm:w-auto flex-shrink-0"
         loading={loading}

@@ -8,7 +8,7 @@ export default {
   component: Button,
   title: "Components/Button",
   argTypes: {
-    color: toEnum(["primary", "secondary"]),
+    color: toEnum(["primary", "purple"]),
     size: toEnum(["sm", "md", "lg"]),
     loading: toBoolean(),
     disabled: toBoolean(),

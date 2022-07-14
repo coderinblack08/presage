@@ -49,11 +49,41 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref
   ) => {
+    function createRipple(
+      event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    ) {
+      const button = event.currentTarget;
+
+      const circle = document.createElement("span");
+      const diameter = Math.max(button.clientWidth, button.clientHeight);
+      const radius = diameter / 2;
+
+      const topPos = button.getBoundingClientRect().top + window.scrollY;
+      const leftPos = button.getBoundingClientRect().left + window.scrollX;
+
+      circle.style.width = circle.style.height = `${diameter}px`;
+      circle.style.left = `${event.clientX - (leftPos + radius)}px`;
+      circle.style.top = `${event.clientY - (topPos + radius)}px`;
+      circle.classList.add("ripple");
+
+      const ripple = button.getElementsByClassName("ripple")[0];
+
+      if (ripple) {
+        ripple.remove();
+      }
+
+      button.appendChild(circle);
+    }
+
     return (
       <button
         ref={ref}
+        onClick={(e) => {
+          createRipple(e);
+          if (props.onClick) props.onClick(e);
+        }}
         disabled={disabled || loading}
-        className={`flex items-center transition justify-center font-bold select-none focus:outline-none ${
+        className={`relative overflow-hidden flex items-center transition justify-center font-bold select-none focus:outline-none ${
           (disabled || loading) && "opacity-50 cursor-not-allowed"
         } ${variants.size[size]} ${
           variants.color[color][variant]

@@ -1,12 +1,12 @@
 import React from "react";
 import { AiFillGithub } from "react-icons/ai";
-import { FeatureCard } from "./FeatureCard";
-import { HeroSection } from "./HeroSection";
-import { Statistic } from "./Statistic";
 import bird from "../../public/static/animals/bird.png";
 import rabbit from "../../public/static/animals/rabbit.png";
 import rat from "../../public/static/animals/rat.png";
 import walrus from "../../public/static/animals/walrus.png";
+import { FeatureCard } from "./FeatureCard";
+import { HeroSection } from "./HeroSection";
+import { Statistic } from "./Statistic";
 
 export const LandingPage: React.FC = () => {
   return (
@@ -31,20 +31,23 @@ export const LandingPage: React.FC = () => {
                 <br />
                 <span className="text-gray-600">But How Does it Work?</span>
               </h2>
-              <p className="text-gray-500 mt-4 max-w-[44rem] text-sm sm:text-base md:text-lg leading-relaxed sm:leading-loose md:leading-loose">
-                Our goal is to support independent journalism for everyone
-                without prejudice. We also believe in keeping our code
-                open-source for all to see (a star never hurts).
-              </p>
-              <a
-                href="https://github.com/coderinblack08/presage"
-                className="inline-flex items-center space-x-2 mt-6"
-              >
-                <AiFillGithub className="w-6 h-6 text-gray-600" />
-                <div className="text-gray-600 font-semibold">
-                  coderinblack / <span className="text-gray-900">presage</span>
-                </div>
-              </a>
+              <div className="text-sm sm:text-base md:text-lg">
+                <p className="text-gray-500 mt-4 max-w-[44rem] leading-loose sm:leading-loose md:leading-loose">
+                  Our goal is to support independent journalism for everyone
+                  without prejudice. We also believe in keeping our code
+                  open-source for all to see (a star never hurts).
+                </p>
+                <a
+                  href="https://github.com/coderinblack08/presage"
+                  className="inline-flex items-center space-x-2 mt-6"
+                >
+                  <AiFillGithub className="w-6 h-6 text-gray-600" />
+                  <div className="text-gray-600 font-semibold">
+                    coderinblack /{" "}
+                    <span className="text-gray-900">presage</span>
+                  </div>
+                </a>
+              </div>
             </div>
           </div>
           <div className="border-t border-dashed px-5">

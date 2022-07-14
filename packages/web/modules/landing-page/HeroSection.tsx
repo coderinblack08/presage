@@ -1,4 +1,4 @@
-import { motion, useTransform, useViewportScroll } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
 import React from "react";
 import { useScreen } from "../../lib/useScreen";
@@ -10,7 +10,7 @@ interface HeroSectionProps {}
 
 export const HeroSection: React.FC<HeroSectionProps> = ({}) => {
   const { isSmallerThanTablet } = useScreen();
-  const { scrollY } = useViewportScroll();
+  const { scrollY } = useScroll();
   const rotateX = useTransform(scrollY, [0, 500], [15, 0]);
   const scale = useTransform(scrollY, [0, 500], [1.1, 1.2]);
 
