@@ -22,7 +22,7 @@ export const Menu: React.FC<MenuProps> = ({
   side,
   className,
   alignOffset,
-  sideOffset = 12,
+  sideOffset = 8,
   children,
   subMenu = false,
   ...props
