@@ -24,6 +24,7 @@
     transform: scale(0);
     animation: ripple 600ms linear;
     background-color: rgba(255, 255, 255, 0.2);
+    @apply pointer-events-none;
   }
 
   @keyframes ripple {

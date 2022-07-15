@@ -1,9 +1,12 @@
-import { FunctionComponent } from "react";
-import "../styles/globals.css";
+import { loggerLink } from "@trpc/client/links/loggerLink";
 import { withTRPC } from "@trpc/next";
-import { AppType } from "next/dist/shared/lib/utils";
 import { SessionProvider } from "next-auth/react";
+import { AppType } from "next/dist/shared/lib/utils";
+import { httpBatchLink } from "@trpc/client/links/httpBatchLink";
+import { FunctionComponent } from "react";
+import superjson from "superjson";
 import { AppRouter } from "../server/routers/_app";
+import "../styles/globals.css";
 
 const MyApp: AppType = ({
   Component,
@@ -25,10 +28,18 @@ export default withTRPC<AppRouter>({
      */
     const url = process.env.VERCEL_URL
       ? `https://${process.env.VERCEL_URL}/api/trpc`
-      : "http://localhost:3000/api/trpc";
+      : "http://localhost:8080/api/trpc";
 
     return {
-      url,
+      links: [
+        loggerLink({
+          enabled: (opts) =>
+            process.env.NODE_ENV === "development" ||
+            (opts.direction === "down" && opts.result instanceof Error),
+        }),
+        httpBatchLink({ url }),
+      ],
+      transformer: superjson,
       /**
        * @link https://react-query.tanstack.com/reference/QueryClient
        */
@@ -38,5 +49,5 @@ export default withTRPC<AppRouter>({
   /**
    * @link https://trpc.io/docs/ssr
    */
-  ssr: true,
+  ssr: false,
 })(MyApp);

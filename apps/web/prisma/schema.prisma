@@ -2,16 +2,12 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["referentialIntegrity"]
-
-
+  provider = "prisma-client-js"
 }
 
 datasource db {
-  provider             = "mysql"
-  url                  = env("DATABASE_URL")
-  referentialIntegrity = "prisma"
+  provider = "postgres"
+  url      = env("DATABASE_URL")
 }
 
 model Account {
@@ -50,6 +46,8 @@ model User {
   username      String    @unique
   accounts      Account[]
   sessions      Session[]
+  drafts        Draft[]
+  folders       Folder[]
 }
 
 model VerificationToken {
@@ -59,3 +57,55 @@ model VerificationToken {
 
   @@unique([identifier, token])
 }
+
+model Folder {
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  parentId String?
+  parent   Folder?  @relation("SubFolders", fields: [parentId], references: [id], onDelete: Cascade)
+  children Folder[] @relation("SubFolders")
+  drafts   Draft[]
+}
+
+model Draft {
+  id           String   @id @default(cuid())
+  title        String?
+  content      String?
+  tags         String[]
+  canonicalUrl String?
+  description  String?
+
+  paywalled Boolean  @default(false)
+  published Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  folderId String?
+  folder   Folder? @relation(fields: [folderId], references: [id], onDelete: Cascade)
+  userId   String
+  user     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // tags     DraftOnTags[]
+}
+
+// model Tag {
+//   id        String   @id @default(cuid())
+//   name      String   @unique
+//   createdAt DateTime @default(now())
+
+//   draftId String
+//   drafts  DraftOnTags[]
+// }
+
+// model DraftOnTags {
+//   draftId String
+//   tagId   String
+//   draft   Draft  @relation(fields: [draftId], references: [id], onDelete: Cascade)
+//   tag     Tag    @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+//   @@id([draftId, tagId])
+// }

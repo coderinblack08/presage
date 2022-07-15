@@ -1,14 +1,126 @@
-import React from "react";
+import {
+  IconDotsVertical,
+  IconFilePlus,
+  IconFolder,
+  IconFolderPlus,
+  IconPencil,
+  IconPlus,
+  IconTrash,
+} from "@tabler/icons";
+import { atom, useAtom, useSetAtom } from "jotai";
+import Image from "next/future/image";
+import Link from "next/link";
+import React, { useEffect, useRef, useState } from "react";
+import { Button, Menu, MenuDivider, MenuItem, ThemeIcon } from "ui";
+import { InferQueryOutput, trpc } from "../../lib/trpc";
+import logo from "../../public/static/logo.svg";
 import { QuickFindPopover } from "./QuickFindPopover";
 import { SidebarItem } from "./SidebarItem";
 import { UserDropdown } from "./UserDropdown";
-import logo from "../../public/static/logo.svg";
-import Image from "next/future/image";
-import Link from "next/link";
 
 interface SidebarProps {}
 
+const focusedAtom = atom<string | null>(null);
+
+const FolderOrFileButton: React.FC<{
+  folder?: InferQueryOutput<"folders.byId">;
+}> = ({ folder }) => {
+  const ref = useRef<HTMLInputElement>(null);
+  const [editing, setEditing] = useState(false);
+  const [focusedId, setFocusedId] = useAtom(focusedAtom);
+  const deleteFolder = trpc.useMutation(["folders.delete"]);
+  const utils = trpc.useContext();
+
+  useEffect(() => {
+    if (focusedId === folder?.id) {
+      setEditing(true);
+      setTimeout(() => {
+        ref.current?.focus();
+      }, 0);
+    }
+    setFocusedId(null);
+  }, [focusedId, folder?.id, setFocusedId]);
+
+  return (
+    <Button
+      className="w-full !justify-start px-2"
+      icon={
+        <ThemeIcon className="mr-1">
+          <IconFolder size={21} />
+        </ThemeIcon>
+      }
+      disableRipple={editing}
+      variant="ghost"
+      as="div"
+    >
+      {!editing && <span className="w-full">{folder?.name}</span>}
+      <input
+        ref={ref}
+        type="text"
+        onBlur={() => setEditing(false)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            setEditing(false);
+            ref.current?.blur();
+          }
+        }}
+        className={`relative z-[100] bg-transparent focus:outline-none py-1 border-b-2 border-gray-300 w-full ${
+          editing ? "block" : "hidden"
+        }`}
+        value={folder?.name}
+      />
+      <Menu
+        side="right"
+        align="start"
+        className="w-56"
+        onCloseAutoFocus
+        trigger={
+          <button className="flex items-center justify-center p-1.5 rounded-md text-gray-400">
+            <IconDotsVertical size={16} />
+          </button>
+        }
+      >
+        <MenuItem
+          onClick={() => {
+            setEditing(true);
+            setTimeout(() => {
+              ref.current?.focus();
+            }, 0);
+          }}
+          icon={<IconPencil size={20} />}
+        >
+          Rename
+        </MenuItem>
+        <MenuDivider />
+        <MenuItem
+          onClick={() =>
+            folder &&
+            deleteFolder.mutate(
+              { id: folder?.id },
+              {
+                onSuccess: () => {
+                  utils.setQueryData(["folders.all"], (old) =>
+                    (old || []).filter((f) => f.id !== folder?.id)
+                  );
+                },
+              }
+            )
+          }
+          icon={<IconTrash size={20} />}
+        >
+          Delete
+        </MenuItem>
+      </Menu>
+    </Button>
+  );
+};
+
 export const Sidebar: React.FC<SidebarProps> = ({}) => {
+  const addFolder = trpc.useMutation(["folders.add"]);
+  const { data: folders } = trpc.useQuery(["folders.all"]);
+  const [_, setFocusedId] = useAtom(focusedAtom);
+  const utils = trpc.useContext();
+
   return (
     <div className="flex flex-col justify-between relative h-screen w-[280px] flex-shrink-0 border-r bg-zinc-50">
       <div className="h-full overflow-y-auto">
@@ -33,6 +145,56 @@ export const Sidebar: React.FC<SidebarProps> = ({}) => {
             <SidebarItem name="rewards" />
           </div>
         </div>
+        <hr />
+        <ul className="py-4 w-full px-3">
+          {folders?.map((folder) => (
+            <li key={folder.id}>
+              <FolderOrFileButton folder={folder} />
+            </li>
+          ))}
+          <li>
+            <Menu
+              onCloseAutoFocus
+              align="start"
+              sideOffset={4}
+              className="w-[calc(280px-1.5rem)]"
+              trigger={
+                <Button
+                  className="w-full !justify-start px-2"
+                  icon={
+                    <ThemeIcon className="mr-1">
+                      <IconPlus size={21} />
+                    </ThemeIcon>
+                  }
+                  variant="ghost"
+                >
+                  New File or Folder
+                </Button>
+              }
+            >
+              <MenuItem icon={<IconFilePlus size={20} />}>File</MenuItem>
+              <MenuItem
+                icon={<IconFolderPlus size={20} />}
+                onClick={() => {
+                  addFolder.mutate(
+                    { name: "Untitled" },
+                    {
+                      onSuccess: (data) => {
+                        utils.setQueryData(["folders.all"], (old) => [
+                          ...(old || []),
+                          data,
+                        ]);
+                        setFocusedId(data.id);
+                      },
+                    }
+                  );
+                }}
+              >
+                Folder
+              </MenuItem>
+            </Menu>
+          </li>
+        </ul>
       </div>
       <UserDropdown />
     </div>

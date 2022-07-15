@@ -1,12 +1,12 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import NextAuth from "next-auth";
+import NextAuth, { NextAuthOptions } from "next-auth";
 import GitHubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import { prisma } from "../../../server/prisma";
 import { generateUsername } from "friendly-username-generator";
 import { env } from "../../../server/env";
 
-export default NextAuth({
+export const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
   adapter: {
     ...PrismaAdapter(prisma),
@@ -47,4 +47,6 @@ export default NextAuth({
     signIn: "/",
   },
   secret: env.NEXT_AUTH_SECRET,
-});
+};
+
+export default NextAuth(authOptions);

@@ -3,6 +3,7 @@ import React, {
   ButtonHTMLAttributes,
   DetailedHTMLProps,
   forwardRef,
+  useEffect,
 } from "react";
 
 const variants = {
@@ -16,11 +17,13 @@ const variants = {
       filled: "bg-blue-500 hover:bg-blue-400 text-white",
       outline: "bg-blue-500/10 hover:bg-blue-500/20 text-blue-500",
       light: "bg-blue-200 hover:bg-blue-300 text-blue-600",
+      ghost: "",
     },
     primary: {
       filled: "bg-gray-800 hover:bg-gray-700 text-gray-100",
       outline: "bg-white text-gray-900 border shadow-sm",
       light: "bg-gray-200 text-gray-600 hover:bg-gray-300",
+      ghost: "bg-transparent, text-gray-600 !font-medium",
     },
   },
 };
@@ -29,8 +32,9 @@ export type ButtonProps = DetailedHTMLProps<
   ButtonHTMLAttributes<HTMLButtonElement>,
   HTMLButtonElement
 > & {
+  disableRipple?: boolean;
   size?: keyof typeof variants["size"];
-  variant?: "filled" | "outline" | "light";
+  variant?: "filled" | "outline" | "light" | "ghost";
   color?: keyof typeof variants["color"];
   loading?: boolean;
   icon?: React.ReactNode;
@@ -42,6 +46,7 @@ type PolymorphicBox = Polymorphic.ForwardRefComponent<"button", ButtonProps>;
 export const Button = forwardRef(
   (
     {
+      disableRipple = false,
       as: Comp = "button",
       size = "md",
       color = "primary",
@@ -51,7 +56,7 @@ export const Button = forwardRef(
       children,
       className,
       icon,
-      onClick,
+      onMouseDown,
       ...props
     },
     ref
@@ -73,10 +78,12 @@ export const Button = forwardRef(
       circle.style.top = `${event.clientY - (topPos + radius)}px`;
       if (variant === "outline") {
         circle.classList.add("ripple", "!bg-gray-900/10");
+      } else if (variant === "filled") {
+        circle.classList.add("ripple");
       } else if (variant === "light") {
         circle.classList.add("ripple", "!bg-gray-900/20");
       } else {
-        circle.classList.add("ripple");
+        circle.classList.add("ripple", "!bg-gray-900/10");
       }
 
       const ripple = button.getElementsByClassName("ripple")[0];
@@ -91,12 +98,12 @@ export const Button = forwardRef(
     return (
       <Comp
         ref={ref}
-        onClick={(e) => {
-          createRipple(e);
-          onClick && onClick(e);
+        onMouseDown={(e) => {
+          if (!disableRipple) createRipple(e);
+          onMouseDown && onMouseDown(e);
         }}
         disabled={disabled || loading}
-        className={`relative overflow-hidden flex items-center transition justify-center font-bold select-none focus:outline-none ${
+        className={`relative overflow-hidden flex items-center transition justify-center font-bold select-none focus:outline-none focus-visible:ring focus-visible:ring-gray-300 ${
           (disabled || loading) && "opacity-50 cursor-not-allowed"
         } ${variants.size[size]} ${
           variants.color[color][variant]

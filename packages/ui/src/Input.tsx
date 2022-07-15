@@ -7,7 +7,7 @@ export interface InputProps extends React.ComponentPropsWithoutRef<"input"> {
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ textarea, className, icon, ...props }, ref) => {
-    const styles = `px-4 py-2 rounded-xl border shadow-sm focus:outline-none focus:ring-none placeholder-gray-400 w-full ${
+    const styles = `px-4 py-2 rounded-xl border shadow-sm focus:outline-none placeholder-gray-400 w-full focus-visible:ring focus-visible:ring-gray-300 ${
       textarea && "resize-none h-32"
     } ${className}`;
     if (textarea) {

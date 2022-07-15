@@ -1921,6 +1921,11 @@ jose@^4.1.4, jose@^4.3.7:
   resolved "https://registry.yarnpkg.com/jose/-/jose-4.8.3.tgz#5a754fb4aa5f2806608d083f438e6916b11087da"
   integrity sha512-7rySkpW78d8LBp4YU70Wb7+OTgE3OwAALNVZxhoIhp4Kscp+p/fBkdpxGAMKxvCAMV4QfXBU9m6l9nX/vGwd2g==
 
+jotai@^1.7.5:
+  version "1.7.5"
+  resolved "https://registry.yarnpkg.com/jotai/-/jotai-1.7.5.tgz#82a001b41fc8638f711d31cbf38fd29873cba8b7"
+  integrity sha512-EpawdHUOQmiKDoKRaFkO0L7R7YAFYBylK6M9IivMUPUpiHnXnt5e80AlqHvMUwg4p8BcQewh2JLWGQqFhtjpEA==
+
 js-sha3@0.8.0:
   version "0.8.0"
   resolved "https://registry.yarnpkg.com/js-sha3/-/js-sha3-0.8.0.tgz#b9b7a5da73afad7dedd0f8c463954cbde6818840"

@@ -3,6 +3,8 @@
  */
 import { createRouter } from "../createRouter";
 import superjson from "superjson";
+import { folderRouter } from "./folders";
+import { TRPCError } from "@trpc/server";
 
 /**
  * Create your application's root router
@@ -16,6 +18,12 @@ export const appRouter = createRouter()
    * @link https://trpc.io/docs/data-transformers
    */
   .transformer(superjson)
+  .middleware(async ({ ctx, meta, next }) => {
+    if (!ctx.session?.user && meta?.hasAuth) {
+      throw new TRPCError({ code: "UNAUTHORIZED" });
+    }
+    return next();
+  })
   /**
    * Optionally do custom error (type safe!) formatting
    * @link https://trpc.io/docs/error-formatting
@@ -28,6 +36,7 @@ export const appRouter = createRouter()
     async resolve() {
       return "yay!";
     },
-  });
+  })
+  .merge("folders.", folderRouter);
 
 export type AppRouter = typeof appRouter;
