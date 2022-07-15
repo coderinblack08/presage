@@ -1,14 +1,8 @@
 import { NextPage } from "next";
-import React from "react";
-import { SideNav } from "../modules/dashboard/SideNav";
+import { DashboardLayout } from "../modules/layout/DashboardLayout";
 
 const Dashboard: NextPage = () => {
-  return (
-    <div className="flex">
-      <SideNav />
-      <main className="w-full h-screen"></main>
-    </div>
-  );
+  return <DashboardLayout></DashboardLayout>;
 };
 
 export default Dashboard;

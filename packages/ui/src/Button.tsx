@@ -1,3 +1,4 @@
+import type * as Polymorphic from "@radix-ui/react-polymorphic";
 import React, {
   ButtonHTMLAttributes,
   DetailedHTMLProps,
@@ -14,10 +15,12 @@ const variants = {
     blue: {
       filled: "bg-blue-500 hover:bg-blue-400 text-white",
       outline: "bg-blue-500/10 hover:bg-blue-500/20 text-blue-500",
+      light: "bg-blue-200 hover:bg-blue-300 text-blue-600",
     },
     primary: {
       filled: "bg-gray-800 hover:bg-gray-700 text-gray-100",
       outline: "bg-white text-gray-900 border shadow-sm",
+      light: "bg-gray-200 text-gray-600 hover:bg-gray-300",
     },
   },
 };
@@ -27,16 +30,19 @@ export type ButtonProps = DetailedHTMLProps<
   HTMLButtonElement
 > & {
   size?: keyof typeof variants["size"];
-  variant?: "filled" | "outline";
+  variant?: "filled" | "outline" | "light";
   color?: keyof typeof variants["color"];
   loading?: boolean;
   icon?: React.ReactNode;
   ref?: any;
 };
 
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+type PolymorphicBox = Polymorphic.ForwardRefComponent<"button", ButtonProps>;
+
+export const Button = forwardRef(
   (
     {
+      as: Comp = "button",
       size = "md",
       color = "primary",
       variant = "filled",
@@ -67,6 +73,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       circle.style.top = `${event.clientY - (topPos + radius)}px`;
       if (variant === "outline") {
         circle.classList.add("ripple", "!bg-gray-900/10");
+      } else if (variant === "light") {
+        circle.classList.add("ripple", "!bg-gray-900/20");
       } else {
         circle.classList.add("ripple");
       }
@@ -81,7 +89,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     }
 
     return (
-      <button
+      <Comp
         ref={ref}
         onClick={(e) => {
           createRipple(e);
@@ -97,9 +105,9 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       >
         {icon && <span className="mr-2">{icon}</span>}
         {children}
-      </button>
+      </Comp>
     );
   }
-);
+) as PolymorphicBox;
 
 Button.displayName = "Button";

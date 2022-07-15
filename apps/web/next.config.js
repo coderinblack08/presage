@@ -6,4 +6,5 @@ module.exports = withTM({
   publicRuntimeConfig: {
     NODE_ENV: env.NODE_ENV,
   },
+  experimental: { images: { allowFutureImage: true } },
 });
