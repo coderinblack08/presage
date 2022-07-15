@@ -3,18 +3,27 @@ import NextAuth from "next-auth";
 import GitHubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import { prisma } from "../../../server/prisma";
+import { generateUsername } from "friendly-username-generator";
+import { env } from "../../../server/env";
 
 export default NextAuth({
   // Configure one or more authentication providers
-  adapter: PrismaAdapter(prisma),
+  adapter: {
+    ...PrismaAdapter(prisma),
+    createUser: (data) => {
+      return prisma.user.create({
+        data: { ...data, username: generateUsername() },
+      });
+    },
+  },
   providers: [
     GitHubProvider({
-      clientId: process.env.GITHUB_CLIENT_ID!,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET!,
+      clientId: env.GITHUB_CLIENT_ID,
+      clientSecret: env.GITHUB_CLIENT_SECRET,
     }),
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      clientId: env.GOOGLE_CLIENT_ID,
+      clientSecret: env.GOOGLE_CLIENT_SECRET,
     }),
   ],
   callbacks: {
@@ -35,7 +44,7 @@ export default NextAuth({
     strategy: "jwt",
   },
   pages: {
-    signIn: "/auth/login",
+    signIn: "/",
   },
-  secret: process.env.NEXT_AUTH_SECRET,
+  secret: env.NEXT_AUTH_SECRET,
 });

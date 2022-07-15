@@ -11,6 +11,7 @@ interface ModalProps {
   visible?: boolean;
   onCancel?: any;
   className?: string;
+  title?: string;
 }
 
 export const Modal: React.VFC<ModalProps> = ({
@@ -18,6 +19,7 @@ export const Modal: React.VFC<ModalProps> = ({
   children,
   className,
   visible,
+  title,
   onCancel,
 }) => {
   const [open, setOpen] = useState(visible ? visible : false);
@@ -80,23 +82,23 @@ export const Modal: React.VFC<ModalProps> = ({
                   onClick={() => handleOpenChange(false)}
                 >
                   <div
-                    className={`relative z-50 inline-block w-full max-w-lg overflow-hidden text-left align-middle transition-all transform bg-white rounded-2xl p-6 ${className}`}
+                    className={`relative z-50 inline-block w-full max-w-lg overflow-hidden text-left align-middle transition-all transform bg-white rounded-2xl ${className}`}
                     onClick={stopPropagation}
                   >
-                    <div className="pt-8">
+                    <div className="flex justify-between items-center p-6 pb-0">
+                      <h2 className="text-gray-700 font-bold">{title}</h2>
+                      <button onClick={() => handleOpenChange(false)}>
+                        <IconX
+                          className="text-gray-500 focus:outline-none"
+                          size={16}
+                        />
+                      </button>
+                    </div>
+                    <div className="p-6">
                       {children instanceof Function
                         ? children({ open, setOpen })
                         : children}
                     </div>
-                    <button
-                      className="absolute top-0 right-0 m-5"
-                      onClick={() => handleOpenChange(false)}
-                    >
-                      <IconX
-                        className="text-gray-500 focus:outline-none"
-                        size={16}
-                      />
-                    </button>
                   </div>
                 </div>
               </div>

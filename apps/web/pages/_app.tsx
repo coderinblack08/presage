@@ -2,15 +2,23 @@ import { FunctionComponent } from "react";
 import "../styles/globals.css";
 import { withTRPC } from "@trpc/next";
 import { AppType } from "next/dist/shared/lib/utils";
-import { AppRouter } from "./api/trpc/[trpc]";
+import { SessionProvider } from "next-auth/react";
+import { AppRouter } from "../server/routers/_app";
 
-const MyApp: AppType = ({ Component, pageProps }) => {
+const MyApp: AppType = ({
+  Component,
+  pageProps: { session, ...pageProps },
+}) => {
   const C = Component as FunctionComponent;
-  return <C {...pageProps} />;
+  return (
+    <SessionProvider session={session}>
+      <C {...pageProps} />
+    </SessionProvider>
+  );
 };
 
 export default withTRPC<AppRouter>({
-  config({ ctx }) {
+  config({}) {
     /**
      * If you want to use SSR, you need to use the server's full URL
      * @link https://trpc.io/docs/ssr

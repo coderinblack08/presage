@@ -45,6 +45,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       children,
       className,
       icon,
+      onClick,
       ...props
     },
     ref
@@ -64,7 +65,11 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       circle.style.width = circle.style.height = `${diameter}px`;
       circle.style.left = `${event.clientX - (leftPos + radius)}px`;
       circle.style.top = `${event.clientY - (topPos + radius)}px`;
-      circle.classList.add("ripple");
+      if (variant === "outline") {
+        circle.classList.add("ripple", "!bg-gray-900/10");
+      } else {
+        circle.classList.add("ripple");
+      }
 
       const ripple = button.getElementsByClassName("ripple")[0];
 
@@ -80,7 +85,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         onClick={(e) => {
           createRipple(e);
-          if (props.onClick) props.onClick(e);
+          onClick && onClick(e);
         }}
         disabled={disabled || loading}
         className={`relative overflow-hidden flex items-center transition justify-center font-bold select-none focus:outline-none ${
@@ -96,3 +101,5 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     );
   }
 );
+
+Button.displayName = "Button";
