@@ -1,23 +1,29 @@
 {
-  "name": "presage",
+  "name": "repo",
+  "version": "0.0.0",
   "private": true,
-  "workspaces": {
-    "packages": [
-      "packages/*"
-    ],
-    "nohoist": [
-      "**/functions",
-      "**/functions/**"
-    ]
-  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
-    "diff": "lerna diff",
-    "new-version": "lerna version --conventional-commits --yes"
+    "build": "turbo run build",
+    "dev": "turbo run dev --parallel",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
-    "lerna": "^4.0.0"
+    "autoprefixer": "^10.4.7",
+    "eslint-config-custom": "*",
+    "postcss": "^8.4.14",
+    "prettier": "latest",
+    "tailwindcss": "^3.1.6",
+    "turbo": "latest"
   },
-  "dependencies": {
-    "postcss": "^8.3.11"
-  }
+  "engines": {
+    "npm": ">=7.0.0",
+    "node": ">=14.0.0"
+  },
+  "dependencies": {},
+  "packageManager": "yarn@1.22.17"
 }
