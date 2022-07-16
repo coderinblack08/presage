@@ -13,7 +13,7 @@ export interface MenuProps {
   className?: string;
   subMenu?: boolean;
   sideOffset?: number;
-  style: React.CSSProperties;
+  style?: React.CSSProperties;
   onCloseAutoFocus?: boolean;
 }
 

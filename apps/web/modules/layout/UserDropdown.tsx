@@ -11,7 +11,7 @@ export const UserDropdown: React.FC = () => {
       {session ? (
         <Menu
           side="right"
-          alignOffset={8}
+          alignOffset={12}
           trigger={
             <button className="flex items-center space-x-2 focus:outline-none p-5 border-t w-full text-left">
               <div className="flex items-center space-x-4 focus:outline-none">

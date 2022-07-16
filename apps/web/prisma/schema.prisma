@@ -74,7 +74,7 @@ model Folder {
 
 model Draft {
   id           String   @id @default(cuid())
-  title        String?
+  title        String
   content      String?
   tags         String[]
   canonicalUrl String?
@@ -83,7 +83,7 @@ model Draft {
   paywalled Boolean  @default(false)
   published Boolean  @default(false)
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   folderId String?
   folder   Folder? @relation(fields: [folderId], references: [id], onDelete: Cascade)
