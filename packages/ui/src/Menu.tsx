@@ -13,6 +13,7 @@ export interface MenuProps {
   className?: string;
   subMenu?: boolean;
   sideOffset?: number;
+  style: React.CSSProperties;
   onCloseAutoFocus?: boolean;
 }
 
@@ -25,6 +26,7 @@ export const Menu: React.FC<MenuProps> = ({
   alignOffset,
   sideOffset = 8,
   children,
+  style,
   onCloseAutoFocus,
   subMenu = false,
   ...props
@@ -41,6 +43,7 @@ export const Menu: React.FC<MenuProps> = ({
         onCloseAutoFocus={
           onCloseAutoFocus ? (e) => e.preventDefault() : undefined
         }
+        style={style}
         alignOffset={alignOffset}
         align={align}
         side={side}

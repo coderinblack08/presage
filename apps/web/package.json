@@ -26,6 +26,8 @@
     "react-hot-toast": "^2.3.0",
     "react-icons": "^4.4.0",
     "react-query": "^3.39.1",
+    "react-resizable-layout": "^0.3.1",
+    "react-use": "^17.4.0",
     "superjson": "^1.9.1",
     "ui": "*",
     "zod": "^3.17.3"

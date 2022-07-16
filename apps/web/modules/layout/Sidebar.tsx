@@ -5,9 +5,10 @@ import {
   IconFolderPlus,
   IconPencil,
   IconPlus,
+  IconSwitch2,
   IconTrash,
 } from "@tabler/icons";
-import { atom, useAtom, useSetAtom } from "jotai";
+import { atom, useAtom } from "jotai";
 import Image from "next/future/image";
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
@@ -18,7 +19,9 @@ import { QuickFindPopover } from "./QuickFindPopover";
 import { SidebarItem } from "./SidebarItem";
 import { UserDropdown } from "./UserDropdown";
 
-interface SidebarProps {}
+interface SidebarProps {
+  width: number;
+}
 
 const focusedAtom = atom<string | null>(null);
 
@@ -72,8 +75,9 @@ const FolderOrFileButton: React.FC<{
       <Menu
         side="right"
         align="start"
-        className="w-56"
+        className="w-64"
         onCloseAutoFocus
+        sideOffset={26}
         trigger={
           <button className="flex items-center justify-center p-1.5 rounded-md text-gray-400">
             <IconDotsVertical size={16} />
@@ -90,6 +94,9 @@ const FolderOrFileButton: React.FC<{
           icon={<IconPencil size={20} />}
         >
           Rename
+        </MenuItem>
+        <MenuItem icon={<IconSwitch2 size={20} />}>
+          Convert to publication
         </MenuItem>
         <MenuDivider />
         <MenuItem
@@ -115,14 +122,17 @@ const FolderOrFileButton: React.FC<{
   );
 };
 
-export const Sidebar: React.FC<SidebarProps> = ({}) => {
+export const Sidebar: React.FC<SidebarProps> = ({ width }) => {
   const addFolder = trpc.useMutation(["folders.add"]);
   const { data: folders } = trpc.useQuery(["folders.all"]);
   const [_, setFocusedId] = useAtom(focusedAtom);
   const utils = trpc.useContext();
 
   return (
-    <div className="flex flex-col justify-between relative h-screen w-[280px] flex-shrink-0 border-r bg-zinc-50">
+    <div
+      className="flex flex-col justify-between relative h-screen flex-shrink-0 bg-zinc-50"
+      style={{ width }}
+    >
       <div className="h-full overflow-y-auto">
         <div className="px-3 pt-8 space-y-4">
           <Link href="/">
@@ -157,7 +167,9 @@ export const Sidebar: React.FC<SidebarProps> = ({}) => {
               onCloseAutoFocus
               align="start"
               sideOffset={4}
-              className="w-[calc(280px-1.5rem)]"
+              style={{
+                width: `calc(${width}px - 1.5rem)`,
+              }}
               trigger={
                 <Button
                   className="w-full !justify-start px-2"
