@@ -4,9 +4,10 @@ import Image from "next/future/image";
 import Link from "next/link";
 import React from "react";
 import { Button, Menu, MenuItem, ThemeIcon } from "ui";
+import { focusedAtom } from "../../lib/store";
 import { InferQueryOutput, trpc } from "../../lib/trpc";
 import logo from "../../public/static/logo.svg";
-import { FileTree, focusedAtom } from "./FileTree";
+import { FileTree } from "./FileTree";
 import { QuickFindPopover } from "./QuickFindPopover";
 import { SidebarItem } from "./SidebarItem";
 import { UserDropdown } from "./UserDropdown";
@@ -18,7 +19,7 @@ interface SidebarProps {
 export const Sidebar: React.FC<SidebarProps> = ({ width }) => {
   const addFolder = trpc.useMutation(["folders.add"]);
   const addDraft = trpc.useMutation(["drafts.add"]);
-  const [_, setFocusedId] = useAtom(focusedAtom);
+  const [focusedId, setFocusedId] = useAtom(focusedAtom);
   const utils = trpc.useContext();
 
   return (

@@ -1,16 +1,20 @@
 import { Disclosure, Transition } from "@headlessui/react";
+import { useHydrateAtoms } from "jotai/utils";
 import {
   IconDotsVertical,
   IconFile,
+  IconFilePlus,
   IconFolder,
+  IconFolderPlus,
   IconPencil,
   IconPlus,
   IconSwitch2,
   IconTrash,
 } from "@tabler/icons";
-import { atom, useAtom } from "jotai";
+import { useAtom } from "jotai";
 import React, { useEffect, useRef, useState } from "react";
 import { Button, Menu, MenuDivider, MenuItem, ThemeIcon } from "ui";
+import { focusedAtom } from "../../lib/store";
 import { InferQueryOutput, trpc } from "../../lib/trpc";
 
 interface FileTreeProps {}
@@ -18,12 +22,16 @@ interface FileTreeProps {}
 const FolderDisclosure: React.FC<{
   folder: InferQueryOutput<"drafts.recursive">["children"][0];
 }> = ({ folder }) => {
+  const containsChildren = !!(folder.children || folder.drafts.length > 0);
   return (
     <Disclosure>
       {({ open }) => (
         <>
           <Disclosure.Button className="w-full block" as="div">
-            <FolderOrFileButton openState={open} folder={folder} />
+            <FolderOrFileButton
+              openState={open && containsChildren}
+              folder={folder}
+            />
           </Disclosure.Button>
           <Transition
             enter="transition duration-100 ease-out"
@@ -33,7 +41,7 @@ const FolderDisclosure: React.FC<{
             leaveFrom="transform scale-100 opacity-100"
             leaveTo="transform scale-95 opacity-0"
           >
-            {(folder.children || folder.drafts.length > 0) && (
+            {containsChildren && (
               <Disclosure.Panel className="border-l-2 py-1 border-[#EEE] ml-3 text-sm text-gray-500">
                 {folder.children?.map((child) => (
                   <div className="ml-2" key={child.id}>
@@ -69,12 +77,12 @@ export const FileTree: React.FC<FileTreeProps> = ({}) => {
   );
 };
 
-export const focusedAtom = atom<string | null>(null);
 export const FolderOrFileButton: React.FC<{
   openState?: boolean;
-  folder?: InferQueryOutput<"folders.byId">;
+  folder?: InferQueryOutput<"drafts.recursive">["children"][0];
   draft?: InferQueryOutput<"drafts.byId">;
 }> = ({ openState, folder, draft }) => {
+  useHydrateAtoms([[focusedAtom, null]] as const);
   const ref = useRef<HTMLInputElement>(null);
   const [editing, setEditing] = useState(false);
   const [focusedId, setFocusedId] = useAtom(focusedAtom);
@@ -94,8 +102,8 @@ export const FolderOrFileButton: React.FC<{
       setTimeout(() => {
         ref.current?.focus();
       }, 0);
+      setFocusedId(null);
     }
-    setFocusedId(null);
   }, [draft?.id, focusedId, folder?.id, setFocusedId]);
 
   function submit() {
@@ -104,7 +112,23 @@ export const FolderOrFileButton: React.FC<{
         { id: folder.id, name },
         {
           onSuccess: () => {
-            utils.refetchQueries(["drafts.recursive"]);
+            utils.setQueryData(["drafts.recursive"], ((
+              old: InferQueryOutput<"drafts.recursive">
+            ) => {
+              if (old) {
+                const dfs = (node: any) => {
+                  for (const child of node.children || []) {
+                    if (child.id === folder.id) {
+                      child.name = name;
+                      return;
+                    }
+                    dfs(child);
+                  }
+                };
+                dfs(old);
+                return old;
+              }
+            }) as any);
           },
         }
       );
@@ -156,64 +180,100 @@ export const FolderOrFileButton: React.FC<{
           editing ? "block" : "hidden"
         }`}
       />
-      {folder && (
-        <button
-          onClick={(e) => {
-            addDraft.mutate({ title: "Untitled", folderId: folder.id });
-            e.stopPropagation();
-            e.preventDefault();
-          }}
-          className="group-hover:flex hidden items-center justify-center p-1.5 rounded-md text-gray-400"
-        >
-          <IconPlus size={16} />
-        </button>
-      )}
+
       {folder ? (
-        <Menu
-          side="right"
-          align="start"
-          className="w-64"
-          onCloseAutoFocus
-          sideOffset={26}
-          trigger={
-            <button className="flex items-center justify-center p-1.5 rounded-md text-gray-400">
-              <IconDotsVertical size={16} />
-            </button>
-          }
-        >
-          <MenuItem
-            onClick={() => {
-              setEditing(true);
-              setTimeout(() => {
-                ref.current?.focus();
-              }, 0);
-            }}
-            icon={<IconPencil size={20} />}
+        <>
+          <Menu
+            trigger={
+              <button className="flex items-center justify-center p-1.5 rounded-md text-gray-400">
+                <IconPlus size={16} />
+              </button>
+            }
+            className="w-48"
+            sideOffset={4}
+            onCloseAutoFocus
           >
-            Rename
-          </MenuItem>
-          <MenuItem icon={<IconSwitch2 size={20} />}>
-            Convert to publication
-          </MenuItem>
-          <MenuDivider />
-          <MenuItem
-            onClick={() => {
-              if (folder) {
-                deleteFolder.mutate(
-                  { id: folder?.id },
+            <MenuItem
+              icon={<IconFilePlus size={20} />}
+              onClick={(e) => {
+                addDraft.mutate(
+                  { title: "Untitled", folderId: folder.id },
                   {
-                    onSuccess: () => {
+                    onSuccess: (data) => {
                       utils.refetchQueries(["drafts.recursive"]);
+                      setFocusedId(data.id);
                     },
                   }
                 );
-              }
-            }}
-            icon={<IconTrash size={20} />}
+              }}
+            >
+              New Draft
+            </MenuItem>
+            <MenuItem icon={<IconFolderPlus size={20} />}>New Folder</MenuItem>
+          </Menu>
+          <Menu
+            side="right"
+            align="start"
+            className="w-64"
+            onCloseAutoFocus
+            sideOffset={26}
+            trigger={
+              <button className="flex items-center justify-center p-1.5 rounded-md text-gray-400">
+                <IconDotsVertical size={16} />
+              </button>
+            }
           >
-            Delete
-          </MenuItem>
-        </Menu>
+            <MenuItem
+              onClick={() => {
+                setEditing(true);
+                setTimeout(() => {
+                  ref.current?.focus();
+                }, 0);
+              }}
+              icon={<IconPencil size={20} />}
+            >
+              Rename
+            </MenuItem>
+            <MenuItem icon={<IconSwitch2 size={20} />}>
+              Convert to publication
+            </MenuItem>
+            <MenuDivider />
+            <MenuItem
+              onClick={() => {
+                if (folder) {
+                  deleteFolder.mutate(
+                    { id: folder?.id },
+                    {
+                      onSuccess: () => {
+                        utils.setQueryData(["drafts.recursive"], ((
+                          old: InferQueryOutput<"drafts.recursive">
+                        ) => {
+                          if (old) {
+                            const dfs = (node: any) => {
+                              node.children = node.children || [];
+                              for (let i = 0; i < node.children.length; i++) {
+                                if (node.children[i].id === folder.id) {
+                                  delete node.children[i];
+                                  return;
+                                }
+                                dfs(node.children[i]);
+                              }
+                            };
+                            dfs(old);
+                            return old;
+                          }
+                        }) as any);
+                      },
+                    }
+                  );
+                }
+              }}
+              icon={<IconTrash size={20} />}
+            >
+              Delete
+            </MenuItem>
+          </Menu>
+        </>
       ) : (
         <Menu
           side="right"

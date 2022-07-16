@@ -90,6 +90,7 @@ export const MenuItem: React.FC<MenuItemProps> = ({
   return (
     <T
       disabled={disabled}
+      onClick={(e) => e.stopPropagation()}
       onSelect={(e) => {
         if (!closeOnSelect) {
           e.preventDefault();

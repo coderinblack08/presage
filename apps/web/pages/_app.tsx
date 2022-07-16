@@ -1,9 +1,10 @@
+import { httpBatchLink } from "@trpc/client/links/httpBatchLink";
 import { loggerLink } from "@trpc/client/links/loggerLink";
 import { withTRPC } from "@trpc/next";
 import { SessionProvider } from "next-auth/react";
 import { AppType } from "next/dist/shared/lib/utils";
-import { httpBatchLink } from "@trpc/client/links/httpBatchLink";
 import { FunctionComponent } from "react";
+import { RecoilRoot } from "recoil";
 import superjson from "superjson";
 import { AppRouter } from "../server/routers/_app";
 import "../styles/globals.css";
@@ -14,9 +15,11 @@ const MyApp: AppType = ({
 }) => {
   const C = Component as FunctionComponent;
   return (
-    <SessionProvider session={session}>
-      <C {...pageProps} />
-    </SessionProvider>
+    <RecoilRoot>
+      <SessionProvider session={session}>
+        <C {...pageProps} />
+      </SessionProvider>
+    </RecoilRoot>
   );
 };
 
