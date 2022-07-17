@@ -96,10 +96,13 @@ export const draftsRouter = createRouter()
         children: Node[];
         drafts: Draft[];
       };
+
       const output = {
         depth: 0,
         path: [],
-        children: (await convertMaterializedPaths(result)) as Node[],
+        children: result.length
+          ? ((await convertMaterializedPaths(result)) as Node[])
+          : [],
         drafts: await ctx.prisma.draft.findMany({ where: { folderId: null } }),
       };
       return output;

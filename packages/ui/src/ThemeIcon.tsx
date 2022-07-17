@@ -10,7 +10,7 @@ export const ThemeIcon: React.FC<ThemeIconProps> = ({
 }) => {
   return (
     <div
-      className={`flex items-center justify-center p-1 rounded-lg border shadow text-gray-400 bg-white ${className}`}
+      className={`inline-flex items-center justify-center p-1 rounded-lg border shadow text-gray-400 bg-white ${className}`}
     >
       {children}
     </div>

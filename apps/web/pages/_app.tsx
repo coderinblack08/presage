@@ -4,6 +4,7 @@ import { withTRPC } from "@trpc/next";
 import { SessionProvider } from "next-auth/react";
 import { AppType } from "next/dist/shared/lib/utils";
 import { FunctionComponent } from "react";
+import { Toaster } from "react-hot-toast";
 import { RecoilRoot } from "recoil";
 import superjson from "superjson";
 import { AppRouter } from "../server/routers/_app";
@@ -17,6 +18,7 @@ const MyApp: AppType = ({
   return (
     <RecoilRoot>
       <SessionProvider session={session}>
+        <Toaster />
         <C {...pageProps} />
       </SessionProvider>
     </RecoilRoot>

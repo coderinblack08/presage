@@ -1,5 +1,4 @@
 import { Disclosure, Transition } from "@headlessui/react";
-import { useHydrateAtoms } from "jotai/utils";
 import {
   IconDotsVertical,
   IconFile,
@@ -12,7 +11,9 @@ import {
   IconTrash,
 } from "@tabler/icons";
 import { useAtom } from "jotai";
-import React, { useEffect, useRef, useState } from "react";
+import { useHydrateAtoms } from "jotai/utils";
+import React, { MouseEventHandler, useEffect, useRef, useState } from "react";
+import toast from "react-hot-toast";
 import { Button, Menu, MenuDivider, MenuItem, ThemeIcon } from "ui";
 import { focusedAtom } from "../../lib/store";
 import { InferQueryOutput, trpc } from "../../lib/trpc";
@@ -29,6 +30,14 @@ const FolderDisclosure: React.FC<{
         <>
           <Disclosure.Button className="w-full block" as="div">
             <FolderOrFileButton
+              onClick={() => {
+                if (!containsChildren) {
+                  console.log("clicked");
+                  toast.error("Folder is empty.", {
+                    position: "bottom-left",
+                  });
+                }
+              }}
               openState={open && containsChildren}
               folder={folder}
             />
@@ -42,7 +51,7 @@ const FolderDisclosure: React.FC<{
             leaveTo="transform scale-95 opacity-0"
           >
             {containsChildren && (
-              <Disclosure.Panel className="border-l-2 py-1 border-[#EEE] ml-3 text-sm text-gray-500">
+              <Disclosure.Panel className="border-l-2 py-0.5 border-[#EEE] ml-3 text-sm text-gray-500">
                 {folder.children?.map((child) => (
                   <div className="ml-2" key={child.id}>
                     <FolderDisclosure folder={child} />
@@ -79,9 +88,10 @@ export const FileTree: React.FC<FileTreeProps> = ({}) => {
 
 export const FolderOrFileButton: React.FC<{
   openState?: boolean;
+  onClick?: MouseEventHandler<HTMLButtonElement> | undefined;
   folder?: InferQueryOutput<"drafts.recursive">["children"][0];
   draft?: InferQueryOutput<"drafts.byId">;
-}> = ({ openState, folder, draft }) => {
+}> = ({ openState, folder, onClick, draft }) => {
   useHydrateAtoms([[focusedAtom, null]] as const);
   const ref = useRef<HTMLInputElement>(null);
   const [editing, setEditing] = useState(false);
@@ -89,6 +99,7 @@ export const FolderOrFileButton: React.FC<{
   const [name, setName] = useState<string>(
     folder ? folder.name! : draft ? draft.title! : ""
   );
+  const addFolder = trpc.useMutation(["folders.add"]);
   const deleteDraft = trpc.useMutation(["drafts.delete"]);
   const deleteFolder = trpc.useMutation(["folders.delete"]);
   const updateFolder = trpc.useMutation(["folders.update"]);
@@ -147,6 +158,7 @@ export const FolderOrFileButton: React.FC<{
 
   return (
     <Button
+      onClick={onClick}
       className={`group w-full !justify-start px-2 ${
         openState ? "bg-[#EEE]" : ""
       }`}
@@ -195,7 +207,7 @@ export const FolderOrFileButton: React.FC<{
           >
             <MenuItem
               icon={<IconFilePlus size={20} />}
-              onClick={(e) => {
+              onClick={() => {
                 addDraft.mutate(
                   { title: "Untitled", folderId: folder.id },
                   {
@@ -209,7 +221,17 @@ export const FolderOrFileButton: React.FC<{
             >
               New Draft
             </MenuItem>
-            <MenuItem icon={<IconFolderPlus size={20} />}>New Folder</MenuItem>
+            <MenuItem
+              icon={<IconFolderPlus size={20} />}
+              onClick={() => {
+                addFolder.mutate({
+                  name: "Untitled",
+                  parentId: folder.id,
+                });
+              }}
+            >
+              New Folder
+            </MenuItem>
           </Menu>
           <Menu
             side="right"
