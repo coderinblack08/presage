@@ -24,7 +24,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ width }) => {
 
   return (
     <div
-      className="flex flex-col justify-between relative h-screen flex-shrink-0 bg-zinc-50"
+      className="sticky top-0 flex flex-col justify-between h-screen flex-shrink-0 bg-zinc-50"
       style={{ width }}
     >
       <div className="h-full overflow-y-auto">

@@ -1,7 +1,8 @@
-import { IconBold, IconItalic, IconUnderline } from "@tabler/icons";
+import { IconBold, IconCode, IconItalic, IconUnderline } from "@tabler/icons";
 import {
   getPluginType,
   MARK_BOLD,
+  MARK_CODE,
   MARK_ITALIC,
   MARK_UNDERLINE,
 } from "@udecode/plate";
@@ -14,7 +15,11 @@ export const MarkBalloonToolbar: React.FC = () => {
   const editor = useMyPlateEditorRef()!;
 
   return (
-    <BalloonToolbar theme="dark" arrow={false}>
+    <BalloonToolbar
+      theme="dark"
+      arrow={false}
+      floatingOptions={{ placement: "top-start" }}
+    >
       <StyledToolbarMark
         type={getPluginType(editor, MARK_BOLD)}
         icon={<IconBold className="block" size={20} />}
@@ -26,6 +31,10 @@ export const MarkBalloonToolbar: React.FC = () => {
       <StyledToolbarMark
         type={getPluginType(editor, MARK_UNDERLINE)}
         icon={<IconUnderline className="block" size={20} />}
+      />
+      <StyledToolbarMark
+        type={getPluginType(editor, MARK_CODE)}
+        icon={<IconCode className="block" size={20} />}
       />
     </BalloonToolbar>
   );

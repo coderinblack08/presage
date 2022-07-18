@@ -8,6 +8,14 @@
   src: url(/fonts/eudoxus-sans-var.woff2) format("woff2");
 }
 
+.slate-ul {
+  @apply list-disc;
+}
+
+.slate-ol {
+  @apply list-decimal;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
