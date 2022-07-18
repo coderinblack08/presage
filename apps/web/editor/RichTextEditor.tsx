@@ -13,6 +13,7 @@ import {
 } from "@udecode/plate";
 import React from "react";
 import { basicMarksValue } from "./elements/BasicElementsValue";
+import { MarkBalloonToolbar } from "./elements/MarkBalloonToolbar";
 import { basicElementsValue } from "./marks/BasicMarksValue";
 import { plateUI } from "./PlateUI";
 import { MyValue } from "./types/plate";
@@ -51,6 +52,8 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({}) => {
       editableProps={editableProps}
       initialValue={[...basicElementsValue, ...basicMarksValue]}
       plugins={plugins}
-    />
+    >
+      <MarkBalloonToolbar />
+    </Plate>
   );
 };

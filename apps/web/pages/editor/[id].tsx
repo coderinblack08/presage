@@ -9,7 +9,7 @@ const EditorPage: React.FC<EditorPageProps> = ({}) => {
   return (
     <DashboardLayout>
       <ScrollArea className="h-screen">
-        <main className="max-w-3xl mx-auto px-5 py-12">
+        <main className="max-w-3xl mx-auto px-5 py-5 lg:py-12">
           <RichTextEditor />
         </main>
       </ScrollArea>
