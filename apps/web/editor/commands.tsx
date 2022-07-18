@@ -1,4 +1,5 @@
 import {
+  IconCode,
   IconH1,
   IconLetterA,
   IconList,
@@ -7,8 +8,8 @@ import {
 } from "@tabler/icons";
 import {
   ELEMENT_BLOCKQUOTE,
+  ELEMENT_CODE_BLOCK,
   ELEMENT_H1,
-  ELEMENT_LI,
   ELEMENT_OL,
   ELEMENT_PARAGRAPH,
   ELEMENT_UL,
@@ -41,5 +42,10 @@ export const COMMANDS: TComboboxItem<CommandItemProps>[] = [
     key: "4",
     text: "Quote",
     data: { icon: <IconQuote />, type: ELEMENT_BLOCKQUOTE },
+  },
+  {
+    key: "5",
+    text: "Codeblock",
+    data: { icon: <IconCode />, type: ELEMENT_CODE_BLOCK },
   },
 ];

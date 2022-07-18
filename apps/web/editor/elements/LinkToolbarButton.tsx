@@ -8,7 +8,6 @@ import {
 } from "@udecode/plate-core";
 import { ELEMENT_LINK, triggerFloatingLink } from "@udecode/plate-link";
 import { ToolbarButtonProps } from "@udecode/plate-ui-toolbar";
-import { ReactEditor } from "slate-react";
 
 export interface LinkToolbarButtonProps extends ToolbarButtonProps {
   /**

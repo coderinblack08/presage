@@ -1,6 +1,8 @@
 import {
+  CodeBlockElement,
   createBlockquotePlugin,
   createBoldPlugin,
+  createCodeBlockPlugin,
   createCodePlugin,
   createComboboxPlugin,
   createExitBreakPlugin,
@@ -52,10 +54,9 @@ const plugins = createPlugins<MyValue>(
 
     createParagraphPlugin(),
     createBlockquotePlugin(),
-    // createCodeBlockPlugin({
-    //   // You can either pass a component per plugin
-    //   component: CodeBlockElement,
-    // }),
+    createCodeBlockPlugin({
+      component: CodeBlockElement,
+    }),
     createHeadingPlugin(),
     createLinkPlugin(linkPlugin),
 
