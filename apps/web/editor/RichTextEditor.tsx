@@ -6,6 +6,7 @@ import {
   createExitBreakPlugin,
   createHeadingPlugin,
   createItalicPlugin,
+  createLinkPlugin,
   createListPlugin,
   createMentionPlugin,
   createParagraphPlugin,
@@ -27,6 +28,7 @@ import { SlashCombobox } from "./elements/SlashCombobox";
 import { basicElementsValue } from "./marks/BasicMarksValue";
 import { plateUI } from "./plate-ui";
 import { exitBreakPlugin } from "./plugins/exitBreakPlugin";
+import { linkPlugin } from "./plugins/linkPlugin";
 import { resetBlockTypePlugin } from "./plugins/resetBlockTypePlugin";
 import { softBreakPlugin } from "./plugins/softBreakPlugin";
 import { trailingBlockPlugin } from "./plugins/trailingBlockPlugin";
@@ -55,6 +57,7 @@ const plugins = createPlugins<MyValue>(
     //   component: CodeBlockElement,
     // }),
     createHeadingPlugin(),
+    createLinkPlugin(linkPlugin),
 
     createBoldPlugin(),
     createItalicPlugin(),
@@ -80,13 +83,15 @@ const plugins = createPlugins<MyValue>(
 
 export const RichTextEditor: React.FC<RichTextEditorProps> = ({}) => {
   return (
-    <Plate<MyValue>
-      editableProps={editableProps}
-      initialValue={[...basicElementsValue, ...basicMarksValue]}
-      plugins={plugins}
-    >
-      <MarkBalloonToolbar />
-      <SlashCombobox items={COMMANDS} pluginKey="/" />
-    </Plate>
+    <>
+      <Plate<MyValue>
+        editableProps={editableProps}
+        initialValue={[...basicElementsValue, ...basicMarksValue]}
+        plugins={plugins}
+      >
+        <MarkBalloonToolbar />
+        <SlashCombobox items={COMMANDS} pluginKey="/" />
+      </Plate>
+    </>
   );
 };

@@ -1,3 +1,6 @@
+import "tippy.js/animations/scale.css";
+import "tippy.js/dist/tippy.css";
+
 import { httpBatchLink } from "@trpc/client/links/httpBatchLink";
 import { loggerLink } from "@trpc/client/links/loggerLink";
 import { withTRPC } from "@trpc/next";

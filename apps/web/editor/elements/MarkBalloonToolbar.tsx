@@ -1,4 +1,10 @@
-import { IconBold, IconCode, IconItalic, IconUnderline } from "@tabler/icons";
+import {
+  IconBold,
+  IconCode,
+  IconItalic,
+  IconLink,
+  IconUnderline,
+} from "@tabler/icons";
 import {
   getPluginType,
   MARK_BOLD,
@@ -9,6 +15,7 @@ import {
 import React from "react";
 import { useMyPlateEditorRef } from "../types/plate";
 import { BalloonToolbar } from "./BalloonToolbar";
+import { LinkToolbarButton } from "./LinkToolbarButton";
 import { StyledToolbarMark } from "./StyledToolbarMark";
 
 export const MarkBalloonToolbar: React.FC = () => {
@@ -35,6 +42,9 @@ export const MarkBalloonToolbar: React.FC = () => {
       <StyledToolbarMark
         type={getPluginType(editor, MARK_CODE)}
         icon={<IconCode className="block" size={20} />}
+      />
+      <LinkToolbarButton
+        icon={<IconLink className="text-gray-500" size={20} />}
       />
     </BalloonToolbar>
   );
