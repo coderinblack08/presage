@@ -6,6 +6,7 @@ import { ListCheck } from "../../modules/landing-page/ListCheck";
 import { Waitlist } from "../../modules/landing-page/Waitlist";
 import dashboard from "../../public/static/dashboard.png";
 import { Navbar } from "./Navbar";
+
 interface HeroSectionProps {}
 
 export const HeroSection: React.FC<HeroSectionProps> = ({}) => {
