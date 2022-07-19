@@ -13,6 +13,7 @@ import {
 import { useAtom, useAtomValue } from "jotai";
 import { useHydrateAtoms } from "jotai/utils";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React, {
   MouseEventHandler,
   useEffect,
@@ -32,7 +33,7 @@ const FolderDisclosure: React.FC<{
   parentFolderPath?: string;
 }> = ({ folder, parentFolderPath = "" }) => {
   const containsChildren = !!(folder.children || folder.drafts.length > 0);
-  const currentDraft = useAtomValue(currentFileAtom);
+  const [currentDraft, setCurrentDraft] = useAtom(currentFileAtom);
   const inCurrentPath = currentDraft.absolutePath
     .join("/")
     .includes(
@@ -41,6 +42,12 @@ const FolderDisclosure: React.FC<{
   const currentPath = parentFolderPath
     ? `${parentFolderPath}/${folder.id}`
     : folder.id;
+
+  const router = useRouter();
+  useEffect(() => {
+    if (router.pathname !== "/editor/[id]")
+      setCurrentDraft({ absolutePath: [], stringPath: [], draftId: "" });
+  }, [setCurrentDraft]);
 
   return (
     <Disclosure
@@ -73,7 +80,7 @@ const FolderDisclosure: React.FC<{
             leaveTo="transform scale-95 opacity-0"
           >
             {containsChildren && (
-              <Disclosure.Panel className="border-l-2 py-0.5 border-[#EEE] ml-3 text-sm text-gray-500">
+              <Disclosure.Panel className="border-l-2 py-1.5 border-[#EEE] ml-3 text-sm text-gray-500">
                 {folder.children?.map((child) => (
                   <div className="ml-2" key={child.id}>
                     <FolderDisclosure
@@ -124,7 +131,7 @@ export const FileTree: React.FC<FileTreeProps> = ({}) => {
   }, [currentFile.draftId, folderTree, setCurrentFile]);
 
   return (
-    <div className="w-full space-y-1">
+    <div className="w-full">
       {folderTree?.children?.map((folder) => (
         <FolderDisclosure folder={folder} key={folder.id} />
       ))}

@@ -8,6 +8,19 @@
   src: url(/fonts/eudoxus-sans-var.woff2) format("woff2");
 }
 
+[placeholder]::before,
+[data-slate-placeholder="true"] {
+  @apply text-gray-300 font-medium !opacity-100;
+}
+
+[data-slate-editor="true"] {
+  @apply h-full;
+}
+
+[data-slate-editor="true"] > *:only-child:before {
+  @apply hidden;
+}
+
 .slate-ul {
   @apply list-disc;
 }

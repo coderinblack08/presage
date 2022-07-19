@@ -11,6 +11,7 @@ import {
   createLinkPlugin,
   createListPlugin,
   createMentionPlugin,
+  createNormalizeTypesPlugin,
   createParagraphPlugin,
   createPlugins,
   createResetNodePlugin,
@@ -19,15 +20,14 @@ import {
   createTodoListPlugin,
   createTrailingBlockPlugin,
   createUnderlinePlugin,
+  ELEMENT_H1,
   Plate,
   TEditableProps,
 } from "@udecode/plate";
-import React from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import { COMMANDS } from "./commands";
-import { basicMarksValue } from "./elements/BasicElementsValue";
 import { MarkBalloonToolbar } from "./elements/MarkBalloonToolbar";
 import { SlashCombobox } from "./elements/SlashCombobox";
-import { basicElementsValue } from "./marks/BasicMarksValue";
 import { plateUI } from "./plate-ui";
 import { exitBreakPlugin } from "./plugins/exitBreakPlugin";
 import { linkPlugin } from "./plugins/linkPlugin";
@@ -40,9 +40,10 @@ interface RichTextEditorProps {}
 
 export const editableProps: TEditableProps<MyValue> = {
   spellCheck: false,
-  autoFocus: false,
+  autoFocus: true,
   readOnly: false,
-  placeholder: "Type / for commands",
+  placeholder: "Type `/` for commands",
+  className: "prose",
 };
 
 const plugins = createPlugins<MyValue>(
@@ -87,7 +88,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({}) => {
     <>
       <Plate<MyValue>
         editableProps={editableProps}
-        initialValue={[...basicElementsValue, ...basicMarksValue]}
+        // initialValue={[...basicElementsValue, ...basicMarksValue]}
         plugins={plugins}
       >
         <MarkBalloonToolbar />
