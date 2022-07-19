@@ -10,26 +10,48 @@ import {
   IconSwitch2,
   IconTrash,
 } from "@tabler/icons";
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { useHydrateAtoms } from "jotai/utils";
-import React, { MouseEventHandler, useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import React, {
+  MouseEventHandler,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import toast from "react-hot-toast";
 import { Button, Menu, MenuDivider, MenuItem, ThemeIcon } from "ui";
-import { focusedAtom } from "../../lib/store";
+import { currentFileAtom, focusedAtom } from "../../lib/store";
 import { InferQueryOutput, trpc } from "../../lib/trpc";
 
 interface FileTreeProps {}
 
 const FolderDisclosure: React.FC<{
   folder: InferQueryOutput<"drafts.recursive">["children"][0];
-}> = ({ folder }) => {
+  parentFolderPath?: string;
+}> = ({ folder, parentFolderPath = "" }) => {
   const containsChildren = !!(folder.children || folder.drafts.length > 0);
+  const currentDraft = useAtomValue(currentFileAtom);
+  const inCurrentPath = currentDraft.absolutePath
+    .join("/")
+    .includes(
+      parentFolderPath ? `${parentFolderPath}/${folder.id}` : folder.id
+    );
+  const currentPath = parentFolderPath
+    ? `${parentFolderPath}/${folder.id}`
+    : folder.id;
+
   return (
-    <Disclosure>
+    <Disclosure
+      defaultOpen={inCurrentPath}
+      key={`${folder.id}/${inCurrentPath}`} // used to force re-render on defaultOpen
+    >
       {({ open }) => (
         <>
           <Disclosure.Button className="w-full block" as="div">
             <FolderOrFileButton
+              absolutePath={currentPath}
               onClick={() => {
                 if (!containsChildren) {
                   console.log("clicked");
@@ -54,12 +76,18 @@ const FolderDisclosure: React.FC<{
               <Disclosure.Panel className="border-l-2 py-0.5 border-[#EEE] ml-3 text-sm text-gray-500">
                 {folder.children?.map((child) => (
                   <div className="ml-2" key={child.id}>
-                    <FolderDisclosure folder={child} />
+                    <FolderDisclosure
+                      parentFolderPath={currentPath}
+                      folder={child}
+                    />
                   </div>
                 ))}
                 {folder.drafts?.map((draft) => (
                   <div className="ml-2" key={draft.id}>
-                    <FolderOrFileButton draft={draft} />
+                    <FolderOrFileButton
+                      absolutePath={currentPath}
+                      draft={draft}
+                    />
                   </div>
                 ))}
               </Disclosure.Panel>
@@ -73,6 +101,27 @@ const FolderDisclosure: React.FC<{
 
 export const FileTree: React.FC<FileTreeProps> = ({}) => {
   const { data: folderTree } = trpc.useQuery(["drafts.recursive"]);
+  const [currentFile, setCurrentFile] = useAtom(currentFileAtom);
+
+  useEffect(() => {
+    const dfs = (obj: any, path: string[]) => {
+      if (obj && "children" in obj && obj.children.length > 0) {
+        obj.children.forEach((node: any) => {
+          node.drafts?.forEach((draft: any) => {
+            if (draft.id === currentFile.draftId) {
+              setCurrentFile((prev) => ({
+                ...prev,
+                absolutePath: [...obj.path, node.id],
+                stringPath: [...path, node.name],
+              }));
+            }
+          });
+          dfs(node, [...path, node.name]);
+        });
+      }
+    };
+    dfs(folderTree, []);
+  }, [currentFile.draftId, folderTree, setCurrentFile]);
 
   return (
     <div className="w-full space-y-1">
@@ -80,7 +129,7 @@ export const FileTree: React.FC<FileTreeProps> = ({}) => {
         <FolderDisclosure folder={folder} key={folder.id} />
       ))}
       {folderTree?.drafts?.map((draft) => (
-        <FolderOrFileButton draft={draft} key={draft.id} />
+        <FolderOrFileButton absolutePath="" draft={draft} key={draft.id} />
       ))}
     </div>
   );
@@ -88,14 +137,16 @@ export const FileTree: React.FC<FileTreeProps> = ({}) => {
 
 export const FolderOrFileButton: React.FC<{
   openState?: boolean;
+  absolutePath: string;
   onClick?: MouseEventHandler<HTMLButtonElement> | undefined;
   folder?: InferQueryOutput<"drafts.recursive">["children"][0];
   draft?: InferQueryOutput<"drafts.byId">;
-}> = ({ openState, folder, onClick, draft }) => {
+}> = ({ openState, folder, onClick, draft, absolutePath }) => {
   useHydrateAtoms([[focusedAtom, null]] as const);
   const ref = useRef<HTMLInputElement>(null);
   const [editing, setEditing] = useState(false);
   const [focusedId, setFocusedId] = useAtom(focusedAtom);
+  const [currentDraft, setCurrentDraft] = useAtom(currentFileAtom);
   const [name, setName] = useState<string>(
     folder ? folder.name! : draft ? draft.title! : ""
   );
@@ -156,12 +207,20 @@ export const FolderOrFileButton: React.FC<{
     }
   }
 
-  return (
+  const isOpen = useMemo(
+    () =>
+      currentDraft.absolutePath.join("/") === absolutePath &&
+      currentDraft.draftId === draft?.id,
+    [absolutePath, currentDraft.absolutePath, currentDraft.draftId, draft?.id]
+  );
+
+  const button = (
     <Button
       onClick={onClick}
       className={`group w-full !justify-start px-2 ${
         openState ? "bg-[#EEE]" : ""
-      }`}
+      } ${isOpen ? "bg-blue-100/50" : ""}`}
+      rippleColor="!bg-blue-900/10"
       icon={
         <ThemeIcon className="mr-1">
           {folder ? <IconFolder size={21} /> : <IconFile size={21} />}
@@ -169,7 +228,7 @@ export const FolderOrFileButton: React.FC<{
       }
       disableRipple={editing}
       variant="ghost"
-      as="div"
+      as={draft ? "a" : "div"}
     >
       {!editing && <span className="w-full">{name}</span>}
       <input
@@ -342,4 +401,18 @@ export const FolderOrFileButton: React.FC<{
       )}
     </Button>
   );
+
+  if (draft) {
+    return (
+      <Link
+        href="/editor/[id]"
+        as={`/editor/${encodeURIComponent(draft?.id || "")}`}
+        passHref
+      >
+        {button}
+      </Link>
+    );
+  }
+
+  return button;
 };

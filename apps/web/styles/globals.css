@@ -64,7 +64,7 @@ code[class*="language-"] ::selection {
 }
 
 .slate-code_block > select {
-  @apply focus:outline-none font-sans text-base text-gray-700 select-none;
+  @apply focus:outline-none font-sans text-base text-gray-500 select-none text-right pr-2;
 }
 
 /* Inline code */

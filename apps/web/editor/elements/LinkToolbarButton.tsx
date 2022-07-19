@@ -28,7 +28,7 @@ export const LinkToolbarButton = withPlateEventProvider(
       <span
         role="button"
         // active={isLink}
-        className="select-none"
+        className="select-none p-1 rounded-lg"
         onMouseDown={async (event) => {
           if (!editor) return;
 

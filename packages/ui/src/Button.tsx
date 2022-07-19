@@ -39,6 +39,7 @@ export type ButtonProps = DetailedHTMLProps<
   loading?: boolean;
   icon?: React.ReactNode;
   ref?: any;
+  rippleColor?: string;
 };
 
 type PolymorphicBox = Polymorphic.ForwardRefComponent<"button", ButtonProps>;
@@ -56,6 +57,7 @@ export const Button = forwardRef(
       children,
       className,
       icon,
+      rippleColor,
       onMouseDown,
       ...props
     },
@@ -76,7 +78,9 @@ export const Button = forwardRef(
       circle.style.width = circle.style.height = `${diameter}px`;
       circle.style.left = `${event.clientX - (leftPos + radius)}px`;
       circle.style.top = `${event.clientY - (topPos + radius)}px`;
-      if (variant === "outline") {
+      if (rippleColor) {
+        circle.classList.add("ripple", rippleColor);
+      } else if (variant === "outline") {
         circle.classList.add("ripple", "!bg-gray-900/10");
       } else if (variant === "filled") {
         circle.classList.add("ripple");
