@@ -59,6 +59,12 @@ export const SlashCombobox = <TData extends Data = NoData>({
       id={id}
       trigger={trigger!}
       onSelectItem={handleSelectCommand}
+      onRenderItem={({ item, search }) => (
+        <div className="flex items-center space-x-2">
+          {(item.data as any).icon}
+          <span>{item.text}</span>
+        </div>
+      )}
       controlled
       {...props}
     />

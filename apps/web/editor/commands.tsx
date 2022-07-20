@@ -34,36 +34,57 @@ export const COMMANDS: TComboboxItem<CommandItemProps>[] = [
   {
     key: counter(),
     text: "Paragraph",
-    data: { icon: <IconLetterA />, type: ELEMENT_PARAGRAPH },
+    data: {
+      icon: <IconLetterA size={16} className="text-gray-500" />,
+      type: ELEMENT_PARAGRAPH,
+    },
   },
   {
     key: counter(),
     text: "Heading",
-    data: { icon: <IconH1 />, type: ELEMENT_H2 },
+    data: {
+      icon: <IconH1 size={16} className="text-gray-500" />,
+      type: ELEMENT_H2,
+    },
   },
   {
     key: counter(),
     text: "Subheading",
-    data: { icon: <IconH2 />, type: ELEMENT_H3 },
+    data: {
+      icon: <IconH2 size={16} className="text-gray-500" />,
+      type: ELEMENT_H3,
+    },
   },
   {
     key: counter(),
     text: "Bulleted List",
-    data: { icon: <IconList />, type: ELEMENT_UL },
+    data: {
+      icon: <IconList size={16} className="text-gray-500" />,
+      type: ELEMENT_UL,
+    },
   },
   {
     key: counter(),
     text: "Numbered List",
-    data: { icon: <IconListNumbers />, type: ELEMENT_OL },
+    data: {
+      icon: <IconListNumbers size={16} className="text-gray-500" />,
+      type: ELEMENT_OL,
+    },
   },
   {
     key: counter(),
     text: "Quote",
-    data: { icon: <IconQuote />, type: ELEMENT_BLOCKQUOTE },
+    data: {
+      icon: <IconQuote size={16} className="text-gray-500" />,
+      type: ELEMENT_BLOCKQUOTE,
+    },
   },
   {
     key: counter(),
     text: "Codeblock",
-    data: { icon: <IconCode />, type: ELEMENT_CODE_BLOCK },
+    data: {
+      icon: <IconCode size={16} className="text-gray-500" />,
+      type: ELEMENT_CODE_BLOCK,
+    },
   },
 ];

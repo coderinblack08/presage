@@ -14,7 +14,7 @@
 }
 
 [data-slate-editor="true"] {
-  @apply h-full;
+  @apply h-full py-4;
 }
 
 [data-slate-editor="true"] > *:only-child:before {

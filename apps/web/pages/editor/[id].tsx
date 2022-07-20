@@ -1,4 +1,5 @@
 import { IconFile, IconStackPop } from "@tabler/icons";
+import { serializeHtml } from "@udecode/plate";
 import { Form, Formik } from "formik";
 import { useAtom } from "jotai";
 import { useHydrateAtoms } from "jotai/utils";
@@ -6,6 +7,7 @@ import { GetServerSideProps } from "next";
 import React, { useEffect, useRef } from "react";
 import ContentEditable from "react-contenteditable";
 import { Button, ThemeIcon } from "ui";
+import { AutoSave } from "../../editor/elements/FormikAutoSave";
 import { RichTextEditor } from "../../editor/RichTextEditor";
 import { currentFileAtom } from "../../lib/store";
 import { trpc } from "../../lib/trpc";
@@ -98,7 +100,14 @@ const EditorPage: React.FC<EditorPageProps> = ({ id }) => {
               </div>
             </div>
             <main className="max-w-3xl mx-auto px-5 py-5 lg:py-12 w-full h-full">
-              <RichTextEditor />
+              <div className="text-gray-400 border-b-2 border-gray-100 py-4">
+                <a href="#">0 plugins</a> enabled · <AutoSave />
+              </div>
+              <RichTextEditor
+                onChange={(value) => {
+                  setFieldValue("content", value);
+                }}
+              />
             </main>
           </Form>
         )}

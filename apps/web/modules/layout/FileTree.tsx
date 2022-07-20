@@ -227,7 +227,7 @@ export const FolderOrFileButton: React.FC<{
       className={`group w-full !justify-start px-2 ${
         openState ? "bg-[#EEE]" : ""
       } ${isOpen ? "bg-blue-100/50" : ""}`}
-      rippleColor="!bg-blue-900/10"
+      rippleColor={draft ? "!bg-blue-900/10" : ""}
       icon={
         <ThemeIcon className="mr-1">
           {folder ? <IconFolder size={21} /> : <IconFile size={21} />}

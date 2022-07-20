@@ -21,7 +21,7 @@ const variants = {
     },
     primary: {
       filled: "bg-gray-800 hover:bg-gray-700 text-gray-100",
-      outline: "bg-white text-gray-900 border shadow-sm",
+      outline: "bg-white text-gray-900 border shadow-sm text-gray-500",
       light: "bg-gray-200 text-gray-600 hover:bg-gray-300",
       ghost: "bg-transparent, text-gray-600 !font-medium",
     },

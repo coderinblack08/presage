@@ -1,8 +1,8 @@
-import { createPlateUI, ELEMENT_CODE_BLOCK } from "@udecode/plate";
+import { createPlateUI } from "@udecode/plate";
 import { withStyledPlaceHolders } from "./plugins/withStyledPlaceholders";
 
-export const plateUI = withStyledPlaceHolders(
-  createPlateUI({
-    // [ELEMENT_CODE_BLOCK]: null as any,
-  })
-);
+export const plateUI = createPlateUI({
+  // [ELEMENT_CODE_BLOCK]: null as any,
+});
+
+export const plateUIWithPlaceholders = withStyledPlaceHolders(plateUI);
