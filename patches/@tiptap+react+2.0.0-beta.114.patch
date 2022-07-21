@@ -1,0 +1,96 @@
+diff --git a/node_modules/@tiptap/react/dist/tiptap-react.cjs.js b/node_modules/@tiptap/react/dist/tiptap-react.cjs.js
+index 1ef7c04..43df405 100644
+--- a/node_modules/@tiptap/react/dist/tiptap-react.cjs.js
++++ b/node_modules/@tiptap/react/dist/tiptap-react.cjs.js
+@@ -192,11 +192,13 @@ class ReactRenderer {
+             };
+         }
+         this.reactElement = React__default["default"].createElement(Component, { ...props });
+-        if ((_a = this.editor) === null || _a === void 0 ? void 0 : _a.contentComponent) {
+-            this.editor.contentComponent.setState({
+-                renderers: this.editor.contentComponent.state.renderers.set(this.id, this),
+-            });
+-        }
++        ReactDOM.flushSync(() => {
++          if ((_a = this.editor) === null || _a === void 0 ? void 0 : _a.contentComponent) {
++              this.editor.contentComponent.setState({
++                  renderers: this.editor.contentComponent.state.renderers.set(this.id, this),
++              });
++          }
++        });
+     }
+     updateProps(props = {}) {
+         this.props = {
+@@ -206,14 +208,16 @@ class ReactRenderer {
+         this.render();
+     }
+     destroy() {
+-        var _a;
+-        if ((_a = this.editor) === null || _a === void 0 ? void 0 : _a.contentComponent) {
+-            const { renderers } = this.editor.contentComponent.state;
+-            renderers.delete(this.id);
+-            this.editor.contentComponent.setState({
+-                renderers,
+-            });
+-        }
++      ReactDOM.flushSync(() => {
++            var _a;
++            if ((_a = this.editor) === null || _a === void 0 ? void 0 : _a.contentComponent) {
++                const { renderers } = this.editor.contentComponent.state;
++                renderers.delete(this.id);
++                this.editor.contentComponent.setState({
++                    renderers,
++                });
++            }
++        });
+     }
+ }
+ 
+diff --git a/node_modules/@tiptap/react/dist/tiptap-react.esm.js b/node_modules/@tiptap/react/dist/tiptap-react.esm.js
+index 505e75a..d3a89dd 100644
+--- a/node_modules/@tiptap/react/dist/tiptap-react.esm.js
++++ b/node_modules/@tiptap/react/dist/tiptap-react.esm.js
+@@ -184,11 +184,13 @@ class ReactRenderer {
+             };
+         }
+         this.reactElement = React.createElement(Component, { ...props });
+-        if ((_a = this.editor) === null || _a === void 0 ? void 0 : _a.contentComponent) {
+-            this.editor.contentComponent.setState({
+-                renderers: this.editor.contentComponent.state.renderers.set(this.id, this),
+-            });
+-        }
++        ReactDOM.flushSync(() => {
++          if ((_a = this.editor) === null || _a === void 0 ? void 0 : _a.contentComponent) {
++              this.editor.contentComponent.setState({
++                  renderers: this.editor.contentComponent.state.renderers.set(this.id, this),
++              });
++          }
++        });
+     }
+     updateProps(props = {}) {
+         this.props = {
+@@ -198,14 +200,16 @@ class ReactRenderer {
+         this.render();
+     }
+     destroy() {
+-        var _a;
+-        if ((_a = this.editor) === null || _a === void 0 ? void 0 : _a.contentComponent) {
+-            const { renderers } = this.editor.contentComponent.state;
+-            renderers.delete(this.id);
+-            this.editor.contentComponent.setState({
+-                renderers,
+-            });
+-        }
++      ReactDOM.flushSync(() => {
++          var _a;
++          if ((_a = this.editor) === null || _a === void 0 ? void 0 : _a.contentComponent) {
++              const { renderers } = this.editor.contentComponent.state;
++              renderers.delete(this.id);
++              this.editor.contentComponent.setState({
++                  renderers,
++              });
++          }
++      });
+     }
+ }
+ 

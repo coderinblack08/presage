@@ -15,7 +15,9 @@
   "devDependencies": {
     "autoprefixer": "^10.4.7",
     "eslint-config-custom": "*",
+    "patch-package": "^6.4.7",
     "postcss": "^8.4.14",
+    "postinstall-postinstall": "^2.1.0",
     "prettier": "latest",
     "tailwindcss": "^3.1.6",
     "turbo": "latest"
