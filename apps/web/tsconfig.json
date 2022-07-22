@@ -1,5 +1,11 @@
 {
   "extends": "tsconfig/nextjs.json",
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "server/env.js"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "server/env.js",
+    "modules/editor/plugins/CursorParking.js"
+  ],
   "exclude": ["node_modules"]
 }

@@ -34,8 +34,6 @@ export const SlashCombobox = <TData extends Data = NoData>({
     editor,
     item
   ): void => {
-    console.log(item);
-
     const targetRange = comboboxStore.get.targetRange();
 
     if (!targetRange) return;

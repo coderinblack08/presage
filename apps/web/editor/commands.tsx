@@ -49,14 +49,6 @@ export const COMMANDS: TComboboxItem<CommandItemProps>[] = [
   },
   {
     key: counter(),
-    text: "Subheading",
-    data: {
-      icon: <IconH2 size={16} className="text-gray-500" />,
-      type: ELEMENT_H3,
-    },
-  },
-  {
-    key: counter(),
     text: "Bulleted List",
     data: {
       icon: <IconList size={16} className="text-gray-500" />,

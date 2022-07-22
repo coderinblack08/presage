@@ -47,7 +47,7 @@ const FolderDisclosure: React.FC<{
   useEffect(() => {
     if (router.pathname !== "/editor/[id]")
       setCurrentDraft({ absolutePath: [], stringPath: [], draftId: "" });
-  }, [setCurrentDraft]);
+  }, [router.pathname, setCurrentDraft]);
 
   return (
     <Disclosure
@@ -61,7 +61,6 @@ const FolderDisclosure: React.FC<{
               absolutePath={currentPath}
               onClick={() => {
                 if (!containsChildren) {
-                  console.log("clicked");
                   toast.error("Folder is empty.", {
                     position: "bottom-left",
                   });
@@ -127,7 +126,9 @@ export const FileTree: React.FC<FileTreeProps> = ({}) => {
         });
       }
     };
-    dfs(folderTree, []);
+    if (folderTree) {
+      dfs({ children: [folderTree], path: [] }, []);
+    }
   }, [currentFile.draftId, folderTree, setCurrentFile]);
 
   return (
@@ -237,7 +238,7 @@ export const FolderOrFileButton: React.FC<{
       variant="ghost"
       as={draft ? "a" : "div"}
     >
-      {!editing && <span className="w-full">{name}</span>}
+      {!editing && <span className="w-full truncate">{name}</span>}
       <input
         ref={ref}
         type="text"

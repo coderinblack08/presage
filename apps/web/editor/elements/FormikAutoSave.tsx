@@ -1,13 +1,21 @@
 import { useFormikContext } from "formik";
-import debounce from "lodash.debounce";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { useDebouncedCallback } from "use-debounce";
 
 export const AutoSave: React.FC = () => {
   const formik = useFormikContext();
   const [isLoading, setIsLoading] = useState(false);
-  const debouncedSubmit = useCallback(
-    debounce(() => formik.submitForm().then(() => setIsLoading(false)), 500),
-    [formik.submitForm, formik.isValid, formik.initialValues, formik.values]
+  const debouncedSubmit = useDebouncedCallback(
+    () =>
+      formik.submitForm().then(() => {
+        setIsLoading(false);
+        toast.success("Saved successfully", {
+          duration: 1000,
+          position: "top-center",
+        });
+      }),
+    1000
   );
 
   useEffect(() => {
@@ -15,16 +23,16 @@ export const AutoSave: React.FC = () => {
       setIsLoading(true);
       debouncedSubmit();
     }
-    return debouncedSubmit.cancel;
   }, [debouncedSubmit, formik.dirty, formik.isValid, formik.values]);
 
-  return (
-    <span
-      className={`${
-        isLoading ? "bg-yellow-200/50 text-yellow-500" : "bg-gray-100"
-      } px-2 py-0.5 rounded-lg`}
-    >
-      {isLoading ? "loading..." : "saved"}
-    </span>
-  );
+  // return (
+  //   <span
+  //     className={`${
+  //       isLoading ? "bg-yellow-200/50 text-yellow-500" : "bg-gray-100"
+  //     } px-2 py-0.5 rounded-lg`}
+  //   >
+  //     {isLoading ? "loading..." : "saved"}
+  //   </span>
+  // );
+  return null;
 };

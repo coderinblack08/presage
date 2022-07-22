@@ -3,20 +3,19 @@ import { createMyPlugins } from "../types/plate";
 
 import {
   createBlockquotePlugin,
-  createCodeBlockPlugin,
-  createHeadingPlugin,
-  createParagraphPlugin,
   createBoldPlugin,
+  createCodeBlockPlugin,
   createCodePlugin,
+  createHeadingPlugin,
   createItalicPlugin,
+  createLinkPlugin,
+  createListPlugin,
+  createParagraphPlugin,
   createStrikethroughPlugin,
   createSubscriptPlugin,
   createSuperscriptPlugin,
-  createUnderlinePlugin,
-  createLinkPlugin,
-  CodeBlockElement,
-  createListPlugin,
   createTodoListPlugin,
+  createUnderlinePlugin,
 } from "@udecode/plate";
 import { linkPlugin } from "./linkPlugin";
 
@@ -24,7 +23,7 @@ export const basicElementsPlugins = createMyPlugins(
   [
     createParagraphPlugin(),
     createBlockquotePlugin(),
-    createCodeBlockPlugin({ component: CodeBlockElement }),
+    createCodeBlockPlugin(),
     createHeadingPlugin(),
     createLinkPlugin(linkPlugin),
     createCodePlugin(),

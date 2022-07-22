@@ -1,6 +1,3 @@
-import "tippy.js/animations/scale.css";
-import "tippy.js/dist/tippy.css";
-
 import { httpBatchLink } from "@trpc/client/links/httpBatchLink";
 import { loggerLink } from "@trpc/client/links/loggerLink";
 import { withTRPC } from "@trpc/next";
@@ -8,7 +5,6 @@ import { SessionProvider } from "next-auth/react";
 import { AppType } from "next/dist/shared/lib/utils";
 import { FunctionComponent } from "react";
 import { Toaster } from "react-hot-toast";
-import { RecoilRoot } from "recoil";
 import superjson from "superjson";
 import { AppRouter } from "../server/routers/_app";
 import "../styles/globals.css";
@@ -19,12 +15,10 @@ const MyApp: AppType = ({
 }) => {
   const C = Component as FunctionComponent;
   return (
-    <RecoilRoot>
-      <SessionProvider session={session}>
-        <Toaster />
-        <C {...pageProps} />
-      </SessionProvider>
-    </RecoilRoot>
+    <SessionProvider session={session}>
+      <Toaster />
+      <C {...pageProps} />
+    </SessionProvider>
   );
 };
 
@@ -40,11 +34,11 @@ export default withTRPC<AppRouter>({
 
     return {
       links: [
-        loggerLink({
-          enabled: (opts) =>
-            process.env.NODE_ENV === "development" ||
-            (opts.direction === "down" && opts.result instanceof Error),
-        }),
+        // loggerLink({
+        //   enabled: (opts) =>
+        //     process.env.NODE_ENV === "development" ||
+        //     (opts.direction === "down" && opts.result instanceof Error),
+        // }),
         httpBatchLink({ url }),
       ],
       transformer: superjson,

@@ -1,11 +1,13 @@
 import {
   createComboboxPlugin,
+  createDeserializeHtmlPlugin,
   createExitBreakPlugin,
   createMentionPlugin,
   createPlugins,
   createResetNodePlugin,
   createSoftBreakPlugin,
   createTrailingBlockPlugin,
+  deserializeHtmlElement,
   Plate,
   serializeHtml,
   TEditableProps,
@@ -23,17 +25,18 @@ import { softBreakPlugin } from "./plugins/softBreakPlugin";
 import { trailingBlockPlugin } from "./plugins/trailingBlockPlugin";
 import stripAttributes from "strip-attributes";
 import { MyValue } from "./types/plate";
+import { basicMarksValue } from "./elements/BasicElementsValue";
+import { basicElementsValue } from "./marks/BasicMarksValue";
+import { useField } from "formik";
 
-interface RichTextEditorProps {
-  onChange: (value: any) => void;
-}
+export interface RichTextEditorProps {}
 
 export const editableProps: TEditableProps<MyValue> = {
   spellCheck: false,
   autoFocus: true,
   readOnly: false,
   placeholder: "Start by typing '/' for commands",
-  className: "prose",
+  className: "pb-4 md:pb-8 lg:pb-20",
 };
 
 const plugins = createPlugins<MyValue>(
@@ -52,23 +55,24 @@ const plugins = createPlugins<MyValue>(
         inputCreation: { key: "creationId", value: "main" },
       },
     }),
+    createDeserializeHtmlPlugin(),
   ],
   { components: plateUIWithPlaceholders }
 );
 
-export const RichTextEditor: React.FC<RichTextEditorProps> = ({ onChange }) => {
-  const [value, setValue] = React.useState<string>();
+export const RichTextEditor: React.FC<RichTextEditorProps> = ({}) => {
+  const [value, setValue] = React.useState<string>("");
+  const [{ value: editorValue }, _, { setValue: setEditorValue }] =
+    useField<string>("content");
 
   const Serialized = () => {
     const editorState = usePlateEditorState()!;
-    setValue(
-      stripAttributes(
-        serializeHtml(editorState, {
-          nodes: editorState?.children,
-        }),
-        { omit: ["placeholder"] }
-      )
-    );
+    try {
+      const serializedHTML = serializeHtml(editorState, {
+        nodes: editorState?.children,
+      });
+      setValue(stripAttributes(serializedHTML, { omit: ["placeholder"] }));
+    } catch (error) {}
     return null;
   };
 
@@ -76,8 +80,9 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({ onChange }) => {
     <>
       <Plate<MyValue>
         editableProps={editableProps}
-        // initialValue={[...basicElementsValue, ...basicMarksValue]}
-        onChange={() => onChange(value)}
+        // initialValue={editorValue}
+        initialValue={[...basicElementsValue, ...basicMarksValue]}
+        // onChange={() => setEditorValue(value)}
         plugins={plugins}
       >
         <Serialized />

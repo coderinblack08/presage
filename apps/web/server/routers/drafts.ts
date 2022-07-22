@@ -50,6 +50,7 @@ export const draftsRouter = createRouter()
     input: z.object({
       id: z.string(),
       title: z.string().optional(),
+      content: z.string().optional(),
       folderId: z.string().optional(),
     }),
     resolve: async ({ input, ctx }) => {
@@ -88,7 +89,6 @@ export const draftsRouter = createRouter()
 
       ) select * from cte order by path;
       `;
-      console.log(result);
 
       type Node = Folder & {
         depth: number;

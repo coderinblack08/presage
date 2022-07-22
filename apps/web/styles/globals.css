@@ -8,140 +8,51 @@
   src: url(/fonts/eudoxus-sans-var.woff2) format("woff2");
 }
 
-[placeholder]::before,
-[data-slate-placeholder="true"] {
-  @apply text-gray-300 font-medium !opacity-100;
+[contenteditable="true"]:empty:before {
+  content: attr(placeholder);
+  color: theme("colors.gray.300");
+  @apply font-semibold tracking-tight;
 }
 
-[data-slate-editor="true"] {
-  @apply h-full py-4;
+.draggable-item {
+  display: flex;
+  padding: 0.5rem;
+  margin: 0.5rem 0;
+  background: white;
+  /* box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05); */
 }
 
-[data-slate-editor="true"] > *:only-child:before {
-  @apply hidden;
+.draggable-item > .drag-handle {
+  flex: 0 0 auto;
+  position: relative;
+  width: 1rem;
+  height: 1rem;
+  top: 0.3rem;
+  margin-right: 0.5rem;
+  cursor: grab;
+  background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 16"><path fill-opacity="0.2" d="M4 14c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zM2 6C.9 6 0 6.9 0 8s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6C.9 0 0 .9 0 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6 4c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" /></svg>');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
 }
 
-.slate-ul {
-  @apply list-disc;
+.draggable-item > .content {
+  flex: 1 1 auto;
 }
 
-.slate-ol {
-  @apply list-decimal;
+.has-focus {
+  border-radius: 3px;
+  box-shadow: 0 0 0 3px #68cef8;
 }
 
-code[class*="language-"],
-.slate-code_block {
-  @apply font-mono font-medium;
+/** hacky way to display placeholders */
 
-  color: #393a34;
-  direction: ltr;
-  text-align: left;
-  white-space: pre;
-  word-spacing: normal;
-  word-break: normal;
-  font-size: 0.9em;
-  line-height: 1.2em;
-
-  -moz-tab-size: 4;
-  -o-tab-size: 4;
-  tab-size: 4;
-
-  -webkit-hyphens: none;
-  -moz-hyphens: none;
-  -ms-hyphens: none;
-  hyphens: none;
-}
-
-pre > code[class*="language-"] {
-  font-size: 1em;
-}
-
-.slate-code_block::-moz-selection,
-.slate-code_block ::-moz-selection,
-code[class*="language-"]::-moz-selection,
-code[class*="language-"] ::-moz-selection {
-  background: #b3d4fc;
-}
-
-.slate-code_block::selection,
-.slate-code_block ::selection,
-code[class*="language-"]::selection,
-code[class*="language-"] ::selection {
-  background: #b3d4fc;
-}
-
-/* Code blocks */
-.slate-code_block {
-  @apply !rounded-lg !p-5 my-4 overflow-auto border;
-  background-color: white !important;
-}
-
-.slate-code_block > select {
-  @apply focus:outline-none font-sans text-base text-gray-500 select-none text-right pr-2;
-}
-
-/* Inline code */
-:not(pre) > code[class*="language-"] {
-  padding: 0.2em;
-  padding-top: 1px;
-  padding-bottom: 1px;
-  background: #f8f8f8;
-  border: 1px solid #dddddd;
-}
-
-.token.comment,
-.token.prolog,
-.token.doctype,
-.token.cdata {
-  @apply text-gray-400;
-}
-
-.token.punctuation {
-  @apply text-gray-700;
-}
-
-.token.property,
-.token.tag,
-.token.boolean,
-.token.number,
-.token.constant,
-.token.symbol,
-.token.deleted {
-  @apply text-green-500;
-}
-
-.token.selector,
-.token.attr-name,
-.token.string,
-.token.char,
-.token.builtin,
-.token.inserted {
-  @apply text-purple-500;
-}
-
-.token.operator,
-.token.entity,
-.token.url,
-.language-css .token.string,
-.style .token.string {
-  @apply text-yellow-500;
-}
-
-.token.atrule,
-.token.attr-value,
-.token.keyword {
-  @apply text-blue-500;
-}
-
-.token.function,
-.token.class-name {
-  @apply text-pink-500;
-}
-
-.token.regex,
-.token.important,
-.token.variable {
-  @apply text-yellow-500;
+.is-empty div .content::before {
+  color: theme("colors.gray.300");
+  content: var(--placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
 }
 
 @tailwind base;
