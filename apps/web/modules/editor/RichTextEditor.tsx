@@ -8,8 +8,15 @@ import React from "react";
 import { DraggableItems } from "./plugins/DraggableItems";
 import { SlashCommands } from "./plugins/SlashCommands";
 import { Placeholder } from "./plugins/Placeholder";
+import { TrailingNode } from "./plugins/TrailingNode";
 
-const topLevelElements = ["paragraph", "heading", "blockquote"];
+const topLevelElements = [
+  "paragraph",
+  "heading",
+  "blockquote",
+  "orderedList",
+  "bulletList",
+];
 
 interface RichTextEditorProps {}
 
@@ -21,6 +28,8 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({}) => {
         paragraph: false,
         heading: false,
         blockquote: false,
+        bulletList: false,
+        orderedList: false,
       }),
       Placeholder.configure({ placeholder: "Type '/' for commands" }),
       // Focus.configure({ className: "has-focus", mode: "all" }),
@@ -75,6 +84,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({}) => {
           ];
         },
       }),
+      TrailingNode,
       ...DraggableItems,
     ],
     onCreate: ({ editor: e }) => {

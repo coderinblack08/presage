@@ -48,7 +48,7 @@ const EditorPage: React.FC<EditorPageProps> = ({ id }) => {
         {({ values, setFieldValue }) => (
           <Form>
             <div className="flex flex-col h-full">
-              <div className="flex items-center justify-between p-3 border-b">
+              <div className="flex items-center justify-between p-3 border-b gap-4">
                 <div className="flex items-center text-gray-500">
                   <ThemeIcon className="mr-2">
                     <IconFile size={21} />
@@ -58,7 +58,7 @@ const EditorPage: React.FC<EditorPageProps> = ({ id }) => {
                     return (
                       <React.Fragment key={index}>
                         <span
-                          className={`rounded-lg ${
+                          className={`rounded-lg truncate ${
                             isLast ? "bg-blue-100/50 px-2" : "px-1"
                           }`}
                         >
