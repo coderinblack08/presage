@@ -1,15 +1,11 @@
 import Dropcursor from "@tiptap/extension-dropcursor";
+import Focus from "@tiptap/extension-focus";
 import Highlight from "@tiptap/extension-highlight";
-import { Plugin } from "prosemirror-state";
-// import Focus from "@tiptap/extension-focus";
 import { BubbleMenu, EditorContent, Extension, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import React from "react";
+import { Plugin } from "prosemirror-state";
+import React, { useEffect } from "react";
 
-import { DraggableItems } from "./plugins/DraggableItems";
-import { SlashCommands } from "./plugins/SlashCommands";
-import { Placeholder } from "./plugins/Placeholder";
-import { TrailingNode } from "./plugins/TrailingNode";
 import {
   IconBold,
   IconCode,
@@ -17,6 +13,13 @@ import {
   IconItalic,
   IconStrikethrough,
 } from "@tabler/icons";
+import { useField } from "formik";
+import { InferQueryOutput } from "../../lib/trpc";
+import { DraggableItems } from "./plugins/DraggableItems";
+import { Placeholder } from "./plugins/Placeholder";
+import { SlashCommands } from "./plugins/SlashCommands";
+import { TrailingNode } from "./plugins/TrailingNode";
+import { Math } from "./plugins/MathNode";
 
 const topLevelElements = [
   "paragraph",
@@ -27,11 +30,16 @@ const topLevelElements = [
   "codeBlock",
 ];
 
-interface RichTextEditorProps {}
+interface RichTextEditorProps {
+  draft?: InferQueryOutput<"drafts.byId">;
+}
 
-export const RichTextEditor: React.FC<RichTextEditorProps> = ({}) => {
+export const RichTextEditor: React.FC<RichTextEditorProps> = ({ draft }) => {
+  const [{}, _, { setValue }] = useField("content");
   const editor = useEditor({
     extensions: [
+      // Math,
+      // for the time being until https://github.com/benrbray/prosemirror-math/issues/43 is fixed
       Highlight.configure({ multicolor: true }),
       StarterKit.configure({
         dropcursor: false,
@@ -44,7 +52,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({}) => {
         codeBlock: false,
       }),
       Placeholder.configure({ placeholder: "Type '/' for commands" }),
-      // Focus.configure({ className: "has-focus", mode: "all" }),
+      Focus.configure({ className: "has-focus", mode: "shallowest" }),
       Dropcursor.configure({ width: 3, color: "#68cef8" }),
       SlashCommands,
       Extension.create({
@@ -105,18 +113,31 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({}) => {
         }
       });
     },
-    content: "<p></p>",
+    onUpdate: ({ editor: e }) => setValue(e.getHTML()),
+    content: draft?.content || null,
     editorProps: {
       attributes: {
         spellcheck: "false",
         class:
           "prose max-w-[calc(100%+2rem)] focus:outline-none -ml-8 py-4 " +
-          "prose-code:bg-gray-100 prose-code:font-medium prose-code:font-mono prose-code:rounded-lg prose-code:px-2 prose-code:py-1 prose-code:border prose-code:text-gray-500 " +
+          "prose-code:bg-gray-100 prose-code:font-medium prose-code:font-mono prose-code:rounded-lg prose-code:px-1.5 prose-code:py-0.5 prose-code:border prose-code:text-gray-500 " +
           "prose-blockquote:border-l-2 prose-blockquote:pl-4 prose-blockquote:text-gray-400 prose-blockquote:not-italic " +
           "prose-headings:leading-tight prose-headings:tracking-tight prose-h1:text-2xl prose-h1:font-bold prose-h1:text-gray-900 prose-h1:font-bold",
       },
     },
   });
+
+  useEffect(() => {
+    if (editor && editor.getHTML() !== draft?.content) {
+      !editor.isDestroyed && editor.commands.setContent(draft?.content || null);
+    }
+  }, [draft?.content, editor]);
+
+  useEffect(() => {
+    return () => {
+      editor?.destroy();
+    };
+  }, [editor]);
 
   return (
     <>

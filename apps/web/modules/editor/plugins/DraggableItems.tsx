@@ -92,17 +92,23 @@ export const DraggableItems = [
         new Plugin({
           props: {
             handleDrop(view, event, slice, moved) {
+              // pulled from the `prosemirror-view` codebase (couldn't think of more concise solution)
+
+              // calculate the coordinates in which the drag ends
               let eventPos = view.posAtCoords(eventCoords(event));
               let $mouse = view.state.doc.resolve(eventPos!.pos);
 
+              // find the insertion point
               let insertPos = slice
                 ? dropPoint(view.state.doc, $mouse.pos, slice)
                 : $mouse.pos;
               if (insertPos == null) insertPos = $mouse.pos;
 
               let tr = view.state.tr;
+              // if the node moves, delete the current selection
               if (moved) tr.deleteSelection();
 
+              // mapping to change the current positions to the new positions
               let pos = tr.mapping.map(insertPos);
               let isNode =
                 slice.openStart == 0 &&
@@ -123,6 +129,7 @@ export const DraggableItems = [
               ) {
                 tr.setSelection(new NodeSelection($pos));
               } else {
+                // in our use case, selectable is false so this chunk run
                 let end = tr.mapping.map(insertPos);
                 tr.mapping.maps[tr.mapping.maps.length - 1].forEach(
                   (_from, _to, _newFrom, newTo) => (end = newTo)
@@ -134,6 +141,7 @@ export const DraggableItems = [
               view.focus();
               view.dispatch(tr.setMeta("uiEvent", "drop"));
 
+              // prevent prosemirror from handling the drop for us
               return true;
             },
           },

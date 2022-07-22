@@ -145,7 +145,11 @@ const EditorPage: React.FC<EditorPageProps> = ({ id }) => {
                       </Button>
                     </div>
                   </Popover>
-                  <Button size="sm" icon={<IconStackPop size={24} />}>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    icon={<IconStackPop size={24} />}
+                  >
                     Publish
                   </Button>
                 </div>
