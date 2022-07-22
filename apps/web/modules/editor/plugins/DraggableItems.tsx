@@ -41,7 +41,7 @@ const ComponentWrapper: React.FC<NodeViewProps> = ({ node }) => {
       <NodeViewContent
         className={`content m-0 p-0 ${
           node.type.name === "orderedList" || node.type.name === "bulletList"
-            ? "pl-8"
+            ? "pl-5"
             : ""
         }`}
         as={

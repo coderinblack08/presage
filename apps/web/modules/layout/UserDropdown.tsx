@@ -22,10 +22,12 @@ export const UserDropdown: React.FC = () => {
                   circle={false}
                 />
                 <div>
-                  <h6 className="font-display font-bold text-lg leading-none">
+                  <h6 className="font-display font-bold text-lg leading-none truncate">
                     {session?.user.name}
                   </h6>
-                  <p className="text-gray-500 mt-1.5 text-sm">Free plan</p>
+                  <p className="text-gray-500 mt-1.5 text-sm truncate">
+                    Free plan
+                  </p>
                 </div>
               </div>
             </button>

@@ -5,6 +5,14 @@ import Suggestion, { SuggestionOptions } from "@tiptap/suggestion";
 import { Node as ProseMirrorNode } from "prosemirror-model";
 import tippy, { Instance } from "tippy.js";
 import { CommandsList } from "./CommandsList";
+import {
+  IconCode,
+  IconHeading,
+  IconLetterA,
+  IconList,
+  IconListNumbers,
+  IconQuote,
+} from "@tabler/icons";
 
 export type CommandsOption = {
   HTMLAttributes?: Record<string, any>;
@@ -54,6 +62,7 @@ const commands = [
   {
     title: "Paragraph",
     shortcut: "p",
+    icon: <IconLetterA size={16} />,
     command: ({ editor, range }: { editor: Editor; range: Range }) => {
       editor.chain().focus().deleteRange(range).setNode("paragraph").run();
     },
@@ -61,6 +70,7 @@ const commands = [
   {
     title: "Heading",
     shortcut: "h1",
+    icon: <IconHeading size={16} />,
     command: ({ editor, range }: { editor: Editor; range: Range }) => {
       editor
         .chain()
@@ -72,6 +82,7 @@ const commands = [
   },
   {
     title: "Ordered List",
+    icon: <IconListNumbers size={16} />,
     description: "Create a list with numberings",
     command: ({ editor, range }: { editor: Editor; range: Range }) => {
       editor.chain().focus().deleteRange(range).toggleOrderedList().run();
@@ -80,6 +91,7 @@ const commands = [
   {
     title: "Bulleted List",
     description: "Create a bulleted list",
+    icon: <IconList size={16} />,
     command: ({ editor, range }: { editor: Editor; range: Range }) => {
       editor.chain().focus().deleteRange(range).toggleBulletList().run();
     },
@@ -87,6 +99,7 @@ const commands = [
   {
     title: "Quote",
     description: "Create a quote",
+    icon: <IconQuote size={16} />,
     command: ({ editor, range }: { editor: Editor; range: Range }) => {
       editor.chain().focus().deleteRange(range).toggleBlockquote().run();
     },
@@ -94,6 +107,7 @@ const commands = [
   {
     title: "Code Block",
     description: "Create a code block",
+    icon: <IconCode size={16} />,
     command: ({ editor, range }: { editor: Editor; range: Range }) => {
       editor.chain().focus().deleteRange(range).toggleCodeBlock().run();
     },

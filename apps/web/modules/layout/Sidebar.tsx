@@ -1,15 +1,22 @@
-import { IconFilePlus, IconFolderPlus, IconPlus } from "@tabler/icons";
+import {
+  IconChevronsLeft,
+  IconFilePlus,
+  IconFolderPlus,
+  IconPlus,
+} from "@tabler/icons";
 import { useAtom } from "jotai";
 import Image from "next/future/image";
 import Link from "next/link";
 import React from "react";
 import { Button, Menu, MenuItem, ThemeIcon } from "ui";
-import { focusedAtom } from "../../lib/store";
+import { collapseAtom, focusedAtom } from "../../lib/store";
 import { InferQueryOutput, trpc } from "../../lib/trpc";
 import logo from "../../public/static/logo.svg";
 import { FileTree } from "./FileTree";
 import { QuickFindPopover } from "./QuickFindPopover";
 import { SidebarItem } from "./SidebarItem";
+import { motion } from "framer-motion";
+
 import { UserDropdown } from "./UserDropdown";
 
 interface SidebarProps {
@@ -17,15 +24,21 @@ interface SidebarProps {
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({ width }) => {
+  const [collapsed, setCollapsed] = useAtom(collapseAtom);
   const addFolder = trpc.useMutation(["folders.add"]);
   const addDraft = trpc.useMutation(["drafts.add"]);
   const [focusedId, setFocusedId] = useAtom(focusedAtom);
   const utils = trpc.useContext();
 
   return (
-    <div
-      className="sticky top-0 flex flex-col justify-between h-screen flex-shrink-0 bg-zinc-50"
-      style={{ width }}
+    <motion.div
+      initial={{ width, opacity: 1 }}
+      animate={{
+        width: collapsed ? 0 : width,
+        opacity: collapsed ? 0 : 1,
+      }}
+      transition={{ ease: "linear", duration: 0.2 }}
+      className={`sticky top-0 flex flex-col justify-between h-screen flex-shrink-0 bg-zinc-50`}
     >
       <div className="h-full overflow-y-auto">
         <div className="px-3 pt-8 space-y-4">
@@ -62,7 +75,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ width }) => {
               }}
               trigger={
                 <Button
-                  className="w-full !justify-start px-2"
+                  className="w-full !justify-start px-2 truncate"
                   icon={
                     <ThemeIcon className="mr-1">
                       <IconPlus size={21} />
@@ -131,6 +144,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ width }) => {
         </ul>
       </div>
       <UserDropdown />
-    </div>
+    </motion.div>
   );
 };
