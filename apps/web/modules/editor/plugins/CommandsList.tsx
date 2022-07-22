@@ -83,7 +83,7 @@ export class CommandsList extends React.Component<CommandsListProps> {
         {items.length === 0 ? (
           <p className="text-gray-500 px-4 py-2">No commands found</p>
         ) : (
-          items.map(({ title, description }, index) => (
+          items.map(({ title }, index) => (
             <li
               key={index}
               {...(selectedIndex === index
@@ -97,9 +97,6 @@ export class CommandsList extends React.Component<CommandsListProps> {
                 onClick={() => this.selectItem(index)}
               >
                 <span>{title}</span>
-                {/* <div className="text-gray-500 text-sm mt-0.5">
-                  {description}
-                </div> */}
               </button>
             </li>
           ))

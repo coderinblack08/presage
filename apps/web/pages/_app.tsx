@@ -7,7 +7,9 @@ import { FunctionComponent } from "react";
 import { Toaster } from "react-hot-toast";
 import superjson from "superjson";
 import { AppRouter } from "../server/routers/_app";
+
 import "../styles/globals.css";
+import "../styles/lowlight.css";
 
 const MyApp: AppType = ({
   Component,

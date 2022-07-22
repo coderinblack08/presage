@@ -50,18 +50,26 @@ export const Commands = Extension.create<CommandsOption>({
   },
 });
 
-const textItemHelper = (type: "heading" | "paragraph", level?: number) => ({
-  title: type === "heading" ? `Heading ${level}` : "Paragraph",
-  description: level ? "Big section heading" : "Plain text",
-  shortcut: level ? `h${level}` : "p",
-  command: ({ editor, range }: { editor: Editor; range: Range }) => {
-    editor.chain().focus().deleteRange(range).setNode(type, { level }).run();
-  },
-});
-
 const commands = [
-  textItemHelper("paragraph"),
-  textItemHelper("heading", 1),
+  {
+    title: "Paragraph",
+    shortcut: "p",
+    command: ({ editor, range }: { editor: Editor; range: Range }) => {
+      editor.chain().focus().deleteRange(range).setNode("paragraph").run();
+    },
+  },
+  {
+    title: "Heading",
+    shortcut: "h1",
+    command: ({ editor, range }: { editor: Editor; range: Range }) => {
+      editor
+        .chain()
+        .focus()
+        .deleteRange(range)
+        .setNode("heading", { level: 1 })
+        .run();
+    },
+  },
   {
     title: "Ordered List",
     description: "Create a list with numberings",
@@ -81,6 +89,13 @@ const commands = [
     description: "Create a quote",
     command: ({ editor, range }: { editor: Editor; range: Range }) => {
       editor.chain().focus().deleteRange(range).toggleBlockquote().run();
+    },
+  },
+  {
+    title: "Code Block",
+    description: "Create a code block",
+    command: ({ editor, range }: { editor: Editor; range: Range }) => {
+      editor.chain().focus().deleteRange(range).toggleCodeBlock().run();
     },
   },
 ];

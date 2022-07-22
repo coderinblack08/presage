@@ -3,6 +3,8 @@ import BulletList from "@tiptap/extension-bullet-list";
 import OrderedList from "@tiptap/extension-ordered-list";
 import Heading from "@tiptap/extension-heading";
 import Paragraph from "@tiptap/extension-paragraph";
+import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
+import { lowlight } from "lowlight/lib/common.js";
 import {
   NodeViewContent,
   NodeViewProps,
@@ -12,7 +14,6 @@ import {
 
 const ComponentWrapper: React.FC<NodeViewProps> = ({ node }) => {
   // const [isHovering, hoverProps] = useHover();
-
   return (
     <NodeViewWrapper
       className={`draggable-item group ${
@@ -23,7 +24,7 @@ const ComponentWrapper: React.FC<NodeViewProps> = ({ node }) => {
         <div
           contentEditable="false"
           draggable="true"
-          className={`drag-handle group-hover:visible invisible transition`}
+          className={`drag-handle group-hover:opacity-100 opacity-0 transition`}
           style={{
             top: {
               heading: "0.8rem",
@@ -31,6 +32,7 @@ const ComponentWrapper: React.FC<NodeViewProps> = ({ node }) => {
               blockquote: "0.4rem",
               orderedList: "0.8rem",
               bulletList: "0.8rem",
+              codeBlock: "0.8rem",
             }[node.type.name],
           }}
           data-drag-handle
@@ -49,6 +51,7 @@ const ComponentWrapper: React.FC<NodeViewProps> = ({ node }) => {
             blockquote: "blockquote",
             orderedList: "ol",
             bulletList: "ul",
+            codeBlock: "pre",
           }[node.type.name]
         }
       />
@@ -57,6 +60,18 @@ const ComponentWrapper: React.FC<NodeViewProps> = ({ node }) => {
 };
 
 export const DraggableItems = [
+  CodeBlockLowlight.extend({
+    addOptions() {
+      return {
+        ...this.parent?.(),
+        lowlight,
+      };
+    },
+    draggable: true,
+    addNodeView() {
+      return ReactNodeViewRenderer(ComponentWrapper);
+    },
+  }),
   Paragraph.extend({
     draggable: true,
     addNodeView() {

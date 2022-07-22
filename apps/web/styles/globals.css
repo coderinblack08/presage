@@ -54,6 +54,10 @@
   pointer-events: none;
 }
 
+.prose mark {
+  @apply bg-yellow-100 rounded-lg px-2 py-1;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
