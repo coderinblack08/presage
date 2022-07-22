@@ -12,7 +12,7 @@ export const AutoSave: React.FC = () => {
         setIsLoading(false);
         toast.success("Saved successfully", {
           duration: 1000,
-          position: "top-center",
+          position: "bottom-right",
         });
       }),
     1000

@@ -79,7 +79,7 @@ export class CommandsList extends React.Component<CommandsListProps> {
     const { selectedIndex } = this.state;
 
     return (
-      <ul className="bg-white py-1.5 overflow-auto rounded-lg border shadow w-64">
+      <ul className="bg-white py-1.5 overflow-auto rounded-xl border shadow-sm w-64">
         {items.length === 0 ? (
           <p className="text-gray-500 px-4 py-2">No commands found</p>
         ) : (

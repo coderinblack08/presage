@@ -238,7 +238,9 @@ export const FolderOrFileButton: React.FC<{
       variant="ghost"
       as={draft ? "a" : "div"}
     >
-      {!editing && <span className="w-full truncate">{name}</span>}
+      {!editing && (
+        <span className="w-full truncate">{name || "Untitled"}</span>
+      )}
       <input
         ref={ref}
         type="text"

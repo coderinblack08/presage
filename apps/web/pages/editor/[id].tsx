@@ -1,16 +1,17 @@
 import {
   IconChevronsLeft,
-  IconFile,
   IconMenu2,
+  IconPackage,
   IconStackPop,
 } from "@tabler/icons";
 import { Form, Formik } from "formik";
 import { useAtom } from "jotai";
 import { useHydrateAtoms } from "jotai/utils";
+import isEqual from "lodash.isequal";
 import { GetServerSideProps } from "next";
 import React, { useEffect, useRef } from "react";
 import ContentEditable from "react-contenteditable";
-import { Button, ThemeIcon } from "ui";
+import { Button, Input, Popover } from "ui";
 import { AutoSave } from "../../editor/elements/FormikAutoSave";
 import { collapseAtom, currentFileAtom } from "../../lib/store";
 import { trpc } from "../../lib/trpc";
@@ -37,24 +38,52 @@ const EditorPage: React.FC<EditorPageProps> = ({ id }) => {
   const [collapsed, setCollapsed] = useAtom(collapseAtom);
   const { data: draft } = trpc.useQuery(["drafts.byId", { id }]);
   const draftTitleRef = useRef<HTMLElement>(null);
-  const breadcrumbs = [...currentDraft.stringPath, draft?.title].filter(
-    Boolean
-  );
+  const breadcrumbs = [
+    ...currentDraft.stringPath,
+    draft?.title || "Untitled",
+  ].filter(Boolean);
+  const utils = trpc.useContext();
 
   return (
     <DashboardLayout>
       <Formik
-        initialValues={{ title: draft?.title || "", content: null as any }}
+        initialValues={{
+          title: draft?.title || "",
+          content: draft?.content as any,
+        }}
         onSubmit={(values) => {
-          if (!values.content) delete values.content;
-          updateDraft.mutate({ ...values, id });
+          if (
+            !isEqual(values, {
+              title: draft?.title,
+              content: draft?.content,
+            })
+          ) {
+            updateDraft.mutate(
+              { ...values, id },
+              {
+                onSuccess(data) {
+                  utils.setQueryData(["drafts.byId", { id }], data);
+                },
+              }
+            );
+          }
         }}
         enableReinitialize
       >
         {({ values, setFieldValue }) => (
           <Form>
             <div className="flex flex-col h-full">
-              <div className="flex items-center justify-between p-3 border-b gap-4">
+              {draft?.published && (
+                <div className="shadow-inner text-gray-500">
+                  <div className="flex items-center justify-center px-5 py-3">
+                    <IconPackage size={20} className="mr-2" />
+                    <span className="mr-4">
+                      This article has been published (click to view)
+                    </span>
+                  </div>
+                </div>
+              )}
+              <div className="flex items-center justify-between p-3 border-y gap-4">
                 <div className="flex items-center text-gray-500">
                   <button
                     onClick={() => setCollapsed(!collapsed)}
@@ -83,18 +112,48 @@ const EditorPage: React.FC<EditorPageProps> = ({ id }) => {
                   })}
                 </div>
                 <div className="flex items-center space-x-2">
-                  <Button size="sm" variant="outline">
-                    Settings
-                  </Button>
+                  <Popover
+                    trigger={
+                      <Button size="sm" variant="outline">
+                        Settings
+                      </Button>
+                    }
+                    className="!w-96"
+                  >
+                    <h3 className="text-lg font-bold">Update Settings</h3>
+                    <div className="flex flex-col gap-2 mt-2">
+                      <Input name="name" placeholder="Name" />
+                      <Input
+                        name="description"
+                        placeholder="Description"
+                        textarea
+                      />
+                      <Input
+                        name="canonical"
+                        placeholder="Canonical URL"
+                        type="url"
+                      />
+                      <label className="block">
+                        <input
+                          className="mr-2 w-5 h-5 form-checkbox rounded border-gray-200 shadow-sm"
+                          type="checkbox"
+                        />
+                        Public
+                      </label>
+                      <Button className="w-full mt-2" color="blue">
+                        Save Settings
+                      </Button>
+                    </div>
+                  </Popover>
                   <Button size="sm" icon={<IconStackPop size={24} />}>
                     Publish
                   </Button>
                 </div>
               </div>
-              <main className="max-w-3xl mx-auto px-8 w-full h-full py-5 md:py-12 lg:py-24">
+              <main className="max-w-3xl mx-auto px-8 w-full h-full py-16 lg:py-24">
                 <AutoSave />
                 <ContentEditable
-                  className="text-3xl font-bold text-gray-900 focus:outline-none"
+                  className="text-3xl font-bold text-gray-900 focus:outline-none cursor-text"
                   placeholder="Untitled"
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
@@ -117,7 +176,7 @@ const EditorPage: React.FC<EditorPageProps> = ({ id }) => {
                   }}
                   tagName="h1"
                 />
-                <RichTextEditor />
+                <RichTextEditor draft={draft} />
               </main>
             </div>
           </Form>

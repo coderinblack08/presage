@@ -40,6 +40,7 @@
 }
 
 .has-focus {
+  @apply relative z-50;
   border-radius: 3px;
   box-shadow: 0 0 0 3px #68cef8;
 }
@@ -55,7 +56,7 @@
 }
 
 .prose mark {
-  @apply bg-yellow-100 rounded-lg px-2 py-1;
+  @apply bg-yellow-100 rounded-lg px-1.5 py-0.5;
 }
 
 @tailwind base;

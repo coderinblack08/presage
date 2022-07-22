@@ -52,6 +52,7 @@ export const draftsRouter = createRouter()
       title: z.string().optional(),
       content: z.string().optional(),
       folderId: z.string().optional(),
+      published: z.boolean().optional(),
     }),
     resolve: async ({ input, ctx }) => {
       const draft = await ctx.prisma.draft.findFirstOrThrow({

@@ -37,6 +37,15 @@ export const UserDropdown: React.FC = () => {
           <MenuItem icon={<MdCode size={20} />}>Developer</MenuItem>
           <MenuItem icon={<MdHelp size={20} />}>Help Center</MenuItem>
           <MenuDivider />
+          <div className="px-4 text-gray-500 py-2">
+            <h3 className="font-semibold mb-2">Quotas:</h3>
+            <ul className="space-y-2">
+              <li>0 / 100 drafts</li>
+              <li>0 / 1GB storage</li>
+              <li>0 / 3 rewards</li>
+            </ul>
+          </div>
+          <MenuDivider />
           <MenuItem
             onClick={() => signOut({ callbackUrl: "/" })}
             icon={<MdLogout size={20} />}

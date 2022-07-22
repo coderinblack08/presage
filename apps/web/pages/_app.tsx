@@ -10,6 +10,8 @@ import { AppRouter } from "../server/routers/_app";
 
 import "../styles/globals.css";
 import "../styles/lowlight.css";
+import "@benrbray/prosemirror-math/style/math.css";
+import "katex/dist/katex.min.css";
 
 const MyApp: AppType = ({
   Component,

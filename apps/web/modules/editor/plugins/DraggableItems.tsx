@@ -1,16 +1,27 @@
 import Blockquote from "@tiptap/extension-blockquote";
+import { dropPoint } from "prosemirror-transform";
 import BulletList from "@tiptap/extension-bullet-list";
-import OrderedList from "@tiptap/extension-ordered-list";
-import Heading from "@tiptap/extension-heading";
-import Paragraph from "@tiptap/extension-paragraph";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
-import { lowlight } from "lowlight/lib/common.js";
+import Heading from "@tiptap/extension-heading";
+import OrderedList from "@tiptap/extension-ordered-list";
+import Paragraph from "@tiptap/extension-paragraph";
 import {
   NodeViewContent,
   NodeViewProps,
   NodeViewWrapper,
   ReactNodeViewRenderer,
 } from "@tiptap/react";
+import { lowlight } from "lowlight/lib/common.js";
+import {
+  Plugin,
+  Selection,
+  NodeSelection,
+  TextSelection,
+} from "prosemirror-state";
+
+function eventCoords(event: MouseEvent) {
+  return { left: event.clientX, top: event.clientY };
+}
 
 const ComponentWrapper: React.FC<NodeViewProps> = ({ node }) => {
   // const [isHovering, hoverProps] = useHover();
@@ -27,7 +38,7 @@ const ComponentWrapper: React.FC<NodeViewProps> = ({ node }) => {
           className={`drag-handle group-hover:opacity-100 opacity-0 transition`}
           style={{
             top: {
-              heading: "0.8rem",
+              heading: "0.5rem",
               paragraph: "0.4rem",
               blockquote: "0.4rem",
               orderedList: "0.8rem",
@@ -68,18 +79,74 @@ export const DraggableItems = [
       };
     },
     draggable: true,
+    selectable: false,
     addNodeView() {
       return ReactNodeViewRenderer(ComponentWrapper);
     },
   }),
   Paragraph.extend({
     draggable: true,
+    selectable: false,
+    addProseMirrorPlugins() {
+      return [
+        new Plugin({
+          props: {
+            handleDrop(view, event, slice, moved) {
+              let eventPos = view.posAtCoords(eventCoords(event));
+              let $mouse = view.state.doc.resolve(eventPos!.pos);
+
+              let insertPos = slice
+                ? dropPoint(view.state.doc, $mouse.pos, slice)
+                : $mouse.pos;
+              if (insertPos == null) insertPos = $mouse.pos;
+
+              let tr = view.state.tr;
+              if (moved) tr.deleteSelection();
+
+              let pos = tr.mapping.map(insertPos);
+              let isNode =
+                slice.openStart == 0 &&
+                slice.openEnd == 0 &&
+                slice.content.childCount == 1;
+              let beforeInsert = tr.doc;
+              if (isNode)
+                tr.replaceRangeWith(pos, pos, slice.content.firstChild!);
+              else tr.replaceRange(pos, pos, slice);
+              if (tr.doc.eq(beforeInsert)) return;
+
+              let $pos = tr.doc.resolve(pos);
+              if (
+                isNode &&
+                NodeSelection.isSelectable(slice.content.firstChild!) &&
+                $pos.nodeAfter &&
+                $pos.nodeAfter.sameMarkup(slice.content.firstChild!)
+              ) {
+                tr.setSelection(new NodeSelection($pos));
+              } else {
+                let end = tr.mapping.map(insertPos);
+                tr.mapping.maps[tr.mapping.maps.length - 1].forEach(
+                  (_from, _to, _newFrom, newTo) => (end = newTo)
+                );
+                tr.setSelection(
+                  new TextSelection(tr.doc.resolve($pos.pos))
+                ).scrollIntoView();
+              }
+              view.focus();
+              view.dispatch(tr.setMeta("uiEvent", "drop"));
+
+              return true;
+            },
+          },
+        }),
+      ];
+    },
     addNodeView() {
       return ReactNodeViewRenderer(ComponentWrapper);
     },
   }),
   Heading.extend({
     draggable: true,
+    selectable: false,
     // addKeyboardShortcuts() {
     //   return {
     //     Enter: ({ editor }) => {
@@ -93,18 +160,21 @@ export const DraggableItems = [
   }).configure({ levels: [1] }),
   Blockquote.extend({
     draggable: true,
+    selectable: false,
     addNodeView() {
       return ReactNodeViewRenderer(ComponentWrapper);
     },
   }),
   BulletList.extend({
     draggable: true,
+    selectable: false,
     addNodeView() {
       return ReactNodeViewRenderer(ComponentWrapper);
     },
   }),
   OrderedList.extend({
     draggable: true,
+    selectable: false,
     addNodeView() {
       return ReactNodeViewRenderer(ComponentWrapper);
     },
