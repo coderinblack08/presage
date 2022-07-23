@@ -123,6 +123,6 @@
 
   html,
   body {
-    @apply bg-white;
+    @apply bg-white selection:!bg-blue-300 selection:!text-white;
   }
 }

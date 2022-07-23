@@ -52,7 +52,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({ draft }) => {
         codeBlock: false,
       }),
       Placeholder.configure({ placeholder: "Type '/' for commands" }),
-      Focus.configure({ className: "has-focus", mode: "shallowest" }),
+      // Focus.configure({ className: "has-focus", mode: "shallowest" }),
       Dropcursor.configure({ width: 3, color: "#68cef8" }),
       SlashCommands,
       Extension.create({

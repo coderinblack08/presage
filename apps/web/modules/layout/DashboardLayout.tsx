@@ -10,7 +10,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 }) => {
   const { position, isDragging, splitterProps } = useResizable({
     axis: "x",
-    initial: 320,
+    initial: 280,
     min: 240,
     max: 440,
   });

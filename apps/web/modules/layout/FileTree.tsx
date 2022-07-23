@@ -167,6 +167,12 @@ export const FolderOrFileButton: React.FC<{
   const utils = trpc.useContext();
 
   useEffect(() => {
+    if (draft && name !== draft.title) {
+      setName(draft.title);
+    }
+  }, [draft?.title, name]);
+
+  useEffect(() => {
     if (focusedId === folder?.id || focusedId === draft?.id) {
       setEditing(true);
       setTimeout(() => {
@@ -282,6 +288,23 @@ export const FolderOrFileButton: React.FC<{
                   {
                     onSuccess: (data) => {
                       utils.refetchQueries(["drafts.recursive"]);
+                      utils.setQueryData(["drafts.recursive"], ((
+                        old: InferQueryOutput<"drafts.recursive">
+                      ) => {
+                        if (old) {
+                          const dfs = (node: any) => {
+                            for (const child of node.children || []) {
+                              if (child.id === folder.id) {
+                                child.drafts.push(data);
+                                return;
+                              }
+                              dfs(child);
+                            }
+                          };
+                          dfs(old);
+                          return old;
+                        }
+                      }) as any);
                       setFocusedId(data.id);
                     },
                   }
@@ -293,10 +316,17 @@ export const FolderOrFileButton: React.FC<{
             <MenuItem
               icon={<IconFolderPlus size={20} />}
               onClick={() => {
-                addFolder.mutate({
-                  name: "Untitled",
-                  parentId: folder.id,
-                });
+                addFolder.mutate(
+                  {
+                    name: "Untitled",
+                    parentId: folder.id,
+                  },
+                  {
+                    onSuccess: (data) => {
+                      utils.refetchQueries(["drafts.recursive"]);
+                    },
+                  }
+                );
               }}
             >
               New Folder
@@ -397,7 +427,25 @@ export const FolderOrFileButton: React.FC<{
                   { id: draft?.id },
                   {
                     onSuccess: () => {
-                      utils.refetchQueries(["drafts.recursive"]);
+                      utils.setQueryData(["drafts.recursive"], ((
+                        old: InferQueryOutput<"drafts.recursive">
+                      ) => {
+                        if (old) {
+                          const dfs = (node: any) => {
+                            for (let i = 0; i < node.drafts.length; i++) {
+                              if (node.drafts[i].id === draft.id) {
+                                delete node.drafts[i];
+                                return;
+                              }
+                            }
+                            for (const child of node.children || []) {
+                              dfs(child);
+                            }
+                          };
+                          dfs(old);
+                          return old;
+                        }
+                      }) as any);
                     },
                   }
                 );

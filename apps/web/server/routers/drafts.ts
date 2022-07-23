@@ -16,6 +16,11 @@ async function convertMaterializedPaths(data: any[]) {
         where: {
           folderId: id,
         },
+        select: {
+          id: true,
+          title: true,
+          createdAt: true,
+        },
       }),
     });
     o[parent] = o[parent] || {};
@@ -53,6 +58,8 @@ export const draftsRouter = createRouter()
       content: z.string().optional(),
       folderId: z.string().optional(),
       published: z.boolean().optional(),
+      canonicalUrl: z.string().optional(),
+      description: z.string().optional(),
     }),
     resolve: async ({ input, ctx }) => {
       const draft = await ctx.prisma.draft.findFirstOrThrow({

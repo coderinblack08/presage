@@ -17,7 +17,7 @@ interface SidebarItemProps {
 }
 
 const icons = {
-  learn: {
+  dashboard: {
     focused: <FocusedHomeIcon />,
     default: <IconSmartHome stroke={1.5} />,
   },
@@ -36,7 +36,7 @@ const icons = {
 };
 
 const routes = {
-  learn: "/dashboard",
+  dashboard: "/dashboard",
   explore: "/explore",
   subscriptions: "/subscriptions",
   rewards: "/rewards",
@@ -49,11 +49,11 @@ export const SidebarItem: React.FC<SidebarItemProps> = ({ name }) => {
   return (
     <Link href={routes[name]} passHref>
       <a
-        className={`block px-4 py-2 w-full rounded-lg ${
+        className={`block px-4 py-2.5 w-full rounded-xl ${
           isFocused ? "bg-[#EEE]" : ""
         }`}
       >
-        <div className="flex items-center space-x-3 w-full text-gray-600">
+        <div className="flex items-center space-x-3 w-full text-gray-500">
           {icons[name][isFocused ? "focused" : "default"]}
           <span className="capitalize">{name}</span>
         </div>

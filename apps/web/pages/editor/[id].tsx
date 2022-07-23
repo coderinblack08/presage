@@ -3,8 +3,9 @@ import {
   IconMenu2,
   IconPackage,
   IconStackPop,
+  IconStackPush,
 } from "@tabler/icons";
-import { Form, Formik } from "formik";
+import { Field, Form, Formik } from "formik";
 import { useAtom } from "jotai";
 import { useHydrateAtoms } from "jotai/utils";
 import isEqual from "lodash.isequal";
@@ -14,7 +15,7 @@ import ContentEditable from "react-contenteditable";
 import { Button, Input, Popover } from "ui";
 import { AutoSave } from "../../editor/elements/FormikAutoSave";
 import { collapseAtom, currentFileAtom } from "../../lib/store";
-import { trpc } from "../../lib/trpc";
+import { InferQueryOutput, trpc } from "../../lib/trpc";
 import { RichTextEditor } from "../../modules/editor/RichTextEditor";
 import { DashboardLayout } from "../../modules/layout/DashboardLayout";
 
@@ -50,6 +51,9 @@ const EditorPage: React.FC<EditorPageProps> = ({ id }) => {
         initialValues={{
           title: draft?.title || "",
           content: draft?.content as any,
+          description: draft?.description || "",
+          canonicalUrl: draft?.canonicalUrl || "",
+          published: draft?.published || false,
         }}
         onSubmit={(values) => {
           if (
@@ -62,7 +66,35 @@ const EditorPage: React.FC<EditorPageProps> = ({ id }) => {
               { ...values, id },
               {
                 onSuccess(data) {
-                  utils.setQueryData(["drafts.byId", { id }], data);
+                  if (data.title !== draft?.title) {
+                    utils.setQueryData(["drafts.recursive"], ((
+                      old: InferQueryOutput<"drafts.recursive">
+                    ) => {
+                      if (old) {
+                        const dfs = (node: any) => {
+                          for (let i = 0; i < node.drafts.length; i++) {
+                            if (node.drafts[i].id === id) {
+                              node.drafts[i] = {
+                                ...node.drafts[i],
+                                title: data.title,
+                              };
+                              return;
+                            }
+                          }
+                          for (const child of node.children || []) {
+                            dfs(child);
+                          }
+                        };
+                        dfs(old);
+                        return old;
+                      }
+                    }) as any);
+                    utils.setQueryData(["drafts.byId", { id }], data);
+                  }
+                  // toast.success("Saved successfully", {
+                  //   duration: 1000,
+                  //   position: "bottom-right",
+                  // });
                 },
               }
             );
@@ -74,14 +106,17 @@ const EditorPage: React.FC<EditorPageProps> = ({ id }) => {
           <Form>
             <div className="flex flex-col h-full">
               {draft?.published && (
-                <div className="shadow-inner text-gray-500">
+                <Button
+                  className="text-gray-500 !p-0 border-none rounded-none font-medium"
+                  variant="outline"
+                >
                   <div className="flex items-center justify-center px-5 py-3">
                     <IconPackage size={20} className="mr-2" />
                     <span className="mr-4">
                       This article has been published (click to view)
                     </span>
                   </div>
-                </div>
+                </Button>
               )}
               <div className="flex items-center justify-between p-3 border-y gap-4">
                 <div className="flex items-center text-gray-500">
@@ -121,36 +156,44 @@ const EditorPage: React.FC<EditorPageProps> = ({ id }) => {
                     className="!w-96"
                   >
                     <h3 className="text-lg font-bold">Update Settings</h3>
-                    <div className="flex flex-col gap-2 mt-2">
-                      <Input name="name" placeholder="Name" />
-                      <Input
+                    <div className="flex flex-col gap-4 mt-2">
+                      <Field
+                        as={Input}
                         name="description"
                         placeholder="Description"
                         textarea
                       />
-                      <Input
-                        name="canonical"
+                      <Field
+                        as={Input}
+                        name="canonicalUrl"
                         placeholder="Canonical URL"
                         type="url"
                       />
-                      <label className="block">
+                      <label className="block cursor-not-allowed">
                         <input
                           className="mr-2 w-5 h-5 form-checkbox rounded border-gray-200 shadow-sm"
                           type="checkbox"
+                          disabled
                         />
-                        Public
+                        Private
                       </label>
-                      <Button className="w-full mt-2" color="blue">
-                        Save Settings
-                      </Button>
                     </div>
                   </Popover>
                   <Button
                     variant="outline"
                     size="sm"
-                    icon={<IconStackPop size={24} />}
+                    onClick={() => {
+                      setFieldValue("published", !values.published, true);
+                    }}
+                    icon={
+                      values.published ? (
+                        <IconStackPush size={24} />
+                      ) : (
+                        <IconStackPop size={24} />
+                      )
+                    }
                   >
-                    Publish
+                    {values.published ? "Un-Publish" : "Publish"}
                   </Button>
                 </div>
               </div>

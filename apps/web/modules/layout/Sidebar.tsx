@@ -38,7 +38,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ width }) => {
         opacity: collapsed ? 0 : 1,
       }}
       transition={{ ease: "linear", duration: 0.2 }}
-      className={`sticky top-0 flex flex-col justify-between h-screen flex-shrink-0 bg-zinc-50`}
+      className={`sticky top-0 flex flex-col justify-between h-screen flex-shrink-0 bg-zinc-50 select-none`}
     >
       <div className="h-full overflow-y-auto">
         <div className="px-3 pt-8 space-y-4">
@@ -55,8 +55,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ width }) => {
           <QuickFindPopover />
         </div>
         <div className="overflow-auto">
-          <div className="px-3 py-4 space-y-2.5">
-            <SidebarItem name="learn" />
+          <div className="p-3 space-y-1.5">
+            <SidebarItem name="dashboard" />
             <SidebarItem name="explore" />
             <SidebarItem name="subscriptions" />
             <SidebarItem name="rewards" />

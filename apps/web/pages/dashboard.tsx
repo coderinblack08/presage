@@ -4,10 +4,11 @@ import {
   IconCreditCard,
   IconListCheck,
   IconPencil,
+  IconPlus,
   IconTrophy,
 } from "@tabler/icons";
 import { NextPage } from "next";
-import { ThemeIcon } from "ui";
+import { Button, ThemeIcon } from "ui";
 import { DashboardLayout } from "../modules/layout/DashboardLayout";
 
 const Dashboard: NextPage = () => {
@@ -22,6 +23,14 @@ const Dashboard: NextPage = () => {
           getting started page is supposed to be used as a FAQ, guide, and
           reference.
         </p>
+        {/* <Button
+          variant="light"
+          className="mt-4 inline-flex"
+          as="a"
+          href="#profile"
+        >
+          Edit profile page
+        </Button> */}
         <div className="grid gap-4 grid-cols-2 mt-8">
           <div className="p-5 rounded-lg border hover:scale-105 transition col-span-1">
             <ThemeIcon className="mb-5">
@@ -85,10 +94,7 @@ const Dashboard: NextPage = () => {
         </div>
         <p className="mt-5 text-gray-500">
           Read our{" "}
-          <a
-            className="text-blue-500 hover:underline underline-offset-4"
-            href="#"
-          >
+          <a className="text-blue-500 underline underline-offset-2" href="#">
             getting started wiki
           </a>{" "}
           for more details.

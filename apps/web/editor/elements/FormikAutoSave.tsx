@@ -1,6 +1,5 @@
 import { useFormikContext } from "formik";
 import React, { useEffect, useState } from "react";
-import toast from "react-hot-toast";
 import { useDebouncedCallback } from "use-debounce";
 
 export const AutoSave: React.FC = () => {
@@ -10,10 +9,6 @@ export const AutoSave: React.FC = () => {
     () =>
       formik.submitForm().then(() => {
         setIsLoading(false);
-        toast.success("Saved successfully", {
-          duration: 1000,
-          position: "bottom-right",
-        });
       }),
     1000
   );
