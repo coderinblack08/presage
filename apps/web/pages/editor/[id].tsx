@@ -99,18 +99,14 @@ const EditorPage: React.FC<EditorPageProps> = ({ id }) => {
         {({ values, setFieldValue }) => (
           <Form>
             <div className="flex flex-col h-full">
-              <div className="fixed right-0 top-0 flex items-center justify-between p-3 gap-4">
+              <div className="absolute right-0 top-0 flex items-center justify-between p-3 gap-4">
                 <div className="flex items-center">
                   <Popover
                     className="!w-96"
                     trigger={
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="!px-3 text-[13px] !font-bold text-gray-400"
-                      >
-                        Settings
-                      </Button>
+                      <button className="p-1 rounded-lg hover:bg-gray-100 text-gray-400">
+                        <MdOutlineMoreHoriz size={18} />
+                      </button>
                     }
                   >
                     <h3 className="font-bold">Update Settings</h3>
@@ -140,45 +136,23 @@ const EditorPage: React.FC<EditorPageProps> = ({ id }) => {
                         />
                         Private
                       </label>
+                      <Button
+                        size="sm"
+                        icon={
+                          values.published ? (
+                            <IconDownload size={16} />
+                          ) : (
+                            <IconUpload size={16} />
+                          )
+                        }
+                        onClick={() => {
+                          setFieldValue("published", !values.published, true);
+                        }}
+                      >
+                        {values.published ? "Unpublish" : "Publish"}
+                      </Button>
                     </div>
                   </Popover>
-                  <Menu
-                    className="text-[13px]"
-                    trigger={
-                      <button className="p-1 rounded-lg hover:bg-gray-100 text-gray-400">
-                        <MdOutlineMoreHoriz size={18} />
-                      </button>
-                    }
-                  >
-                    <MenuItem
-                      closeOnSelect={false}
-                      icon={
-                        values.published ? (
-                          <IconDownload size={16} />
-                        ) : (
-                          <IconUpload size={16} />
-                        )
-                      }
-                      onClick={() => {
-                        setFieldValue("published", !values.published, true);
-                      }}
-                    >
-                      {values.published ? "Unpublish" : "Publish"}
-                    </MenuItem>
-                    <MenuDivider />
-                    <MenuItem
-                      closeOnSelect={false}
-                      icon={<MdCheck size={16} />}
-                    >
-                      Paywall Enabled
-                    </MenuItem>
-                    <MenuItem
-                      closeOnSelect={false}
-                      icon={<MdCheck size={16} />}
-                    >
-                      Comments Enabled
-                    </MenuItem>
-                  </Menu>
                 </div>
               </div>
               <main className="max-w-3xl mx-auto px-8 w-full h-full py-24 lg:py-32">

@@ -7,7 +7,7 @@ import React, {
 
 const variants = {
   size: {
-    sm: "py-1.5 px-5 rounded-xl text-base",
+    sm: "py-2 px-5 rounded-xl text-sm",
     md: "py-2 px-6 rounded-xl text-base",
     lg: "py-2 px-7 rounded-xl text-lg",
   },

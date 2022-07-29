@@ -18,7 +18,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 
   return (
     <div className="flex w-screen min-h-screen">
-      <div className={`fixed z-50 top-0 left-0 px-3 pt-[0.85rem]`}>
+      <div className={`absolute z-50 top-0 left-0 px-3 pt-[0.85rem]`}>
         <SidebarControls />
       </div>
       <Sidebar width={position} />
