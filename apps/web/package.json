@@ -71,6 +71,7 @@
     "ui": "*",
     "use-debounce": "^8.0.2",
     "use-text-selection": "^1.1.5",
+    "uuid": "^8.3.2",
     "zod": "^3.17.3",
     "zustand": "^4.0.0-rc.1"
   },

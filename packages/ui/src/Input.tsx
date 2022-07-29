@@ -1,13 +1,17 @@
 import React, { forwardRef } from "react";
 
-export interface InputProps extends React.ComponentPropsWithoutRef<"input"> {
+export interface InputProps
+  extends Omit<React.ComponentPropsWithoutRef<"input">, "size"> {
   textarea?: boolean;
+  size: "sm" | "md";
   icon?: React.ReactNode;
 }
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ textarea, className, icon, ...props }, ref) => {
-    const styles = `px-4 py-2 rounded-xl border shadow-sm focus:outline-none placeholder-gray-400 w-full focus-visible:ring focus-visible:ring-gray-300 focus:ring-offset-2 focus:ring-offset-white transition ${
+  ({ textarea, className, size = "md", icon, ...props }, ref) => {
+    const styles = `${
+      size === "md" ? "text-base px-4 py-2" : "text-sm px-3 py-2"
+    } rounded-xl border shadow-sm focus:outline-none placeholder-gray-400 w-full transition ${
       textarea && "resize-none h-32"
     } ${className}`;
     if (textarea) {

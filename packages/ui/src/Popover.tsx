@@ -1,7 +1,6 @@
 import * as PopoverPrimitive from "@radix-ui/react-popover";
 import { IconX } from "@tabler/icons";
 import React from "react";
-import { Button } from "..";
 
 const cx = (...args: string[]) => args.join(" ");
 
@@ -10,36 +9,13 @@ interface PopoverProps {
   className?: string;
 }
 
-const items = [
-  {
-    id: "width",
-    label: "Width",
-    defaultValue: "100%",
-  },
-  {
-    id: "max-width",
-    label: "Max. width",
-    defaultValue: "300px",
-  },
-  {
-    id: "height",
-    label: "Height",
-    defaultValue: "25px",
-  },
-  {
-    id: "max-height",
-    label: "Max. height",
-    defaultValue: "none",
-  },
-];
-
 export const Popover: React.FC<PopoverProps> = ({
   trigger,
   className,
   children,
 }) => {
   return (
-    <div className="relative inline-block text-left">
+    <div>
       <PopoverPrimitive.Root>
         <PopoverPrimitive.Trigger asChild>{trigger}</PopoverPrimitive.Trigger>
         <PopoverPrimitive.Content
@@ -47,7 +23,7 @@ export const Popover: React.FC<PopoverProps> = ({
           sideOffset={8}
           className={cx(
             "radix-side-top:animate-slide-up radix-side-bottom:animate-slide-down",
-            "w-56 rounded-lg p-4 shadow-md md:w-56 border",
+            "w-56 rounded-lg p-4 md:w-56 shadow-sm border",
             "bg-white",
             className || ""
           )}

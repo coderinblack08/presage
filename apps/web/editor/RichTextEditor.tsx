@@ -29,7 +29,7 @@ import { basicMarksValue } from "./elements/BasicElementsValue";
 import { basicElementsValue } from "./marks/BasicMarksValue";
 import { useField } from "formik";
 
-export interface RichTextEditorProps {}
+export interface RichTextEditorProps { }
 
 export const editableProps: TEditableProps<MyValue> = {
   spellCheck: false,
@@ -60,7 +60,7 @@ const plugins = createPlugins<MyValue>(
   { components: plateUIWithPlaceholders }
 );
 
-export const RichTextEditor: React.FC<RichTextEditorProps> = ({}) => {
+export const RichTextEditor: React.FC<RichTextEditorProps> = ({ }) => {
   const [value, setValue] = React.useState<string>("");
   const [{ value: editorValue }, _, { setValue: setEditorValue }] =
     useField<string>("content");
@@ -72,7 +72,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({}) => {
         nodes: editorState?.children,
       });
       setValue(stripAttributes(serializedHTML, { omit: ["placeholder"] }));
-    } catch (error) {}
+    } catch (error) { }
     return null;
   };
 

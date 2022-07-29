@@ -1,18 +1,13 @@
-import {
-  IconChevronsLeft,
-  IconMenu2,
-  IconPackage,
-  IconStackPop,
-  IconStackPush,
-} from "@tabler/icons";
+import { IconDownload, IconUpload } from "@tabler/icons";
 import { Field, Form, Formik } from "formik";
 import { useAtom } from "jotai";
 import { useHydrateAtoms } from "jotai/utils";
 import isEqual from "lodash.isequal";
 import { GetServerSideProps } from "next";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import ContentEditable from "react-contenteditable";
-import { Button, Input, Popover } from "ui";
+import { MdCheck, MdOutlineMoreHoriz } from "react-icons/md";
+import { Button, Input, Menu, MenuDivider, MenuItem, Popover } from "ui";
 import { AutoSave } from "../../editor/elements/FormikAutoSave";
 import { collapseAtom, currentFileAtom } from "../../lib/store";
 import { InferQueryOutput, trpc } from "../../lib/trpc";
@@ -44,26 +39,25 @@ const EditorPage: React.FC<EditorPageProps> = ({ id }) => {
     draft?.title || "Untitled",
   ].filter(Boolean);
   const utils = trpc.useContext();
+  const initialValues = useMemo(() => {
+    return {
+      title: draft?.title || "",
+      content: draft?.content as any,
+      description: draft?.description || "",
+      canonicalUrl: draft?.canonicalUrl || "",
+      published: draft?.published || false,
+      private: draft?.private || false,
+    };
+  }, [draft]);
 
   return (
     <DashboardLayout>
       <Formik
-        initialValues={{
-          title: draft?.title || "",
-          content: draft?.content as any,
-          description: draft?.description || "",
-          canonicalUrl: draft?.canonicalUrl || "",
-          published: draft?.published || false,
-        }}
+        initialValues={initialValues}
         onSubmit={(values) => {
-          if (
-            !isEqual(values, {
-              title: draft?.title,
-              content: draft?.content,
-            })
-          ) {
+          if (!isEqual(values, initialValues)) {
             updateDraft.mutate(
-              { ...values, id },
+              { id, ...values },
               {
                 onSuccess(data) {
                   if (data.title !== draft?.title) {
@@ -105,102 +99,92 @@ const EditorPage: React.FC<EditorPageProps> = ({ id }) => {
         {({ values, setFieldValue }) => (
           <Form>
             <div className="flex flex-col h-full">
-              {draft?.published && (
-                <Button
-                  className="text-gray-500 !p-0 border-none rounded-none font-medium"
-                  variant="outline"
-                >
-                  <div className="flex items-center justify-center px-5 py-3">
-                    <IconPackage size={20} className="mr-2" />
-                    <span className="mr-4">
-                      This article has been published (click to view)
-                    </span>
-                  </div>
-                </Button>
-              )}
-              <div className="flex items-center justify-between p-3 border-y gap-4">
-                <div className="flex items-center text-gray-500">
-                  <button
-                    onClick={() => setCollapsed(!collapsed)}
-                    className="mr-3 p-1 text-gray-400 border shadow-sm rounded-lg"
-                  >
-                    {collapsed ? (
-                      <IconMenu2 size={20} />
-                    ) : (
-                      <IconChevronsLeft size={20} />
-                    )}
-                  </button>
-                  {breadcrumbs.map((folder, index) => {
-                    const isLast = index === breadcrumbs.length - 1;
-                    return (
-                      <React.Fragment key={index}>
-                        <span className={`rounded-lg truncate px-1`}>
-                          {folder}
-                        </span>
-                        {!isLast && (
-                          <span className="mx-1.5 text-gray-300 text-lg font-semibold">
-                            /
-                          </span>
-                        )}
-                      </React.Fragment>
-                    );
-                  })}
-                </div>
-                <div className="flex items-center space-x-2">
+              <div className="fixed right-0 top-0 flex items-center justify-between p-3 gap-4">
+                <div className="flex items-center">
                   <Popover
+                    className="!w-96"
                     trigger={
-                      <Button size="sm" variant="outline">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="!px-3 text-[13px] !font-bold text-gray-400"
+                      >
                         Settings
                       </Button>
                     }
-                    className="!w-96"
                   >
-                    <h3 className="text-lg font-bold">Update Settings</h3>
+                    <h3 className="font-bold">Update Settings</h3>
                     <div className="flex flex-col gap-4 mt-2">
                       <Field
                         as={Input}
                         name="description"
                         placeholder="Description"
+                        size="sm"
                         textarea
                       />
                       <Field
                         as={Input}
                         name="canonicalUrl"
                         placeholder="Canonical URL"
+                        size="sm"
                         type="url"
                       />
-                      <label className="block cursor-not-allowed">
+                      <label className="block text-sm">
                         <input
+                          checked={values.private}
+                          onClick={() =>
+                            setFieldValue("private", !values.private)
+                          }
                           className="mr-2 w-5 h-5 form-checkbox rounded border-gray-200 shadow-sm"
                           type="checkbox"
-                          disabled
                         />
                         Private
                       </label>
                     </div>
                   </Popover>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => {
-                      setFieldValue("published", !values.published, true);
-                    }}
-                    icon={
-                      values.published ? (
-                        <IconStackPush size={24} />
-                      ) : (
-                        <IconStackPop size={24} />
-                      )
+                  <Menu
+                    className="text-[13px]"
+                    trigger={
+                      <button className="p-1 rounded-lg hover:bg-gray-100 text-gray-400">
+                        <MdOutlineMoreHoriz size={18} />
+                      </button>
                     }
                   >
-                    {values.published ? "Un-Publish" : "Publish"}
-                  </Button>
+                    <MenuItem
+                      closeOnSelect={false}
+                      icon={
+                        values.published ? (
+                          <IconDownload size={16} />
+                        ) : (
+                          <IconUpload size={16} />
+                        )
+                      }
+                      onClick={() => {
+                        setFieldValue("published", !values.published, true);
+                      }}
+                    >
+                      {values.published ? "Unpublish" : "Publish"}
+                    </MenuItem>
+                    <MenuDivider />
+                    <MenuItem
+                      closeOnSelect={false}
+                      icon={<MdCheck size={16} />}
+                    >
+                      Paywall Enabled
+                    </MenuItem>
+                    <MenuItem
+                      closeOnSelect={false}
+                      icon={<MdCheck size={16} />}
+                    >
+                      Comments Enabled
+                    </MenuItem>
+                  </Menu>
                 </div>
               </div>
-              <main className="max-w-3xl mx-auto px-8 w-full h-full py-16 lg:py-24">
+              <main className="max-w-3xl mx-auto px-8 w-full h-full py-24 lg:py-32">
                 <AutoSave />
                 <ContentEditable
-                  className="text-3xl font-bold text-gray-900 focus:outline-none cursor-text"
+                  className="text-3xl font-bold text-gray-900 focus:outline-none cursor-text leading-normal"
                   placeholder="Untitled"
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
@@ -209,8 +193,10 @@ const EditorPage: React.FC<EditorPageProps> = ({ id }) => {
                     }
                   }}
                   onPaste={(e) => {
+                    // return only text content
                     e.preventDefault();
-                    return false;
+                    const text = e.clipboardData.getData("text/plain");
+                    document.execCommand("insertHTML", false, text);
                   }}
                   innerRef={draftTitleRef}
                   disabled={false}

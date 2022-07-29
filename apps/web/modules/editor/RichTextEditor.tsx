@@ -119,7 +119,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({ draft }) => {
       attributes: {
         spellcheck: "false",
         class:
-          "prose max-w-[calc(100%+2rem)] focus:outline-none -ml-8 py-4 " +
+          "prose max-w-[calc(100%+2rem)] focus:outline-none -ml-8 pb-4 pt-2 " +
           "prose-code:bg-gray-100 prose-code:font-medium prose-code:font-mono prose-code:rounded-lg prose-code:px-1.5 prose-code:py-0.5 prose-code:border prose-code:text-gray-500 " +
           "prose-blockquote:border-l-2 prose-blockquote:pl-4 prose-blockquote:text-gray-400 prose-blockquote:not-italic " +
           "prose-headings:leading-tight prose-headings:tracking-tight prose-h1:text-2xl prose-h1:font-bold prose-h1:text-gray-900 prose-h1:font-bold",

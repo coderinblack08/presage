@@ -1,17 +1,14 @@
-import { Disclosure, Transition } from "@headlessui/react";
+import { Transition } from "@headlessui/react";
 import {
   IconDotsVertical,
-  IconFile,
   IconFilePlus,
-  IconFolder,
   IconFolderPlus,
   IconPencil,
   IconPlus,
   IconSwitch2,
   IconTrash,
 } from "@tabler/icons";
-import { useAtom, useAtomValue } from "jotai";
-import { useHydrateAtoms } from "jotai/utils";
+import { useAtom } from "jotai";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, {
@@ -22,8 +19,9 @@ import React, {
   useState,
 } from "react";
 import toast from "react-hot-toast";
-import { Button, Menu, MenuDivider, MenuItem, ThemeIcon } from "ui";
-import { currentFileAtom, focusedAtom } from "../../lib/store";
+import { MdFolder, MdStickyNote2 } from "react-icons/md";
+import { Button, Menu, MenuDivider, MenuItem } from "ui";
+import { currentFileAtom, fileTreeAtom } from "../../lib/store";
 import { InferQueryOutput, trpc } from "../../lib/trpc";
 
 interface FileTreeProps {}
@@ -49,59 +47,62 @@ const FolderDisclosure: React.FC<{
       setCurrentDraft({ absolutePath: [], stringPath: [], draftId: "" });
   }, [router.pathname, setCurrentDraft]);
 
+  const [fileTree, setFileTree] = useAtom(fileTreeAtom);
+  const open = useMemo(() => fileTree.has(folder.id), [fileTree, folder.id]);
+
+  useEffect(() => {
+    if (inCurrentPath) setFileTree((prev) => new Set([...prev, folder.id]));
+  }, [folder.id, inCurrentPath, setFileTree]);
+
   return (
-    <Disclosure
-      defaultOpen={inCurrentPath}
-      key={`${folder.id}/${inCurrentPath}`} // used to force re-render on defaultOpen
-    >
-      {({ open }) => (
-        <>
-          <Disclosure.Button className="w-full block" as="div">
-            <FolderOrFileButton
-              absolutePath={currentPath}
-              onClick={() => {
-                if (!containsChildren) {
-                  toast.error("Folder is empty.", {
-                    position: "bottom-left",
-                  });
-                }
-              }}
-              openState={open && containsChildren}
-              folder={folder}
-            />
-          </Disclosure.Button>
-          <Transition
-            enter="transition duration-100 ease-out"
-            enterFrom="transform scale-95 opacity-0"
-            enterTo="transform scale-100 opacity-100"
-            leave="transition duration-75 ease-out"
-            leaveFrom="transform scale-100 opacity-100"
-            leaveTo="transform scale-95 opacity-0"
-          >
-            {containsChildren && (
-              <Disclosure.Panel className="border-l-2 py-1.5 border-[#EEE] ml-3 text-sm text-gray-500">
-                {folder.children?.map((child) => (
-                  <div className="ml-2" key={child.id}>
-                    <FolderDisclosure
-                      parentFolderPath={currentPath}
-                      folder={child}
-                    />
-                  </div>
-                ))}
-                {folder.drafts?.map((draft) => (
-                  <div className="ml-2" key={draft.id}>
-                    <FolderOrFileButton
-                      absolutePath={currentPath}
-                      draft={draft}
-                    />
-                  </div>
-                ))}
-              </Disclosure.Panel>
-            )}
-          </Transition>
-        </>
-      )}
-    </Disclosure>
+    <>
+      <FolderOrFileButton
+        absolutePath={currentPath}
+        onClick={() => {
+          if (open) {
+            setFileTree(
+              (prev) => new Set([...[...prev].filter((id) => id !== folder.id)])
+            );
+          } else {
+            setFileTree((prev) => new Set([...prev, folder.id]));
+          }
+          if (!containsChildren) {
+            toast.error("Folder is empty.", {
+              position: "bottom-left",
+            });
+          }
+        }}
+        openState={open && containsChildren}
+        folder={folder}
+      />
+      <Transition
+        enter="transition duration-100 ease-out"
+        enterFrom="transform scale-95 opacity-0"
+        enterTo="transform scale-100 opacity-100"
+        leave="transition duration-75 ease-out"
+        leaveFrom="transform scale-100 opacity-100"
+        leaveTo="transform scale-95 opacity-0"
+        show={open}
+      >
+        {containsChildren && (
+          <div className="border-l-2 border-[#EEE] ml-3 py-1 text-sm text-gray-500 space-y-1">
+            {folder.children?.map((child) => (
+              <div className="ml-2" key={child.id}>
+                <FolderDisclosure
+                  parentFolderPath={currentPath}
+                  folder={child}
+                />
+              </div>
+            ))}
+            {folder.drafts?.map((draft) => (
+              <div className="ml-2" key={draft.id}>
+                <FolderOrFileButton absolutePath={currentPath} draft={draft} />
+              </div>
+            ))}
+          </div>
+        )}
+      </Transition>
+    </>
   );
 };
 
@@ -150,10 +151,8 @@ export const FolderOrFileButton: React.FC<{
   folder?: InferQueryOutput<"drafts.recursive">["children"][0];
   draft?: InferQueryOutput<"drafts.byId">;
 }> = ({ openState, folder, onClick, draft, absolutePath }) => {
-  useHydrateAtoms([[focusedAtom, null]] as const);
   const ref = useRef<HTMLInputElement>(null);
   const [editing, setEditing] = useState(false);
-  const [focusedId, setFocusedId] = useAtom(focusedAtom);
   const [currentDraft, setCurrentDraft] = useAtom(currentFileAtom);
   const [name, setName] = useState<string>(
     folder ? folder.name! : draft ? draft.title! : ""
@@ -170,17 +169,7 @@ export const FolderOrFileButton: React.FC<{
     if (draft && name !== draft.title) {
       setName(draft.title);
     }
-  }, [draft?.title, name]);
-
-  useEffect(() => {
-    if (focusedId === folder?.id || focusedId === draft?.id) {
-      setEditing(true);
-      setTimeout(() => {
-        ref.current?.focus();
-      }, 0);
-      setFocusedId(null);
-    }
-  }, [draft?.id, focusedId, folder?.id, setFocusedId]);
+  }, [draft?.title]);
 
   function submit() {
     if (folder) {
@@ -213,8 +202,9 @@ export const FolderOrFileButton: React.FC<{
       updateDraft.mutate(
         { id: draft.id, title: name },
         {
-          onSuccess: () => {
+          onSuccess: (data) => {
             utils.refetchQueries(["drafts.recursive"]);
+            utils.setQueryData(["drafts.byId", { id: draft.id }], data);
           },
         }
       );
@@ -228,17 +218,20 @@ export const FolderOrFileButton: React.FC<{
     [absolutePath, currentDraft.absolutePath, currentDraft.draftId, draft?.id]
   );
 
+  const [fileTree, setFileTree] = useAtom(fileTreeAtom);
+  const router = useRouter();
+
   const button = (
     <Button
       onClick={onClick}
-      className={`group w-full !justify-start px-2 ${
-        openState ? "bg-[#EEE]" : ""
-      } ${isOpen ? "bg-blue-100/50" : ""}`}
+      className={`group w-full !justify-start !p-1.5 text-[13px] ${
+        isOpen ? "bg-blue-100/50 hover:bg-blue-100" : ""
+      }`}
       rippleColor={draft ? "!bg-blue-900/10" : ""}
       icon={
-        <ThemeIcon className="mr-1">
-          {folder ? <IconFolder size={21} /> : <IconFile size={21} />}
-        </ThemeIcon>
+        <div className={isOpen ? "text-blue-300" : "text-gray-300"}>
+          {folder ? <MdFolder size={21} /> : <MdStickyNote2 size={21} />}
+        </div>
       }
       disableRipple={editing}
       variant="ghost"
@@ -276,12 +269,12 @@ export const FolderOrFileButton: React.FC<{
                 <IconPlus size={16} />
               </button>
             }
-            className="w-48"
+            className="w-48 text-[13px]"
             sideOffset={4}
             onCloseAutoFocus
           >
             <MenuItem
-              icon={<IconFilePlus size={20} />}
+              icon={<IconFilePlus size={16} />}
               onClick={() => {
                 addDraft.mutate(
                   { title: "Untitled", folderId: folder.id },
@@ -305,7 +298,8 @@ export const FolderOrFileButton: React.FC<{
                           return old;
                         }
                       }) as any);
-                      setFocusedId(data.id);
+                      router.push("/editor/[id]", `/editor/${data.id}`);
+                      setFileTree((prev) => new Set([...prev, data.folderId!]));
                     },
                   }
                 );
@@ -314,7 +308,7 @@ export const FolderOrFileButton: React.FC<{
               New Draft
             </MenuItem>
             <MenuItem
-              icon={<IconFolderPlus size={20} />}
+              icon={<IconFolderPlus size={16} />}
               onClick={() => {
                 addFolder.mutate(
                   {
@@ -324,6 +318,7 @@ export const FolderOrFileButton: React.FC<{
                   {
                     onSuccess: (data) => {
                       utils.refetchQueries(["drafts.recursive"]);
+                      setFileTree((prev) => new Set([...prev, data.parentId!]));
                     },
                   }
                 );
@@ -335,9 +330,9 @@ export const FolderOrFileButton: React.FC<{
           <Menu
             side="right"
             align="start"
-            className="w-64"
+            className="w-64 text-[13px]"
             onCloseAutoFocus
-            sideOffset={26}
+            sideOffset={16}
             trigger={
               <button className="flex items-center justify-center p-1.5 rounded-md text-gray-400">
                 <IconDotsVertical size={16} />
@@ -351,11 +346,11 @@ export const FolderOrFileButton: React.FC<{
                   ref.current?.focus();
                 }, 0);
               }}
-              icon={<IconPencil size={20} />}
+              icon={<IconPencil size={16} />}
             >
               Rename
             </MenuItem>
-            <MenuItem icon={<IconSwitch2 size={20} />}>
+            <MenuItem icon={<IconSwitch2 size={16} />}>
               Convert to publication
             </MenuItem>
             <MenuDivider />
@@ -384,12 +379,21 @@ export const FolderOrFileButton: React.FC<{
                             return old;
                           }
                         }) as any);
+                        if (router.pathname === "/editor/[id]") {
+                          const openDraft = utils.getQueryData([
+                            "drafts.byId",
+                            { id: router.query.id?.toString() || "" },
+                          ]);
+                          if (openDraft?.folderId === folder.id) {
+                            router.push("/dashboard");
+                          }
+                        }
                       },
                     }
                   );
                 }
               }}
-              icon={<IconTrash size={20} />}
+              icon={<IconTrash size={16} />}
             >
               Delete
             </MenuItem>
@@ -399,9 +403,9 @@ export const FolderOrFileButton: React.FC<{
         <Menu
           side="right"
           align="start"
-          className="w-64"
+          className="w-64 text-[13px]"
           onCloseAutoFocus
-          sideOffset={26}
+          sideOffset={16}
           trigger={
             <button className="flex items-center justify-center p-1.5 rounded-md text-gray-400">
               <IconDotsVertical size={16} />
@@ -415,11 +419,10 @@ export const FolderOrFileButton: React.FC<{
                 ref.current?.focus();
               }, 0);
             }}
-            icon={<IconPencil size={20} />}
+            icon={<IconPencil size={16} />}
           >
             Rename
           </MenuItem>
-          <MenuDivider />
           <MenuItem
             onClick={() => {
               if (draft) {
@@ -449,9 +452,10 @@ export const FolderOrFileButton: React.FC<{
                     },
                   }
                 );
+                router.push("/dashboard");
               }
             }}
-            icon={<IconTrash size={20} />}
+            icon={<IconTrash size={16} />}
           >
             Delete
           </MenuItem>

@@ -60,6 +60,7 @@ export const draftsRouter = createRouter()
       published: z.boolean().optional(),
       canonicalUrl: z.string().optional(),
       description: z.string().optional(),
+      private: z.boolean().optional(),
     }),
     resolve: async ({ input, ctx }) => {
       const draft = await ctx.prisma.draft.findFirstOrThrow({
