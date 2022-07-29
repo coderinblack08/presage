@@ -1,5 +1,6 @@
 import { httpBatchLink } from "@trpc/client/links/httpBatchLink";
 import { withTRPC } from "@trpc/next";
+import { KBarProvider } from "kbar";
 import { SessionProvider } from "next-auth/react";
 import { AppType } from "next/dist/shared/lib/utils";
 import { FunctionComponent } from "react";
@@ -11,17 +12,46 @@ import "../styles/globals.css";
 import "../styles/lowlight.css";
 // import "@benrbray/prosemirror-math/style/math.css";
 import "katex/dist/katex.min.css";
+import { useRouter } from "next/router";
+import { MdHome, MdSavings, MdSubscriptions } from "react-icons/md";
+import { CommandPallette } from "../modules/kbar/CommandPallette";
 
 const MyApp: AppType = ({
   Component,
   pageProps: { session, ...pageProps },
 }) => {
   const C = Component as FunctionComponent;
+  const router = useRouter();
+
   return (
-    <SessionProvider session={session}>
-      <Toaster />
-      <C {...pageProps} />
-    </SessionProvider>
+    <KBarProvider
+      actions={[
+        {
+          id: "dashboard",
+          name: "Dashboard",
+          icon: <MdHome className="text-gray-300" size={20} />,
+          perform: () => router.push("/dashboard"),
+        },
+        {
+          id: "rewards",
+          name: "Rewards",
+          icon: <MdSavings className="text-gray-300" size={20} />,
+          perform: () => router.push("/rewards"),
+        },
+        {
+          id: "monetization",
+          name: "Monetization",
+          icon: <MdSubscriptions className="text-gray-300" size={20} />,
+          perform: () => router.push("/monetization"),
+        },
+      ]}
+    >
+      <CommandPallette />
+      <SessionProvider session={session}>
+        <Toaster />
+        <C {...pageProps} />
+      </SessionProvider>
+    </KBarProvider>
   );
 };
 

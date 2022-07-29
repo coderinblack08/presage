@@ -38,6 +38,7 @@
     "fuse.js": "^6.6.2",
     "jotai": "^1.7.5",
     "katex": "^0.16.0",
+    "kbar": "^0.1.0-beta.36",
     "lodash.debounce": "^4.0.8",
     "lodash.isequal": "^4.5.0",
     "lowlight": "^2.7.0",

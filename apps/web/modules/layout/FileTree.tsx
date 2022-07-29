@@ -75,7 +75,7 @@ const FolderDisclosure: React.FC<{
         openState={open && containsChildren}
         folder={folder}
       />
-      <Transition
+      {/* <Transition
         enter="transition duration-100 ease-out"
         enterFrom="transform scale-95 opacity-0"
         enterTo="transform scale-100 opacity-100"
@@ -83,25 +83,22 @@ const FolderDisclosure: React.FC<{
         leaveFrom="transform scale-100 opacity-100"
         leaveTo="transform scale-95 opacity-0"
         show={open}
-      >
-        {containsChildren && (
-          <div className="border-l-2 border-[#EEE] ml-3 py-1 text-sm text-gray-500 space-y-1">
-            {folder.children?.map((child) => (
-              <div className="ml-2" key={child.id}>
-                <FolderDisclosure
-                  parentFolderPath={currentPath}
-                  folder={child}
-                />
-              </div>
-            ))}
-            {folder.drafts?.map((draft) => (
-              <div className="ml-2" key={draft.id}>
-                <FolderOrFileButton absolutePath={currentPath} draft={draft} />
-              </div>
-            ))}
-          </div>
-        )}
-      </Transition>
+      > */}
+      {containsChildren && open && (
+        <div className="border-l-2 border-[#EEE] ml-3 py-1 text-sm text-gray-500 space-y-1">
+          {folder.children?.map((child) => (
+            <div className="ml-2" key={child.id}>
+              <FolderDisclosure parentFolderPath={currentPath} folder={child} />
+            </div>
+          ))}
+          {folder.drafts?.map((draft) => (
+            <div className="ml-2" key={draft.id}>
+              <FolderOrFileButton absolutePath={currentPath} draft={draft} />
+            </div>
+          ))}
+        </div>
+      )}
+      {/* </Transition> */}
     </>
   );
 };

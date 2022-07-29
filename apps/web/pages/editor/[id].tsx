@@ -2,6 +2,7 @@ import { IconDownload, IconUpload } from "@tabler/icons";
 import { Field, Form, Formik } from "formik";
 import { useAtom } from "jotai";
 import { useHydrateAtoms } from "jotai/utils";
+import { useKBar } from "kbar";
 import isEqual from "lodash.isequal";
 import { GetServerSideProps } from "next";
 import React, { useEffect, useMemo, useRef } from "react";
@@ -25,6 +26,7 @@ const EditorPage: React.FC<EditorPageProps> = ({ id }) => {
 
   const [currentDraft, setCurrentDraft] = useAtom(currentFileAtom);
   const updateDraft = trpc.useMutation(["drafts.update"]);
+  const { query } = useKBar();
 
   useEffect(
     () => setCurrentDraft((prev) => ({ ...prev, draftId: id })),
@@ -52,13 +54,16 @@ const EditorPage: React.FC<EditorPageProps> = ({ id }) => {
 
   return (
     <DashboardLayout>
-      <div className="fixed z-50 bg-white/50 backdrop-blur-sm bottom-5 right-5 border px-3 py-2 rounded-xl shadow-lg">
+      <button
+        className="fixed z-50 bg-white/50 backdrop-blur-sm bottom-5 right-5 border px-3 py-2 rounded-xl shadow-lg"
+        onClick={query.toggle}
+      >
         <div className="flex items-center text-gray-400">
           <span className="font-semibold mr-3 text-[13px]">Actions</span>
           <kbd className="shadow mr-1.5">⌘</kbd>
           <kbd className="shadow">K</kbd>
         </div>
-      </div>
+      </button>
       <Formik
         initialValues={initialValues}
         onSubmit={(values) => {
@@ -112,7 +117,7 @@ const EditorPage: React.FC<EditorPageProps> = ({ id }) => {
                     className="!w-96"
                     trigger={
                       <button className="p-1 rounded-lg hover:bg-gray-100 text-gray-400">
-                        <MdOutlineMoreHoriz size={18} />
+                        <MdOutlineMoreHoriz size={20} />
                       </button>
                     }
                   >
