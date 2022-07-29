@@ -85,6 +85,10 @@
     }
   }
 
+  kbd {
+    @apply border rounded-lg w-6 h-6 inline-flex items-center justify-center;
+  }
+
   :root {
     font-size: 14px;
     line-height: 1.6em;
@@ -119,10 +123,5 @@
     .feature-grid {
       @apply grid-border;
     }
-  }
-
-  html,
-  body {
-    @apply bg-white selection:!bg-blue-300 selection:!text-white;
   }
 }

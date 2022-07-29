@@ -52,6 +52,13 @@ const EditorPage: React.FC<EditorPageProps> = ({ id }) => {
 
   return (
     <DashboardLayout>
+      <div className="fixed z-50 bg-white/50 backdrop-blur-sm bottom-5 right-5 border px-3 py-2 rounded-xl shadow-lg">
+        <div className="flex items-center text-gray-400">
+          <span className="font-semibold mr-3 text-[13px]">Actions</span>
+          <kbd className="shadow mr-1.5">⌘</kbd>
+          <kbd className="shadow">K</kbd>
+        </div>
+      </div>
       <Formik
         initialValues={initialValues}
         onSubmit={(values) => {

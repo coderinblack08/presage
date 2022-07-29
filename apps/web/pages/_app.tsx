@@ -1,5 +1,4 @@
 import { httpBatchLink } from "@trpc/client/links/httpBatchLink";
-import { loggerLink } from "@trpc/client/links/loggerLink";
 import { withTRPC } from "@trpc/next";
 import { SessionProvider } from "next-auth/react";
 import { AppType } from "next/dist/shared/lib/utils";
@@ -10,7 +9,7 @@ import { AppRouter } from "../server/routers/_app";
 
 import "../styles/globals.css";
 import "../styles/lowlight.css";
-import "@benrbray/prosemirror-math/style/math.css";
+// import "@benrbray/prosemirror-math/style/math.css";
 import "katex/dist/katex.min.css";
 
 const MyApp: AppType = ({

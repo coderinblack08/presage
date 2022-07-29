@@ -1,5 +1,4 @@
 import Blockquote from "@tiptap/extension-blockquote";
-import { dropPoint } from "prosemirror-transform";
 import BulletList from "@tiptap/extension-bullet-list";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import Heading from "@tiptap/extension-heading";
@@ -12,18 +11,14 @@ import {
   ReactNodeViewRenderer,
 } from "@tiptap/react";
 import { lowlight } from "lowlight/lib/common.js";
-import {
-  Plugin,
-  Selection,
-  NodeSelection,
-  TextSelection,
-} from "prosemirror-state";
+import { NodeSelection, Plugin, TextSelection } from "prosemirror-state";
+import { dropPoint } from "prosemirror-transform";
 
 function eventCoords(event: MouseEvent) {
   return { left: event.clientX, top: event.clientY };
 }
 
-const ComponentWrapper: React.FC<NodeViewProps> = ({ node }) => {
+const ComponentWrapper: React.FC<NodeViewProps> = ({ editor, node }) => {
   // const [isHovering, hoverProps] = useHover();
   return (
     <NodeViewWrapper
@@ -70,6 +65,8 @@ const ComponentWrapper: React.FC<NodeViewProps> = ({ node }) => {
   );
 };
 
+let globalStyles: Element;
+
 export const DraggableItems = [
   CodeBlockLowlight.extend({
     addOptions() {
@@ -91,9 +88,22 @@ export const DraggableItems = [
       return [
         new Plugin({
           props: {
+            handleDOMEvents: {
+              dragstart(view, _event: Event) {
+                globalStyles ??= document.createElement("style");
+                globalStyles.innerHTML = `
+                  body::selection {
+                    background: transparent !important;
+                    color: inherit !important;
+                  }
+                `;
+                console.log(globalStyles);
+
+                return false;
+              },
+            },
             handleDrop(view, event, slice, moved) {
               // pulled from the `prosemirror-view` codebase (couldn't think of more concise solution)
-
               // calculate the coordinates in which the drag ends
               let eventPos = view.posAtCoords(eventCoords(event));
               let $mouse = view.state.doc.resolve(eventPos!.pos);
@@ -140,6 +150,8 @@ export const DraggableItems = [
               }
               view.focus();
               view.dispatch(tr.setMeta("uiEvent", "drop"));
+
+              globalStyles?.remove();
 
               // prevent prosemirror from handling the drop for us
               return true;
