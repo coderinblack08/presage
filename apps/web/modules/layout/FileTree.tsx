@@ -1,6 +1,7 @@
 import {
   IconDotsVertical,
   IconFilePlus,
+  IconFolder,
   IconFolderPlus,
   IconFolders,
   IconPencil,
@@ -20,7 +21,7 @@ import React, {
 } from "react";
 import toast from "react-hot-toast";
 import { MdFolder, MdStickyNote2 } from "react-icons/md";
-import { Button, Menu, MenuDivider, MenuItem } from "ui";
+import { Button, Menu, MenuDivider, MenuItem, SubMenu } from "ui";
 import { currentFileAtom, fileTreeAtom } from "../../lib/store";
 import { InferQueryOutput, trpc } from "../../lib/trpc";
 
@@ -154,6 +155,7 @@ export const FolderOrFileButton: React.FC<{
   const [name, setName] = useState<string>(
     folder ? folder.name! : draft ? draft.title! : ""
   );
+  const { data: folders } = trpc.useQuery(["folders.all"]);
   const addFolder = trpc.useMutation(["folders.add"]);
   const deleteDraft = trpc.useMutation(["drafts.delete"]);
   const deleteFolder = trpc.useMutation(["folders.delete"]);
@@ -241,6 +243,7 @@ export const FolderOrFileButton: React.FC<{
         ref={ref}
         type="text"
         value={name}
+        spellCheck={false}
         onBlur={() => {
           setEditing(false);
           submit();
@@ -420,7 +423,55 @@ export const FolderOrFileButton: React.FC<{
           >
             Rename
           </MenuItem>
-          <MenuItem icon={<IconFolders size={16} />}>Move to folder</MenuItem>
+          <Menu
+            subMenu
+            trigger={
+              <MenuItem trigger icon={<IconFolders size={16} />}>
+                Move to folder
+              </MenuItem>
+            }
+          >
+            <MenuItem
+              className="text-[13px]"
+              icon={<IconFolder size={16} />}
+              onClick={() => {
+                if (draft) {
+                  updateDraft.mutate(
+                    { id: draft.id, folderId: null },
+                    {
+                      onSuccess: () => {
+                        utils.refetchQueries(["drafts.recursive"]);
+                      },
+                    }
+                  );
+                }
+              }}
+            >
+              None <span className="text-gray-400">(Root)</span>
+            </MenuItem>
+            <MenuDivider />
+            {folders?.map((folder) => (
+              <MenuItem
+                key={folder.id}
+                className="text-[13px]"
+                icon={<IconFolder size={16} />}
+                onClick={() => {
+                  if (draft) {
+                    updateDraft.mutate(
+                      { id: draft.id, folderId: folder.id },
+                      {
+                        onSuccess: () => {
+                          utils.refetchQueries(["drafts.recursive"]);
+                        },
+                      }
+                    );
+                  }
+                }}
+              >
+                {folder.name}
+              </MenuItem>
+            ))}
+          </Menu>
           <MenuItem
             onClick={() => {
               if (draft) {

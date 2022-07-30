@@ -56,7 +56,7 @@ export const draftsRouter = createRouter()
       id: z.string(),
       title: z.string().optional(),
       content: z.string().optional(),
-      folderId: z.string().optional(),
+      folderId: z.string().optional().nullable(),
       published: z.boolean().optional(),
       canonicalUrl: z.string().optional(),
       description: z.string().optional(),

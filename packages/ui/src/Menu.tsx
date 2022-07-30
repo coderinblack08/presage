@@ -121,3 +121,17 @@ export const MenuItem: React.FC<MenuItemProps> = ({
     </T>
   );
 };
+
+export const SubMenu: React.FC<{ trigger: React.ReactNode }> = ({
+  trigger,
+  children,
+}) => {
+  return (
+    <DropdownMenu.Sub>
+      {trigger}
+      <DropdownMenu.Portal>
+        <DropdownMenu.SubContent>{children}</DropdownMenu.SubContent>
+      </DropdownMenu.Portal>
+    </DropdownMenu.Sub>
+  );
+};
