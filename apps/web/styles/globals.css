@@ -86,7 +86,7 @@
   }
 
   kbd {
-    @apply border rounded-lg w-6 h-6 inline-flex items-center justify-center;
+    @apply border rounded-md shadow-sm w-6 h-6 inline-flex items-center justify-center;
   }
 
   :root {

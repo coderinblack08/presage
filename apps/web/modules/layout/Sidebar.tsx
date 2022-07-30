@@ -1,10 +1,9 @@
-import { IconPlus } from "@tabler/icons";
 import { motion } from "framer-motion";
 import { useAtom } from "jotai";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
-import { MdHome, MdSavings, MdSubscriptions } from "react-icons/md";
+import { MdAdd, MdHome, MdSavings, MdSubscriptions } from "react-icons/md";
 import { Button } from "ui";
 import { collapseAtom } from "../../lib/store";
 import { InferQueryOutput, trpc } from "../../lib/trpc";
@@ -39,8 +38,17 @@ export const Sidebar: React.FC<SidebarProps> = ({ width }) => {
             <Button
               as="a"
               variant="ghost"
-              icon={<MdHome className="text-gray-300" size={20} />}
-              className="w-full !justify-start !p-2 text-[13px]"
+              icon={
+                <MdHome
+                  className="text-gray-300 group-hover:text-gray-400 transition"
+                  size={20}
+                />
+              }
+              className={`group w-full !justify-start !p-2 text-[13px] ${
+                router.pathname === "/dashboard"
+                  ? "bg-gray-100 hover:bg-gray-200"
+                  : ""
+              }`}
             >
               Dashboard
             </Button>
@@ -73,8 +81,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ width }) => {
             <Button
               className="w-full !justify-start px-2 truncate text-[13px]"
               icon={
-                <div className="mr-1 text-gray-300">
-                  <IconPlus size={21} />
+                <div className="text-gray-300">
+                  <MdAdd size={21} />
                 </div>
               }
               variant="ghost"
@@ -104,8 +112,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ width }) => {
             <Button
               className="w-full !justify-start px-2 truncate text-[13px]"
               icon={
-                <div className="mr-1 text-gray-300">
-                  <IconPlus size={21} />
+                <div className="text-gray-300">
+                  <MdAdd size={21} />
                 </div>
               }
               variant="ghost"

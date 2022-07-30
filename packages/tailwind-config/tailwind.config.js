@@ -9,7 +9,7 @@ module.exports = {
   ],
   theme: {
     extend: {
-      colors: { zinc: require("tailwindcss/colors").zinc },
+      colors: { gray: require("tailwindcss/colors").zinc },
       fontFamily: {
         sans: ["Inter", ...require("tailwindcss/defaultTheme").fontFamily.sans],
         display: [

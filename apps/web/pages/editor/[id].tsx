@@ -7,11 +7,11 @@ import isEqual from "lodash.isequal";
 import { GetServerSideProps } from "next";
 import React, { useEffect, useMemo, useRef } from "react";
 import ContentEditable from "react-contenteditable";
-import { MdCheck, MdOutlineMoreHoriz } from "react-icons/md";
-import { Button, Input, Menu, MenuDivider, MenuItem, Popover } from "ui";
-import { AutoSave } from "../../editor/elements/FormikAutoSave";
+import { MdOpenInNew, MdOutlineMoreHoriz } from "react-icons/md";
+import { Button, Input, Popover } from "ui";
 import { collapseAtom, currentFileAtom } from "../../lib/store";
 import { InferQueryOutput, trpc } from "../../lib/trpc";
+import { AutoSave } from "../../modules/editor/FormikAutoSave";
 import { RichTextEditor } from "../../modules/editor/RichTextEditor";
 import { DashboardLayout } from "../../modules/layout/DashboardLayout";
 
@@ -34,7 +34,7 @@ const EditorPage: React.FC<EditorPageProps> = ({ id }) => {
   );
 
   const [collapsed, setCollapsed] = useAtom(collapseAtom);
-  const { data: draft } = trpc.useQuery(["drafts.byId", { id }]);
+  const { data: draft, isLoading } = trpc.useQuery(["drafts.byId", { id }]);
   const draftTitleRef = useRef<HTMLElement>(null);
   const breadcrumbs = [
     ...currentDraft.stringPath,
@@ -60,14 +60,14 @@ const EditorPage: React.FC<EditorPageProps> = ({ id }) => {
       >
         <div className="flex items-center text-gray-400">
           <span className="font-semibold mr-3 text-[13px]">Actions</span>
-          <kbd className="shadow mr-1.5">⌘</kbd>
-          <kbd className="shadow">K</kbd>
+          <kbd className="mr-1.5">⌘</kbd>
+          <kbd>K</kbd>
         </div>
       </button>
       <Formik
         initialValues={initialValues}
         onSubmit={(values) => {
-          if (!isEqual(values, initialValues)) {
+          if (!isEqual(values, initialValues) && !isLoading) {
             updateDraft.mutate(
               { id, ...values },
               {
@@ -97,10 +97,6 @@ const EditorPage: React.FC<EditorPageProps> = ({ id }) => {
                     }) as any);
                     utils.setQueryData(["drafts.byId", { id }], data);
                   }
-                  // toast.success("Saved successfully", {
-                  //   duration: 1000,
-                  //   position: "bottom-right",
-                  // });
                 },
               }
             );
@@ -112,7 +108,12 @@ const EditorPage: React.FC<EditorPageProps> = ({ id }) => {
           <Form>
             <div className="flex flex-col h-full">
               <div className="absolute right-0 top-0 flex items-center justify-between p-3 gap-4">
-                <div className="flex items-center">
+                <div className="flex items-center space-x-2">
+                  {values.published && (
+                    <button className="p-1 rounded-lg hover:bg-gray-100 text-gray-400">
+                      <MdOpenInNew size={18} />
+                    </button>
+                  )}
                   <Popover
                     className="!w-96"
                     trigger={
@@ -150,6 +151,7 @@ const EditorPage: React.FC<EditorPageProps> = ({ id }) => {
                       </label>
                       <Button
                         size="sm"
+                        variant="light"
                         icon={
                           values.published ? (
                             <IconDownload size={16} />

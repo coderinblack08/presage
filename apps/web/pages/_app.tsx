@@ -7,11 +7,10 @@ import { FunctionComponent } from "react";
 import { Toaster } from "react-hot-toast";
 import superjson from "superjson";
 import { AppRouter } from "../server/routers/_app";
-
 import "../styles/globals.css";
 import "../styles/lowlight.css";
 // import "@benrbray/prosemirror-math/style/math.css";
-import "katex/dist/katex.min.css";
+// import "katex/dist/katex.min.css";
 import { useRouter } from "next/router";
 import { MdHome, MdSavings, MdSubscriptions } from "react-icons/md";
 import { CommandPallette } from "../modules/kbar/CommandPallette";
@@ -29,19 +28,19 @@ const MyApp: AppType = ({
         {
           id: "dashboard",
           name: "Dashboard",
-          icon: <MdHome className="text-gray-300" size={20} />,
+          icon: <MdHome size={22} />,
           perform: () => router.push("/dashboard"),
         },
         {
           id: "rewards",
           name: "Rewards",
-          icon: <MdSavings className="text-gray-300" size={20} />,
+          icon: <MdSavings size={22} />,
           perform: () => router.push("/rewards"),
         },
         {
           id: "monetization",
           name: "Monetization",
-          icon: <MdSubscriptions className="text-gray-300" size={20} />,
+          icon: <MdSubscriptions size={22} />,
           perform: () => router.push("/monetization"),
         },
       ]}

@@ -1,5 +1,4 @@
 import Dropcursor from "@tiptap/extension-dropcursor";
-import Focus from "@tiptap/extension-focus";
 import Highlight from "@tiptap/extension-highlight";
 import { BubbleMenu, EditorContent, Extension, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -12,14 +11,16 @@ import {
   IconHighlight,
   IconItalic,
   IconStrikethrough,
+  IconUnderline,
 } from "@tabler/icons";
+import Underline from "@tiptap/extension-underline";
 import { useField } from "formik";
+
 import { InferQueryOutput } from "../../lib/trpc";
 import { DraggableItems } from "./plugins/DraggableItems";
 import { Placeholder } from "./plugins/Placeholder";
 import { SlashCommands } from "./plugins/SlashCommands";
 import { TrailingNode } from "./plugins/TrailingNode";
-import { Math } from "./plugins/MathNode";
 
 const topLevelElements = [
   "paragraph",
@@ -40,6 +41,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({ draft }) => {
     extensions: [
       // Math,
       // for the time being until https://github.com/benrbray/prosemirror-math/issues/43 is fixed
+      Underline,
       Highlight.configure({ multicolor: true }),
       StarterKit.configure({
         dropcursor: false,
@@ -162,6 +164,14 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({ draft }) => {
             } p-1 rounded-lg text-gray-500`}
           >
             <IconItalic size={16} />
+          </button>
+          <button
+            onClick={() => editor.chain().focus().toggleUnderline().run()}
+            className={`${
+              editor.isActive("underline") ? "bg-gray-100" : ""
+            } p-1 rounded-lg text-gray-500`}
+          >
+            <IconUnderline size={16} />
           </button>
           <button
             onClick={() => editor.chain().focus().toggleStrike().run()}

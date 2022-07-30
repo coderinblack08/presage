@@ -1,8 +1,8 @@
-import { Transition } from "@headlessui/react";
 import {
   IconDotsVertical,
   IconFilePlus,
   IconFolderPlus,
+  IconFolders,
   IconPencil,
   IconPlus,
   IconSwitch2,
@@ -227,7 +227,7 @@ export const FolderOrFileButton: React.FC<{
       rippleColor={draft ? "!bg-blue-900/10" : ""}
       icon={
         <div className={isOpen ? "text-blue-300" : "text-gray-300"}>
-          {folder ? <MdFolder size={21} /> : <MdStickyNote2 size={21} />}
+          {folder ? <MdFolder size={20} /> : <MdStickyNote2 size={20} />}
         </div>
       }
       disableRipple={editing}
@@ -329,7 +329,7 @@ export const FolderOrFileButton: React.FC<{
             align="start"
             className="w-64 text-[13px]"
             onCloseAutoFocus
-            sideOffset={16}
+            sideOffset={20}
             trigger={
               <button className="flex items-center justify-center p-1.5 rounded-md text-gray-400">
                 <IconDotsVertical size={16} />
@@ -402,7 +402,7 @@ export const FolderOrFileButton: React.FC<{
           align="start"
           className="w-64 text-[13px]"
           onCloseAutoFocus
-          sideOffset={16}
+          sideOffset={20}
           trigger={
             <button className="flex items-center justify-center p-1.5 rounded-md text-gray-400">
               <IconDotsVertical size={16} />
@@ -420,6 +420,7 @@ export const FolderOrFileButton: React.FC<{
           >
             Rename
           </MenuItem>
+          <MenuItem icon={<IconFolders size={16} />}>Move to folder</MenuItem>
           <MenuItem
             onClick={() => {
               if (draft) {
@@ -449,7 +450,12 @@ export const FolderOrFileButton: React.FC<{
                     },
                   }
                 );
-                router.push("/dashboard");
+                if (
+                  router.pathname === "/editor/[id]" &&
+                  router.query.id === draft.id
+                ) {
+                  router.push("/dashboard");
+                }
               }
             }}
             icon={<IconTrash size={16} />}

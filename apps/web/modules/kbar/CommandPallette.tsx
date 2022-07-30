@@ -10,7 +10,7 @@ export const CommandPallette: React.FC<CommandPalletteProps> = ({}) => {
       <KBarPositioner className="z-50 bg-gray-900/50">
         <KBarAnimator className="max-w-xl w-full rounded-xl shadow-xl overflow-hidden bg-white">
           <KBarSearch className="rounded-t-xl px-4 py-3 w-full focus:outline-none border-b" />
-          <div className="py-2">
+          <div className="p-2">
             <RenderResults />
           </div>
         </KBarAnimator>

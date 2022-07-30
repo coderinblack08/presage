@@ -8,11 +8,15 @@ export function RenderResults() {
       items={results}
       onRender={({ item, active }) => (
         <button
-          className={`w-full flex items-center gap-2 p-3 bg-white ${
+          className={`w-full rounded-lg transition flex items-center gap-3 p-3 bg-white ${
             active ? "bg-gray-100" : ""
           }`}
         >
-          <span>
+          <span
+            className={`${
+              active ? "text-gray-400" : "text-gray-300"
+            } transition`}
+          >
             {typeof item !== "string" && item.icon ? item.icon : null}
           </span>
           <span className="text-gray-600">
