@@ -8,9 +8,9 @@ import { SidebarControls } from "./SidebarControls";
 
 interface DashboardLayoutProps {}
 
-export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
-  children,
-}) => {
+export const DashboardLayout: React.FC<
+  React.PropsWithChildren<DashboardLayoutProps>
+> = ({ children }) => {
   const collapsed = useAtomValue(collapseAtom);
   const { position, isDragging, splitterProps } = useResizable({
     axis: "x",

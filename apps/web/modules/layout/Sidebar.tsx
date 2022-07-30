@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { useAtom } from "jotai";
+import { useTheme } from "next-themes";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
@@ -21,6 +22,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ width }) => {
   const addDraft = trpc.useMutation(["drafts.add"]);
   const router = useRouter();
   const utils = trpc.useContext();
+  const { theme } = useTheme();
 
   return (
     <motion.div
@@ -37,18 +39,20 @@ export const Sidebar: React.FC<SidebarProps> = ({ width }) => {
           <Link href="/dashboard" passHref>
             <Button
               as="a"
-              variant="ghost"
+              variant={
+                router.pathname === "/dashboard"
+                  ? theme === "dark"
+                    ? "filled"
+                    : "light"
+                  : "ghost"
+              }
               icon={
                 <MdHome
-                  className="text-gray-300 group-hover:text-gray-400 transition"
+                  className={`text-gray-300 dark:text-gray-600`}
                   size={20}
                 />
               }
-              className={`group w-full !justify-start !p-2 text-[13px] ${
-                router.pathname === "/dashboard"
-                  ? "bg-gray-100 hover:bg-gray-200"
-                  : ""
-              }`}
+              className={`w-full !justify-start !p-2 text-[13px] !font-medium`}
             >
               Dashboard
             </Button>
@@ -57,7 +61,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ width }) => {
             <Button
               as="a"
               variant="ghost"
-              icon={<MdSavings className="text-gray-300" size={20} />}
+              icon={
+                <MdSavings
+                  className="text-gray-300 dark:text-gray-600"
+                  size={20}
+                />
+              }
               className="w-full !justify-start !p-2 text-[13px]"
             >
               Rewards
@@ -67,21 +76,26 @@ export const Sidebar: React.FC<SidebarProps> = ({ width }) => {
             <Button
               as="a"
               variant="ghost"
-              icon={<MdSubscriptions className="text-gray-300" size={20} />}
+              icon={
+                <MdSubscriptions
+                  className="text-gray-300 dark:text-gray-600"
+                  size={20}
+                />
+              }
               className="w-full !justify-start !p-2 text-[13px]"
             >
               Monetization
             </Button>
           </Link>
         </div>
-        <hr className="my-2" />
+        <hr className="my-2 dark:border-gray-800" />
         <ul className="w-full">
           <FileTree />
           <li>
             <Button
               className="w-full !justify-start px-2 truncate text-[13px]"
               icon={
-                <div className="text-gray-300">
+                <div className="text-gray-300 dark:text-gray-600">
                   <MdAdd size={21} />
                 </div>
               }
@@ -112,7 +126,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ width }) => {
             <Button
               className="w-full !justify-start px-2 truncate text-[13px]"
               icon={
-                <div className="text-gray-300">
+                <div className="text-gray-300 dark:text-gray-600">
                   <MdAdd size={21} />
                 </div>
               }

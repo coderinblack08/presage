@@ -121,10 +121,10 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({ draft }) => {
       attributes: {
         spellcheck: "false",
         class:
-          "prose max-w-[calc(100%+2rem)] focus:outline-none -ml-8 pb-4 pt-2 " +
-          "prose-code:bg-gray-100 prose-code:font-medium prose-code:font-mono prose-code:rounded-lg prose-code:px-1.5 prose-code:py-0.5 prose-code:border prose-code:text-gray-500 " +
+          "prose !bg-transparent dark:prose-invert max-w-[calc(100%+2rem)] focus:outline-none -ml-8 pb-4 pt-2 " +
+          "prose-pre:!bg-gray-900 prose-pre:border dark:prose-pre:border-gray-800 dark:prose-code:bg-gray-900 dark:prose-code:border-gray-700 dark:prose-code:text-gray-400 prose-code:bg-gray-100 dark:bg-gray-800 prose-code:font-medium prose-code:font-mono prose-code:rounded-lg prose-code:px-1.5 prose-code:py-0.5 prose-code:border prose-code:text-gray-500 " +
           "prose-blockquote:border-l-2 prose-blockquote:pl-4 prose-blockquote:text-gray-400 prose-blockquote:not-italic " +
-          "prose-headings:leading-tight prose-headings:tracking-tight prose-h1:text-2xl prose-h1:font-bold prose-h1:text-gray-900 prose-h1:font-bold",
+          "prose-headings:leading-tight prose-headings:tracking-tight prose-h1:text-2xl prose-h1:font-bold prose-h1:font-bold",
       },
     },
   });
@@ -147,12 +147,12 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({ draft }) => {
         <BubbleMenu
           editor={editor}
           tippyOptions={{ placement: "top-start" }}
-          className="bg-white rounded-lg flex items-center space-x-1 p-1 shadow border"
+          className="bg-white dark:bg-gray-900 rounded-lg flex items-center space-x-1 p-1 shadow border dark:border-gray-800"
         >
           <button
             onClick={() => editor.chain().focus().toggleBold().run()}
             className={`${
-              editor.isActive("bold") ? "bg-gray-100" : ""
+              editor.isActive("bold") ? "bg-gray-100 dark:bg-gray-800" : ""
             } p-1 rounded-lg text-gray-500`}
           >
             <IconBold size={16} />
@@ -160,7 +160,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({ draft }) => {
           <button
             onClick={() => editor.chain().focus().toggleItalic().run()}
             className={`${
-              editor.isActive("italic") ? "bg-gray-100" : ""
+              editor.isActive("italic") ? "bg-gray-100 dark:bg-gray-800" : ""
             } p-1 rounded-lg text-gray-500`}
           >
             <IconItalic size={16} />
@@ -168,7 +168,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({ draft }) => {
           <button
             onClick={() => editor.chain().focus().toggleUnderline().run()}
             className={`${
-              editor.isActive("underline") ? "bg-gray-100" : ""
+              editor.isActive("underline") ? "bg-gray-100 dark:bg-gray-800" : ""
             } p-1 rounded-lg text-gray-500`}
           >
             <IconUnderline size={16} />
@@ -176,7 +176,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({ draft }) => {
           <button
             onClick={() => editor.chain().focus().toggleStrike().run()}
             className={`${
-              editor.isActive("strike") ? "bg-gray-100" : ""
+              editor.isActive("strike") ? "bg-gray-100 dark:bg-gray-800" : ""
             } p-1 rounded-lg text-gray-500`}
           >
             <IconStrikethrough size={16} />
@@ -184,7 +184,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({ draft }) => {
           <button
             onClick={() => editor.chain().focus().toggleCode().run()}
             className={`${
-              editor.isActive("code") ? "bg-gray-100" : ""
+              editor.isActive("code") ? "bg-gray-100 dark:bg-gray-800" : ""
             } p-1 rounded-lg text-gray-500`}
           >
             <IconCode size={16} />
@@ -193,7 +193,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({ draft }) => {
           <button
             onClick={() => editor.chain().focus().toggleHighlight().run()}
             className={`${
-              editor.isActive("highlight") ? "bg-gray-100" : ""
+              editor.isActive("highlight") ? "bg-gray-100 dark:bg-gray-800" : ""
             } p-1 rounded-lg text-gray-500`}
           >
             <IconHighlight size={16} />
@@ -205,7 +205,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({ draft }) => {
         </BubbleMenu>
       )}
       {/* <pre>{JSON.stringify(editor?.state.doc, null, 2)}</pre> */}
-      <EditorContent suppressContentEditableWarning editor={editor} />
+      <EditorContent editor={editor} />
     </>
   );
 };

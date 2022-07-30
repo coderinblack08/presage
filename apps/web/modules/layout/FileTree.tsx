@@ -86,7 +86,7 @@ const FolderDisclosure: React.FC<{
         show={open}
       > */}
       {containsChildren && open && (
-        <div className="border-l-2 border-[#EEE] ml-3 py-1 text-sm text-gray-500 space-y-1">
+        <div className="border-l-2 border-[#EEE] dark:border-gray-700 ml-3 py-1 text-sm space-y-1">
           {folder.children?.map((child) => (
             <div className="ml-2" key={child.id}>
               <FolderDisclosure parentFolderPath={currentPath} folder={child} />
@@ -224,11 +224,17 @@ export const FolderOrFileButton: React.FC<{
     <Button
       onClick={onClick}
       className={`group w-full !justify-start !p-1.5 text-[13px] ${
-        isOpen ? "bg-blue-100/50 hover:bg-blue-100" : ""
+        isOpen
+          ? "bg-blue-100/50 hover:bg-blue-100 dark:text-blue-300/75 hover:dark:bg-blue-400/10 dark:bg-blue-400/10"
+          : ""
       }`}
       rippleColor={draft ? "!bg-blue-900/10" : ""}
       icon={
-        <div className={isOpen ? "text-blue-300" : "text-gray-300"}>
+        <div
+          className={
+            isOpen ? "text-blue-300" : "text-gray-300 dark:text-gray-600"
+          }
+        >
           {folder ? <MdFolder size={20} /> : <MdStickyNote2 size={20} />}
         </div>
       }
@@ -256,7 +262,7 @@ export const FolderOrFileButton: React.FC<{
             submit();
           }
         }}
-        className={`relative z-[100] bg-transparent focus:outline-none py-1 border-b-2 border-gray-300 w-full ${
+        className={`relative z-[100] bg-transparent focus:outline-none py-1 border-b-2 border-gray-300 dark:border-gray-600 w-full ${
           editing ? "block" : "hidden"
         }`}
       />
@@ -265,7 +271,7 @@ export const FolderOrFileButton: React.FC<{
         <>
           <Menu
             trigger={
-              <button className="flex items-center justify-center p-1.5 rounded-md text-gray-400">
+              <button className="flex items-center justify-center p-1.5 rounded-md text-gray-400 dark:text-gray-600">
                 <IconPlus size={16} />
               </button>
             }
@@ -334,7 +340,7 @@ export const FolderOrFileButton: React.FC<{
             onCloseAutoFocus
             sideOffset={20}
             trigger={
-              <button className="flex items-center justify-center p-1.5 rounded-md text-gray-400">
+              <button className="flex items-center justify-center p-1.5 rounded-md text-gray-400 dark:text-gray-600">
                 <IconDotsVertical size={16} />
               </button>
             }
@@ -407,7 +413,7 @@ export const FolderOrFileButton: React.FC<{
           onCloseAutoFocus
           sideOffset={20}
           trigger={
-            <button className="flex items-center justify-center p-1.5 rounded-md text-gray-400">
+            <button className="flex items-center justify-center p-1.5 rounded-md text-gray-400 dark:text-gray-600">
               <IconDotsVertical size={16} />
             </button>
           }

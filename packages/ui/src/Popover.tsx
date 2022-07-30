@@ -23,8 +23,8 @@ export const Popover: React.FC<PopoverProps> = ({
           sideOffset={8}
           className={cx(
             "radix-side-top:animate-slide-up radix-side-bottom:animate-slide-down",
-            "w-56 rounded-lg p-4 md:w-56 shadow-sm border",
-            "bg-white",
+            "w-56 rounded-lg p-4 md:w-56 shadow-sm border dark:border-gray-800",
+            "bg-white dark:bg-gray-900",
             className || ""
           )}
         >

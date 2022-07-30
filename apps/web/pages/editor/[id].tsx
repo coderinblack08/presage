@@ -1,14 +1,15 @@
-import { IconDownload, IconUpload } from "@tabler/icons";
+import { IconDownload, IconMoon, IconSun, IconUpload } from "@tabler/icons";
 import { Field, Form, Formik } from "formik";
 import { useAtom } from "jotai";
 import { useHydrateAtoms } from "jotai/utils";
 import { useKBar } from "kbar";
 import isEqual from "lodash.isequal";
 import { GetServerSideProps } from "next";
-import React, { useEffect, useMemo, useRef } from "react";
+import { useTheme } from "next-themes";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import ContentEditable from "react-contenteditable";
 import { MdOpenInNew, MdOutlineMoreHoriz } from "react-icons/md";
-import { Button, Input, Popover } from "ui";
+import { Button, IconButton, Input, Popover } from "ui";
 import { collapseAtom, currentFileAtom } from "../../lib/store";
 import { InferQueryOutput, trpc } from "../../lib/trpc";
 import { AutoSave } from "../../modules/editor/FormikAutoSave";
@@ -33,7 +34,14 @@ const EditorPage: React.FC<EditorPageProps> = ({ id }) => {
     [id, setCurrentDraft]
   );
 
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const [collapsed, setCollapsed] = useAtom(collapseAtom);
+  const { setTheme, theme } = useTheme();
   const { data: draft, isLoading } = trpc.useQuery(["drafts.byId", { id }]);
   const draftTitleRef = useRef<HTMLElement>(null);
   const breadcrumbs = [
@@ -52,16 +60,30 @@ const EditorPage: React.FC<EditorPageProps> = ({ id }) => {
     };
   }, [draft]);
 
+  if (!mounted) return null;
+
   return (
     <DashboardLayout>
-      <button
-        className="fixed z-50 bg-white/50 backdrop-blur-sm bottom-5 right-5 border px-3 py-2 rounded-xl shadow-lg"
-        onClick={query.toggle}
-      >
-        <div className="flex items-center text-gray-400">
-          <span className="font-semibold mr-3 text-[13px]">Actions</span>
-          <kbd className="mr-1.5">⌘</kbd>
-          <kbd>K</kbd>
+      <button className="fixed z-50 bg-white dark:bg-gray-900 dark:border-gray-800 bottom-5 right-5 border rounded-xl shadow-lg">
+        <div className="divide-x flex items-center text-gray-400 dark:divide-gray-800">
+          <button
+            className="px-3 py-2 flex items-center"
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+          >
+            <span className="font-semibold mr-3 text-[13px]">Theme</span>
+            <div className="border dark:border-gray-800 rounded-lg shadow-sm p-1">
+              {theme === "dark" ? (
+                <IconSun size={12} />
+              ) : (
+                <IconMoon size={12} />
+              )}
+            </div>
+          </button>
+          <button onClick={query.toggle} className="px-3 py-2">
+            <span className="font-semibold mr-3 text-[13px]">Actions</span>
+            <kbd className="mr-1.5">⌘</kbd>
+            <kbd>K</kbd>
+          </button>
         </div>
       </button>
       <Formik
@@ -110,19 +132,25 @@ const EditorPage: React.FC<EditorPageProps> = ({ id }) => {
               <div className="absolute right-0 top-0 flex items-center justify-between p-3 gap-4">
                 <div className="flex items-center space-x-2">
                   {values.published && (
-                    <button className="p-1 rounded-lg hover:bg-gray-100 text-gray-400">
-                      <MdOpenInNew size={18} />
-                    </button>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      icon={<MdOpenInNew size={18} />}
+                    />
                   )}
                   <Popover
                     className="!w-96"
                     trigger={
-                      <button className="p-1 rounded-lg hover:bg-gray-100 text-gray-400">
-                        <MdOutlineMoreHoriz size={20} />
-                      </button>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        icon={<MdOutlineMoreHoriz size={20} />}
+                      />
                     }
                   >
-                    <h3 className="font-bold">Update Settings</h3>
+                    <h3 className="font-bold dark:text-white">
+                      Update Settings
+                    </h3>
                     <div className="flex flex-col gap-4 mt-2">
                       <Field
                         as={Input}
@@ -138,20 +166,20 @@ const EditorPage: React.FC<EditorPageProps> = ({ id }) => {
                         size="sm"
                         type="url"
                       />
-                      <label className="block text-sm">
+                      <label className="block text-sm dark:text-white">
                         <input
                           checked={values.private}
                           onClick={() =>
                             setFieldValue("private", !values.private)
                           }
-                          className="mr-2 w-5 h-5 form-checkbox rounded border-gray-200 shadow-sm"
+                          className="mr-2 w-5 h-5 focus:ring-offset-0 form-checkbox rounded dark:bg-gray-900 border-gray-200 dark:border-gray-800 shadow-sm"
                           type="checkbox"
                         />
                         Private
                       </label>
                       <Button
                         size="sm"
-                        variant="light"
+                        variant={theme === "dark" ? "filled" : "light"}
                         icon={
                           values.published ? (
                             <IconDownload size={16} />
@@ -169,10 +197,10 @@ const EditorPage: React.FC<EditorPageProps> = ({ id }) => {
                   </Popover>
                 </div>
               </div>
-              <main className="max-w-3xl mx-auto px-8 w-full h-full py-24 lg:py-32">
+              <main className="max-w-[52rem] mx-auto px-8 w-full h-full py-24 lg:py-32">
                 <AutoSave />
                 <ContentEditable
-                  className="text-3xl font-bold text-gray-900 focus:outline-none cursor-text leading-normal"
+                  className="text-3xl font-bold text-gray-900 dark:text-white focus:outline-none cursor-text leading-normal"
                   placeholder="Untitled"
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {

@@ -7,3 +7,4 @@ export * from "./src/Modal";
 export * from "./src/ThemeIcon";
 export * from "./src/ScrollArea";
 export * from "./src/Popover";
+export * from "./src/IconButton";

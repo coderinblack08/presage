@@ -1,3 +1,4 @@
+import { ThemeProvider } from "next-themes";
 import { httpBatchLink } from "@trpc/client/links/httpBatchLink";
 import { withTRPC } from "@trpc/next";
 import { KBarProvider } from "kbar";
@@ -23,34 +24,36 @@ const MyApp: AppType = ({
   const router = useRouter();
 
   return (
-    <KBarProvider
-      actions={[
-        {
-          id: "dashboard",
-          name: "Dashboard",
-          icon: <MdHome size={22} />,
-          perform: () => router.push("/dashboard"),
-        },
-        {
-          id: "rewards",
-          name: "Rewards",
-          icon: <MdSavings size={22} />,
-          perform: () => router.push("/rewards"),
-        },
-        {
-          id: "monetization",
-          name: "Monetization",
-          icon: <MdSubscriptions size={22} />,
-          perform: () => router.push("/monetization"),
-        },
-      ]}
-    >
-      <CommandPallette />
-      <SessionProvider session={session}>
-        <Toaster />
-        <C {...pageProps} />
-      </SessionProvider>
-    </KBarProvider>
+    <ThemeProvider enableSystem={false} attribute="class">
+      <KBarProvider
+        actions={[
+          {
+            id: "dashboard",
+            name: "Dashboard",
+            icon: <MdHome size={22} />,
+            perform: () => router.push("/dashboard"),
+          },
+          {
+            id: "rewards",
+            name: "Rewards",
+            icon: <MdSavings size={22} />,
+            perform: () => router.push("/rewards"),
+          },
+          {
+            id: "monetization",
+            name: "Monetization",
+            icon: <MdSubscriptions size={22} />,
+            perform: () => router.push("/monetization"),
+          },
+        ]}
+      >
+        <CommandPallette />
+        <SessionProvider session={session}>
+          <Toaster />
+          <C {...pageProps} />
+        </SessionProvider>
+      </KBarProvider>
+    </ThemeProvider>
   );
 };
 

@@ -10,15 +10,14 @@
 
 [contenteditable="true"]:empty:before {
   content: attr(placeholder);
-  color: theme("colors.gray.300");
-  @apply font-semibold tracking-tight;
+  @apply font-semibold tracking-tight text-gray-300 dark:text-gray-600;
 }
 
 .draggable-item {
   display: flex;
   padding: 0.5rem;
   /* margin: 0.5rem 0; */
-  background: white;
+  @apply bg-white dark:bg-gray-900;
   /* box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05); */
 }
 
@@ -30,6 +29,7 @@
   margin-right: 0.5rem;
   cursor: grab;
   background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 16"><path fill-opacity="0.2" d="M4 14c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zM2 6C.9 6 0 6.9 0 8s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6C.9 0 0 .9 0 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6 4c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" /></svg>');
+  @apply dark:invert;
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
@@ -48,15 +48,19 @@
 /** hacky way to display placeholders */
 
 .is-empty div .content::before {
-  color: theme("colors.gray.300");
   content: var(--placeholder);
   float: left;
   height: 0;
   pointer-events: none;
+  @apply text-gray-300 dark:text-gray-600;
 }
 
 .prose mark {
-  @apply bg-yellow-100 rounded-lg px-1.5 py-0.5;
+  @apply bg-yellow-100 dark:bg-yellow-400/20 dark:text-yellow-400 rounded-lg px-1.5 py-0.5;
+}
+
+.prose mark > strong {
+  @apply dark:text-yellow-400;
 }
 
 @tailwind base;
@@ -64,6 +68,11 @@
 @tailwind utilities;
 
 @layer base {
+  html,
+  body {
+    @apply dark:bg-gray-900;
+  }
+
   :not(h1 > *, .font-display) {
     font-feature-settings: "cv11";
   }
@@ -86,7 +95,7 @@
   }
 
   kbd {
-    @apply border rounded-md shadow-sm w-6 h-6 inline-flex items-center justify-center;
+    @apply border rounded-md shadow-sm w-6 h-6 inline-flex items-center justify-center dark:border-gray-800;
   }
 
   :root {

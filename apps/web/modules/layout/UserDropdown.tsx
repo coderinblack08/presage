@@ -13,7 +13,7 @@ export const UserDropdown: React.FC = () => {
           side="right"
           alignOffset={8}
           trigger={
-            <button className="flex items-center space-x-2 focus:outline-none p-5 border-t w-full text-left">
+            <button className="flex items-center space-x-2 focus:outline-none p-5 border-t dark:border-gray-800 w-full text-left text-[13px]">
               <div className="flex items-center space-x-4 focus:outline-none">
                 <Avatar
                   name={session.user.name!}
@@ -22,12 +22,10 @@ export const UserDropdown: React.FC = () => {
                   circle={false}
                 />
                 <div>
-                  <h6 className="font-display font-bold text-lg leading-none truncate">
+                  <h6 className="font-display font-bold text-base leading-none truncate dark:text-white">
                     {session?.user.name}
                   </h6>
-                  <p className="text-gray-500 mt-1.5 text-sm truncate">
-                    Free plan
-                  </p>
+                  <p className="text-gray-500 mt-1.5 truncate">Free plan</p>
                 </div>
               </div>
             </button>

@@ -7,6 +7,7 @@ module.exports = {
     "./modules/**/*.{js,ts,jsx,tsx}",
     "./editor/**/*.{js,ts,jsx,tsx}",
   ],
+  darkMode: "class",
   theme: {
     extend: {
       colors: { gray: require("tailwindcss/colors").zinc },

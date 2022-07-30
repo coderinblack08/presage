@@ -15,7 +15,7 @@ const Dashboard: NextPage = () => {
   return (
     <DashboardLayout>
       <main className="max-w-3xl mx-auto py-20 px-5">
-        <h1 className="text-3xl font-bold font-display tracking-tight">
+        <h1 className="text-3xl font-bold font-display tracking-tight dark:text-white">
           Getting Started
         </h1>
         <p className="text-gray-500 mt-4">
@@ -32,32 +32,36 @@ const Dashboard: NextPage = () => {
           Edit profile page
         </Button> */}
         <div className="grid gap-4 grid-cols-2 mt-8">
-          <div className="p-5 rounded-lg border hover:scale-105 transition col-span-1">
+          <div className="p-5 rounded-lg border dark:border-gray-800 hover:scale-105 transition col-span-1">
             <ThemeIcon className="mb-5">
               <IconPencil />
             </ThemeIcon>
-            <h1 className="text-gray-700 font-bold text-lg mb-1">Write</h1>
+            <h1 className="text-gray-700 dark:text-white font-bold text-lg mb-1">
+              Write
+            </h1>
             <p className="text-gray-500">
               Write drafts using our all-inclusive editor. Structure your
               content with folders and publications.
             </p>
           </div>
-          <div className="p-5 rounded-lg border hover:scale-105 transition col-span-1">
+          <div className="p-5 rounded-lg border dark:border-gray-800 hover:scale-105 transition col-span-1">
             <ThemeIcon className="mb-5">
               <IconListCheck />
             </ThemeIcon>
-            <h1 className="text-gray-700 font-bold text-lg mb-1">Publish</h1>
+            <h1 className="text-gray-700 dark:text-white font-bold text-lg mb-1">
+              Publish
+            </h1>
             <p className="text-gray-500">
               Publish your content with built-in comments, reactions, and
               sharing.
             </p>
           </div>
 
-          <div className="p-5 rounded-lg border hover:scale-105 transition col-span-1">
+          <div className="p-5 rounded-lg border dark:border-gray-800 hover:scale-105 transition col-span-1">
             <ThemeIcon className="mb-5">
               <IconTrophy />
             </ThemeIcon>
-            <h1 className="text-gray-700 font-bold text-lg mb-1">
+            <h1 className="text-gray-700 dark:text-white font-bold text-lg mb-1">
               Reward sharing
             </h1>
             <p className="text-gray-500">
@@ -65,13 +69,15 @@ const Dashboard: NextPage = () => {
               with a &quot;twitch channel points&quot; like system.
             </p>
           </div>
-          <div className="p-5 rounded-lg border hover:scale-105 transition col-span-1">
+          <div className="p-5 rounded-lg border dark:border-gray-800 hover:scale-105 transition col-span-1">
             <ThemeIcon className="mb-5">
               <IconBeach />
             </ThemeIcon>
-            <h1 className="text-gray-700 font-bold text-lg mb-1">
+            <h1 className="text-gray-700 dark:text-white font-bold text-lg mb-1">
               Upgrade to Pro{" "}
-              <span className="bg-yellow-200 rounded-md p-1">$12/mo</span>
+              <span className="bg-yellow-200 rounded-md p-1 text-gray-900">
+                $12/mo
+              </span>
             </h1>
             <p className="text-gray-500">
               Incentive your audience to share your content by rewarding them
@@ -79,11 +85,11 @@ const Dashboard: NextPage = () => {
             </p>
           </div>
 
-          <div className="p-5 rounded-lg border hover:scale-105 transition col-span-2">
+          <div className="p-5 rounded-lg border dark:border-gray-800 hover:scale-105 transition col-span-2">
             <ThemeIcon className="mb-5">
               <IconCreditCard />
             </ThemeIcon>
-            <h1 className="text-gray-700 font-bold text-lg mb-1">
+            <h1 className="text-gray-700 dark:text-white font-bold text-lg mb-1">
               Subscriptions
             </h1>
             <p className="text-gray-500">
