@@ -13,9 +13,8 @@ async function convertMaterializedPaths(data: any[]) {
       path,
       ...rest,
       drafts: await prisma.draft.findMany({
-        where: {
-          folderId: id,
-        },
+        where: { folderId: id },
+        orderBy: { updatedAt: "desc" },
         select: {
           id: true,
           title: true,
