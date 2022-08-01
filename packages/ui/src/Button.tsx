@@ -9,7 +9,7 @@ const variants = {
   size: {
     sm: "py-2 px-5 rounded-xl text-sm",
     md: "py-2 px-6 rounded-xl text-base",
-    lg: "py-2 px-7 rounded-xl text-lg",
+    lg: "py-2.5 px-7 rounded-xl text-base",
   },
   iconSize: {
     sm: "p-1 rounded-lg",
@@ -19,8 +19,9 @@ const variants = {
   color: {
     primary: {
       filled:
-        "bg-gray-800 hover:bg-gray-700 dark:hover:bg-gray-800 text-gray-100",
-      outline: "bg-white text-gray-900 border shadow-sm text-gray-500",
+        "bg-gray-800 hover:bg-gray-700 dark:hover:bg-gray-800 text-gray-100 dark:text-gray-300",
+      outline:
+        "bg-white text-gray-900 border shadow-sm text-gray-500 dark:text-gray-100 dark:bg-gray-900 dark:border-gray-800 dark:border-2",
       light: "bg-gray-100 text-gray-600 hover:bg-gray-200",
       ghost:
         "bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 !font-medium",

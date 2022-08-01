@@ -82,19 +82,21 @@ export const Modal: React.VFC<ModalProps> = ({
                   onClick={() => handleOpenChange(false)}
                 >
                   <div
-                    className={`relative z-50 inline-block w-full max-w-lg overflow-hidden text-left align-middle transition-all transform bg-white rounded-2xl ${className}`}
+                    className={`relative z-50 inline-block w-full max-w-xl overflow-hidden text-left align-middle transition-all transform bg-white dark:bg-gray-900 dark:border-2 dark:border-gray-800 rounded-2xl ${className}`}
                     onClick={stopPropagation}
                   >
-                    <div className="flex justify-between items-center p-6 pb-0">
-                      <h2 className="text-gray-700 font-bold">{title}</h2>
+                    <div className="flex justify-between items-center p-5 border-b-2 border-gray-100 dark:border-gray-800">
+                      <h2 className="leading-none text-gray-500 font-bold text-lg">
+                        {title}
+                      </h2>
                       <button onClick={() => handleOpenChange(false)}>
                         <IconX
-                          className="text-gray-500 focus:outline-none"
-                          size={16}
+                          className="text-gray-400 focus:outline-none"
+                          size={20}
                         />
                       </button>
                     </div>
-                    <div className="p-6">
+                    <div className="p-5">
                       {children instanceof Function
                         ? children({ open, setOpen })
                         : children}

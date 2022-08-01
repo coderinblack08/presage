@@ -9,6 +9,7 @@ import { Button } from "ui";
 import { collapseAtom } from "../../lib/store";
 import { InferQueryOutput, trpc } from "../../lib/trpc";
 import { FileTree } from "./FileTree";
+import { SettingsModal } from "./SettingsModal";
 
 import { UserDropdown } from "./UserDropdown";
 
@@ -39,13 +40,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ width }) => {
           <Link href="/dashboard" passHref>
             <Button
               as="a"
-              variant={
-                router.pathname === "/dashboard"
-                  ? theme === "dark"
-                    ? "filled"
-                    : "light"
-                  : "ghost"
-              }
+              variant={"ghost"}
               icon={
                 <MdHome
                   className={`text-gray-300 dark:text-gray-600`}
@@ -57,36 +52,33 @@ export const Sidebar: React.FC<SidebarProps> = ({ width }) => {
               Dashboard
             </Button>
           </Link>
-          <Link href="/rewards" passHref>
-            <Button
-              as="a"
-              variant="ghost"
-              icon={
-                <MdSavings
-                  className="text-gray-300 dark:text-gray-600"
-                  size={20}
-                />
-              }
-              className="w-full !justify-start !p-2 text-[13px]"
-            >
-              Rewards
-            </Button>
-          </Link>
-          <Link href="/settings" passHref>
-            <Button
-              as="a"
-              variant="ghost"
-              icon={
-                <MdSubscriptions
-                  className="text-gray-300 dark:text-gray-600"
-                  size={20}
-                />
-              }
-              className="w-full !justify-start !p-2 text-[13px]"
-            >
-              Monetization
-            </Button>
-          </Link>
+          <SettingsModal />
+          <Button
+            disabled
+            variant="ghost"
+            icon={
+              <MdSavings
+                className="text-gray-300 dark:text-gray-600"
+                size={20}
+              />
+            }
+            className="w-full !justify-start !p-2 text-[13px]"
+          >
+            Rewards
+          </Button>
+          <Button
+            disabled
+            variant="ghost"
+            icon={
+              <MdSubscriptions
+                className="text-gray-300 dark:text-gray-600"
+                size={20}
+              />
+            }
+            className="w-full !justify-start !p-2 text-[13px]"
+          >
+            Monetization
+          </Button>
         </div>
         <hr className="my-2 dark:border-gray-800" />
         <ul className="w-full">
