@@ -86,5 +86,9 @@
     "tailwind-config": "*",
     "tsconfig": "*",
     "typescript": "^4.5.3"
+  },
+  "resolutions": {
+    "@types/react": "^18.0.15",
+    "@types/react-dom": "^18.0.6"
   }
 }

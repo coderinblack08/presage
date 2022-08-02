@@ -54,7 +54,7 @@ export const draftsRouter = createRouter()
     input: z.object({
       id: z.string(),
       title: z.string().optional(),
-      content: z.string().optional(),
+      content: z.any().optional(),
       folderId: z.string().optional().nullable(),
       published: z.boolean().optional(),
       canonicalUrl: z.string().optional(),
@@ -119,6 +119,9 @@ export const draftsRouter = createRouter()
   .query("byId", {
     input: z.object({ id: z.string() }),
     resolve: async ({ input, ctx }) => {
-      return ctx.prisma.draft.findFirstOrThrow({ where: input });
+      return ctx.prisma.draft.findFirstOrThrow({
+        where: input,
+        include: { user: true },
+      });
     },
   });

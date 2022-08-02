@@ -75,7 +75,7 @@ model Folder {
 model Draft {
   id           String   @id @default(cuid())
   title        String
-  content      String?
+  content      Json?
   tags         String[]
   canonicalUrl String?
   description  String?

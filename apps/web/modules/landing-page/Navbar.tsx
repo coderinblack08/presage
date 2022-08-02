@@ -25,7 +25,12 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
           {session ? (
             <li>
               <Link href="/dashboard" passHref>
-                <Button size="sm" variant="light" as="a">
+                <Button
+                  size="sm"
+                  variant="light"
+                  className="bg-gray-200"
+                  as="a"
+                >
                   Go to dashboard
                 </Button>
               </Link>

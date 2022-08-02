@@ -153,6 +153,17 @@ export const SlashCommands = Commands.configure({
             popup[0].hide();
             return true;
           }
+          if (
+            [
+              "Space",
+              "ArrowUp",
+              "ArrowDown",
+              "ArrowLeft",
+              "ArrowRight",
+            ].indexOf(props.event.key) > -1
+          ) {
+            props.event.preventDefault();
+          }
           return (component.ref as any).onKeyDown(props);
         },
         onExit() {

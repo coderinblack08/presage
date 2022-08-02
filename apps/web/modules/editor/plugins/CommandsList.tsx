@@ -43,14 +43,14 @@ export class CommandsList extends React.Component<CommandsListProps> {
         (this.state.selectedIndex + this.props.items.length - 1) %
         this.props.items.length,
     });
-    this.focusedRef.current?.scrollIntoView({ behavior: "smooth" });
+    // this.focusedRef.current?.scrollIntoView({ behavior: "smooth" });
   }
 
   downHandler() {
     this.setState({
       selectedIndex: (this.state.selectedIndex + 1) % this.props.items.length,
     });
-    this.focusedRef.current?.scrollIntoView({ behavior: "smooth" });
+    // this.focusedRef.current?.scrollIntoView({ behavior: "smooth" });
   }
 
   enterHandler() {
@@ -79,7 +79,7 @@ export class CommandsList extends React.Component<CommandsListProps> {
     const { selectedIndex } = this.state;
 
     return (
-      <ul className="bg-white py-1.5 overflow-auto rounded-xl border shadow-sm w-64">
+      <ul className="bg-white dark:bg-gray-900 dark:border-gray-800 dark:border-2 py-1.5 overflow-auto rounded-xl border shadow-sm w-64">
         {items.length === 0 ? (
           <p className="text-gray-500 px-4 py-2">No commands found</p>
         ) : (
@@ -91,13 +91,29 @@ export class CommandsList extends React.Component<CommandsListProps> {
                 : {})}
             >
               <button
-                className={`flex items-center gap-2 p-2 cursor-pointer focus:outline-none focus:bg-blue-100/50 hover:bg-blue-100 transition ${
-                  selectedIndex === index ? "bg-blue-100/50" : ""
+                className={`flex items-center gap-2 p-2 cursor-pointer focus:outline-none hover:bg-blue-100 dark:hover:bg-blue-400/10 transition ${
+                  selectedIndex === index
+                    ? "bg-blue-100/50 dark:bg-blue-400/10"
+                    : ""
                 } w-full text-left`}
                 onClick={() => this.selectItem(index)}
               >
-                <span className="text-gray-500">{icon}</span>
-                <span>{title}</span>
+                <span
+                  className={`text-gray-500 ${
+                    selectedIndex === index ? "dark:text-blue-300" : ""
+                  }`}
+                >
+                  {icon}
+                </span>
+                <span
+                  className={
+                    selectedIndex === index
+                      ? "dark:text-blue-300"
+                      : "dark:text-gray-500"
+                  }
+                >
+                  {title}
+                </span>
               </button>
             </li>
           ))

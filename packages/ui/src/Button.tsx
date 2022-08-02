@@ -7,11 +7,13 @@ import React, {
 
 const variants = {
   size: {
-    sm: "py-2 px-5 rounded-xl text-sm",
+    xs: "py-1 px-4 rounded-lg text-sm",
+    sm: "py-2 px-5 rounded-lg text-sm",
     md: "py-2 px-6 rounded-xl text-base",
     lg: "py-2.5 px-7 rounded-xl text-base",
   },
   iconSize: {
+    xs: "p-0 rounded-lg",
     sm: "p-1 rounded-lg",
     md: "p-2 rounded-lg",
     lg: "p-3 rounded-lg",
@@ -22,7 +24,8 @@ const variants = {
         "bg-gray-800 hover:bg-gray-700 dark:hover:bg-gray-800 text-gray-100 dark:text-gray-300",
       outline:
         "bg-white text-gray-900 border shadow-sm text-gray-500 dark:text-gray-100 dark:bg-gray-900 dark:border-gray-800 dark:border-2",
-      light: "bg-gray-100 text-gray-600 hover:bg-gray-200",
+      light:
+        "bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-800",
       ghost:
         "bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 !font-medium",
     },

@@ -12,7 +12,7 @@ export const Waitlist: React.FC<WaitlistProps> = ({}) => {
 
   return (
     <form
-      className="flex flex-col sm:flex-row items-center space-y-3 sm:space-y-0 sm:space-x-3 max-w-lg lg:max-w-xl w-full mt-4 sm:mt-6"
+      className="flex flex-col sm:flex-row items-center space-y-3 sm:space-y-0 sm:space-x-3 max-w-xl w-full mt-4 sm:mt-6"
       onSubmit={async (e) => {
         e.preventDefault();
         setLoading(true);

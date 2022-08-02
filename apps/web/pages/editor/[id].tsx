@@ -9,12 +9,13 @@ import { useTheme } from "next-themes";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import ContentEditable from "react-contenteditable";
 import { MdOpenInNew, MdOutlineMoreHoriz } from "react-icons/md";
-import { Button, IconButton, Input, Popover } from "ui";
+import { Button, Input, Popover } from "ui";
 import { collapseAtom, currentFileAtom } from "../../lib/store";
 import { InferQueryOutput, trpc } from "../../lib/trpc";
 import { AutoSave } from "../../modules/editor/FormikAutoSave";
 import { RichTextEditor } from "../../modules/editor/RichTextEditor";
 import { DashboardLayout } from "../../modules/layout/DashboardLayout";
+import { FloatingActions } from "../../modules/layout/FloatingActions";
 
 interface EditorPageProps {
   id: string;
@@ -25,29 +26,17 @@ const EditorPage: React.FC<EditorPageProps> = ({ id }) => {
     [currentFileAtom, { draftId: id, absolutePath: [], stringPath: [] }],
   ] as const);
 
-  const [currentDraft, setCurrentDraft] = useAtom(currentFileAtom);
+  const [_currentDraft, setCurrentDraft] = useAtom(currentFileAtom);
   const updateDraft = trpc.useMutation(["drafts.update"]);
-  const { query } = useKBar();
 
   useEffect(
     () => setCurrentDraft((prev) => ({ ...prev, draftId: id })),
     [id, setCurrentDraft]
   );
 
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  const [collapsed, setCollapsed] = useAtom(collapseAtom);
-  const { setTheme, theme } = useTheme();
+  const { theme } = useTheme();
   const { data: draft, isLoading } = trpc.useQuery(["drafts.byId", { id }]);
   const draftTitleRef = useRef<HTMLElement>(null);
-  const breadcrumbs = [
-    ...currentDraft.stringPath,
-    draft?.title || "Untitled",
-  ].filter(Boolean);
   const utils = trpc.useContext();
   const initialValues = useMemo(() => {
     return {
@@ -60,32 +49,9 @@ const EditorPage: React.FC<EditorPageProps> = ({ id }) => {
     };
   }, [draft]);
 
-  if (!mounted) return null;
-
   return (
     <DashboardLayout>
-      <button className="fixed z-50 bg-white dark:bg-gray-900 dark:border-gray-800 bottom-5 right-5 border rounded-xl shadow-lg">
-        <div className="divide-x flex items-center text-gray-400 dark:divide-gray-800">
-          <button
-            className="px-3 py-2 flex items-center"
-            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-          >
-            <span className="font-semibold mr-3 text-[13px]">Theme</span>
-            <div className="border dark:border-gray-800 rounded-lg shadow-sm p-1">
-              {theme === "dark" ? (
-                <IconSun size={12} />
-              ) : (
-                <IconMoon size={12} />
-              )}
-            </div>
-          </button>
-          <button onClick={query.toggle} className="px-3 py-2">
-            <span className="font-semibold mr-3 text-[13px]">Actions</span>
-            <kbd className="mr-1.5">⌘</kbd>
-            <kbd>K</kbd>
-          </button>
-        </div>
-      </button>
+      <FloatingActions />
       <Formik
         initialValues={initialValues}
         onSubmit={(values) => {
@@ -134,6 +100,9 @@ const EditorPage: React.FC<EditorPageProps> = ({ id }) => {
                   {values.published && (
                     <Button
                       size="sm"
+                      as="a"
+                      target="_blank"
+                      href={`/view/${id.toString()}`}
                       variant="ghost"
                       icon={<MdOpenInNew size={18} />}
                     />

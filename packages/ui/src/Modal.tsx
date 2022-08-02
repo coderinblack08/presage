@@ -82,7 +82,7 @@ export const Modal: React.VFC<ModalProps> = ({
                   onClick={() => handleOpenChange(false)}
                 >
                   <div
-                    className={`relative z-50 inline-block w-full max-w-xl overflow-hidden text-left align-middle transition-all transform bg-white dark:bg-gray-900 dark:border-2 dark:border-gray-800 rounded-2xl ${className}`}
+                    className={`relative z-50 inline-block w-full max-w-xl overflow-hidden text-left align-middle transition-all transform bg-white dark:bg-gray-900 rounded-2xl ${className}`}
                     onClick={stopPropagation}
                   >
                     <div className="flex justify-between items-center p-5 border-b-2 border-gray-100 dark:border-gray-800">

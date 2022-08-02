@@ -1,6 +1,12 @@
 import Dropcursor from "@tiptap/extension-dropcursor";
 import Highlight from "@tiptap/extension-highlight";
-import { BubbleMenu, EditorContent, Extension, useEditor } from "@tiptap/react";
+import {
+  BubbleMenu,
+  Content,
+  EditorContent,
+  Extension,
+  useEditor,
+} from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { Plugin } from "prosemirror-state";
 import React, { useEffect } from "react";
@@ -21,6 +27,14 @@ import { DraggableItems } from "./plugins/DraggableItems";
 import { Placeholder } from "./plugins/Placeholder";
 import { SlashCommands } from "./plugins/SlashCommands";
 import { TrailingNode } from "./plugins/TrailingNode";
+import { lowlight } from "lowlight/lib/common.js";
+import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
+
+export const rteClass =
+  "prose !bg-transparent dark:prose-invert max-w-[calc(100%+2rem)] focus:outline-none -ml-8 pb-4 pt-2 " +
+  "prose-pre:!bg-gray-900 prose-pre:border dark:prose-pre:border-gray-800 dark:prose-code:bg-gray-900 dark:prose-code:border-gray-700 dark:prose-code:text-gray-400 prose-code:bg-gray-100 dark:bg-gray-800 prose-code:font-medium prose-code:font-mono prose-code:rounded-lg prose-code:px-1.5 prose-code:py-0.5 prose-code:border prose-code:text-gray-500 " +
+  "prose-blockquote:border-l-2 prose-blockquote:pl-4 prose-blockquote:text-gray-400 prose-blockquote:not-italic " +
+  "prose-headings:leading-tight prose-headings:tracking-tight prose-h1:text-2xl prose-h1:font-bold prose-h1:font-bold";
 
 const topLevelElements = [
   "paragraph",
@@ -34,6 +48,17 @@ const topLevelElements = [
 interface RichTextEditorProps {
   draft?: InferQueryOutput<"drafts.byId">;
 }
+
+export const viewOnlyExtensions = [
+  Underline,
+  Highlight.configure({ multicolor: true }),
+  StarterKit.configure({ codeBlock: false }),
+  CodeBlockLowlight.extend({
+    addOptions() {
+      return { ...this.parent?.(), lowlight };
+    },
+  }),
+];
 
 export const RichTextEditor: React.FC<RichTextEditorProps> = ({ draft }) => {
   const [{}, _, { setValue }] = useField("content");
@@ -115,23 +140,20 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({ draft }) => {
         }
       });
     },
-    onUpdate: ({ editor: e }) => setValue(e.getHTML()),
-    content: draft?.content || null,
+    onUpdate: ({ editor: e }) => setValue(e.getJSON()),
+    content: draft?.content as Content,
     editorProps: {
       attributes: {
         spellcheck: "false",
-        class:
-          "prose !bg-transparent dark:prose-invert max-w-[calc(100%+2rem)] focus:outline-none -ml-8 pb-4 pt-2 " +
-          "prose-pre:!bg-gray-900 prose-pre:border dark:prose-pre:border-gray-800 dark:prose-code:bg-gray-900 dark:prose-code:border-gray-700 dark:prose-code:text-gray-400 prose-code:bg-gray-100 dark:bg-gray-800 prose-code:font-medium prose-code:font-mono prose-code:rounded-lg prose-code:px-1.5 prose-code:py-0.5 prose-code:border prose-code:text-gray-500 " +
-          "prose-blockquote:border-l-2 prose-blockquote:pl-4 prose-blockquote:text-gray-400 prose-blockquote:not-italic " +
-          "prose-headings:leading-tight prose-headings:tracking-tight prose-h1:text-2xl prose-h1:font-bold prose-h1:font-bold",
+        class: rteClass,
       },
     },
   });
 
   useEffect(() => {
-    if (editor && editor.getHTML() !== draft?.content) {
-      !editor.isDestroyed && editor.commands.setContent(draft?.content || null);
+    if (editor && editor.getJSON() !== draft?.content) {
+      !editor.isDestroyed &&
+        editor.commands.setContent((draft?.content || null) as Content);
     }
   }, [draft?.content, editor]);
 
