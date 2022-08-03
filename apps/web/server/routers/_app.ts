@@ -6,6 +6,7 @@ import superjson from "superjson";
 import { folderRouter } from "./folders";
 import { TRPCError } from "@trpc/server";
 import { draftsRouter } from "./drafts";
+import { reactionsRouter } from "./reactions";
 
 /**
  * Create your application's root router
@@ -39,6 +40,7 @@ export const appRouter = createRouter()
     },
   })
   .merge("folders.", folderRouter)
-  .merge("drafts.", draftsRouter);
+  .merge("drafts.", draftsRouter)
+  .merge("reactions.", reactionsRouter);
 
 export type AppRouter = typeof appRouter;

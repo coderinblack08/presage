@@ -1,4 +1,5 @@
 import { EditorContent, JSONContent, useEditor } from "@tiptap/react";
+import { createSSGHelpers } from "@trpc/react/ssg";
 import {
   GetServerSideProps,
   InferGetServerSidePropsType,
@@ -6,6 +7,7 @@ import {
 } from "next";
 import Head from "next/head";
 import { useEffect } from "react";
+import { IconType } from "react-icons";
 import {
   MdBookmark,
   MdChromeReaderMode,
@@ -13,13 +15,16 @@ import {
   MdInfo,
   MdReplyAll,
 } from "react-icons/md";
+import superjson from "superjson";
 import { Button } from "ui";
-import { trpc } from "../../lib/trpc";
+import { InferQueryOutput, trpc } from "../../lib/trpc";
 import {
   rteClass,
   viewOnlyExtensions,
 } from "../../modules/editor/RichTextEditor";
 import { FloatingActions } from "../../modules/layout/FloatingActions";
+import { createContext } from "../../server/context";
+import { appRouter } from "../../server/routers/_app";
 
 function formatDate(date: Date) {
   return date.toLocaleDateString("en-US", {
@@ -28,6 +33,61 @@ function formatDate(date: Date) {
     year: "numeric",
   });
 }
+
+const ReactionButton: React.FC<{
+  draftId: string;
+  type: "Favorite" | "Bookmark" | "Share";
+}> = ({ type, draftId }) => {
+  const { data: reactions } = trpc.useQuery([
+    "reactions.byDraftId",
+    { id: draftId },
+  ]);
+  const toggleReaction = trpc.useMutation(["reactions.toggle"]);
+  const utils = trpc.useContext();
+
+  let ReactionIcon: IconType;
+
+  if (type === "Favorite") {
+    ReactionIcon = MdFavorite;
+  } else if (type === "Bookmark") {
+    ReactionIcon = MdBookmark;
+  } else if (type === "Share") {
+    ReactionIcon = MdReplyAll;
+  }
+
+  return (
+    <button
+      className={`rounded-lg p-4 border-2 ${
+        reactions?.status[type]
+          ? "bg-blue-50 text-blue-500 border-blue-500/10 dark:bg-blue-400/10 dark:border-blue-300/10 dark:text-blue-300"
+          : "border-gray-200/60 dark:border-gray-800 text-gray-400 dark:text-gray-500"
+      }`}
+      onClick={() =>
+        toggleReaction.mutate(
+          { type: type, draftId },
+          {
+            onSuccess: () => {
+              utils.setQueryData(["reactions.byDraftId", { id: draftId }], ((
+                old: InferQueryOutput<"reactions.byDraftId">
+              ) => {
+                if (old) {
+                  old.status[type] = !old.status[type];
+                  old.counts[type] =
+                    old.counts[type] + (old.status[type] ? 1 : -1);
+                  return old;
+                }
+              }) as any);
+            },
+          }
+        )
+      }
+    >
+      {/* @ts-ignore */}
+      <ReactionIcon size={20} />
+      <p className="mt-0.5 text-lg font-semibold">{reactions?.counts[type]}</p>
+    </button>
+  );
+};
 
 const ViewPage: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
@@ -56,7 +116,7 @@ const ViewPage: NextPage<
   }, [editor]);
 
   return (
-    <div className="p-6 max-w-3xl mx-auto">
+    <div className="p-6 max-w-3xl mx-auto selection:bg-blue-500 selection:text-white">
       <Head>
         <title>{draft?.title}</title>
         <meta name="description" content={draft?.description || ""} />
@@ -67,14 +127,14 @@ const ViewPage: NextPage<
       </Head>
       <div className="flex items-center space-x-1">
         <Button
-          size="xs"
+          size="sm"
           className="text-base"
           variant="light"
           icon={<MdChromeReaderMode size={18} />}
         >
           Posts
         </Button>
-        <Button size="xs" className="text-base" variant="ghost">
+        <Button size="sm" className="text-base" variant="ghost">
           Login
         </Button>
         {/* <Button size="xs" className="text-base" variant="ghost">
@@ -105,21 +165,12 @@ const ViewPage: NextPage<
               </p>
             </div>
           </div>
-          <button className="border-2 border-gray-200/60 dark:border-gray-800 rounded-lg p-4 text-gray-400 dark:text-gray-500">
-            <MdFavorite size={20} />
-            <p className="mt-0.5 text-lg font-semibold">0</p>
-          </button>
-          <button className="border-2 border-gray-200/60 dark:border-gray-800 rounded-lg p-4 text-gray-400 dark:text-gray-500">
-            <MdBookmark size={20} />
-            <p className="mt-0.5 text-lg font-semibold">0</p>
-          </button>
-          <button className="border-2 border-gray-200/60 dark:border-gray-800 rounded-lg p-4 text-gray-400 dark:text-gray-500">
-            <MdReplyAll size={20} />
-            <p className="mt-0.5 text-lg font-semibold">0</p>
-          </button>
+          <ReactionButton draftId={id} type="Favorite" />
+          <ReactionButton draftId={id} type="Bookmark" />
+          <ReactionButton draftId={id} type="Share" />
         </div>
         <main>
-          <blockquote className="flex space-x-3 bg-blue-50 dark:bg-blue-400/10 p-4 rounded-lg text-blue-700 dark:text-blue-300 mb-4">
+          <blockquote className="border-2 border-blue-500/10 dark:border-blue-300/10 flex space-x-3 bg-blue-50 dark:bg-blue-400/10 p-4 rounded-lg text-blue-500 dark:text-blue-300 mb-4">
             <MdInfo size={24} />
             <div className="mt-[1px]">
               Share this article to gain points. Publish on{" "}
@@ -135,8 +186,23 @@ const ViewPage: NextPage<
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  const id = context.query?.id as string;
+  const ssg = createSSGHelpers({
+    router: appRouter,
+    transformer: superjson,
+    ctx: await createContext({
+      req: context.req as any,
+      res: context.res as any,
+    }),
+  });
+
+  await ssg.fetchQuery("drafts.byId", { id });
+
   return {
-    props: { id: context.query.id },
+    props: {
+      id,
+      trpcState: ssg.dehydrate(),
+    },
   };
 };
 

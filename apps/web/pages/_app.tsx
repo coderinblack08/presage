@@ -1,8 +1,8 @@
-import { ThemeProvider } from "next-themes";
 import { httpBatchLink } from "@trpc/client/links/httpBatchLink";
 import { withTRPC } from "@trpc/next";
 import { KBarProvider } from "kbar";
 import { SessionProvider } from "next-auth/react";
+import { ThemeProvider } from "next-themes";
 import { AppType } from "next/dist/shared/lib/utils";
 import { FunctionComponent } from "react";
 import { Toaster } from "react-hot-toast";

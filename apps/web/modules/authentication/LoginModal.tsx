@@ -13,14 +13,16 @@ export const LoginModal: React.FC<LoginModalProps> = ({}) => {
     >
       <div className="flex gap-4 flex-col">
         <Button
+          size="lg"
           variant="outline"
           icon={<AiOutlineGithub size={20} />}
-          onClick={() => signIn("github")}
+          onClick={() => signIn("github", { callbackUrl: "/dashboard" })}
         >
           Login with GitHub
         </Button>
         <Button
-          onClick={() => signIn("google")}
+          size="lg"
+          onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
           icon={<AiOutlineGoogle size={20} />}
           variant="outline"
         >

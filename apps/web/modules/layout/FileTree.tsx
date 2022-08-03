@@ -280,7 +280,7 @@ export const FolderOrFileButton: React.FC<{
             onCloseAutoFocus
           >
             <MenuItem
-              icon={<IconFilePlus size={16} />}
+              icon={<IconFilePlus size={18} />}
               onClick={() => {
                 addDraft.mutate(
                   { title: "Untitled", folderId: folder.id },
@@ -314,7 +314,7 @@ export const FolderOrFileButton: React.FC<{
               New Draft
             </MenuItem>
             <MenuItem
-              icon={<IconFolderPlus size={16} />}
+              icon={<IconFolderPlus size={18} />}
               onClick={() => {
                 addFolder.mutate(
                   {
@@ -352,11 +352,11 @@ export const FolderOrFileButton: React.FC<{
                   ref.current?.focus();
                 }, 0);
               }}
-              icon={<IconPencil size={16} />}
+              icon={<IconPencil size={18} />}
             >
               Rename
             </MenuItem>
-            <MenuItem icon={<IconSwitch2 size={16} />}>
+            <MenuItem icon={<IconSwitch2 size={18} />}>
               Convert to publication
             </MenuItem>
             <MenuDivider />
@@ -399,7 +399,7 @@ export const FolderOrFileButton: React.FC<{
                   );
                 }
               }}
-              icon={<IconTrash size={16} />}
+              icon={<IconTrash size={18} />}
             >
               Delete
             </MenuItem>
@@ -414,7 +414,7 @@ export const FolderOrFileButton: React.FC<{
           sideOffset={20}
           trigger={
             <button className="flex items-center justify-center p-1.5 rounded-md text-gray-400 dark:text-gray-600">
-              <IconDotsVertical size={16} />
+              <IconDotsVertical size={18} />
             </button>
           }
         >
@@ -425,21 +425,21 @@ export const FolderOrFileButton: React.FC<{
                 ref.current?.focus();
               }, 0);
             }}
-            icon={<IconPencil size={16} />}
+            icon={<IconPencil size={18} />}
           >
             Rename
           </MenuItem>
           <Menu
             subMenu
             trigger={
-              <MenuItem trigger icon={<IconFolders size={16} />}>
+              <MenuItem trigger icon={<IconFolders size={18} />}>
                 Move to folder
               </MenuItem>
             }
           >
             <MenuItem
               className="text-[13px]"
-              icon={<IconFolder size={16} />}
+              icon={<IconFolder size={18} />}
               onClick={() => {
                 if (draft) {
                   updateDraft.mutate(
@@ -460,7 +460,7 @@ export const FolderOrFileButton: React.FC<{
               <MenuItem
                 key={folder.id}
                 className="text-[13px]"
-                icon={<IconFolder size={16} />}
+                icon={<IconFolder size={18} />}
                 onClick={() => {
                   if (draft) {
                     updateDraft.mutate(
@@ -515,7 +515,7 @@ export const FolderOrFileButton: React.FC<{
                 }
               }
             }}
-            icon={<IconTrash size={16} />}
+            icon={<IconTrash size={18} />}
           >
             Delete
           </MenuItem>

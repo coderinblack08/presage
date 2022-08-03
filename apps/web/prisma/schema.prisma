@@ -38,16 +38,17 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String     @id @default(cuid())
   name          String?
-  email         String?   @unique
+  email         String?    @unique
   emailVerified DateTime?
   image         String?
-  username      String    @unique
+  username      String     @unique
   accounts      Account[]
   sessions      Session[]
   drafts        Draft[]
   folders       Folder[]
+  Reaction      Reaction[]
 }
 
 model VerificationToken {
@@ -87,10 +88,37 @@ model Draft {
   updatedAt DateTime @updatedAt
 
   folderId String?
-  folder   Folder? @relation(fields: [folderId], references: [id], onDelete: Cascade)
+  folder   Folder?    @relation(fields: [folderId], references: [id], onDelete: Cascade)
   userId   String
-  user     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user     User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   // tags     DraftOnTags[]
+  Reaction Reaction[]
+}
+
+model ReactionCount {
+  draftId   String
+  type      ReactionType
+  count     Int
+  createdAt DateTime     @default(now())
+
+  @@id([draftId, type])
+}
+
+enum ReactionType {
+  Favorite
+  Bookmark
+  Share
+}
+
+model Reaction {
+  type      ReactionType
+  draftId   String
+  draft     Draft        @relation(fields: [draftId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime     @default(now())
+
+  @@id([type, draftId, userId])
 }
 
 // model Tag {

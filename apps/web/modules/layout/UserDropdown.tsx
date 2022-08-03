@@ -12,6 +12,7 @@ export const UserDropdown: React.FC = () => {
         <Menu
           side="right"
           alignOffset={8}
+          className="text-[13px]"
           trigger={
             <button className="flex items-center space-x-2 focus:outline-none p-5 border-t dark:border-gray-800 w-full text-left text-[13px]">
               <div className="flex items-center space-x-4 focus:outline-none">
@@ -31,9 +32,9 @@ export const UserDropdown: React.FC = () => {
             </button>
           }
         >
-          <MenuItem icon={<MdCreditCard size={20} />}>Upgrade</MenuItem>
-          <MenuItem icon={<MdCode size={20} />}>Developer</MenuItem>
-          <MenuItem icon={<MdHelp size={20} />}>Help Center</MenuItem>
+          <MenuItem icon={<MdCreditCard size={18} />}>Upgrade</MenuItem>
+          <MenuItem icon={<MdCode size={18} />}>Developer</MenuItem>
+          <MenuItem icon={<MdHelp size={18} />}>Help Center</MenuItem>
           <MenuDivider />
           {/* <div className="px-4 text-gray-500 py-2">
             <h3 className="font-semibold mb-2">Quotas:</h3>
@@ -46,7 +47,7 @@ export const UserDropdown: React.FC = () => {
           <MenuDivider /> */}
           <MenuItem
             onClick={() => signOut({ callbackUrl: "/" })}
-            icon={<MdLogout size={20} />}
+            icon={<MdLogout size={18} />}
           >
             Logout
           </MenuItem>
