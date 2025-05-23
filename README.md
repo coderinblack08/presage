@@ -11,5 +11,3 @@ When contributing code, please checkout our [Figma file](https://www.figma.com/f
 ## Contact & Other Details
 
 If you want to get in touch for investing, contributing, or joining our platform, please DM us on twitter [@joinpresage](https://twitter.com/joinpresage) or email use [help@joinpresage.com](mailto:help@joinpresage.com)
-
-We plan on launching sometime this fall (2021) and to apply to YC S22.
