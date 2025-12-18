@@ -1,6 +1,6 @@
 # Presage
 
-A Medium alternative built for referral podcasts and blogs [joinpresage.com](https://joinpresage.com)
+A Medium alternative built for referral podcasts and blogs [joinpresage.com](https://joinpresage.vercel.app)
 
 ## Development
 
